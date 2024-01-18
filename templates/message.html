@@ -1,0 +1,43 @@
+<div class="popup-message">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+
+<style>
+    .popup-message {
+    display: none; 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+</style>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const popupMessage = document.querySelector('.popup-message');
+    
+    // Eğer mesajlar varsa, popup mesajı göster
+    if (popupMessage && popupMessage.innerHTML.trim() !== '') {
+        popupMessage.style.display = 'block';
+        
+        // Sayfa yüklendiğinde mesajın otomatik olarak kapanması için bir süre bekleyin (örneğin 5 saniye)
+        setTimeout(function() {
+            popupMessage.style.display = 'none';
+        }, 5000); // 5 saniye
+    } else {
+        popupMessage.style.display = 'none';
+    }
+});
+
+
+</script>

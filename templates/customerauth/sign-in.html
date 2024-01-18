@@ -1,0 +1,103 @@
+{% extends 'partials/customerauthbase.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    
+    .left-side {
+        background-color: #FFFFFF;
+        height: 50vh;
+        width: 100%;
+    }
+
+    .right-side {
+        background-color: #F3F0EB;
+        height: 50vh;
+        width: 100%;
+        
+    }
+
+    @media screen  and (min-width:768px) {
+        
+        .left-side,.right-side{
+            height: 100vh;
+        }
+    }
+
+    .custom-btn {
+        background-color: #F2C791; /* İstediğiniz renk */
+    }
+
+    .left-side h1 {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 700; /* Kalın (bold) ağırlık */
+        font-size: 2em; /* İstediğiniz büyüklükte */
+    }
+
+    .left-side h6 {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400; /* Normal ağırlık */
+    }
+</style>
+
+<div class="row no-gutters">
+
+    <div class="col-md-6 no-gutters">
+        <div class="left-side d-flex flex-column align-items-center justify-content-center" style="margin-top: -60px;">
+            <h1 class="mb-5">Haydi Tanışalım</h1>
+            <p class="mb-30">Üye değil misiniz? <a href="{% url 'customerauth:sign-up' %}">Kayıt Ol</a></p>
+        </div>
+    </div>
+    
+    
+
+    <div class="col-md-6 no-gutters">
+        <div class="right-side d-flex justify-content-center align-items-center">
+
+            <form method="POST"> 
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <input type="text" required name="email_or_username" placeholder="Username or Email *" style="width: 100%;" />
+                </div>
+                <div class="form-group">
+                    <input required type="password" name="password" placeholder="Your password *" style="width: 100%;" />
+                </div>
+        
+                <div class="login_footer form-group">
+                    <div class="chek-form">
+                        <div class="custome-checkbox">
+                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox1" value="" />
+                            <label class="form-check-label" for="exampleCheckbox1"><span>Beni Hatırla</span></label>
+                        </div>
+
+                        <div class="text-center">
+                            <a class="small" href="{% url 'customerauth:forgot_password' %}">Şifremi Unuttum!</a>
+                        </div>
+                    </div>
+ 
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-heading btn-block hover-up custom-btn" name="login">Giriş Yap</button>
+                </div>
+            </form>
+
+            <!-- Google ile devam et butonunu ekleyin -->
+            <div class="col-lg-6 pr-30 d-none d-lg-block">
+                <div class="card-login mt-115">
+                    <a href="{% url 'social:begin' 'google-oauth2' %}" class="social-login google-login">
+                        <img src="{% static 'assets/imgs/theme/icons/logo-google.svg' %}" alt="" />
+                        <span>Google İle Devam Et</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+
+</div>
+
+
+
+{% endblock content %}

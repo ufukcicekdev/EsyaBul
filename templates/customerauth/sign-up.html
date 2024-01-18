@@ -1,0 +1,88 @@
+{% extends 'partials/customerauthbase.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    
+    .left-side {
+        background-color: #FFFFFF;
+        height: 50vh;
+        width: 100%;
+    }
+
+    .right-side {
+        background-color: #F3F0EB;
+        height: 50vh;
+        width: 100%;
+        
+    }
+
+    @media screen  and (min-width:768px) {
+        
+        .left-side,.right-side{
+            height: 100vh;
+        }
+    }
+
+    .custom-btn {
+        background-color: #F2C791; /* İstediğiniz renk */
+    }
+
+    .left-side h1 {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 700; /* Kalın (bold) ağırlık */
+        font-size: 2em; /* İstediğiniz büyüklükte */
+    }
+
+    .left-side h6 {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400; /* Normal ağırlık */
+    }
+</style>
+
+<div class="row no-gutters">
+
+    <div class="col-md-6 no-gutters">
+        <div class="left-side d-flex flex-column align-items-center justify-content-center" style="margin-top: -60px;">
+            <h1 class="mb-5">Haydi Tanışalım</h1>
+            <p class="mb-30">Zaten hesabınız var mı?<a href="{% url 'customerauth:sign-in' %}">Giriş Yap</a></p>
+        </div>
+    </div>
+    
+    <div class="col-md-6 no-gutters">
+        <div class="right-side d-flex justify-content-center align-items-center">
+            <form method="post" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.username }}
+                </div>
+                <div class="form-group">
+                    {{ form.email }}
+                </div>
+                <div class="form-group">
+                    {{ form.password1 }}
+                </div>
+                <div class="form-group">
+                    {{ form.password2 }}
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-heading btn-block hover-up custom-btn" name="login">Kayıt Ol</button>
+                </div>
+            </form>
+    
+            <!-- Google ile devam et butonunu ekleyin -->
+            <div class="col-lg-6 pr-30 d-none d-lg-block">
+                <div class="card-login mt-115">
+                    <a href="{% url 'social:begin' 'google-oauth2' %}" class="social-login google-login">
+                        <img src="{% static 'assets/imgs/theme/icons/logo-google.svg' %}" alt="" />
+                        <span>Google İle Giriş Yap</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+{% endblock content %}
