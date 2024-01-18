@@ -29,10 +29,12 @@ google-resumable-media==2.7.0
 googleapis-common-protos==1.62.0
 grpcio==1.60.0
 grpcio-status==1.60.0
+gunicorn==21.2.0
 httplib2==0.22.0
 idna==3.6
 msgpack==1.0.7
 oauthlib==3.2.2
+packaging==23.2
 phonenumbers==8.13.27
 pillow==10.2.0
 progressbar2==4.3.2
