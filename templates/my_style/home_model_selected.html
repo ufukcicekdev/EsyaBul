@@ -3,197 +3,208 @@
 
 {% block content %}
 
-<style>
-    .left-side {
-        background-color: #FFFFFF;
-        height: 50vh;
-        width: 100%;
-    }
+<div id="__next"><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5BR43KH" height="0"
+    width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<div class="site-container">
 
-    .right-side {
-        background-color: #F3F0EB;
-        height: 50vh;
-        width: 100%;
-        position: relative;
-    }
+    {% include 'core/header.html' %}
 
-    @media screen and (min-width: 768px) {
-        .left-side,
-        .right-side {
-            height: 100vh;
+    <style>
+        .left-side {
+            background-color: #FFFFFF;
+            height: 50vh;
+            width: 100%;
         }
-    }
-
-    .custom-btn {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        margin-bottom: 20px;
-        margin-right: 20px;
-        background-color: #F2C791;
-    }
-
-    .custom-btn1 {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        margin-bottom: 20px;
-        margin-left: 20px;
-        background-color: #F2C791;
-    }
-
-    .left-side h1 {
-        font-family: 'Roboto', sans-serif;
-        font-weight: 700;
-        font-size: 2em;
-    }
-
-    .left-side h6 {
-        font-family: 'Roboto', sans-serif;
-        font-weight: 400;
-    }
-
-    .option-image.selected img {
-        background-color: orange;
-    }
-
-    .image-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-    }
-
-    .option-image {
-        position: relative;
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        margin-left: 10px;
-        cursor: pointer;
-        background-color: #f0f0f0;
-        margin-right: 10px;
-    }
-
-    .option-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .checkmark {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        display: none;
-        color: rgb(61, 147, 0);
-        font-size: 4em; /* Checkmark boyutu */
-        font-weight: bold; /* Checkmark kalınlığı */
-        /* Diğer özelleştirmeleri buraya ekleyin */
-    }
-</style>
-
-<div class="row no-gutters">
-    <div class="col-md-4 no-gutters">
-        <div class="left-side d-flex flex-column align-items-center justify-content-center" style="margin-top: -60px;">
-            <h1 class="mb-5">Nasıl bir evde yaşıyorsunuz?</h1>
-        </div>
-    </div>
-
-    <div class="col-md-8 no-gutters">
-        <div class="right-side d-flex justify-content-center align-items-center">
-            <div class="image-container">
-                {% for home_model in home_models %}
-                    <div class="option-image text-center" onclick="selectImage(this)" data-home-model-id="{{ home_model.id }}">
-                        <img src="{{ home_model.image.url }}" alt="{{ home_model.img_alt }}" title="{{ home_model.img_title }}" />
-                        <i class="fas fa-check checkmark"></i>
-                        <span>{{ home_model.name }}</span>
-                    </div>
-                {% endfor %}
+    
+        .right-side {
+            background-color: #F3F0EB;
+            height: 50vh;
+            width: 100%;
+            position: relative;
+        }
+    
+        @media screen and (min-width: 768px) {
+            .left-side,
+            .right-side {
+                height: 100vh;
+            }
+        }
+    
+        .custom-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            margin-bottom: 20px;
+            margin-right: 20px;
+            background-color: #F2C791;
+        }
+    
+        .custom-btn1 {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            margin-bottom: 20px;
+            margin-left: 20px;
+            background-color: #F2C791;
+        }
+    
+        .left-side h1 {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            font-size: 2em;
+        }
+    
+        .left-side h6 {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+        }
+    
+        .option-image.selected img {
+            background-color: orange;
+        }
+    
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+    
+        .option-image {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-left: 10px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            margin-right: 10px;
+        }
+    
+        .option-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    
+        .checkmark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            color: rgb(61, 147, 0);
+            font-size: 4em; /* Checkmark boyutu */
+            font-weight: bold; /* Checkmark kalınlığı */
+            /* Diğer özelleştirmeleri buraya ekleyin */
+        }
+    </style>
+    
+    <div class="row no-gutters">
+        <div class="col-md-4 no-gutters">
+            <div class="left-side d-flex flex-column align-items-center justify-content-center" style="margin-top: -60px;">
+                <h1 class="mb-5">Nasıl bir evde yaşıyorsunuz?</h1>
             </div>
-            <button type="submit" class="btn btn-heading btn-block hover-up custom-btn" onclick="save_type()" name="login">Sonraki Adım</button>
-            <button type="submit" class="btn btn-heading btn-block hover-up custom-btn1" onclick="goToPreviousPage()" name="prev">Önceki Adım</button>
+        </div>
+    
+        <div class="col-md-8 no-gutters">
+            <div class="right-side d-flex justify-content-center align-items-center">
+                <div class="image-container">
+                    {% for home_model in home_models %}
+                        <div class="option-image text-center" onclick="selectImage(this)" data-home-model-id="{{ home_model.id }}">
+                            <img src="{{ home_model.image.url }}" alt="{{ home_model.img_alt }}" title="{{ home_model.img_title }}" />
+                            <i class="fas fa-check checkmark"></i>
+                            <span>{{ home_model.name }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-heading btn-block hover-up custom-btn" onclick="save_type()" name="login">Sonraki Adım</button>
+                <button type="submit" class="btn btn-heading btn-block hover-up custom-btn1" onclick="goToPreviousPage()" name="prev">Önceki Adım</button>
+            </div>
         </div>
     </div>
+    
+    <form id="roomTypeForm" method="post">
+        {% csrf_token %}
+        <input type="hidden" id="selectedHomeModelId" name="selected_home_model_id" value="">
+    </form>
+    
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        
+    
+        let selectedImage = null;
+    
+        function selectImage(divElement) {
+            const imagePath = $(divElement).find("img").attr("src");
+            const checkmark = $(divElement).find(".checkmark");
+    
+            if (selectedImage === imagePath) {
+                selectedImage = null;
+                $(divElement).removeClass("selected-image");
+                $(divElement).css("background-color", "#f0f0f0");
+                checkmark.hide();
+                return;
+            }
+    
+            if (selectedImage) {
+                const messageContainer = document.querySelector('.popup-message');
+                messageContainer.innerHTML = '<div class="alert alert-danger">Sadece bir seçim yapabilirsiniz!</div>';
+                messageContainer.style.display = 'block';
+    
+                setTimeout(function () {
+                    messageContainer.style.display = 'none';
+                }, 5000); // 5 saniye
+                return;
+            }
+    
+            selectedImage = imagePath;
+    
+            $(divElement).addClass("selected-image");
+            $(divElement).css("background-color", "orange");
+            checkmark.show();
+        }
+    
+        function save_type() {
+            if (selectedImage) {
+                const selectedHomeModelId = $(".selected-image").attr("data-home-model-id");
+                $("#selectedHomeModelId").val(selectedHomeModelId);
+    
+                console.log(selectedHomeModelId);
+                
+                $.ajax({
+                    url: "{% url 'customerauth:home-model' %}",
+                    type: "POST",
+                    data: $("#roomTypeForm").serialize(),
+                    success: function (response) {
+                        window.location.href = "{% url 'customerauth:space-definations' %}";
+                    },
+                    error: function (error) {
+                        //console.error(selectedHomeModelId);
+                    }
+                });
+            } else {
+                const messageContainer = document.querySelector('.popup-message');
+                messageContainer.innerHTML = '<div class="alert alert-danger">Lütfen bir ev modeli seçin!</div>';
+                messageContainer.style.display = 'block';
+    
+                setTimeout(function () {
+                    messageContainer.style.display = 'none';
+                }, 5000); // 5 saniye
+            }
+        }
+    
+        function goToPreviousPage() {
+            // Önceki sayfanın URL'ini al
+            const previousPageUrl = "{% url 'customerauth:home-type' %}";
+            
+            // Yeni sayfaya yönlendir
+            window.location.href = previousPageUrl;
+        }
+    </script>
+
+</div>
 </div>
 
-<form id="roomTypeForm" method="post">
-    {% csrf_token %}
-    <input type="hidden" id="selectedHomeModelId" name="selected_home_model_id" value="">
-</form>
 
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
-    
-
-    let selectedImage = null;
-
-    function selectImage(divElement) {
-        const imagePath = $(divElement).find("img").attr("src");
-        const checkmark = $(divElement).find(".checkmark");
-
-        if (selectedImage === imagePath) {
-            selectedImage = null;
-            $(divElement).removeClass("selected-image");
-            $(divElement).css("background-color", "#f0f0f0");
-            checkmark.hide();
-            return;
-        }
-
-        if (selectedImage) {
-            const messageContainer = document.querySelector('.popup-message');
-            messageContainer.innerHTML = '<div class="alert alert-danger">Sadece bir seçim yapabilirsiniz!</div>';
-            messageContainer.style.display = 'block';
-
-            setTimeout(function () {
-                messageContainer.style.display = 'none';
-            }, 5000); // 5 saniye
-            return;
-        }
-
-        selectedImage = imagePath;
-
-        $(divElement).addClass("selected-image");
-        $(divElement).css("background-color", "orange");
-        checkmark.show();
-    }
-
-    function save_type() {
-        if (selectedImage) {
-            const selectedHomeModelId = $(".selected-image").attr("data-home-model-id");
-            $("#selectedHomeModelId").val(selectedHomeModelId);
-
-            console.log(selectedHomeModelId);
-            
-            $.ajax({
-                url: "{% url 'customerauth:home-model' %}",
-                type: "POST",
-                data: $("#roomTypeForm").serialize(),
-                success: function (response) {
-                    window.location.href = "{% url 'customerauth:space-definations' %}";
-                },
-                error: function (error) {
-                    //console.error(selectedHomeModelId);
-                }
-            });
-        } else {
-            const messageContainer = document.querySelector('.popup-message');
-            messageContainer.innerHTML = '<div class="alert alert-danger">Lütfen bir ev modeli seçin!</div>';
-            messageContainer.style.display = 'block';
-
-            setTimeout(function () {
-                messageContainer.style.display = 'none';
-            }, 5000); // 5 saniye
-        }
-    }
-
-    function goToPreviousPage() {
-        // Önceki sayfanın URL'ini al
-        const previousPageUrl = "{% url 'customerauth:home-type' %}";
-        
-        // Yeni sayfaya yönlendir
-        window.location.href = previousPageUrl;
-    }
-</script>
 
 {% endblock content %}

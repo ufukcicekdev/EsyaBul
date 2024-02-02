@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from customerauth.models import User, Profile, Address
 from phonenumber_field.formfields import PhoneNumberField
-from cities_light.models import Country, City, Region
+from cities_light.models import Country, City, Region, SubRegion
 from products.models import RoomType, HomeType
 from django.contrib.auth.password_validation import CommonPasswordValidator, MinimumLengthValidator, NumericPasswordValidator
 
@@ -50,29 +50,52 @@ class ProfileForm(forms.ModelForm):
 
 
 class AddressForm(forms.ModelForm):
-    country = forms.ModelChoiceField(
-        queryset=Country.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control'})
+ 
+    
+    region = forms.ModelChoiceField(
+        queryset=SubRegion.objects.all().order_by('name'),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label='İlçe'
     )
     
     city = forms.ModelChoiceField(
-        queryset=City.objects.all().order_by('name'),
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
-    
-    region = forms.ModelChoiceField(
         queryset=Region.objects.all().order_by('name'),
-        widget=forms.Select(attrs={'class': 'form-control'})
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label='İl'
     )
 
     class Meta:
         model = Address
-        fields = ['address_type', 'name', 'city', 'country', 'region', 'address_line1', 'address_line2', 'state', 'postal_code']
+        fields = ['address_type', 'username', 'usersurname', 'phone', 'city', 'region', 
+                  'address_name', 'address_line1', 'postal_code', 'firm_name','firm_taxcode','firm_tax_home']
         widgets = {
-            'address_type': forms.Select(attrs={'class': 'form-control'}),
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'address_type': forms.RadioSelect(attrs={'class': 'radioButtons'}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'usersurname': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'city': forms.Select(attrs={'class': 'form-control'}),
+            'region': forms.Select(attrs={'class': 'form-control'}),
+            'address_name': forms.TextInput(attrs={'class': 'form-control'}),
             'address_line1': forms.TextInput(attrs={'class': 'form-control'}),
-            'address_line2': forms.TextInput(attrs={'class': 'form-control', 'required': False}),
-            'state': forms.TextInput(attrs={'class': 'form-control'}),
             'postal_code': forms.TextInput(attrs={'class': 'form-control'}),
+            'firm_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'firm_taxcode': forms.TextInput(attrs={'class': 'form-control'}),
+            'firm_tax_home': forms.TextInput(attrs={'class': 'form-control'}),
+
+
+
+        }
+        labels = {
+            'address_type': 'Fatura Tipi',
+            'username': 'Ad',
+            'usersurname': 'Soyad',
+            'phone': 'Telefon Numarası',
+            'city': 'İlçe',
+            'region': 'İl',
+            'address_name': 'Adres Başlığı',
+            'address_line1': 'Adres',
+            'postal_code': 'Posta Kodu',
+            'firm_name':'Firma Adı',
+            'firm_taxcode':'Vergi Kodu',
+            'firm_tax_home':'Vergi Dairesi'
         }

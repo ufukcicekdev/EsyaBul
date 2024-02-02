@@ -137,7 +137,7 @@ def customer_dashboard(request):
             new_address = form.save(commit=False) 
             new_address.user = request.user 
             new_address.save()
-            messages.success(request, "Address Added Successfully.")
+            messages.success(request, "Profiliniz Başarı ile Güncellenmiştir.")
             return redirect("customerauth:dashboard")
         else:
             messages.error(request, "There was an error with the form.")
@@ -149,43 +149,93 @@ def customer_dashboard(request):
     }
     return render(request, 'customerauth/dashboard.html', context)
 
-@login_required(login_url='customerauth:sign-in')
-def make_address_default(request):
-    id = request.GET['id']
-    Address.objects.update(is_default=True)
-    Address.objects.filter(id=id).update(is_default=True)
-    return JsonResponse({"boolean": True})
+
+
+# @login_required(login_url='customerauth:sign-in')
+# def customer_address(request):
+#     addresses = Address.objects.filter(user=request.user)
+#     form = AddressForm(request.POST or None) 
+
+#     if request.method == "POST":
+#         if form.is_valid():  
+#             new_address = form.save(commit=False) 
+#             new_address.user = request.user 
+#             new_address.save()
+#             messages.success(request, "Adresiniz Başarı ile Eklenmiştir.")
+#             return redirect("customerauth:dashboard")
+#         else:
+#             messages.error(request, "There was an error with the form.")
+
+#     context = {
+#         "addresses": addresses,
+#         "form": form  
+#     }
+#     return render(request, 'customerauth/address.html', context)
+
+
+
+# @login_required(login_url='customerauth:sign-in')
+# def make_address_default(request):
+#     id = request.GET['id']
+#     Address.objects.update(is_default=True)
+#     Address.objects.filter(id=id).update(is_default=True)
+#     return JsonResponse({"boolean": True})
+
+
+# @login_required(login_url='customerauth:sign-in')
+# def delete_adress(request):
+#     if request.method == "GET":
+#         address_id = request.GET.get('id')
+#         try:
+#             address = Address.objects.get(id=address_id)
+#             address.delete()
+#             messages.success(request, "Address Delete Successfully.")
+#             return JsonResponse({"status": "success", "message": "Address deleted successfully."})
+#         except Address.DoesNotExist:
+#             return JsonResponse({"status": "error", "message": "Address does not exist."})
+#     return JsonResponse({"status": "error", "message": "Invalid method."})
+
+
+# @login_required(login_url='customerauth:sign-in')
+# def edit_address(request, address_id):
+#     address1 = get_object_or_404(Address, id=address_id)
+#     if request.method == "POST":
+#         form = AddressForm(request.POST, instance=address1)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, "Address Added Successfully.")
+#             return redirect("customerauth:dashboard")
+#         else:
+#             return JsonResponse({"status": "error", "message": form.errors})
+    
+#     form = AddressForm(instance=address1)
+#     return render(request, 'customerauth/address.html', {'editform': form, 'address1': address1})
 
 
 @login_required(login_url='customerauth:sign-in')
-def delete_adress(request):
-    if request.method == "GET":
-        address_id = request.GET.get('id')
-        try:
-            address = Address.objects.get(id=address_id)
-            address.delete()
-            messages.success(request, "Address Delete Successfully.")
-            return JsonResponse({"status": "success", "message": "Address deleted successfully."})
-        except Address.DoesNotExist:
-            return JsonResponse({"status": "error", "message": "Address does not exist."})
-    return JsonResponse({"status": "error", "message": "Invalid method."})
+def address_list(request):
+    addresses = Address.objects.filter(user=request.user)
+    form = AddressForm(request.POST or None) 
+    return render(request, 'customerauth/address.html', {'addresses': addresses, 'form': form })
 
 
-
+@login_required(login_url='customerauth:sign-in')
 def edit_address(request, address_id):
-    address = get_object_or_404(Address, id=address_id)
+    address_queryset = Address.objects.get(id=address_id)
     
-    if request.method == "POST":
-        form = AddressForm(request.POST, instance=address)
-        if form.is_valid():
-            form.save()
-            return JsonResponse({"status": "success", "message": "Address updated successfully."})
-        else:
-            return JsonResponse({"status": "error", "message": form.errors})
+    address_queryset_val = Address.objects.values()
+    address_data = list(address_queryset_val)
     
-    form = AddressForm(instance=address)
-    return render(request, 'edit_address_modal_content.html', {'form': form})
+    return JsonResponse({'status': 'success', 'data':address_data })
+    
 
+
+@login_required(login_url='customerauth:sign-in')
+def delete_address(request, address_id):
+    address = get_object_or_404(Address, id=address_id)
+    address.delete()
+    messages.success(request, "Address Deleted Successfully.")
+    return redirect('customerauth:address-list')
 
 
 

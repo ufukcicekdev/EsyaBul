@@ -2,73 +2,85 @@
 {% load static %}
 
 {% block content %}
-<style>
+
+<div id="__next"><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5BR43KH" height="0"
+    width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<div class="site-container">
+
+    {% include 'core/header.html' %}
+
+    <style>
     
-    .left-side {
-        background-color: #FFFFFF;
-        height: 50vh;
-        width: 100%;
-    }
-
-    .right-side {
-        background-color: #F3F0EB;
-        height: 50vh;
-        width: 100%;
-        
-    }
-
- 
-    .custom-btn {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        margin-bottom: 20px; /* İhtiyaca göre ayarlayabilirsiniz */
-        margin-right: 20px; /* İhtiyaca göre ayarlayabilirsiniz */
-        background-color: #F2C791;
-    }
-
-    @media screen  and (min-width:768px) {
-        
-        .left-side,.right-side{
-            height: 100vh;
+        .left-side {
+            background-color: #FFFFFF;
+            height: 50vh;
+            width: 100%;
         }
-    }
-
-
-
-    .left-side h1 {
-        font-family: 'Roboto', sans-serif;
-        font-weight: 700; /* Kalın (bold) ağırlık */
-        font-size: 2em; /* İstediğiniz büyüklükte */
-    }
-
-    .left-side h6 {
-        font-family: 'Roboto', sans-serif;
-        font-weight: 400; /* Normal ağırlık */
-    }
-</style>
-
-<div class="row no-gutters">
-
-    <div class="col-md-6 no-gutters">
-        <div class="left-side d-flex flex-column align-items-center justify-content-center" style="margin-top: -60px;">
-            <h1 class="mb-5">Neredeysen oradasın!</h1>
-            <p class="mb-30">Stil sonuçlarını görmek için Tarzımı Gör diyerek devam edebilirsiniz!</p>
+    
+        .right-side {
+            background-color: #F3F0EB;
+            height: 50vh;
+            width: 100%;
+            
+        }
+    
+     
+        .custom-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            margin-bottom: 20px; /* İhtiyaca göre ayarlayabilirsiniz */
+            margin-right: 20px; /* İhtiyaca göre ayarlayabilirsiniz */
+            background-color: #F2C791;
+        }
+    
+        @media screen  and (min-width:768px) {
+            
+            .left-side,.right-side{
+                height: 100vh;
+            }
+        }
+    
+    
+    
+        .left-side h1 {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700; /* Kalın (bold) ağırlık */
+            font-size: 2em; /* İstediğiniz büyüklükte */
+        }
+    
+        .left-side h6 {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400; /* Normal ağırlık */
+        }
+    </style>
+    
+    <div class="row no-gutters">
+    
+        <div class="col-md-6 no-gutters">
+            <div class="left-side d-flex flex-column align-items-center justify-content-center" style="margin-top: -60px;">
+                <h1 class="mb-5">Neredeysen oradasın!</h1>
+                <p class="mb-30">Stil sonuçlarını görmek için Tarzımı Gör diyerek devam edebilirsiniz!</p>
+            </div>
+        </div>
+        
+        <div class="col-md-6 no-gutters">
+            <div class="right-side d-flex justify-content-center align-items-center">
+                <h1 class="mb-5">Hazır mısın {{ user_name }}</h1>
+                <button type="submit" class="btn btn-heading btn-block hover-up custom-btn" onclick="redirectToPage()" name="login">Tarzımı Gör</button>
+            </div>
         </div>
     </div>
     
-    <div class="col-md-6 no-gutters">
-        <div class="right-side d-flex justify-content-center align-items-center">
-            <h1 class="mb-5">Hazır mısın {{ user_name }}</h1>
-            <button type="submit" class="btn btn-heading btn-block hover-up custom-btn" onclick="redirectToPage()" name="login">Tarzımı Gör</button>
-        </div>
-    </div>
+    <script>
+        function redirectToPage() {
+            window.location.href = "{% url 'customerauth:room-type' %}";
+        }
+    </script>
+
+</div>
 </div>
 
-<script>
-    function redirectToPage() {
-        window.location.href = "{% url 'customerauth:room-type' %}";
-    }
-</script>
+
 
 {% endblock content %}

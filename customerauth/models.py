@@ -34,7 +34,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="image")
     full_name = models.CharField(max_length=200, null=True, blank=True)
-    phone = PhoneNumberField(null=True, blank=True)
+    phone = models.CharField(max_length=255)
     verified = models.BooleanField(default=False)
     
     def __str__(self):
@@ -44,7 +44,7 @@ class Profile(models.Model):
 class ContactUs(models.Model):
     full_name = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
-    phone = PhoneNumberField(null=True, blank=True)
+    phone = models.CharField(max_length=255)
     subject = models.CharField(max_length=200) # +234 (456) - 789
     message = models.TextField()
 
@@ -65,25 +65,34 @@ class AddressType(models.Model):
 
 class Address(models.Model):
     user = models.ForeignKey(User, related_name='addresses', on_delete=models.CASCADE)
+    username = models.CharField(max_length=255)  # max_length eklenmiştir
+    usersurname = models.CharField(max_length=255)  # max_length eklenmiştir
+    phone = models.CharField(max_length=255)
     address_type = models.ForeignKey(AddressType, related_name='addresses', on_delete=models.SET_NULL, null=True)
-    name = models.CharField(max_length=255, help_text="Açıklayıcı bir ad (örn. Ev Adresi, İş Adresi)")
+    address_name = models.CharField(max_length=255, help_text="Açıklayıcı bir ad (örn. Ev Adresi, İş Adresi)")
     address_line1 = models.CharField(max_length=255)
-    address_line2 = models.CharField(max_length=255, blank=True, null=True)
-    state = models.CharField(max_length=100)
     postal_code = models.CharField(max_length=10)
     is_default = models.BooleanField(default=False)  # varsayılan adres mi?
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    country = models.ForeignKey('cities_light.Country', on_delete=models.SET_NULL, null=True, blank=True) 
-    city = models.ForeignKey('cities_light.City', on_delete=models.SET_NULL, null=True, blank=True)
-    region = models.ForeignKey('cities_light.Region', on_delete=models.SET_NULL, null=True, blank=True)
+    firm_name = models.CharField(max_length=255)
+    firm_taxcode = models.CharField(max_length=255)
+    firm_tax_home = models.CharField(max_length=255)
+
+    #country = models.ForeignKey('cities_light.Country', on_delete=models.SET_NULL, null=True, blank=True) 
+    #city = models.ForeignKey('cities_light.City', on_delete=models.SET_NULL, null=True, blank=True)
+    city = models.ForeignKey('cities_light.Region', on_delete=models.SET_NULL, null=True, blank=True)
+    region = models.ForeignKey('cities_light.SubRegion', on_delete=models.SET_NULL, null=True, blank=True)
+
+    
     class Meta:
         verbose_name = 'Address'
         verbose_name_plural = 'Addresses'
 
     def __str__(self):
-        return f"{self.name} - {self.address_line1}, {self.city}, {self.country}"
+        return f"{self.username} - {self.address_line1}, {self.city}"
+
     
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

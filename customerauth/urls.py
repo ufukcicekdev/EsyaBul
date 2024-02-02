@@ -14,9 +14,18 @@ urlpatterns = [
     path("sign-out/", views.logout_view, name="sign-out"),
     path("profile/update/", views.profile_update, name="profile-update"),
     path("dashboard/", views.customer_dashboard, name="dashboard"),
-    path("make-default-address/", views.make_address_default, name="make-default-address"),
-    path("delete-adress/", views.delete_adress, name="delete-adress"),
-    path('edit-address/<int:address_id>/', views.edit_address, name='edit_address'),
+    # path("dashboard/adress", views.customer_address, name="cutomer-address"),
+    # path("dashboard/adress/edit-address/<int:address_id>/", views.edit_address, name="edit_address"),
+
+
+    path('dashboard/addresses/', views.address_list, name='address-list'),
+    path('dashboard/edit_address/<int:address_id>/', views.edit_address, name='edit-address'),
+    path('dashboard/delete_address/<int:address_id>/', views.delete_address, name='delete-address'),
+
+
+    # path("make-default-address/", views.make_address_default, name="make-default-address"),
+    # path("delete-adress/", views.delete_adress, name="delete-adress"),
+    #path('edit-address/<int:address_id>/', views.edit_address, name='edit_address'),
 
     path('thank-you/', views.thank_you_view, name='thank_you'),
 

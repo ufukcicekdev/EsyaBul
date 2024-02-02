@@ -423,32 +423,26 @@ function showErrorMessage(messageText) {
     }, 5000);
 }
 
-    // Adress aedit
+ 
 
-
-$(document).ready(function() {
-    // Adres Detayları gösterme kodunuz burada
+// $(document).ready(function() {
   
-    // Adres Düzenleme kodu
-    $(".edit-address").click(function() {
-      let addressId = $(this).data("address-id");
-      $.ajax({
-        url: `/edit-address/${addressId}/`,  // Örnek URL, gerçek URL'nizi bu yapıya göre güncelleyin
-        type: "GET",
-        success: function(response) {
-          $("#editAddressContent").html(response);
-          $("#editAddressModal").modal("show");
-        },
-        error: function(error) {
-          console.log("Error:", error);
-        }
-      });
-    });
-  });
-
-
-    
-})
+//     $(".edit-address").click(function() {
+//        let addressId = $(this).attr("data-address-id");
+//       $.ajax({
+//         url: `/dashboard/adress/edit-address/${addressId}/`,  // Örnek URL, gerçek URL'nizi bu yapıya göre güncelleyin
+//         type: "GET",
+//         success: function(response) {
+//             console.log(response);
+         
+//         },
+//         error: function(error) {
+//           console.log("Error:", error);
+//         }
+//       });
+//     });
+//   });    
+// })
 
 
 

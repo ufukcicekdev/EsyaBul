@@ -2,16 +2,20 @@
 
 {% load static %}
 
-{% block title %} Home {% endblock title %}
+{% block title %} Anasayfa {% endblock title %}
 
 {% block content %}
 
 
-<h1>selam
+<div id="__next"><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5BR43KH" height="0"
+    width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<div class="site-container">
 
-</h1>
-<a href="{% url 'customerauth:dashboard' %}">dashboard</a>
+    {% include 'core/header.html' %}
+    {% include 'core/footer.html' %}
 
 
+</div>
+</div>
 
 {%  endblock %}
