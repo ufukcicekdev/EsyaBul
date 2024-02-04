@@ -5,6 +5,8 @@ from phonenumber_field.formfields import PhoneNumberField
 from cities_light.models import Country, City, Region, SubRegion
 from products.models import RoomType, HomeType
 from django.contrib.auth.password_validation import CommonPasswordValidator, MinimumLengthValidator, NumericPasswordValidator
+from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm
+
 
 
 class HomeTypeForm(forms.ModelForm):
@@ -37,16 +39,45 @@ class UserRegisterForm(UserCreationForm):
         return password2
 
 
+class NotificationSettingsForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['receive_email_notifications', 'receive_sms_notifications']
+        widgets = {
+            'receive_email_notifications': forms.CheckboxInput(),
+            'receive_sms_notifications': forms.CheckboxInput(),
+        }
 
 
 class ProfileForm(forms.ModelForm):
-    full_name = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Adınız"}))
-    phone = PhoneNumberField(widget=forms.TextInput(attrs={"placeholder": "Telefon Numarası"}))  # PhoneNumberField'ı doğrudan formda kullanıyoruz.
-
-
     class Meta:
-        model = Profile
-        fields = ['full_name', 'image', 'phone']
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'phone']
+        widgets = {
+            'phone': forms.NumberInput(attrs={'type': 'number', 'inputmode':'numeric'})
+        }
+
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+
+        # Telefon numarası sadece sayısal karakterler içermeli
+        if not phone.isdigit():
+            raise forms.ValidationError('Telefon numarası yalnızca sayısal karakterler içermelidir.')
+
+        return phone
+
+   
+    
+
+
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['old_password'].widget.attrs['placeholder'] = 'Mevcut Şifre'
+        self.fields['new_password1'].widget.attrs['placeholder'] = 'Yeni Şifre'
+        self.fields['new_password2'].widget.attrs['placeholder'] = 'Yeni Şifreyi Tekrar Girin'
+
 
 
 class AddressForm(forms.ModelForm):

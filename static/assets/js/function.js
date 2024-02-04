@@ -395,33 +395,33 @@ $(document).ready(function (){
 
 
 // Başarılı mesajı göstermek için fonksiyon
-function showSuccessMessage(messageText) {
-    const popupMessage = document.querySelector('.popup-message');
-    popupMessage.innerHTML = '<div class="alert alert-success">' + messageText + '</div>';
+// function showSuccessMessage(messageText) {
+//     const popupMessage = document.querySelector('.popup-message');
+//     popupMessage.innerHTML = '<div class="alert alert-success">' + messageText + '</div>';
     
-    // Popup mesajını göster
-    popupMessage.style.display = 'block';
+//     // Popup mesajını göster
+//     popupMessage.style.display = 'block';
     
-    // 5 saniye sonra popup mesajını gizle ve sayfayı yenile
-    setTimeout(function() {
-        popupMessage.style.display = 'none';
-        window.location.reload();
-    }, 5000);
-}
+//     // 5 saniye sonra popup mesajını gizle ve sayfayı yenile
+//     setTimeout(function() {
+//         popupMessage.style.display = 'none';
+//         window.location.reload();
+//     }, 5000);
+// }
 
-// Hata mesajı göstermek için fonksiyon
-function showErrorMessage(messageText) {
-    const popupMessage = document.querySelector('.popup-message');
-    popupMessage.innerHTML = '<div class="alert alert-danger">' + messageText + '</div>';
+// // Hata mesajı göstermek için fonksiyon
+// function showErrorMessage(messageText) {
+//     const popupMessage = document.querySelector('.popup-message');
+//     popupMessage.innerHTML = '<div class="alert alert-danger">' + messageText + '</div>';
     
-    // Popup mesajını göster
-    popupMessage.style.display = 'block';
+//     // Popup mesajını göster
+//     popupMessage.style.display = 'block';
     
-    // 5 saniye sonra popup mesajını gizle
-    setTimeout(function() {
-        popupMessage.style.display = 'none';
-    }, 5000);
-}
+//     // 5 saniye sonra popup mesajını gizle
+//     setTimeout(function() {
+//         popupMessage.style.display = 'none';
+//     }, 5000);
+// }
 
  
 

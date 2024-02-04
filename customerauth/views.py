@@ -1,15 +1,17 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from customerauth.forms import UserRegisterForm, ProfileForm, AddressForm,HomeTypeForm
+from customerauth.forms import UserRegisterForm, ProfileForm, AddressForm,CustomPasswordChangeForm, NotificationSettingsForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.conf import settings
-from customerauth.models import Profile, User, Address, MyStyles
+from customerauth.models import User, Address, MyStyles
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from products.models import RoomType, HomeType, HomeModel, SpaceDefinition, TimeRange
 from django.core.mail import EmailMessage
 from django.views.decorators.http import require_POST
 from actstream import action
+import json
+from django.contrib.auth import update_session_auth_hash
 
 
 def register_view(request):
@@ -97,18 +99,18 @@ def logout_view(request):
     }
     return render(request, "customerauth/thank-you.html", context1)
 
-
 @login_required(login_url='customerauth:sign-in')
 def profile_update(request):
-    profile = Profile.objects.get(user=request.user)
+    profile = get_object_or_404(User, id=request.user.id)
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            new_form = form.save(commit=False)
-            new_form.user = request.user
-            new_form.save()
+            form.save()
             messages.success(request, "Profile Updated Successfully.")
-            return redirect("customerauth:dashboard")
+            return redirect("customerauth:profile")
+        else:
+            for error in form.errors.values():
+                messages.error(request, error)
     else:
         form = ProfileForm(instance=profile)
 
@@ -128,7 +130,7 @@ def thank_you_view(request):
 
 @login_required(login_url='customerauth:sign-in')
 def customer_dashboard(request):
-    user_profile = Profile.objects.get(user=request.user)
+    user_profile = get_object_or_404(User, id=request.user.id)
     addresses = Address.objects.filter(user=request.user)
     form = AddressForm(request.POST or None) 
 
@@ -151,65 +153,45 @@ def customer_dashboard(request):
 
 
 
-# @login_required(login_url='customerauth:sign-in')
-# def customer_address(request):
-#     addresses = Address.objects.filter(user=request.user)
-#     form = AddressForm(request.POST or None) 
-
-#     if request.method == "POST":
-#         if form.is_valid():  
-#             new_address = form.save(commit=False) 
-#             new_address.user = request.user 
-#             new_address.save()
-#             messages.success(request, "Adresiniz Başarı ile Eklenmiştir.")
-#             return redirect("customerauth:dashboard")
-#         else:
-#             messages.error(request, "There was an error with the form.")
-
-#     context = {
-#         "addresses": addresses,
-#         "form": form  
-#     }
-#     return render(request, 'customerauth/address.html', context)
-
+@login_required(login_url='customerauth:sign-in')
+def password_change(request):
+    if request.method == "POST":
+        form = CustomPasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user) 
+            messages.success(request, "Password changed successfully.")
+            return redirect("customerauth:dashboard")
+        else:
+            for error in form.errors.values():
+                messages.error(request, error)
+    else:
+        form = CustomPasswordChangeForm(request.user)
+        
+    context = {
+        "form": form,
+    }
+    return render(request, 'customerauth/password_change.html', context)
 
 
-# @login_required(login_url='customerauth:sign-in')
-# def make_address_default(request):
-#     id = request.GET['id']
-#     Address.objects.update(is_default=True)
-#     Address.objects.filter(id=id).update(is_default=True)
-#     return JsonResponse({"boolean": True})
+@login_required(login_url='customerauth:sign-in')
+def notifications(request):
+    user_profile = get_object_or_404(User, id=request.user.id)
+  # varsayılan olarak user'ın profile'ını alır, profile yoksa oluşturur
 
+    print("user_profile",user_profile.receive_email_notifications)
+    if request.method == 'POST':
+        form = NotificationSettingsForm(request.POST, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Notification settings updated successfully.')
+            return redirect("customerauth:notifications")
+        else:
+            messages.error(request, 'Error updating notification settings. Please check the form.')
+    else:
+        form = NotificationSettingsForm(instance=user_profile)
 
-# @login_required(login_url='customerauth:sign-in')
-# def delete_adress(request):
-#     if request.method == "GET":
-#         address_id = request.GET.get('id')
-#         try:
-#             address = Address.objects.get(id=address_id)
-#             address.delete()
-#             messages.success(request, "Address Delete Successfully.")
-#             return JsonResponse({"status": "success", "message": "Address deleted successfully."})
-#         except Address.DoesNotExist:
-#             return JsonResponse({"status": "error", "message": "Address does not exist."})
-#     return JsonResponse({"status": "error", "message": "Invalid method."})
-
-
-# @login_required(login_url='customerauth:sign-in')
-# def edit_address(request, address_id):
-#     address1 = get_object_or_404(Address, id=address_id)
-#     if request.method == "POST":
-#         form = AddressForm(request.POST, instance=address1)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, "Address Added Successfully.")
-#             return redirect("customerauth:dashboard")
-#         else:
-#             return JsonResponse({"status": "error", "message": form.errors})
-    
-#     form = AddressForm(instance=address1)
-#     return render(request, 'customerauth/address.html', {'editform': form, 'address1': address1})
+    return render(request, 'customerauth/notifications.html', {'form': form})
 
 
 @login_required(login_url='customerauth:sign-in')
@@ -221,21 +203,122 @@ def address_list(request):
 
 @login_required(login_url='customerauth:sign-in')
 def edit_address(request, address_id):
-    address_queryset = Address.objects.get(id=address_id)
-    
-    address_queryset_val = Address.objects.values()
-    address_data = list(address_queryset_val)
-    
-    return JsonResponse({'status': 'success', 'data':address_data })
-    
+    # İlgili adresi getir veya 404 hatası gönder
+    address = get_object_or_404(Address, id=address_id)
+
+    if request.method == "POST":
+        json_data = json.loads(request.body.decode('utf-8'))
+
+        print("json_data",json_data)
+        username = json_data.get('username')
+        last_name = json_data.get('usersurname')
+        phone = json_data.get('phone')
+
+        city_id = json_data.get('cityId')
+        region_id = json_data.get('countyId')
+        address_line1 = json_data.get('address_line1')
+        address_name = json_data.get("title")
+        address_type = json_data.get('type')
+
+        firmName = json_data.get('corporateName')
+        taxNumber = json_data.get('taxNumber')
+        taxOffice = json_data.get('taxOffice')
+
+        try:
+            address.username = username
+            address.usersurname = last_name
+            address.phone = phone
+            address.city_id = city_id
+            address.region_id = region_id
+            address.address_line1 = address_line1
+            address.address_name = address_name
+            address.address_type_id = address_type
+           
+            if address_type == '2':
+                address.firm_name = firmName
+                address.firm_taxcode = taxNumber
+                address.firm_tax_home = taxOffice
+
+            address.save()
+
+            messages.success(request, "Address Updated Successfully.")
+            return JsonResponse({"status": "success", 'redirect_url': reverse('customerauth:address-list')})
+        except Exception as e:
+            # Hata durumunda hatayı JSON olarak gönder
+            return JsonResponse({"status": "error", "message": str(e)})
+
+    address_data = {
+        "id": address.id,
+        "city": address.city_id,
+        "region": address.region_id,
+        "username": address.username,
+        "usersurname": address.usersurname,
+        "phone": address.phone,
+        "address_line1": address.address_line1,
+        "address_name": address.address_name,
+        "firm_name": address.firm_name,
+        "firm_taxcode": address.firm_taxcode,
+        "firm_tax_home": address.firm_tax_home,
+        "address_type_id": address.address_type_id,
+    }
+
+    return JsonResponse({'status': 'success', 'data': [address_data]})
 
 
 @login_required(login_url='customerauth:sign-in')
 def delete_address(request, address_id):
+    print("buradsın")
     address = get_object_or_404(Address, id=address_id)
     address.delete()
-    messages.success(request, "Address Deleted Successfully.")
+    messages.success(request, "Adresiniz başarıyla silinmiştir.")
     return redirect('customerauth:address-list')
+
+
+@login_required(login_url='customerauth:sign-in')
+def create_address(request):
+    if request.method == 'POST':
+        # Gelen verilertek tek al
+        json_data = json.loads(request.body.decode('utf-8'))
+
+        username = json_data.get('username')
+        last_name = json_data.get('usersurname')
+        phone = json_data.get('phone')
+
+        city_id = json_data.get('cityId')
+        region_id = json_data.get('countyId')
+        address_line1 = json_data.get('address_line1')
+        address_name = json_data.get("title")
+        address_type = json_data.get('type')
+
+        firmName = json_data.get('corporateName')
+        taxNumber = json_data.get('taxNumber')
+        taxOffice = json_data.get('taxOffice')
+        # Diğer gerekli alanları da alın
+
+        try:
+            new_address = Address.objects.create(
+                username=username,
+                usersurname=last_name,
+                phone=phone,
+                city_id=city_id,
+                region_id  = region_id,
+                address_line1=address_line1,
+                address_name = address_name,
+                address_type_id = address_type,
+                firm_name = firmName,
+                firm_taxcode = taxNumber,
+                firm_tax_home = taxOffice,
+                user_id=request.user.id,
+            )
+            messages.success(request, "Adresiniz başarıyla kayıt edilmiştir.")
+            return JsonResponse({"status": "success", "message": "Address created successfully"})
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": str(e)})
+
+    else:
+        # GET isteği durumunda uygun bir yanıt gönder
+        return JsonResponse({"status": "error", "message": "GET isteği bekleniyor."})
+    
 
 
 

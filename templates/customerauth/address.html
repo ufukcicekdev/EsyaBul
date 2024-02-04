@@ -18,13 +18,13 @@
                                             class="sc-kzqdkY edqiAa title-bold-16-19">Kiraladıklarım</button></li>
                                     <li class="sc-gdyeKB xqfpj"><button class="sc-kzqdkY edqiAa title-bold-16-19">Satın
                                             Aldıklarım</button></li>
-                                    <li class="sc-gdyeKB xqfpj"><button class="sc-kzqdkY fwKUEs title-bold-16-19">Adres
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getAddress()" class="sc-kzqdkY hIpJTj title-bold-16-19">Adres
                                             Bilgilerim</button></li>
-                                    <li class="sc-gdyeKB xqfpj"><button class="sc-kzqdkY edqiAa title-bold-16-19">Kişisel
-                                            Bilgiler</button></li>
-                                    <li class="sc-gdyeKB xqfpj"><button class="sc-kzqdkY edqiAa title-bold-16-19">Bildirim
+                                            <li class="sc-gdyeKB xqfpj"><button onclick="getProfile()" class="sc-kzqdkY edqiAa title-bold-16-19">Kişisel
+                                                Bilgiler</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getNotify()" class="sc-kzqdkY edqiAa title-bold-16-19">Bildirim
                                             Ayarları</button></li>
-                                    <li class="sc-gdyeKB xqfpj"><button class="sc-kzqdkY edqiAa title-bold-16-19">Şifre
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getPasswordProcess()" class="sc-kzqdkY edqiAa title-bold-16-19">Şifre
                                             İşlemleri</button></li>
                                     <li class="sc-gdyeKB xqfpj"><button class="sc-kzqdkY edqiAa title-bold-16-19">Çıkış
                                             Yap</button></li>
@@ -47,8 +47,8 @@
                                     </div>
                                 </a>
                             </div> -->
-                            <div id="addressPage">
-                                <div class="contentTitle heading mb-0">
+                            <div id="addressPage" class="sc-bVHCgj bvQtLI">
+                                <div class="contentTitle heading">
                                     <strong class="d-block headline-bold-20-24">Adres bilgilerim</strong>
                                     <div class="insertAddress body-bold-14-17">
                                         <a class="sc-iHGNWf bhQoUp d-block" onclick="toggleAddressForm()">
@@ -80,16 +80,12 @@
                                             <div class="header">
                                                 <strong class="title body-semi-bold-14-17">{{ address.address_name }}</strong>
                                                 <div class="body-bold-14-17">
-                                                    <a href="#" data-address-id="{{address.id}}"
+                                                    <a data-address-id="{{address.id}}"
                                                         class="sc-iHGNWf bhQoUp d-block edit-address"
                                                         onclick="">
                                                         <div class="sc-kOHTFB kABxmt">Düzenle</div>
                                                     </a>
-                                                    <a href="#" data-address-id="{{address.id}}"
-                                                        class="sc-iHGNWf bhQoUp d-block delete-address"
-                                                        onclick="deleteAddress(event)">
-                                                        <div class="sc-kOHTFB kABxmt">Sil</div>
-                                                    </a>
+                                                    
                                                 </div>
                                             </div>
                                             <div class="body">
@@ -127,7 +123,8 @@
         </div>
         <div class="content">
             <div class="contentInner">
-                <form id="EditAddressForm" class="edit-address-form" method="POST" >
+                <form id="CreateForm" class="edit-address-form" method="POST" >
+                    {% csrf_token %}
                     <div class="input-container">
                         <div width="100%" class="sc-koXPp hcabXJ">
                             <div class="top caption-bold-12-15">
@@ -291,16 +288,19 @@
                 </form>
             </div>
         </div>
-        <div class="buttons"><button class="sc-aXZVg hSCzLe body-bold-14-17">
-            <div class="children">Adresimi Kaydet</div>
-            <div class="sc-gEvEer bfDmgA"><svg width="16px" height="16px" viewBox="0 0 24 24" fill="none"
-                    xmlns="http://www.w3.org/2000/svg" name="ArrowMediumRight">
-                    <path d="M8.5 5L15.5 12L8.5 19" stroke="#0A103D" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round"></path>
-                </svg></div>
-        </button><button class="sc-aXZVg cIIrOK body-bold-14-17">
-            <div class="children">Vazgeç</div>
-        </button></div>
+        <div class="buttons">
+                <button class="sc-aXZVg hSCzLe body-bold-14-17" id="createAddressBtn">
+                    <div class="children">Adresimi Kaydet</div>
+                    <div class="sc-gEvEer bfDmgA"><svg width="16px" height="16px" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg" name="ArrowMediumRight">
+                            <path d="M8.5 5L15.5 12L8.5 19" stroke="#0A103D" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"></path>
+                        </svg></div>
+                </button>
+            <button class="sc-aXZVg cIIrOK body-bold-14-17">
+                <div class="children">Vazgeç</div>
+            </button>
+        </div>
     </div>
 </div>
 
@@ -323,6 +323,7 @@
         <div class="content">
             <div class="contentInner">
                 <form id="EditAddressForm" class="edit-address-form" method="POST" data-address-id="{{address.id}}">
+                    {% csrf_token %}
                     <div class="input-container">
                         <div width="100%" class="sc-koXPp hcabXJ">
                             <div class="top caption-bold-12-15">
@@ -447,14 +448,17 @@
                     </div>
                     <div class="radioGroup"><label class="radioGroupTitle title-semi-bold-16-19">Fatura tipi</label>
                         <div class="radioButtons"><label for="type_1" class="sc-uVWWZ fYMixk"><input id="type_1" type="radio"
-                                    name="type" value="1" checked="">
-                                <div class="indicator"></div>
-                                <div class="labelsWrapper"><label class="label body-medium-14-17" for="type_1">Bireysel</label></div>
-                            </label><label for="type_2" class="sc-uVWWZ fYMixk"><input id="type_2" type="radio" name="type" value="2">
-                                <div class="indicator"></div>
-                                <div class="labelsWrapper"><label class="label body-medium-14-17" for="type_2">Kurumsal</label></div>
-                            </label></div>
-                    </div>
+                                                name="type" value="1" checked="">
+                                        <div class="indicator"></div>
+                                        <div class="labelsWrapper"><label class="label body-medium-14-17" for="type_1">Bireysel</label>
+                                        </div>
+                                </label><label for="type_2" class="sc-uVWWZ fYMixk"><input id="type_2" type="radio" name="type"
+                                                value="2">
+                                        <div class="indicator"></div>
+                                        <div class="labelsWrapper"><label class="label body-medium-14-17" for="type_2">Kurumsal</label>
+                                        </div>
+                                </label></div>
+                </div>
                     <div class="firmName d-none">
                         <div width="100%" class="sc-koXPp hcabXJ">
                             <div class="top caption-bold-12-15">
@@ -486,19 +490,20 @@
                 </form>
             </div>
         </div>
-        <div class="buttons"><button class="sc-aXZVg hSCzLe body-bold-14-17">
-            <div class="children">Adresimi Kaydet</div>
-            <div class="sc-gEvEer bfDmgA"><svg width="16px" height="16px" viewBox="0 0 24 24" fill="none"
-                    xmlns="http://www.w3.org/2000/svg" name="ArrowMediumRight">
-                    <path d="M8.5 5L15.5 12L8.5 19" stroke="#0A103D" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round"></path>
-                </svg></div>
-        </button><button class="sc-aXZVg cIIrOK body-bold-14-17">
+        <div class="buttons">
+            <button class="sc-aXZVg hSCzLe body-bold-14-17 update-address" data-address-id="{{address.id}}">
+                <div class="children">Adresimi Kaydet</div>
+                <div class="sc-gEvEer bfDmgA"><svg width="16px" height="16px" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg" name="ArrowMediumRight">
+                        <path d="M8.5 5L15.5 12L8.5 19" stroke="#0A103D" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                    </svg></div>
+            </button>
+        <button class="sc-aXZVg cIIrOK body-bold-14-17 delete-address" data-address-id="{{address.id}}">
             <div class="children">Adresimi Sil</div>
         </button></div>
     </div>
 </div>
-
 
 
 

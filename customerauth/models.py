@@ -10,6 +10,10 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=100)
     my_style = models.BooleanField(default=False)
+    phone = models.CharField(max_length=15, null=True, blank=True)
+    verified = models.BooleanField(default=False)
+    receive_email_notifications = models.BooleanField(default=True)
+    receive_sms_notifications = models.BooleanField(default=True)
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ['username']
 
@@ -30,12 +34,15 @@ class User(AbstractUser):
         return self.username
 
 
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="image")
     full_name = models.CharField(max_length=200, null=True, blank=True)
     phone = models.CharField(max_length=255)
     verified = models.BooleanField(default=False)
+    receive_email_notifications = models.BooleanField(default=True)
+    receive_sms_notifications = models.BooleanField(default=True)
     
     def __str__(self):
         return f"{self.user.username} - {self.full_name}"
@@ -45,7 +52,7 @@ class ContactUs(models.Model):
     full_name = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
     phone = models.CharField(max_length=255)
-    subject = models.CharField(max_length=200) # +234 (456) - 789
+    subject = models.CharField(max_length=200) 
     message = models.TextField()
 
     class Meta:

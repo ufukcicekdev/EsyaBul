@@ -55,8 +55,6 @@ INSTALLED_APPS = [
     "cities_light",
     "actstream",
     "social_django",
-
-    #apps
     "customerauth",
     "main",
     "products",

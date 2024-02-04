@@ -22,11 +22,11 @@
                                             Aldıklarım</button></li>
                                     <li class="sc-gdyeKB xqfpj"><button onclick="getAddress()" class="sc-kzqdkY edqiAa title-bold-16-19">Adres
                                             Bilgilerim</button></li>
-                                    <li class="sc-gdyeKB xqfpj"><button class="sc-kzqdkY edqiAa title-bold-16-19">Kişisel
-                                            Bilgiler</button></li>
-                                    <li class="sc-gdyeKB xqfpj"><button class="sc-kzqdkY edqiAa title-bold-16-19">Bildirim
+                                            <li class="sc-gdyeKB xqfpj"><button onclick="getProfile()" class="sc-kzqdkY edqiAa title-bold-16-19">Kişisel
+                                                Bilgiler</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getNotify()" class="sc-kzqdkY edqiAa title-bold-16-19">Bildirim
                                             Ayarları</button></li>
-                                    <li class="sc-gdyeKB xqfpj"><button class="sc-kzqdkY edqiAa title-bold-16-19">Şifre
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getPasswordProcess()" class="sc-kzqdkY edqiAa title-bold-16-19">Şifre
                                             İşlemleri</button></li>
                                     <li class="sc-gdyeKB xqfpj"><button class="sc-kzqdkY edqiAa title-bold-16-19">Çıkış
                                             Yap</button></li>
@@ -44,12 +44,6 @@
     </div>
 </div>  
 
-<script>
-    function getAddress() {
-        const previousPageUrl = "{% url 'customerauth:address-list' %}";
-        
-        window.location.href = previousPageUrl;
-    }
-</script>
+
 
 {% endblock content %}
