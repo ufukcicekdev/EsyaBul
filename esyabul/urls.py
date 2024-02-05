@@ -10,6 +10,8 @@ urlpatterns = [
     path('', include('customerauth.urls')),
     path('', include('main.urls')),
     path('', include('products.urls')),
+    path('', include('notification.urls')),
+
 
      ##SOCIAL ACCOUNT
     path("social-auth/",include('social_django.urls',namespace='social')),

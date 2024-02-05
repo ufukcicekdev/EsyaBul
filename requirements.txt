@@ -12,6 +12,7 @@ django-autoslug==1.9.9
 django-cities-light==3.10.1
 django-ckeditor-5==0.2.10
 django-crispy-forms==2.1
+django-crontab==0.7.1
 django-jazzmin==2.6.0
 django-phonenumber-field==7.3.0
 django-phonenumbers==1.0.1
