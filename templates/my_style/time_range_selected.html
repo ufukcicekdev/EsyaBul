@@ -3,6 +3,12 @@
 
 {% block content %}
 
+<div id="__next">
+    <div class="site-container">
+
+        {% include 'core/header.html' %}
+
+
 <style>
     .left-side {
         background-color: #FFFFFF;
@@ -195,5 +201,9 @@
         window.location.href = previousPageUrl;
     }
 </script>
+          
+        {% include 'core/footer.html' %}
+    </div>
+</div>
 
 {% endblock content %}

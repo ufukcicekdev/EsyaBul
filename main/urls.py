@@ -7,7 +7,7 @@ app_name = "main"
 
 
 urlpatterns = [
-    path('home', home, name='home'),
+    path('', home, name='home'),
     path('my_style/', my_style_start, name='my_style_start'),
 ]
 

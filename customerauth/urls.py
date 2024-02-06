@@ -29,13 +29,6 @@ urlpatterns = [
 
 
 
-
-
-
-    # path("make-default-address/", views.make_address_default, name="make-default-address"),
-    # path("delete-adress/", views.delete_adress, name="delete-adress"),
-    #path('edit-address/<int:address_id>/', views.edit_address, name='edit_address'),
-
     path('thank-you/', views.thank_you_view, name='thank_you'),
 
 
