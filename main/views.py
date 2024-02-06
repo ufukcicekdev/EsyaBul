@@ -17,7 +17,6 @@ def my_style_start(request):
     return render(request, 'my_style/my_style_start.html', {'user_name': user_name})
 
 
-
 ################### Errors Open ################
 
 def custom_404_page(request, exception):

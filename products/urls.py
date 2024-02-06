@@ -10,6 +10,3 @@ urlpatterns = [
 
 ]
 
-
-handler404 = custom_404_page
-handler500 = custom_500_page

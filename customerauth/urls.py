@@ -1,9 +1,6 @@
 from django.urls import path, include
 from customerauth import views
 from django.conf.urls import handler404, handler500
-from .views import custom_404_page, custom_500_page
-
-
 
 app_name = "customerauth"
 
@@ -48,7 +45,3 @@ urlpatterns = [
 
     path('', include('main.urls')),
 ]
-
-
-handler404 = custom_404_page
-handler500 = custom_500_page
