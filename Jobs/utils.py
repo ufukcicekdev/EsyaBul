@@ -5,7 +5,7 @@ from django.core.mail import EmailMessage
 from django.utils.html import strip_tags
 from django.contrib.auth import get_user_model
 from django.db.models import F
-from .models import EmailNotification
+from notification.models import EmailNotification
 import os
 from dotenv import load_dotenv
 
@@ -14,7 +14,6 @@ load_dotenv()
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 
 def send_email_notifications():
-    # Aktif olan bildirimleri al
     active_notifications = EmailNotification.objects.filter(is_active=True)
     
     for notification in active_notifications:

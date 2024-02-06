@@ -58,8 +58,8 @@ INSTALLED_APPS = [
     "customerauth",
     "main",
     "products",
+    "background_task",
     'notification',
-    'django_crontab',
 
 ]
 
@@ -413,9 +413,4 @@ CKEDITOR_5_CONFIGS = {
         },
     },
 }
-
-
-CRONJOBS = [
-    ('*/5 * * * *', 'notification.tasks.send_email_notifications_task'),
-]
 
