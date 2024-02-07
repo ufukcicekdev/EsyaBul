@@ -1,10 +1,10 @@
 from django.contrib import admin
 from .models import EmailNotification
-from ckeditor.widgets import CKEditorWidget
+from django_ckeditor_5.fields import CKEditor5Field
 from django import forms
 
 class EmailNotificationAdminForm(forms.ModelForm):
-    body = forms.CharField(widget=CKEditorWidget(config_name='extends'), required=False)
+    body = forms.CharField(widget=CKEditor5Field(config_name='extends'), required=False)
 
     class Meta:
         model = EmailNotification
