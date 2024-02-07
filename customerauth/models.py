@@ -120,3 +120,17 @@ class MyStyles(models.Model):
     home_model = models.ForeignKey(HomeModel, on_delete=models.CASCADE, null=True, blank=True)
     space_definition = models.ForeignKey(SpaceDefinition, on_delete=models.CASCADE, null=True, blank=True)
     time_range = models.ForeignKey(TimeRange, on_delete=models.CASCADE, null=True, blank=True)
+
+
+
+
+class wishlist_model(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "wishlists"
+
+    def __str__(self):
+        return self.product.title

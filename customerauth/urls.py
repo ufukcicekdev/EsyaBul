@@ -43,5 +43,11 @@ urlpatterns = [
     path("forgot-password/",views.forgot_password, name="forgot_password"),
     path("reset-password/",views.reset_password,name="reset_password"),
 
+
+    ## wishlist page ##
+    path("wishlist/", views.wishlist_view, name="wishlist"),
+    path("add-to-wishlist/", views.add_to_wishlist, name="add-to-wishlist"),
+    path("remove-from-wishlist/", views.remove_wishlist, name="remove-from-wishlist"),
+
     path('', include('main.urls')),
 ]

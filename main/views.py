@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from main.models import ContactUs
+from django.http import JsonResponse
 
 def home(request):
     return render(request, 'core/home.html')
@@ -27,3 +29,37 @@ def custom_500_page(request):
 
 
 ################### Errors Close ################
+
+
+################### Contact Open ################
+
+
+def contact(request):
+    return render(request, "main/contact.html")
+
+
+def ajax_contact_form(request):
+    full_name = request.GET['full_name']
+    email = request.GET['email']
+    phone = request.GET['phone']
+    subject = request.GET['subject']
+    message = request.GET['message']
+
+    contact = ContactUs.objects.create(
+        full_name=full_name,
+        email=email,
+        phone=phone,
+        subject=subject,
+        message=message,
+    )
+
+    data = {
+        "bool": True,
+        "message": "Message Sent Successfully"
+    }
+
+    return JsonResponse({"data":data})
+
+
+
+################### Contact Close ################

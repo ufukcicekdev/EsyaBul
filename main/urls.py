@@ -9,6 +9,9 @@ app_name = "main"
 urlpatterns = [
     path('', home, name='home'),
     path('my_style/', my_style_start, name='my_style_start'),
+    path('contact/', contact, name='contact'),
+    path("ajax-contact-form/", ajax_contact_form, name="ajax-contact-form"),
+
 ]
 
 

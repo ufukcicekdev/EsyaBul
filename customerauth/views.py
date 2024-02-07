@@ -3,15 +3,17 @@ from customerauth.forms import UserRegisterForm, ProfileForm, AddressForm,Custom
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.conf import settings
-from customerauth.models import User, Address, MyStyles
+from customerauth.models import User, Address, MyStyles, wishlist_model
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from products.models import RoomType, HomeType, HomeModel, SpaceDefinition, TimeRange
+from products.models import RoomType, HomeType, HomeModel, SpaceDefinition, TimeRange, Product
 from django.core.mail import EmailMessage
 from django.views.decorators.http import require_POST
 from actstream import action
 import json
 from django.contrib.auth import update_session_auth_hash
+from django.core import serializers
+from django.template.loader import render_to_string
 
 
 def register_view(request):
@@ -544,5 +546,63 @@ def reset_password(request):
     
 ################### Forgot Passwords Close ################
 
+
+
+
+################### Wishlist Open ################
+    
+@login_required
+def wishlist_view(request):
+    wishlist = wishlist_model.objects.all()
+    context = {
+        "w":wishlist
+    }
+    return render(request, "customerauth/wishlist.html", context)
+
+
+def add_to_wishlist(request):
+    product_id = request.GET['id']
+    product = Product.objects.get(id=product_id)
+
+    context = {}
+
+    wishlist_count = wishlist_model.objects.filter(product=product, user=request.user).count()
+    print(wishlist_count)
+
+    if wishlist_count > 0:
+        context = {
+            "bool": True
+        }
+    else:
+        new_wishlist = wishlist_model.objects.create(
+            user=request.user,
+            product=product,
+        )
+        context = {
+            "bool": True
+        }
+
+    return JsonResponse(context)
+
+
+
+
+def remove_wishlist(request):
+    pid = request.GET['id']
+    wishlist = wishlist_model.objects.filter(user=request.user)
+    wishlist_d = wishlist_model.objects.get(id=pid)
+    delete_product = wishlist_d.delete()
+    
+    context = {
+        "bool":True,
+        "w":wishlist
+    }
+    wishlist_json = serializers.serialize('json', wishlist)
+    t = render_to_string('customerauth/wishlist-list.html', context)
+    return JsonResponse({'data':t,'w':wishlist_json})
+
+
+
+################### Wishlist Close ################
 
 
