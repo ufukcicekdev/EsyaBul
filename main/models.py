@@ -22,6 +22,7 @@ class ContactUs(models.Model):
     phone = models.CharField(max_length=200) 
     subject = models.CharField(max_length=200) 
     message = models.TextField()
+    is_read = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Contact Us"
