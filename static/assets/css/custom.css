@@ -674,3 +674,70 @@
     border: none;
     height: 56px;
 }
+
+.iwaTuT {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0px;
+    margin: 12.5px auto;
+    max-width: 1050px;
+}
+
+.cSWPAL {
+    display: block;
+    position: relative;
+    margin: 0px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+}
+
+.jFARBW {
+    text-decoration: none;
+    padding: 12px 16px;
+    color: var(--dark-opacity-75);
+    margin: 0px;
+    transition: all 0.2s ease-in-out 0s;
+    text-align: center;
+    display: block;
+    position: relative;
+    border: 0px;
+    background: transparent;
+    outline: 0px;
+    width: 100%;
+    font-family: inherit;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.iiZYPB {
+    height: 24px;
+    display: block;
+}
+
+
+.jFARBW::before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    border: 1px solid white;
+    color: var(--dark-opacity-75);
+    background-color: white;
+    border-radius: 8px;
+    z-index: -1;
+    transition: all 0.2s ease-in-out 0s;
+}
+
+.cSWPAL:not(:last-child) path, .cSWPAL:not(:last-child) circle {
+    stroke: var(--dark-opacity-75);
+}
+.kGnodn {
+    margin-top: 8px;
+    display: block;
+}

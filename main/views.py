@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from main.models import ContactUs
 from django.http import JsonResponse
+from products.models import Category,Product
 
 def home(request):
     return render(request, 'core/home.html')
@@ -63,3 +64,24 @@ def ajax_contact_form(request):
 
 
 ################### Contact Close ################
+
+
+def category_list(request):
+    categories = Category.objects.filter(is_active=True)
+
+    context = {
+        "categories":categories
+    }
+    return render(request, 'core/categories.html', context)
+
+
+def category_product_list__view(request, slug):
+    print("buradasiiii*****")
+    category = Category.objects.get(slug=slug) # food, Cosmetics
+    products = Product.objects.filter(is_active=True, category=category)
+
+    context = {
+        "category":category,
+        "products":products,
+    }
+    return render(request, "core/category-product-list.html", context)

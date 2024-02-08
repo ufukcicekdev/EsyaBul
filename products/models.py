@@ -78,6 +78,9 @@ class Category(models.Model):
     img_title = models.CharField(max_length=255, unique=True)
     is_active = models.BooleanField(default=True)
 
+    def product_count(self):
+        return Product.objects.filter(category=self).count()
+
     def __str__(self):
         return self.name
     

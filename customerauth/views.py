@@ -560,6 +560,7 @@ def wishlist_view(request):
     return render(request, "customerauth/wishlist.html", context)
 
 
+
 def add_to_wishlist(request):
     product_id = request.GET['id']
     product = Product.objects.get(id=product_id)
@@ -583,7 +584,6 @@ def add_to_wishlist(request):
         }
 
     return JsonResponse(context)
-
 
 
 
