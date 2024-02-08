@@ -30,3 +30,20 @@ class ContactUs(models.Model):
 
     def __str__(self):
         return self.full_name
+    
+
+class SocialMedia(models.Model):
+    SOCIAL_MEDIA_CHOICES = (
+        ('facebook', 'Facebook'),
+        ('twitter', 'Twitter'),
+        ('instagram', 'Instagram'),
+        ('linkedin', 'Linkedin'),
+        ('youtube', 'YouTube'),
+        # Diğer sosyal medya platformları ekleyebilirsiniz
+    )
+
+    name = models.CharField(max_length=20, choices=SOCIAL_MEDIA_CHOICES, unique=True)
+    link = models.URLField()
+
+    def __str__(self):
+        return self.get_name_display()

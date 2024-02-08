@@ -1,5 +1,5 @@
 from django.contrib import admin
-from main.models import HomeBanner, ContactUs
+from main.models import HomeBanner, ContactUs,SocialMedia
 
 
 @admin.register(HomeBanner)
@@ -21,3 +21,7 @@ class ContactUsAdmin(admin.ModelAdmin):
     readonly_fields = ('full_name', 'email', 'phone', 'subject', 'message', 'is_read')
     ordering = ('-id',)  # Assuming you want to order by the latest entries first
 
+@admin.register(SocialMedia)
+class SocialMediaAdmin(admin.ModelAdmin):
+    list_display = ('name', 'link')
+    search_fields = ('name',)

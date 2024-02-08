@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from main.models import ContactUs
+from main.models import ContactUs,SocialMedia
 from django.http import JsonResponse
 from products.models import Category,Product
 
 def home(request):
-    return render(request, 'core/home.html')
+    social_media_links = SocialMedia.objects.all()
+    return render(request, 'core/home.html', {'social_media_links': social_media_links})
 
 
 @login_required(login_url='customerauth:sign-in')
