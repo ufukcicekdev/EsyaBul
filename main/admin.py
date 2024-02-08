@@ -1,5 +1,5 @@
 from django.contrib import admin
-from main.models import HomeBanner
+from main.models import HomeBanner, ContactUs
 
 
 @admin.register(HomeBanner)
@@ -10,3 +10,14 @@ class HomeBannerAdmin(admin.ModelAdmin):
     ordering = ('-id',)
     fields = ('img', 'img_alt', 'img_title', 'is_active', 'link')
     readonly_fields = ('img_title',) 
+
+
+
+@admin.register(ContactUs)
+class ContactUsAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'email', 'phone', 'subject', 'is_read')
+    list_filter = ('is_read',)
+    search_fields = ('full_name', 'email', 'phone', 'subject', 'message')
+    readonly_fields = ('full_name', 'email', 'phone', 'subject', 'message', 'is_read')
+    ordering = ('-id',)  # Assuming you want to order by the latest entries first
+

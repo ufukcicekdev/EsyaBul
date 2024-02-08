@@ -386,103 +386,10 @@ $(document).ready(function (){
             },
             success: function(res){
                 console.log("Sent Data to server!");
-                $(".contact_us_p").hide()
-                $("#contact-form-ajax").hide()
-                $("#message-response").html("Message sent successfully.")
+                
+                $("#message-response").html("Mesaj başarıyla gönderildi.")
             }
         })
     })
 
-
-// Başarılı mesajı göstermek için fonksiyon
-// function showSuccessMessage(messageText) {
-//     const popupMessage = document.querySelector('.popup-message');
-//     popupMessage.innerHTML = '<div class="alert alert-success">' + messageText + '</div>';
-    
-//     // Popup mesajını göster
-//     popupMessage.style.display = 'block';
-    
-//     // 5 saniye sonra popup mesajını gizle ve sayfayı yenile
-//     setTimeout(function() {
-//         popupMessage.style.display = 'none';
-//         window.location.reload();
-//     }, 5000);
-// }
-
-// // Hata mesajı göstermek için fonksiyon
-// function showErrorMessage(messageText) {
-//     const popupMessage = document.querySelector('.popup-message');
-//     popupMessage.innerHTML = '<div class="alert alert-danger">' + messageText + '</div>';
-    
-//     // Popup mesajını göster
-//     popupMessage.style.display = 'block';
-    
-//     // 5 saniye sonra popup mesajını gizle
-//     setTimeout(function() {
-//         popupMessage.style.display = 'none';
-//     }, 5000);
-// }
-
- 
-
-// $(document).ready(function() {
-  
-//     $(".edit-address").click(function() {
-//        let addressId = $(this).attr("data-address-id");
-//       $.ajax({
-//         url: `/dashboard/adress/edit-address/${addressId}/`,  // Örnek URL, gerçek URL'nizi bu yapıya göre güncelleyin
-//         type: "GET",
-//         success: function(response) {
-//             console.log(response);
-         
-//         },
-//         error: function(error) {
-//           console.log("Error:", error);
-//         }
-//       });
-//     });
-//   });    
-// })
-
-
-
-
-
-
-
-// // Add to cart functionality
-// $(".add-to-cart-btn").on("click", function(){
-//     let quantity = $("#product-quantity").val()
-//     let product_title = $(".product-title").val()
-//     let product_id = $(".product-id").val()
-//     let product_price = $("#current-product-price").text()
-//     let this_val = $(this)
-
-
-//     console.log("Quantity:", quantity);
-//     console.log("Title:", product_title);
-//     console.log("Price:", product_price);
-//     console.log("ID:", product_id);
-//     console.log("Currrent Element:", this_val);
-
-//     $.ajax({
-//         url: '/add-to-cart',
-//         data: {
-//             'id': product_id,
-//             'qty': quantity,
-//             'title': product_title,
-//             'price': product_price,
-//         },
-//         dataType: 'json',
-//         beforeSend: function(){
-//             console.log("Adding Product to Cart...");
-//         },
-//         success: function(response){
-//             this_val.html("Item added to cart")
-//             console.log("Added Product to Cart!");
-//             $(".cart-items-count").text(response.totalcartitems)
-
-
-//         }
-//     })
-// })
+});
