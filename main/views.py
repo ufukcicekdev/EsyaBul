@@ -14,7 +14,6 @@ def home(request):
 def my_style_start(request):
     user = request.user
     user_name = user.username
-    print("********************************",user.my_style)
     if user.my_style:
         return redirect('main:home')
 

@@ -27,15 +27,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-CSRF_TRUSTED_ORIGINS = ["https://*."]
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# CSRF_TRUSTED_ORIGINS = ["https://*."]
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
 
 
 INSTALLED_APPS = [
@@ -50,8 +50,8 @@ INSTALLED_APPS = [
     "phonenumber_field",
     "cities_light",
     "actstream",
-    "social_django",
     "customerauth",
+    "social_django",
     "main",
     "products",
     "background_task",
@@ -162,9 +162,6 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 
-AUTH_USER_MODEL = 'customerauth.User'
-
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
@@ -209,6 +206,7 @@ JAZZMIN_UI_TWEAKS = {
     }
 }
 
+AUTH_USER_MODEL = 'customerauth.User'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend', 
