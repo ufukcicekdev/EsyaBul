@@ -7,7 +7,8 @@ from products.models import Category,Product
 
 def home(request):
     social_media_links = SocialMedia.objects.all()
-    return render(request, 'core/home.html', {'social_media_links': social_media_links})
+    product_category = Category.objects.all()
+    return render(request, 'core/home.html', {'social_media_links': social_media_links, 'product_category': product_category})
 
 
 @login_required(login_url='customerauth:sign-in')

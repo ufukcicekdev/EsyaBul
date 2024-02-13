@@ -84,7 +84,31 @@
     </div>
     <nav class="header__categories customPages">
         <div class="categoriesWrapper">
-            <ul class="sc-eldPxv iwaTuT"></ul>
+            <ul class="sc-eldPxv iwaTuT">
+                
+                {% for pc in product_category %}
+                <li class="sc-blmEgr hUOPpR">
+                    <a href="{% url 'main:category-product-list' pc.slug %}">
+                            <span class="sc-ifyrAs fjiCBF">
+                                    <span class="sc-dJGMql gEMhdk">
+                                            <svg
+                                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg" name="Discovery">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                            d="M8.27051 14.9515L9.86319 9.86221L14.9524 8.26953L13.3598 13.3588L8.27051 14.9515Z"
+                                                            stroke="#474C6D" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round"></path>
+                                                    <circle cx="11.611" cy="11.611" r="9.61098" stroke="#474C6D" stroke-width="2"
+                                                            stroke-linecap="round" stroke-linejoin="round"></circle>
+                                            </svg>
+                                    </span>
+                                    <strong class="sc-hIPBNq eHjACQ caption-semi-bold-12-15">{{ pc.name }}</strong>
+                            </span>
+                    </a>
+                </li>
+                {% endfor %}
+
+            </ul>
         </div>
     </nav>
 </header>

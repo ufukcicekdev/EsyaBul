@@ -57,6 +57,7 @@
         </div>
         <div class="footerBottomRight">
             <div class="followUs">
+                {% if social_media_links.count > 0 %}
                 <div class="title body-bold-13-16">Bizi takip edin -</div>
                 <div class="socials">
                     {% for social_media in social_media_links %}
@@ -80,6 +81,8 @@
                         
                     {% endfor %}
                 </div>
+
+                {% endif %}
         
         </div>
     </div>
