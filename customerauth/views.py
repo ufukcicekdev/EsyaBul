@@ -14,7 +14,7 @@ import json
 from django.contrib.auth import update_session_auth_hash
 from django.core import serializers
 from django.template.loader import render_to_string
-
+from cities_light.models import Country, City, Region, SubRegion
 
 def register_view(request):
     if request.method == "POST":
@@ -195,6 +195,7 @@ def notifications(request):
 
     return render(request, 'customerauth/notifications.html', {'form': form})
 
+###################### Address  Open #################
 
 @login_required(login_url='customerauth:sign-in')
 def address_list(request):
@@ -204,67 +205,36 @@ def address_list(request):
 
 
 @login_required(login_url='customerauth:sign-in')
+def create_address(request):
+    if request.method == 'POST':
+        form = AddressForm(request.POST)
+        if form.is_valid():
+            new_address = form.save(commit=False)
+            new_address.user = request.user
+            new_address.save()
+            messages.success(request,"Adresiniz Başarıyla Eklenmiştir.")
+            return redirect('customerauth:address-list')  # Başarıyla eklendiğinde yönlendirilecek sayfa
+        else:
+            print("form error: ", form.errors)
+    else:
+        form = AddressForm()
+
+    return render(request, 'customerauth/add-new-address.html', {'form': form})
+
+@login_required(login_url='customerauth:sign-in')
 def edit_address(request, address_id):
-    # İlgili adresi getir veya 404 hatası gönder
     address = get_object_or_404(Address, id=address_id)
 
-    if request.method == "POST":
-        json_data = json.loads(request.body.decode('utf-8'))
+    if request.method == 'POST':
+        form = AddressForm(request.POST, instance=address)
+        if form.is_valid():
+            form.save()
+            messages.success(request,"Adresiniz Başarıyla Güncellenmiştir.")
+            return redirect('customerauth:address-list')
+    else:
+        form = AddressForm(instance=address)
 
-        print("json_data",json_data)
-        username = json_data.get('username')
-        last_name = json_data.get('usersurname')
-        phone = json_data.get('phone')
-
-        city_id = json_data.get('cityId')
-        region_id = json_data.get('countyId')
-        address_line1 = json_data.get('address_line1')
-        address_name = json_data.get("title")
-        address_type = json_data.get('type')
-
-        firmName = json_data.get('corporateName')
-        taxNumber = json_data.get('taxNumber')
-        taxOffice = json_data.get('taxOffice')
-
-        try:
-            address.username = username
-            address.usersurname = last_name
-            address.phone = phone
-            address.city_id = city_id
-            address.region_id = region_id
-            address.address_line1 = address_line1
-            address.address_name = address_name
-            address.address_type_id = address_type
-           
-            if address_type == '2':
-                address.firm_name = firmName
-                address.firm_taxcode = taxNumber
-                address.firm_tax_home = taxOffice
-
-            address.save()
-
-            messages.success(request, "Address Updated Successfully.")
-            return JsonResponse({"status": "success", 'redirect_url': reverse('customerauth:address-list')})
-        except Exception as e:
-            # Hata durumunda hatayı JSON olarak gönder
-            return JsonResponse({"status": "error", "message": str(e)})
-
-    address_data = {
-        "id": address.id,
-        "city": address.city_id,
-        "region": address.region_id,
-        "username": address.username,
-        "usersurname": address.usersurname,
-        "phone": address.phone,
-        "address_line1": address.address_line1,
-        "address_name": address.address_name,
-        "firm_name": address.firm_name,
-        "firm_taxcode": address.firm_taxcode,
-        "firm_tax_home": address.firm_tax_home,
-        "address_type_id": address.address_type_id,
-    }
-
-    return JsonResponse({'status': 'success', 'data': [address_data]})
+    return render(request, 'customerauth/edit-address.html', {'form': form, 'address': address})
 
 
 @login_required(login_url='customerauth:sign-in')
@@ -277,55 +247,15 @@ def delete_address(request, address_id):
 
 
 @login_required(login_url='customerauth:sign-in')
-def create_address(request):
-    if request.method == 'POST':
-        # Gelen verilertek tek al
-        json_data = json.loads(request.body.decode('utf-8'))
+def get_subregions(request):
+    if request.method == 'GET':
+        city_id = request.GET.get('city_id')
+        if city_id:
+            subregions = SubRegion.objects.filter(region_id=city_id).values('id', 'name')
+            data = {str(subregion['id']): subregion['name'] for subregion in subregions}
+            return JsonResponse(data)
 
-        username = json_data.get('username')
-        last_name = json_data.get('usersurname')
-        phone = json_data.get('phone')
-
-        city_id = json_data.get('cityId')
-        region_id = json_data.get('countyId')
-        address_line1 = json_data.get('address_line1')
-        address_name = json_data.get("title")
-        address_type = json_data.get('type')
-
-        firmName = json_data.get('corporateName')
-        taxNumber = json_data.get('taxNumber')
-        taxOffice = json_data.get('taxOffice')
-        # Diğer gerekli alanları da alın
-
-        try:
-            new_address = Address.objects.create(
-                username=username,
-                usersurname=last_name,
-                phone=phone,
-                city_id=city_id,
-                region_id  = region_id,
-                address_line1=address_line1,
-                address_name = address_name,
-                address_type_id = address_type,
-                firm_name = firmName,
-                firm_taxcode = taxNumber,
-                firm_tax_home = taxOffice,
-                user_id=request.user.id,
-            )
-            messages.success(request, "Adresiniz başarıyla kayıt edilmiştir.")
-            return JsonResponse({"status": "success", "message": "Address created successfully"})
-        except Exception as e:
-            return JsonResponse({"status": "error", "message": str(e)})
-
-    else:
-        # GET isteği durumunda uygun bir yanıt gönder
-        return JsonResponse({"status": "error", "message": "GET isteği bekleniyor."})
-    
-
-
-
-
-
+    return JsonResponse({})
 
 ###################### My Style  Open #################
 

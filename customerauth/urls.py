@@ -9,16 +9,19 @@ urlpatterns = [
     path("sign-up/", views.register_view, name="sign-up"),
     path("sign-in/", views.login_view, name="sign-in"),
     path("sign-out/", views.logout_view, name="sign-out"),
-    #path("profile/update/", views.profile_update, name="profile-update"),
     path("dashboard/", views.customer_dashboard, name="dashboard"),
-    # path("dashboard/adress", views.customer_address, name="cutomer-address"),
-    # path("dashboard/adress/edit-address/<int:address_id>/", views.edit_address, name="edit_address"),
-
 
     path('dashboard/addresses/', views.address_list, name='address-list'),
-    path('dashboard/edit_address/<int:address_id>/', views.edit_address, name='edit-address'),
     path('dashboard/delete_address/<int:address_id>/', views.delete_address, name='delete-address'),
+
+    path('dashboard/edit_address/<int:address_id>/', views.edit_address, name='edit-address'),
     path('dashboard/create_address/', views.create_address, name='create-address'),
+
+
+
+    path('get-subregions/', views.get_subregions, name='get_subregions'),
+
+
 
     path('dashboard/password/', views.password_change, name='password-process'),
     path('dashboard/notifications/', views.notifications, name='notifications'),

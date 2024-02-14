@@ -81,23 +81,20 @@ class CustomPasswordChangeForm(PasswordChangeForm):
 
 
 class AddressForm(forms.ModelForm):
- 
-    
-    region = forms.ModelChoiceField(
-        queryset=SubRegion.objects.all().order_by('name'),
-        widget=forms.Select(attrs={'class': 'form-control'}),
-        label='İlçe'
-    )
-    
     city = forms.ModelChoiceField(
         queryset=Region.objects.all().order_by('name'),
         widget=forms.Select(attrs={'class': 'form-control'}),
-        label='İl'
+        label='İl', required=True
     )
+    phone = forms.IntegerField( )
+
+    firm_name = forms.CharField(required=False)
+    firm_taxcode = forms.CharField(required=False)
+    firm_tax_home = forms.CharField(required=False)
 
     class Meta:
         model = Address
-        fields = ['address_type', 'username', 'usersurname', 'phone', 'city', 'region', 
+        fields = ['address_type', 'username', 'usersurname', 'phone', 'city', 'region',
                   'address_name', 'address_line1', 'postal_code', 'firm_name','firm_taxcode','firm_tax_home']
         widgets = {
             'address_type': forms.RadioSelect(attrs={'class': 'radioButtons'}),
@@ -112,17 +109,15 @@ class AddressForm(forms.ModelForm):
             'firm_name': forms.TextInput(attrs={'class': 'form-control'}),
             'firm_taxcode': forms.TextInput(attrs={'class': 'form-control'}),
             'firm_tax_home': forms.TextInput(attrs={'class': 'form-control'}),
-
-
-
         }
+
         labels = {
             'address_type': 'Fatura Tipi',
             'username': 'Ad',
             'usersurname': 'Soyad',
             'phone': 'Telefon Numarası',
-            'city': 'İlçe',
-            'region': 'İl',
+            'city': 'İl',
+            'region': 'İlçe',
             'address_name': 'Adres Başlığı',
             'address_line1': 'Adres',
             'postal_code': 'Posta Kodu',
@@ -130,3 +125,24 @@ class AddressForm(forms.ModelForm):
             'firm_taxcode':'Vergi Kodu',
             'firm_tax_home':'Vergi Dairesi'
         }
+
+
+
+    def clean(self):
+        cleaned_data = super().clean()
+        address_type = cleaned_data.get('address_type')
+
+        if address_type == 2:
+            firm_name = cleaned_data.get('firm_name')
+            if not firm_name:
+                self.add_error('firm_name', 'Firma Adı zorunludur.')
+
+            firm_taxcode = cleaned_data.get('firm_taxcode')
+            if not firm_taxcode:
+                self.add_error('firm_taxcode', 'Firma Vergi Kodu zorunludur.')
+
+            firm_tax_home = cleaned_data.get('firm_tax_home')
+            if not firm_tax_home:
+                self.add_error('firm_tax_home', 'Firma Vergi Dairesi zorunludur.')
+
+        return cleaned_data

@@ -73,6 +73,7 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
     slug = AutoSlugField(populate_from='name', unique=True)
     image = models.ImageField(upload_to='category/', null=True, blank=True)
+    mainImage = models.ImageField(upload_to='category/', null=True, blank=True)
     description = models.TextField(blank=True, null=True)
     img_alt = models.CharField(max_length=255, unique=True)
     img_title = models.CharField(max_length=255, unique=True)

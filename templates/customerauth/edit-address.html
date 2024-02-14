@@ -1,0 +1,166 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+
+<div id="__next">
+    <div class="site-container">
+
+        {% include 'core/header.html' %}
+        <main class="site-main">
+            <div class="site-main__container">
+                <div class="container">
+                    <h1 class="pageTitle headline-bold-24-29">Hesabım</h1>
+                    <div class="profileLayout">
+                        <div class="left">
+                            <div class="accountList">
+                                <ul class="sc-ecPEgm dCbnuA">
+                                    <li class="sc-gdyeKB xqfpj"><button
+                                            class="sc-kzqdkY edqiAa title-bold-16-19">Kiraladıklarım</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button class="sc-kzqdkY edqiAa title-bold-16-19">Satın
+                                            Aldıklarım</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getAddress()" class="sc-kzqdkY hIpJTj title-bold-16-19">Adres
+                                            Bilgilerim</button></li>
+                                            <li class="sc-gdyeKB xqfpj"><button onclick="getProfile()" class="sc-kzqdkY edqiAa title-bold-16-19">Kişisel
+                                                Bilgiler</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getNotify()" class="sc-kzqdkY edqiAa title-bold-16-19">Bildirim
+                                            Ayarları</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getPasswordProcess()" class="sc-kzqdkY edqiAa title-bold-16-19">Şifre
+                                            İşlemleri</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button class="sc-kzqdkY edqiAa title-bold-16-19">Çıkış
+                                            Yap</button></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="right">
+                            <!-- <div class="historyBack body-bold-14-17" id="historyBack">
+                                <a class="sc-iHGNWf dWXVxB">
+                                    <div class="sc-kOHTFB kABxmt">
+                                        <div class="sc-dtBdUo eeQyqX">
+                                            <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                                name="ArrowSmallLeft">
+                                                <path d="M14 16L10 12L14 8" stroke="#0A103D" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                            
+                                                </path>
+                                            </svg>
+                                        </div>Hesabıma dön
+                                    </div>
+                                </a>
+                            </div> -->
+                            <div id="addressPage" class="sc-bVHCgj bvQtLI">
+                                
+                                <form method="post">
+                                    {% csrf_token %}
+                                    {% for field in form %}
+                                    <div class="form-group">
+                                        {{ field.label_tag }} {{ field }}
+                                        {% if field.errors %}
+                                            <div class="text-danger">
+                                                {% for error in field.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                                    <button type="submit" class="btn btn-primary">Güncelle</button>
+                                  </form>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </main>
+        {% include 'core/footer.html' %}
+    </div>
+</div>
+
+
+<script>
+   $(document).ready(function () {
+    // "Fatura Tipi" değeri '1' olanı seç
+    $("input[name='address_type'][value='1']").prop('checked', true);
+
+    // "Fatura Tipi" alanındaki değişiklik olayını dinle
+    $("input[name='address_type']").change(function () {
+        var selectedType = $(this).val();
+        
+        var labelForFirmTaxHome = $("label[for='id_firm_tax_home']");
+        var labelForFirmTaxCode = $("label[for='id_firm_taxcode']");
+        var labelForFirmName = $("label[for='id_firm_name']");
+
+       $("#id_firm_name, #id_firm_taxcode, #id_firm_tax_home").prop("required", selectedType === '2');
+        // İlk açılışta kapalı olması gereken alanları kontrol et
+        if (selectedType === '2') {
+            $("#id_firm_name").removeClass("d-none");
+            $("#id_firm_taxcode").removeClass("d-none");
+            $("#id_firm_tax_home").removeClass("d-none");
+            labelForFirmTaxHome.removeClass("d-none");
+            labelForFirmTaxCode.removeClass("d-none");
+            labelForFirmName.removeClass("d-none");
+        } else {
+            $("#id_firm_name").addClass("d-none");
+            $("#id_firm_taxcode").addClass("d-none");
+            $("#id_firm_tax_home").addClass("d-none");
+            labelForFirmTaxHome.addClass("d-none");
+            labelForFirmTaxCode.addClass("d-none");
+            labelForFirmName.addClass("d-none");
+        }
+    });
+
+    // Sayfa yüklendiğinde "Fatura Tipi" değeri '1' olanı kontrol et
+    var selectedTypeOnLoad = $("input[name='address_type']:checked").val();
+    if (selectedTypeOnLoad !== '2') {
+        $("#id_firm_name, #id_firm_taxcode, #id_firm_tax_home").prop("required", false);
+        var labelForFirmTaxHome = $("label[for='id_firm_tax_home']");
+        var labelForFirmTaxCode = $("label[for='id_firm_taxcode']");
+        var labelForFirmName = $("label[for='id_firm_name']");
+
+        $("#id_firm_name").addClass("d-none");
+        $("#id_firm_taxcode").addClass("d-none");
+        $("#id_firm_tax_home").addClass("d-none");
+        labelForFirmTaxHome.addClass("d-none");
+        labelForFirmTaxCode.addClass("d-none");
+        labelForFirmName.addClass("d-none");
+    }
+});
+
+function setDefaultSelectedValue() {
+    var selectedValue = $("#id_region").val();
+    $("#id_region option[value='" + selectedValue + "']").prop('selected', true);
+}
+
+$(document).ready(function () {
+    $("#id_region").prop('disabled', true);
+
+    $("#id_city").change(function () {
+        var selectedCity = $(this).val();
+
+        $("#id_region").empty().prop('disabled', true);
+
+        $.ajax({
+            url: "{% url 'customerauth:get_subregions' %}", 
+            data: { 'city_id': selectedCity },
+            dataType: 'json',
+            success: function (data) {
+                $.each(data, function (key, value) {
+                    $("#id_region").append('<option value="' + key + '">' + value + '</option>');
+                });
+
+                setDefaultSelectedValue();
+                $("#id_region").prop('disabled', false);
+            }
+        });
+    });
+});
+
+$("#id_region").change(function () {
+        setDefaultSelectedValue();
+    });
+
+</script>
+
+
+{% endblock %}
