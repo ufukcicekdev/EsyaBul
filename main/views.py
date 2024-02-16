@@ -77,11 +77,12 @@ def category_list(request):
 
 
 def category_product_list__view(request, slug):
-    print("buradasiiii*****")
     category = Category.objects.get(slug=slug) # food, Cosmetics
     products = Product.objects.filter(is_active=True, category=category)
+    product_category = Category.objects.all()
 
     context = {
+        "product_category":product_category,
         "category":category,
         "products":products,
     }

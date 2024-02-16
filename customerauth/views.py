@@ -52,7 +52,6 @@ def register_view(request):
     return render(request, "customerauth/sign-up.html", context)
 
 
-
 def login_view(request):
     if request.user.is_authenticated:
         action.send(request.user , verb='login')
@@ -103,6 +102,7 @@ def logout_view(request):
 
 @login_required(login_url='customerauth:sign-in')
 def profile_update(request):
+    title = "Hesabım"
     profile = get_object_or_404(User, id=request.user.id)
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=profile)
@@ -119,6 +119,7 @@ def profile_update(request):
     context = {
         "form": form,
         "profile": profile,
+        "title":title
     }
 
     return render(request, "customerauth/profile-edit.html", context)
@@ -135,7 +136,7 @@ def customer_dashboard(request):
     user_profile = get_object_or_404(User, id=request.user.id)
     addresses = Address.objects.filter(user=request.user)
     form = AddressForm(request.POST or None) 
-
+    title ="Hesabım"
     if request.method == "POST":
         if form.is_valid():  
             new_address = form.save(commit=False) 
@@ -149,14 +150,15 @@ def customer_dashboard(request):
     context = {
         "user_profile": user_profile,
         "addresses": addresses,
-        "form": form  
+        "form": form ,
+        "title":title
     }
     return render(request, 'customerauth/dashboard.html', context)
 
 
-
 @login_required(login_url='customerauth:sign-in')
 def password_change(request):
+    title = "Hesabım"
     if request.method == "POST":
         form = CustomPasswordChangeForm(request.user, request.POST)
         if form.is_valid():
@@ -172,12 +174,14 @@ def password_change(request):
         
     context = {
         "form": form,
+        "title":title
     }
     return render(request, 'customerauth/password_change.html', context)
 
 
 @login_required(login_url='customerauth:sign-in')
 def notifications(request):
+    title="Bildirimlerim"
     user_profile = get_object_or_404(User, id=request.user.id)
   # varsayılan olarak user'ın profile'ını alır, profile yoksa oluşturur
 
@@ -193,19 +197,21 @@ def notifications(request):
     else:
         form = NotificationSettingsForm(instance=user_profile)
 
-    return render(request, 'customerauth/notifications.html', {'form': form})
+    return render(request, 'customerauth/notifications.html', {'form': form, 'title':title})
 
 ###################### Address  Open #################
 
 @login_required(login_url='customerauth:sign-in')
 def address_list(request):
+    title ="Adreslerim"
     addresses = Address.objects.filter(user=request.user)
     form = AddressForm(request.POST or None) 
-    return render(request, 'customerauth/address.html', {'addresses': addresses, 'form': form })
+    return render(request, 'customerauth/address.html', {'addresses': addresses, 'form': form, 'title':title })
 
 
 @login_required(login_url='customerauth:sign-in')
 def create_address(request):
+    title ="Adreslerim"
     if request.method == 'POST':
         form = AddressForm(request.POST)
         if form.is_valid():
@@ -219,10 +225,12 @@ def create_address(request):
     else:
         form = AddressForm()
 
-    return render(request, 'customerauth/add-new-address.html', {'form': form})
+    return render(request, 'customerauth/add-new-address.html', {'form': form, 'title': title})
+
 
 @login_required(login_url='customerauth:sign-in')
 def edit_address(request, address_id):
+    title ="Adreslerim"
     address = get_object_or_404(Address, id=address_id)
 
     if request.method == 'POST':
@@ -234,7 +242,7 @@ def edit_address(request, address_id):
     else:
         form = AddressForm(instance=address)
 
-    return render(request, 'customerauth/edit-address.html', {'form': form, 'address': address})
+    return render(request, 'customerauth/edit-address.html', {'form': form, 'address': address, 'title': title})
 
 
 @login_required(login_url='customerauth:sign-in')
@@ -289,7 +297,6 @@ def room_type_selected(request):
     return render(request, 'my_style/room_type_selected.html', {'room_types': active_room_types})
 
 
-
 @login_required(login_url='customerauth:sign-in')
 def home_type_selected(request):
     active_home_types = HomeType.objects.filter(is_active=True)
@@ -318,7 +325,6 @@ def home_type_selected(request):
                 messages.error(request, 'Invalid room type selected.')
 
     return render(request, 'my_style/home_type_selected.html', {'home_types': active_home_types})
-
 
 
 @login_required(login_url='customerauth:sign-in')
@@ -352,7 +358,6 @@ def home_model_selected(request):
     return render(request, 'my_style/home_model_selected.html', {'home_models': active_space_definations})
 
 
-
 @login_required(login_url='customerauth:sign-in')
 def space_definations_selected(request):
     active_space_def = SpaceDefinition.objects.filter(is_active=True)
@@ -384,7 +389,6 @@ def space_definations_selected(request):
     return render(request, 'my_style/space_definations_selected.html', {'space_defs': active_space_def})
 
 
-
 @login_required(login_url='customerauth:sign-in')
 def time_range_selected(request):
     active_time_range = TimeRange.objects.filter(is_active=True)
@@ -414,9 +418,6 @@ def time_range_selected(request):
     
 
     return render(request, 'my_style/time_range_selected.html', {'time_ranges': active_time_range})
-
-
-
 
 
 def update_user_my_style_status(user):
@@ -478,7 +479,6 @@ def reset_password(request):
 
 
 
-
 ################### Wishlist Open ################
     
 @login_required
@@ -488,7 +488,6 @@ def wishlist_view(request):
         "w":wishlist
     }
     return render(request, "customerauth/wishlist.html", context)
-
 
 
 def add_to_wishlist(request):
@@ -516,7 +515,6 @@ def add_to_wishlist(request):
     return JsonResponse(context)
 
 
-
 def remove_wishlist(request):
     pid = request.GET['id']
     wishlist = wishlist_model.objects.filter(user=request.user)
@@ -530,7 +528,6 @@ def remove_wishlist(request):
     wishlist_json = serializers.serialize('json', wishlist)
     t = render_to_string('customerauth/wishlist-list.html', context)
     return JsonResponse({'data':t,'w':wishlist_json})
-
 
 
 ################### Wishlist Close ################

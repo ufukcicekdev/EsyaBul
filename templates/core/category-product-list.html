@@ -1,0 +1,103 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div id="__next">
+    <div class="site-container">
+
+        {% include 'core/header.html' %}
+        <main id="siteMain">
+            <div class="container">
+                    <div>
+                            <div class="breadcrumbWrapper">
+                                    <div class="row align-items-center justify-content-between position-relative">
+                                            <div class="col">
+                                                    <div class="sc-eDLKkx hhosGh">
+                                                            <ul class="sc-jTQCzO dKrhyP">
+                                                                    <li class="sc-gLLuof bGrkxs"><span
+                                                                                    class="sc-qZrbh dIcBim"><svg
+                                                                                            width="16px" height="16px"
+                                                                                            viewBox="0 0 24 24" fill="none"
+                                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                                            name="ArrowSmallLeft"
+                                                                                            onclick="handleArrowClick()">
+                                                                                            <path d="M14 16L10 12L14 8"
+                                                                                                    stroke="#0A103D"
+                                                                                                    stroke-width="2"
+                                                                                                    stroke-linecap="round"
+                                                                                                    stroke-linejoin="round">
+                                                                                            </path>
+                                                                                    </svg></span><a href="{% url 'main:category-list' %}"><span
+                                                                                            class="sc-iBdnpw ksbpfb caption-bold-12-15">Anasayfa</span></a>
+                                                                    </li>
+                                                                    <li class="sc-gLLuof bGrkxs"><span
+                                                                                    class="sc-qZrbh dIcBim"><svg
+                                                                                            width="16px" height="16px"
+                                                                                            viewBox="0 0 24 24" fill="none"
+                                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                                            name="ArrowSmallLeft"
+                                                                                            onclick="handleArrowClick()">
+                                                                                            <path d="M14 16L10 12L14 8"
+                                                                                                    stroke="#0A103D"
+                                                                                                    stroke-width="2"
+                                                                                                    stroke-linecap="round"
+                                                                                                    stroke-linejoin="round">
+                                                                                            </path>
+                                                                                    </svg></span><a
+                                                                                    href="{% url 'main:category-product-list' category.slug %}"><span
+                                                                                            class="sc-fsYfdN hSLwkI"><svg
+                                                                                                    width="24" height="24"
+                                                                                                    viewBox="0 0 24 24"
+                                                                                                    fill="none"
+                                                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                                                    name="ArrowSmallRightStroke">
+                                                                                                    <path d="M14 8L18 12L14 16"
+                                                                                                            stroke="#0A103D"
+                                                                                                            stroke-width="2"
+                                                                                                            stroke-linecap="round"
+                                                                                                            stroke-linejoin="round">
+                                                                                                    </path>
+                                                                                                    <path d="M18 12L7.6709 12"
+                                                                                                            stroke="#0A103D"
+                                                                                                            stroke-width="2"
+                                                                                                            stroke-linecap="round"
+                                                                                                            stroke-linejoin="round">
+                                                                                                    </path>
+                                                                                            </svg></span><span
+                                                                                            class="sc-iBdnpw ksbpfb caption-bold-12-15">
+                                                                                            {{ category.name}}
+                                                                                        </span>
+                                                                                        </a>
+                                                                                    </li>
+                                                              
+                                                            </ul>
+                                                  
+                                                    </div>
+                                            </div>
+                                            
+                                    </div>
+                            </div>
+                    </div>
+                    <div class="slug">
+                            
+                    </div>
+            </div><button class="goToUp btn"><span class="icon"></span><span class="text">Yukarı çık</span></button>
+            <div class="shoppingCartBackdrop hidden"></div>
+    </main>
+        {% include 'core/footer.html' %}
+    </div>
+</div>
+
+
+<script>
+
+
+    function handleArrowClick() {
+        var redirectURL = "{% url 'main:category-list' %}";
+        window.location.href = redirectURL;
+    }
+</script>
+
+
+{% endblock %}

@@ -802,3 +802,144 @@
     stroke: var(--dark-opacity-75);
 }
 
+.hhosGh {
+    display: block;
+}
+.dKrhyP {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+
+.bGrkxs {
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bGrkxs > a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+}
+
+.ksbpfb {
+    position: relative;
+    margin: 0px;
+    display: block;
+    color: var(--dark-opacity-50);
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+@media only screen and (max-width: 1050px){
+    .bGrkxs:not(:nth-child(2)) {
+        display: none;
+    }
+}
+
+
+
+/* .dIcBim sınıfını stilize et */
+.dIcBim {
+    display: none;
+    margin-left: 0px;
+    margin-right: 16px;
+}
+
+/* Eğer ekran genişliği 1050 piksel veya daha azsa */
+@media only screen and (max-width: 1050px) {
+    /* .dIcBim sınıfına sahip elementi görünür yap */
+    .dIcBim {
+        display: block;
+    }
+}
+
+/* .dIcBim sınıfına ait svg elementini stilize et */
+.dIcBim svg {
+    display: block;
+}
+
+
+@media only screen and (max-width: 1050px) {
+    /* .hSLwkI sınıfına sahip elementi gizle */
+    .hSLwkI {
+        display: none;
+    }
+}
+
+/* .hSLwkI sınıfını stilize et */
+.hSLwkI {
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
+/* .hSLwkI sınıfına ait svg elementini stilize et */
+.hSLwkI svg {
+    display: block;
+}
+.hhosGh a {
+    text-decoration: none;
+    color: inherit;
+}
+:not(svg) {
+    transform-origin: 0px 0px;
+}
+
+.left {
+    display: block;
+}
+
+@media only screen and (max-width: 1050px) {
+    /* .dIcBim sınıfına sahip elementi görünür yap */
+    .left {
+        display: none;
+    }
+}
+
+.historyBack {
+    display: none;
+}
+
+@media only screen and (max-width: 1050px) {
+    /* .dIcBim sınıfına sahip elementi görünür yap */
+    .historyBack {
+        display: block;
+    }
+}
+
+.RZBnd {
+    color: var(--primary);
+    font-size: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 0.5rem 0px;
+}
+
+.inMzQv {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.hyoizp {
+    margin-right: 0.5rem;
+}
+
+
+.RZBnd svg {
+    display: block;
+}
