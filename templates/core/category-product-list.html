@@ -15,7 +15,7 @@
                                             <div class="archive-header">
                                                 <div class="row align-items-center">
                                                     <div class="col-xl-3">
-                                                        <h1 class="mb-15">{{category.name}}</h1>
+                                                        <h2 class="mb-15">{{category.name}}</h2>
                                                         <div class="breadcrumbWrapper">
                                                                 <div class="row align-items-center justify-content-between position-relative">
                                                                         <div class="col">
@@ -151,11 +151,11 @@
                                                 <input type="hidden" class="product-id-{{ p.id }}" value="{{ p.id }}">
                                                 <input type="hidden" class="product-title-{{ p.id }}" value="{{ p.name }}">
                                                 <div class="d-flex">
-                                                        <button class="add add-to-cart-btn" data-index="{{ p.id }}" style="border: none;" id="add-to-cart-btn"><i class="fi-rs-shopping-cart mr-5"></i>Ekle</button>
-                                                        {% if request.user.is_authenticated %}
-                                                        <button style="border: none; background: none;" class="add-to-wishlist" data-product-item="{{p.id}}"><i class="fi-rs-heart" style="fill: aqua;"></i></button>
-                                                        {% endif %}
-                                                        </div>
+                                                <button class="add add-to-cart-btn" data-index="{{ p.id }}" style="border: none;" id="add-to-cart-btn"><i class="fi-rs-shopping-cart mr-5"></i>Ekle</button>
+                                                {% if request.user.is_authenticated %}
+                                                <button style="border: none; background: none;" class="add-to-wishlist" data-product-item="{{p.id}}"><i class="fi-rs-heart" style="fill: aqua;"></i></button>
+                                                {% endif %}
+                                                </div>
                                                 <!-- <button class="add add-to-cart-btn" data-index="{{ p.id }}" style="border: none;" id="add-to-cart-btn"><i class="fi-rs-shopping-cart mr-5"></i>Add</button> -->
                                                 </div>
                                         </div>

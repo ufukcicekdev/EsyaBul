@@ -309,9 +309,6 @@ $(document).ready(function (){
         let product_id = $(this).attr("data-product-item")
         let this_val = $(this)
 
-
-        console.log("PRoduct ID IS", product_id);
-
         $.ajax({
             url: "/add-to-wishlist",
             data: {
@@ -322,11 +319,8 @@ $(document).ready(function (){
                 console.log("Adding to wishlist...")
             },
             success: function(response){
-                // this_val.html("✓")
                 this_val.html("<i class='fas fa-heart text-danger'></i>")
-                if (response.bool === true) {
-                    console.log("Added to wishlist...");
-                }
+                document.querySelector('.pro-count').innerHTML = response.wishlist_count;
             }
         })
     })

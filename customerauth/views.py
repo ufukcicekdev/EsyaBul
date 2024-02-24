@@ -497,7 +497,7 @@ def wishlist_view(request):
     }
     return render(request, "customerauth/wishlist.html", context)
 
-
+@login_required
 def add_to_wishlist(request):
     product_id = request.GET['id']
     product = Product.objects.get(id=product_id)
@@ -508,21 +508,25 @@ def add_to_wishlist(request):
     print(wishlist_count)
 
     if wishlist_count > 0:
+        wishlist_count = wishlist_model.objects.filter(user=request.user).count()
         context = {
-            "bool": True
+            "bool": True,
+            "wishlist_count":wishlist_count
         }
     else:
         new_wishlist = wishlist_model.objects.create(
             user=request.user,
             product=product,
         )
+        wishlist_count = wishlist_model.objects.filter(user=request.user).count()
         context = {
-            "bool": True
+            "bool": True,
+            "wishlist_count":wishlist_count
         }
 
     return JsonResponse(context)
 
-
+@login_required
 def remove_wishlist(request):
     pid = request.GET['id']
     wishlist = wishlist_model.objects.filter(user=request.user)

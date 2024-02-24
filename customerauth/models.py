@@ -133,4 +133,4 @@ class wishlist_model(models.Model):
         verbose_name_plural = "wishlists"
 
     def __str__(self):
-        return self.product.title
+        return self.product.name

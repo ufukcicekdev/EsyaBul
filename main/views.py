@@ -4,11 +4,15 @@ from django.contrib.auth.decorators import login_required
 from main.models import ContactUs,SocialMedia
 from django.http import JsonResponse
 from products.models import Category,Product
+from customerauth.models import wishlist_model
 
 def home(request):
     social_media_links = SocialMedia.objects.all()
     product_category = Category.objects.all()
-    return render(request, 'core/home.html', {'social_media_links': social_media_links, 'product_category': product_category})
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
+
+    return render(request, 'core/home.html', {'social_media_links': social_media_links, 'product_category': product_category, "wcount": wcount})
 
 
 @login_required(login_url='customerauth:sign-in')
@@ -80,10 +84,12 @@ def category_product_list__view(request, slug):
     category = Category.objects.get(slug=slug) # food, Cosmetics
     products = Product.objects.filter(is_active=True, category=category)
     product_category = Category.objects.all()
-
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
     context = {
         "product_category":product_category,
         "category":category,
         "products":products,
+        "wcount":wcount
     }
     return render(request, "core/category-product-list.html", context)

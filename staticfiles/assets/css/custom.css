@@ -943,3 +943,61 @@
 .RZBnd svg {
     display: block;
 }
+
+.fjMAPz {
+    box-shadow: rgb(234, 233, 240) 0px 6px 30px 0px;
+    border-radius: 0.5rem;
+    min-width: 240px;
+    padding: 1rem;
+    transition: all 0.2s ease 0s;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.fjMAPz a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.fjMAPz .img {
+    border-radius: 0.5rem;
+    border: 1px solid var(--dark-opacity-5);
+    background: rgb(255, 255, 255);
+    position: relative;
+    overflow: hidden;
+    height: 150px;
+    box-sizing: border-box;
+    z-index: 1;
+    text-align: center;
+}
+
+
+.fjMAPz .img > * {
+    width: 100%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fjMAPz .productCardContent {
+    padding: 1rem 0px 0.5rem;
+}
+
+.buttons__like {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.pro-count {
+    color: blue;
+    font-weight: bold;
+    margin-left: 5px; /* İkon ile sayı arasındaki boşluğu ayarlamak için */
+    position: absolute;
+    top: 0;
+    right: 0;
+}
