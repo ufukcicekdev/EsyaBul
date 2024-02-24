@@ -1,15 +1,18 @@
 from django.contrib import admin
-from products.models import Product, ProductImage, RoomType, HomeType, HomeModel, SpaceDefinition, TimeRange, Category
+from products.models import Product, ProductImage, ProductRentalPrice, RoomType, HomeType, HomeModel, SpaceDefinition, TimeRange, Category
 
 
 class ProductImagesAdmin(admin.TabularInline):
     model = ProductImage
 
+class ProductRentalPriceAdmin(admin.TabularInline):
+    model = ProductRentalPrice
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    inlines = [ProductImagesAdmin]
-    list_display = ('name', 'slug', 'description', 'price')  # Diğer sütunları da ekleyin.
-    list_editable = ('description', 'price')  # Düzenlenebilir sütunları belirtin.
+    inlines = [ProductImagesAdmin,ProductRentalPriceAdmin]
+    list_display = ('name', 'slug', 'description', 'selling_price')  # Diğer sütunları da ekleyin.
+    list_editable = ('description', 'selling_price')  # Düzenlenebilir sütunları belirtin.
     list_display_links =  ('slug',)   # Hangi sütuna tıklanıldığında düzenleme sayfasına gidileceğini belirtin.
 
 

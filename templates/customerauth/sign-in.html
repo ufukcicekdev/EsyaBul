@@ -43,6 +43,7 @@
                 font-family: 'Roboto', sans-serif;
                 font-weight: 400; /* Normal ağırlık */
             }
+            
         </style>
             <div class="row no-gutters">
 
@@ -60,10 +61,10 @@
                             {% csrf_token %}
             
                             <div class="form-group">
-                                <input type="text" required name="email_or_username" placeholder="Username or Email *" style="width: 100%;" />
+                                <input type="text" required name="email_or_username" placeholder="Kullanıcı Adınız veya Mail Adresiniz" style="width: 100%;" />
                             </div>
                             <div class="form-group">
-                                <input required type="password" name="password" placeholder="Your password *" style="width: 100%;" />
+                                <input required type="password" name="password" placeholder="Şifreniz *" style="width: 100%;" />
                             </div>
                     
                             <div class="login_footer form-group">

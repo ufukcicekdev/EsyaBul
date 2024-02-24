@@ -15,6 +15,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.core import serializers
 from django.template.loader import render_to_string
 from cities_light.models import Country, City, Region, SubRegion
+from main.models import SocialMedia
 
 def register_view(request):
     if request.method == "POST":
@@ -461,19 +462,26 @@ def forgot_password(request):
 import random
 
 def reset_password(request):
-    un = request.GET["username"]
+    username = request.GET.get("username")
     try:
-        user = get_object_or_404(User,username=un)
-        otp = random.randint(100000,999999)
-        msz = "Merhaba {} \n{} Tek Kullanımlık Parolanız (OTP) \nBaşkalarıyla paylaşmayınız \nTeşekkürler & Saygılar \EsyaBul".format(user.username, otp)
+        user = get_object_or_404(User, username=username)
+        otp = random.randint(100000, 999999)
+        social_media_links = SocialMedia.objects.all()
+        context = {
+            'username': user.username,
+            'otp': otp,
+            "social_media_links":social_media_links
+        }
+        email_content = render_to_string('email_templates/reset_password_email.html', context)
         try:
-            email = EmailMessage("Hesap Doğrulama",msz,to=[user.email])
+            email = EmailMessage("Hesap Doğrulama", email_content, to=[user.email])
+            email.content_subtype = 'html' 
             email.send()
-            return JsonResponse({"status":"sent","email":user.email,"rotp":otp})
+            return JsonResponse({"status": "sent", "email": user.email, "rotp": otp})
         except:
-            return JsonResponse({"status":"error","email":user.email})
+            return JsonResponse({"status": "error", "email": user.email})
     except:
-        return JsonResponse({"status":"failed"})
+        return JsonResponse({"status": "failed"})
     
 ################### Forgot Passwords Close ################
 

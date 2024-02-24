@@ -8,83 +8,168 @@
 
         {% include 'core/header.html' %}
         <main id="siteMain">
-            <div class="container">
-                    <div>
-                            <div class="breadcrumbWrapper">
-                                    <div class="row align-items-center justify-content-between position-relative">
-                                            <div class="col">
-                                                    <div class="sc-eDLKkx hhosGh">
-                                                            <ul class="sc-jTQCzO dKrhyP">
-                                                                    <li class="sc-gLLuof bGrkxs"><span
-                                                                                    class="sc-qZrbh dIcBim"><svg
-                                                                                            width="16px" height="16px"
-                                                                                            viewBox="0 0 24 24" fill="none"
-                                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                                            name="ArrowSmallLeft"
-                                                                                            onclick="handleArrowClick()">
-                                                                                            <path d="M14 16L10 12L14 8"
-                                                                                                    stroke="#0A103D"
-                                                                                                    stroke-width="2"
-                                                                                                    stroke-linecap="round"
-                                                                                                    stroke-linejoin="round">
-                                                                                            </path>
-                                                                                    </svg></span><a href="{% url 'main:category-list' %}"><span
-                                                                                            class="sc-iBdnpw ksbpfb caption-bold-12-15">Anasayfa</span></a>
-                                                                    </li>
-                                                                    <li class="sc-gLLuof bGrkxs"><span
-                                                                                    class="sc-qZrbh dIcBim"><svg
-                                                                                            width="16px" height="16px"
-                                                                                            viewBox="0 0 24 24" fill="none"
-                                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                                            name="ArrowSmallLeft"
-                                                                                            onclick="handleArrowClick()">
-                                                                                            <path d="M14 16L10 12L14 8"
-                                                                                                    stroke="#0A103D"
-                                                                                                    stroke-width="2"
-                                                                                                    stroke-linecap="round"
-                                                                                                    stroke-linejoin="round">
-                                                                                            </path>
-                                                                                    </svg></span><a
-                                                                                    href="{% url 'main:category-product-list' category.slug %}"><span
-                                                                                            class="sc-fsYfdN hSLwkI"><svg
-                                                                                                    width="24" height="24"
-                                                                                                    viewBox="0 0 24 24"
-                                                                                                    fill="none"
-                                                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                                                    name="ArrowSmallRightStroke">
-                                                                                                    <path d="M14 8L18 12L14 16"
-                                                                                                            stroke="#0A103D"
-                                                                                                            stroke-width="2"
-                                                                                                            stroke-linecap="round"
-                                                                                                            stroke-linejoin="round">
-                                                                                                    </path>
-                                                                                                    <path d="M18 12L7.6709 12"
-                                                                                                            stroke="#0A103D"
-                                                                                                            stroke-width="2"
-                                                                                                            stroke-linecap="round"
-                                                                                                            stroke-linejoin="round">
-                                                                                                    </path>
-                                                                                            </svg></span><span
-                                                                                            class="sc-iBdnpw ksbpfb caption-bold-12-15">
-                                                                                            {{ category.name}}
-                                                                                        </span>
-                                                                                        </a>
-                                                                                    </li>
-                                                              
-                                                            </ul>
-                                                  
+                <div class="container">
+                        <div>
+                                <div class="page-header mt-30 mb-50">
+                                        <div class="container">
+                                            <div class="archive-header">
+                                                <div class="row align-items-center">
+                                                    <div class="col-xl-3">
+                                                        <h1 class="mb-15">{{category.name}}</h1>
+                                                        <div class="breadcrumbWrapper">
+                                                                <div class="row align-items-center justify-content-between position-relative">
+                                                                        <div class="col">
+                                                                                <div class="sc-eDLKkx hhosGh">
+                                                                                        <ul class="sc-jTQCzO dKrhyP">
+                                                                                                <li class="sc-gLLuof bGrkxs"><span
+                                                                                                                class="sc-qZrbh dIcBim"><svg
+                                                                                                                        width="16px" height="16px"
+                                                                                                                        viewBox="0 0 24 24" fill="none"
+                                                                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                                                                        name="ArrowSmallLeft"
+                                                                                                                        onclick="handleArrowClick()">
+                                                                                                                        <path d="M14 16L10 12L14 8"
+                                                                                                                                stroke="#0A103D"
+                                                                                                                                stroke-width="2"
+                                                                                                                                stroke-linecap="round"
+                                                                                                                                stroke-linejoin="round">
+                                                                                                                        </path>
+                                                                                                                </svg></span><a href="{% url 'main:category-list' %}"><span
+                                                                                                                        class="sc-iBdnpw ksbpfb caption-bold-12-15">Anasayfa</span></a>
+                                                                                                </li>
+                                                                                                <li class="sc-gLLuof bGrkxs"><span
+                                                                                                                class="sc-qZrbh dIcBim"><svg
+                                                                                                                        width="16px" height="16px"
+                                                                                                                        viewBox="0 0 24 24" fill="none"
+                                                                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                                                                        name="ArrowSmallLeft"
+                                                                                                                        onclick="handleArrowClick()">
+                                                                                                                        <path d="M14 16L10 12L14 8"
+                                                                                                                                stroke="#0A103D"
+                                                                                                                                stroke-width="2"
+                                                                                                                                stroke-linecap="round"
+                                                                                                                                stroke-linejoin="round">
+                                                                                                                        </path>
+                                                                                                                </svg></span><a
+                                                                                                                href="{% url 'main:category-product-list' category.slug %}"><span
+                                                                                                                        class="sc-fsYfdN hSLwkI"><svg
+                                                                                                                                width="24" height="24"
+                                                                                                                                viewBox="0 0 24 24"
+                                                                                                                                fill="none"
+                                                                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                                                                name="ArrowSmallRightStroke">
+                                                                                                                                <path d="M14 8L18 12L14 16"
+                                                                                                                                        stroke="#0A103D"
+                                                                                                                                        stroke-width="2"
+                                                                                                                                        stroke-linecap="round"
+                                                                                                                                        stroke-linejoin="round">
+                                                                                                                                </path>
+                                                                                                                                <path d="M18 12L7.6709 12"
+                                                                                                                                        stroke="#0A103D"
+                                                                                                                                        stroke-width="2"
+                                                                                                                                        stroke-linecap="round"
+                                                                                                                                        stroke-linejoin="round">
+                                                                                                                                </path>
+                                                                                                                        </svg></span><span
+                                                                                                                        class="sc-iBdnpw ksbpfb caption-bold-12-15">
+                                                                                                                        {{ category.name}}
+                                                                                                                    </span>
+                                                                                                                    </a>
+                                                                                                                </li>
+                                                                                          
+                                                                                        </ul>
+                                                                              
+                                                                                </div>
+                                                                        </div>
+                                                                        
+                                                                </div>
+                                                        </div>
                                                     </div>
+                                                    
+                                                </div>
                                             </div>
-                                            
-                                    </div>
-                            </div>
-                    </div>
-                    <div class="slug">
+                                        </div>
+                                </div>
+                                
                             
-                    </div>
+                        </div>
+                        <div class="shop-product-fillter">
+                                <div class="totall-product">
+                                        <p>Sizin için <strong class="text-brand">{{ products.count }}</strong> ürün bulduk{{ products.count|pluralize:"dık,duk" }}!</p>
+                                    </div>
+                              
+                            </div>
+                        <div class="row product-grid">
+                        {% for p in products %}
+                                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
+                                <div class="product-cart-wrap mb-30">
+                                        <div class="product-img-action-wrap">
+                                        <div class="product-img product-img-zoom">
+                                                <a href="">
+                                                {% with first_image=p.related_products.first %}
+                                                        {% if first_image %}
+                                                                <img class="default-img" src="{{ first_image.image.url }}" alt="{{ first_image.img_alt }}" title="{{ first_image.img_title }}" style="height: 280px; width: 280px; object-fit: cover;" />
+                                                        {% endif %}
+                                                {% endwith %}
+
+                                                </a>
+                                        </div>
+                                        <div class="product-action-1">
+                                                {% if request.user.is_authenticated %}
+                                                <a aria-label="Beğendiklerim"  class="action-btn add-to-wishlist" data-product-item="{{p.id}}"><i class="fi-rs-heart"></i></a>
+                                                {% endif %}
+                                                <!-- <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a> -->
+                                                <a aria-label="Detay"  class="action-btn go-to-detail" data-product-item="{{p.id}}"><i class="fi-rs-eye"></i></a>
+
+                                        </div>
+                                        {% if p.get_precentage != None %}
+                                        <div class="product-badges product-badges-position product-badges-mrg">
+                                                <span class="hot">-{{p.get_precentage|floatformat:0}}%</span>
+                                        </div>
+                                        {% endif %}
+                                        </div>
+                                        <div class="product-content-wrap">
+                                        
+                                        <h2><a href="shop-product-right.html">{{ p.name }}</a></h2>
+                                        <div class="product-rate-cover">
+                                                <i class="fas fa-star text-warning"></i>
+                                                <span class="font-small ml-5 text-muted"> ({{ p.view_count }})</span>
+
+                                        </div>
+                                
+                                        <div class="product-card-bottom">
+                                                <div class="product-price">
+                                                <span>₺</span> <span class="current-product-price-{{ p.id }}">{{p.selling_price}}</span>
+                                                {% if p.selling_old_price != 0 %}
+                                                <span class="old-price">${{p.selling_old_price}}</span>
+                                                {% endif %}
+                                                </div>
+                                                <div class="add-cart">
+                                                <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ p.id }}">
+                                                <input type="hidden" class="product-pid-{{ p.id }}" value="{{ p.pid }}">
+                                                <input type="hidden" class="product-image-{{ p.id }}" value="{{ p.image.url }}">
+                                                <input type="hidden" class="product-id-{{ p.id }}" value="{{ p.id }}">
+                                                <input type="hidden" class="product-title-{{ p.id }}" value="{{ p.name }}">
+                                                <div class="d-flex">
+                                                        <button class="add add-to-cart-btn" data-index="{{ p.id }}" style="border: none;" id="add-to-cart-btn"><i class="fi-rs-shopping-cart mr-5"></i>Ekle</button>
+                                                        {% if request.user.is_authenticated %}
+                                                        <button style="border: none; background: none;" class="add-to-wishlist" data-product-item="{{p.id}}"><i class="fi-rs-heart" style="fill: aqua;"></i></button>
+                                                        {% endif %}
+                                                        </div>
+                                                <!-- <button class="add add-to-cart-btn" data-index="{{ p.id }}" style="border: none;" id="add-to-cart-btn"><i class="fi-rs-shopping-cart mr-5"></i>Add</button> -->
+                                                </div>
+                                        </div>
+                                        </div>
+                                </div>
+                                </div>
+                        {% endfor %}
+                </div>
             </div><button class="goToUp btn"><span class="icon"></span><span class="text">Yukarı çık</span></button>
             <div class="shoppingCartBackdrop hidden"></div>
-    </main>
+            
+            
+
+        </main>
         {% include 'core/footer.html' %}
     </div>
 </div>
