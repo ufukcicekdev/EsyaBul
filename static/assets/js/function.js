@@ -320,7 +320,10 @@ $(document).ready(function (){
             },
             success: function(response){
                 this_val.html("<i class='fas fa-heart text-danger'></i>")
-                document.querySelector('.pro-count').innerHTML = response.wishlist_count;
+                var proCountElements = document.querySelectorAll('.pro-count');
+                proCountElements.forEach(function(element) {
+                    element.innerHTML = response.wishlist_count;
+                });
             }
         })
     })
@@ -343,7 +346,7 @@ $(document).ready(function (){
                 console.log("Deleting product from wishlist...");
             },
             success: function(response){
-                $("#wishlist-list").html(response.data)
+                location.reload();
             }
         })
     })

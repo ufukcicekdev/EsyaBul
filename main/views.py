@@ -11,8 +11,11 @@ def home(request):
     product_category = Category.objects.all()
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
-
+    else:
+        wcount = 0
     return render(request, 'core/home.html', {'social_media_links': social_media_links, 'product_category': product_category, "wcount": wcount})
+
+
 
 
 @login_required(login_url='customerauth:sign-in')

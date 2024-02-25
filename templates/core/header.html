@@ -58,7 +58,7 @@
                 </button>
 
 
-                <button type="button" class="buttons__like btn btn-icon">
+                <button type="button" class="buttons__like btn btn-icon" onclick="gotoWishlist()">
                     <span style="box-sizing:border-box;display:inline-block;overflow:hidden;width:initial;height:initial;background:none;opacity:1;border:0;margin:0;padding:0;position:relative;max-width:100%">
                         <span style="box-sizing:border-box;display:block;width:initial;height:initial;background:none;opacity:1;border:0;margin:0;padding:0;max-width:100%">
                             <img style="display:block;max-width:100%;width:initial;height:initial;background:none;opacity:1;border:0;margin:0;padding:0"
@@ -143,59 +143,103 @@
     </nav>
 </header>
 
-<nav class="mobile-nav"><a role="button" tabindex="0" href="index.html"
-    class="mobile-nav__item active btn btn-primary"><span class="item__image"><svg width="24px" height="24px"
-            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" name="Home">
-            <path
-                d="M9.15722 20.7714V17.7047C9.1572 16.9246 9.79312 16.2908 10.581 16.2856H13.4671C14.2587 16.2856 14.9005 16.9209 14.9005 17.7047V17.7047V20.7809C14.9003 21.4432 15.4343 21.9845 16.103 22H18.0271C19.9451 22 21.5 20.4607 21.5 18.5618V18.5618V9.83784C21.4898 9.09083 21.1355 8.38935 20.538 7.93303L13.9577 2.6853C12.8049 1.77157 11.1662 1.77157 10.0134 2.6853L3.46203 7.94256C2.86226 8.39702 2.50739 9.09967 2.5 9.84736V18.5618C2.5 20.4607 4.05488 22 5.97291 22H7.89696C8.58235 22 9.13797 21.4499 9.13797 20.7714V20.7714"
-                stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-        </svg></span><span class="item__label caption-semi-bold-11-13">Anasayfa</span></a><a role="button"
-    tabindex="0" href="{% url 'main:category-list' %}" class="mobile-nav__item btn btn-primary"><span class="item__image"><svg
-            width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-            name="Category">
-            <path fill-rule="evenodd" clip-rule="evenodd"
-                d="M16.2849 2H19.5515C20.903 2 21.9993 3.1059 21.9993 4.47018V7.7641C21.9993 9.12735 20.903 10.2343 19.5515 10.2343H16.2849C14.9323 10.2343 13.8359 9.12735 13.8359 7.7641V4.47018C13.8359 3.1059 14.9323 2 16.2849 2Z"
-                stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            <path fill-rule="evenodd" clip-rule="evenodd"
-                d="M4.44892 2H7.71449C9.06703 2 10.1634 3.1059 10.1634 4.47018V7.7641C10.1634 9.12735 9.06703 10.2343 7.71449 10.2343H4.44892C3.09638 10.2343 2 9.12735 2 7.7641V4.47018C2 3.1059 3.09638 2 4.44892 2Z"
-                stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            <path fill-rule="evenodd" clip-rule="evenodd"
-                d="M4.44892 13.7656H7.71449C9.06703 13.7656 10.1634 14.8715 10.1634 16.2368V19.5297C10.1634 20.894 9.06703 21.9999 7.71449 21.9999H4.44892C3.09638 21.9999 2 20.894 2 19.5297V16.2368C2 14.8715 3.09638 13.7656 4.44892 13.7656Z"
-                stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            <path fill-rule="evenodd" clip-rule="evenodd"
-                d="M16.2849 13.7656H19.5515C20.903 13.7656 21.9993 14.8715 21.9993 16.2368V19.5297C21.9993 20.894 20.903 21.9999 19.5515 21.9999H16.2849C14.9323 21.9999 13.8359 20.894 13.8359 19.5297V16.2368C13.8359 14.8715 14.9323 13.7656 16.2849 13.7656Z"
-                stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-        </svg></span><span class="item__label caption-semi-bold-11-13">Kategoriler</span></a><button type="button"
-    class="mobile-nav__item btn btn-primary"><span class="item__image shoppingCart"><svg width="24px" height="24px"
-            viewBox="0 0 22 21" fill="none" xmlns="http://www.w3.org/2000/svg" name="Buy">
-            <g id="Buy">
-                <path id="Stroke 1" fill-rule="evenodd" clip-rule="evenodd"
-                    d="M6.4222 17.8203C6.8442 17.8203 7.1872 18.1633 7.1872 18.5853C7.1872 19.0073 6.8442 19.3493 6.4222 19.3493C6.0002 19.3493 5.6582 19.0073 5.6582 18.5853C5.6582 18.1633 6.0002 17.8203 6.4222 17.8203Z"
-                    fill="#474C6D"></path>
-                <path id="Stroke 1 (Stroke)" fill-rule="evenodd" clip-rule="evenodd"
-                    d="M6.4222 18.8203C6.55419 18.8203 6.6582 18.7139 6.6582 18.5853C6.6582 18.455 6.55249 18.3493 6.4222 18.3493C6.29362 18.3493 6.1872 18.4533 6.1872 18.5853C6.1872 18.7156 6.29192 18.8203 6.4222 18.8203ZM4.6582 18.5853C4.6582 17.6127 5.44622 16.8203 6.4222 16.8203C7.39649 16.8203 8.1872 17.611 8.1872 18.5853C8.1872 19.5613 7.39478 20.3493 6.4222 20.3493C5.44792 20.3493 4.6582 19.5596 4.6582 18.5853Z"
-                    fill="#474C6D"></path>
-                <path id="Stroke 3" fill-rule="evenodd" clip-rule="evenodd"
-                    d="M17.6752 17.8203C18.0972 17.8203 18.4402 18.1633 18.4402 18.5853C18.4402 19.0073 18.0972 19.3493 17.6752 19.3493C17.2532 19.3493 16.9102 19.0073 16.9102 18.5853C16.9102 18.1633 17.2532 17.8203 17.6752 17.8203Z"
-                    fill="#474C6D"></path>
-                <path id="Stroke 3 (Stroke)" fill-rule="evenodd" clip-rule="evenodd"
-                    d="M17.6752 18.8203C17.8054 18.8203 17.9102 18.7156 17.9102 18.5853C17.9102 18.4533 17.8037 18.3493 17.6752 18.3493C17.5466 18.3493 17.4402 18.4533 17.4402 18.5853C17.4402 18.7156 17.5449 18.8203 17.6752 18.8203ZM15.9102 18.5853C15.9102 17.611 16.7009 16.8203 17.6752 16.8203C18.6494 16.8203 19.4402 17.611 19.4402 18.5853C19.4402 19.5613 18.6477 20.3493 17.6752 20.3493C16.7026 20.3493 15.9102 19.5613 15.9102 18.5853Z"
-                    fill="#474C6D"></path>
-                <path id="Stroke 5 (Stroke)" fill-rule="evenodd" clip-rule="evenodd"
-                    d="M0.764813 1.07962C0.859 0.535428 1.37651 0.170626 1.9207 0.264813L4.00071 0.624813C4.44913 0.702425 4.78859 1.07303 4.82666 1.52652L5.0426 4.09916H18.9092C20.3354 4.09916 21.4301 5.36336 21.2259 6.7753L20.2769 13.3334C20.0766 14.7122 18.8957 15.7362 17.5022 15.7362H6.59016C5.13262 15.7362 3.91817 14.6202 3.79667 13.1668C3.79665 13.1666 3.79668 13.167 3.79667 13.1668L2.89829 2.46375L1.57962 2.23551C1.03543 2.14133 0.670626 1.62382 0.764813 1.07962ZM5.21047 6.09916L5.78966 12.9995C5.8244 13.4159 6.17188 13.7362 6.59016 13.7362H17.5022C17.9006 13.7362 18.2399 13.4436 18.2976 13.0464L19.2465 6.48903C19.2763 6.28297 19.1169 6.09916 18.9092 6.09916H5.21047Z"
-                    fill="#474C6D"></path>
-            </g>
-        </svg> </span><span class="item__label caption-semi-bold-11-13">Sepet</span></button><a role="button"
-    tabindex="0" href="{% url 'customerauth:dashboard' %}" class="mobile-nav__item  btn btn-primary"><span class="item__image"><svg
-            width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-            name="Profile">
-            <circle cx="11.5788" cy="7.27803" r="4.77803" stroke="#0A103D" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round"></circle>
-            <path fill-rule="evenodd" clip-rule="evenodd"
-                d="M4.00002 18.7016C3.99873 18.3657 4.07385 18.0339 4.2197 17.7313C4.67736 16.816 5.96798 16.3308 7.03892 16.1112C7.81128 15.9463 8.59431 15.8362 9.38217 15.7816C10.8408 15.6535 12.3079 15.6535 13.7666 15.7816C14.5544 15.8369 15.3374 15.947 16.1099 16.1112C17.1808 16.3308 18.4714 16.7702 18.9291 17.7313C19.2224 18.3481 19.2224 19.0642 18.9291 19.681C18.4714 20.6421 17.1808 21.0814 16.1099 21.2919C15.3384 21.4636 14.5551 21.5768 13.7666 21.6306C12.5794 21.7313 11.3866 21.7496 10.1968 21.6855C9.92221 21.6855 9.65677 21.6855 9.38217 21.6306C8.59663 21.5775 7.81632 21.4642 7.04807 21.2919C5.96798 21.0814 4.68652 20.6421 4.2197 19.681C4.0746 19.3749 3.99955 19.0403 4.00002 18.7016Z"
-                stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-        </svg></span><span class="item__label caption-semi-bold-11-13">Profil</span></a>
-    </nav>
+<nav class="mobile-nav">
+    <a role="button" tabindex="0" href="index.html" class="mobile-nav__item active btn btn-primary">
+        <span class="item__image">
+            <svg width="24px" height="24px"
+                viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" name="Home">
+                <path d="M9.15722 20.7714V17.7047C9.1572 16.9246 9.79312 16.2908 10.581 16.2856H13.4671C14.2587 16.2856 14.9005 16.9209 14.9005 17.7047V17.7047V20.7809C14.9003 21.4432 15.4343 21.9845 16.103 22H18.0271C19.9451 22 21.5 20.4607 21.5 18.5618V18.5618V9.83784C21.4898 9.09083 21.1355 8.38935 20.538 7.93303L13.9577 2.6853C12.8049 1.77157 11.1662 1.77157 10.0134 2.6853L3.46203 7.94256C2.86226 8.39702 2.50739 9.09967 2.5 9.84736V18.5618C2.5 20.4607 4.05488 22 5.97291 22H7.89696C8.58235 22 9.13797 21.4499 9.13797 20.7714V20.7714"
+                    stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                </path>
+            </svg>
+        </span>
+        <span class="item__label caption-semi-bold-11-13">Anasayfa</span>
+    </a>
+
+    <a role="button" tabindex="0" href="{% url 'main:category-list' %}" class="mobile-nav__item btn btn-primary">
+        <span class="item__image">
+            <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg" name="Category">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M16.2849 2H19.5515C20.903 2 21.9993 3.1059 21.9993 4.47018V7.7641C21.9993 9.12735 20.903 10.2343 19.5515 10.2343H16.2849C14.9323 10.2343 13.8359 9.12735 13.8359 7.7641V4.47018C13.8359 3.1059 14.9323 2 16.2849 2Z"
+                    stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M4.44892 2H7.71449C9.06703 2 10.1634 3.1059 10.1634 4.47018V7.7641C10.1634 9.12735 9.06703 10.2343 7.71449 10.2343H4.44892C3.09638 10.2343 2 9.12735 2 7.7641V4.47018C2 3.1059 3.09638 2 4.44892 2Z"
+                    stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M4.44892 13.7656H7.71449C9.06703 13.7656 10.1634 14.8715 10.1634 16.2368V19.5297C10.1634 20.894 9.06703 21.9999 7.71449 21.9999H4.44892C3.09638 21.9999 2 20.894 2 19.5297V16.2368C2 14.8715 3.09638 13.7656 4.44892 13.7656Z"
+                    stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M16.2849 13.7656H19.5515C20.903 13.7656 21.9993 14.8715 21.9993 16.2368V19.5297C21.9993 20.894 20.903 21.9999 19.5515 21.9999H16.2849C14.9323 21.9999 13.8359 20.894 13.8359 19.5297V16.2368C13.8359 14.8715 14.9323 13.7656 16.2849 13.7656Z"
+                    stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+        </span>
+        <span class="item__label caption-semi-bold-11-13">Kategoriler</span>
+    </a>
+    
+    <button type="button" class="mobile-nav__item btn btn-primary">
+        <span class="item__image shoppingCart">
+            <svg width="24px" height="24px" viewBox="0 0 22 21" fill="none" xmlns="http://www.w3.org/2000/svg" name="Buy">
+                <g id="Buy">
+                    <path id="Stroke 1" fill-rule="evenodd" clip-rule="evenodd"
+                        d="M6.4222 17.8203C6.8442 17.8203 7.1872 18.1633 7.1872 18.5853C7.1872 19.0073 6.8442 19.3493 6.4222 19.3493C6.0002 19.3493 5.6582 19.0073 5.6582 18.5853C5.6582 18.1633 6.0002 17.8203 6.4222 17.8203Z"
+                        fill="#474C6D"></path>
+                    <path id="Stroke 1 (Stroke)" fill-rule="evenodd" clip-rule="evenodd"
+                        d="M6.4222 18.8203C6.55419 18.8203 6.6582 18.7139 6.6582 18.5853C6.6582 18.455 6.55249 18.3493 6.4222 18.3493C6.29362 18.3493 6.1872 18.4533 6.1872 18.5853C6.1872 18.7156 6.29192 18.8203 6.4222 18.8203ZM4.6582 18.5853C4.6582 17.6127 5.44622 16.8203 6.4222 16.8203C7.39649 16.8203 8.1872 17.611 8.1872 18.5853C8.1872 19.5613 7.39478 20.3493 6.4222 20.3493C5.44792 20.3493 4.6582 19.5596 4.6582 18.5853Z"
+                        fill="#474C6D"></path>
+                    <path id="Stroke 3" fill-rule="evenodd" clip-rule="evenodd"
+                        d="M17.6752 17.8203C18.0972 17.8203 18.4402 18.1633 18.4402 18.5853C18.4402 19.0073 18.0972 19.3493 17.6752 19.3493C17.2532 19.3493 16.9102 19.0073 16.9102 18.5853C16.9102 18.1633 17.2532 17.8203 17.6752 17.8203Z"
+                        fill="#474C6D"></path>
+                    <path id="Stroke 3 (Stroke)" fill-rule="evenodd" clip-rule="evenodd"
+                        d="M17.6752 18.8203C17.8054 18.8203 17.9102 18.7156 17.9102 18.5853C17.9102 18.4533 17.8037 18.3493 17.6752 18.3493C17.5466 18.3493 17.4402 18.4533 17.4402 18.5853C17.4402 18.7156 17.5449 18.8203 17.6752 18.8203ZM15.9102 18.5853C15.9102 17.611 16.7009 16.8203 17.6752 16.8203C18.6494 16.8203 19.4402 17.611 19.4402 18.5853C19.4402 19.5613 18.6477 20.3493 17.6752 20.3493C16.7026 20.3493 15.9102 19.5613 15.9102 18.5853Z"
+                        fill="#474C6D"></path>
+                    <path id="Stroke 5 (Stroke)" fill-rule="evenodd" clip-rule="evenodd"
+                        d="M0.764813 1.07962C0.859 0.535428 1.37651 0.170626 1.9207 0.264813L4.00071 0.624813C4.44913 0.702425 4.78859 1.07303 4.82666 1.52652L5.0426 4.09916H18.9092C20.3354 4.09916 21.4301 5.36336 21.2259 6.7753L20.2769 13.3334C20.0766 14.7122 18.8957 15.7362 17.5022 15.7362H6.59016C5.13262 15.7362 3.91817 14.6202 3.79667 13.1668C3.79665 13.1666 3.79668 13.167 3.79667 13.1668L2.89829 2.46375L1.57962 2.23551C1.03543 2.14133 0.670626 1.62382 0.764813 1.07962ZM5.21047 6.09916L5.78966 12.9995C5.8244 13.4159 6.17188 13.7362 6.59016 13.7362H17.5022C17.9006 13.7362 18.2399 13.4436 18.2976 13.0464L19.2465 6.48903C19.2763 6.28297 19.1169 6.09916 18.9092 6.09916H5.21047Z"
+                        fill="#474C6D"></path>
+                </g>
+            </svg> 
+        </span><span class="item__label caption-semi-bold-11-13">Sepet</span>
+    </button>
+
+    <button type="button" class="mobile-nav__item buttons__like btn btn-icon" onclick="gotoWishlist()">
+        <span style="box-sizing:border-box;display:inline-block;overflow:hidden;width:initial;height:initial;background:none;opacity:1;border:0;margin:0;padding:0;position:relative;max-width:100%">
+            <span style="box-sizing:border-box;display:block;width:initial;height:initial;background:none;opacity:1;border:0;margin:0;padding:0;max-width:100%">
+                <img style="display:block;max-width:100%;width:initial;height:initial;background:none;opacity:1;border:0;margin:0;padding:0"
+                    alt="" aria-hidden="true"
+                    src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2724%27%20height=%2724%27/%3e" />
+            </span>
+            <img alt="Beğeni İkonu" src="{% static 'assets/imgs/icons/icon-heart.svg' %}"
+                decoding="async" data-nimg="intrinsic"
+                style="position:absolute;top:0;left:0;bottom:0;right:0;box-sizing:border-box;padding:0;border:none;margin:auto;display:block;width:0;height:0;min-width:100%;max-width:100%;min-height:100%;max-height:100%" />
+            <noscript>
+                <img alt="Beğeni İkonu" srcSet="/icon-heart.svg 1x, /icon-heart.svg 2x"
+                    src="{% static 'assets/imgs/icons/icon-heart.svg' %}" decoding="async" data-nimg="intrinsic"
+                    style="position:absolute;top:0;left:0;bottom:0;right:0;box-sizing:border-box;padding:0;border:none;margin:auto;display:block;width:0;height:0;min-width:100%;max-width:100%;min-height:100%;max-height:100%"
+                    loading="lazy" />
+            </noscript>
+        </span>
+        <span class="item__label caption-semi-bold-11-13">Beğendiklerim</span>
+        {% if request.user.is_authenticated %}
+        <span class="pro-count blue">{{ wcount }}</span>
+        {% else %}
+        <span class="pro-count blue">0</span>
+        {% endif %}
+    </button>
+
+    <a role="button" tabindex="0" href="{% url 'customerauth:dashboard' %}" class="mobile-nav__item  btn btn-primary">
+        <span class="item__image">
+            <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" name="Profile">
+                <circle cx="11.5788" cy="7.27803" r="4.77803" stroke="#0A103D" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round"></circle>
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M4.00002 18.7016C3.99873 18.3657 4.07385 18.0339 4.2197 17.7313C4.67736 16.816 5.96798 16.3308 7.03892 16.1112C7.81128 15.9463 8.59431 15.8362 9.38217 15.7816C10.8408 15.6535 12.3079 15.6535 13.7666 15.7816C14.5544 15.8369 15.3374 15.947 16.1099 16.1112C17.1808 16.3308 18.4714 16.7702 18.9291 17.7313C19.2224 18.3481 19.2224 19.0642 18.9291 19.681C18.4714 20.6421 17.1808 21.0814 16.1099 21.2919C15.3384 21.4636 14.5551 21.5768 13.7666 21.6306C12.5794 21.7313 11.3866 21.7496 10.1968 21.6855C9.92221 21.6855 9.65677 21.6855 9.38217 21.6306C8.59663 21.5775 7.81632 21.4642 7.04807 21.2919C5.96798 21.0814 4.68652 20.6421 4.2197 19.681C4.0746 19.3749 3.99955 19.0403 4.00002 18.7016Z"
+                    stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+        </span>
+        <span class="item__label caption-semi-bold-11-13">Profil</span>
+    </a>
+       
+</nav>
 
 
 
@@ -208,6 +252,12 @@
 
     function goToLogin() {
         const previousPageUrl = "{% url 'customerauth:sign-in' %}";
+        
+        window.location.href = previousPageUrl;
+    }
+
+    function gotoWishlist() {
+        const previousPageUrl = "{% url 'customerauth:wishlist' %}";
         
         window.location.href = previousPageUrl;
     }

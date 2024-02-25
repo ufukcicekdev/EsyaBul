@@ -138,6 +138,8 @@ def customer_dashboard(request):
     addresses = Address.objects.filter(user=request.user)
     form = AddressForm(request.POST or None) 
     title ="Hesabım"
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
     if request.method == "POST":
         if form.is_valid():  
             new_address = form.save(commit=False) 
@@ -152,7 +154,8 @@ def customer_dashboard(request):
         "user_profile": user_profile,
         "addresses": addresses,
         "form": form ,
-        "title":title
+        "title":title,
+        "wcount":wcount
     }
     return render(request, 'customerauth/dashboard.html', context)
 
@@ -489,15 +492,18 @@ def reset_password(request):
 
 ################### Wishlist Open ################
     
-@login_required
+@login_required(login_url='customerauth:sign-in')
 def wishlist_view(request):
-    wishlist = wishlist_model.objects.all()
+    wishlistProducts = wishlist_model.objects.filter(user=request.user)
+    title = "Beğendiklerim"
+    print("wishlistProducts",wishlistProducts.count())
     context = {
-        "w":wishlist
+        "wishlistProducts":wishlistProducts,
+        "title":title
     }
     return render(request, "customerauth/wishlist.html", context)
 
-@login_required
+@login_required(login_url='customerauth:sign-in')
 def add_to_wishlist(request):
     product_id = request.GET['id']
     product = Product.objects.get(id=product_id)
@@ -526,7 +532,7 @@ def add_to_wishlist(request):
 
     return JsonResponse(context)
 
-@login_required
+@login_required(login_url='customerauth:sign-in')
 def remove_wishlist(request):
     pid = request.GET['id']
     wishlist = wishlist_model.objects.filter(user=request.user)

@@ -993,11 +993,15 @@
     align-items: center;
 }
 
+
+
 .pro-count {
-    color: blue;
-    font-weight: bold;
-    margin-left: 5px; /* İkon ile sayı arasındaki boşluğu ayarlamak için */
     position: absolute;
     top: 0;
     right: 0;
+    background-color: #3498db; 
+    color: #ffffff; 
+    border-radius: 50%; 
+    padding: 5px 8px;
+    font-size: 8px; 
 }

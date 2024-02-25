@@ -5,7 +5,6 @@
 
 <div id="__next">
     <div class="site-container">
-
         {% include 'core/header.html' %}
         <main id="siteMain">
                 <div class="container">
@@ -95,74 +94,83 @@
                         </div>
                         <div class="shop-product-fillter">
                                 <div class="totall-product">
-                                        <p>Sizin için <strong class="text-brand">{{ products.count }}</strong> ürün bulduk{{ products.count|pluralize:"dık,duk" }}!</p>
+                                        <p>Sizin için <strong class="text-brand">{{ products.count }}</strong> ürün bulduk!</p>
                                     </div>
                               
                             </div>
                         <div class="row product-grid">
-                        {% for p in products %}
-                                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
-                                <div class="product-cart-wrap mb-30">
-                                        <div class="product-img-action-wrap">
-                                        <div class="product-img product-img-zoom">
-                                                <a href="">
-                                                {% with first_image=p.related_products.first %}
-                                                        {% if first_image %}
-                                                                <img class="default-img" src="{{ first_image.image.url }}" alt="{{ first_image.img_alt }}" title="{{ first_image.img_title }}" style="height: 280px; width: 280px; object-fit: cover;" />
+                        {% if products %}
+                                {% for p in products %}
+                                        <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
+                                        <div class="product-cart-wrap mb-30">
+                                                <div class="product-img-action-wrap">
+                                                <div class="product-img product-img-zoom">
+                                                        <a href="">
+                                                        {% with first_image=p.related_products.first %}
+                                                                {% if first_image %}
+                                                                        <img class="default-img" src="{{ first_image.image.url }}" alt="{{ first_image.img_alt }}" title="{{ first_image.img_title }}" style="height: 280px; width: 280px; object-fit: cover;" />
+                                                                {% endif %}
+                                                        {% endwith %}
+
+                                                        </a>
+                                                </div>
+                                                <div class="product-action-1">
+                                                        {% if request.user.is_authenticated %}
+                                                        <a aria-label="Beğendiklerim"  class="action-btn add-to-wishlist" data-product-item="{{p.id}}"><i class="fi-rs-heart"></i></a>
                                                         {% endif %}
-                                                {% endwith %}
+                                                        <!-- <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a> -->
+                                                        <a aria-label="Detay"  class="action-btn go-to-detail" data-product-item="{{p.id}}"><i class="fi-rs-eye"></i></a>
 
-                                                </a>
-                                        </div>
-                                        <div class="product-action-1">
-                                                {% if request.user.is_authenticated %}
-                                                <a aria-label="Beğendiklerim"  class="action-btn add-to-wishlist" data-product-item="{{p.id}}"><i class="fi-rs-heart"></i></a>
+                                                </div>
+                                                {% if p.get_precentage != None %}
+                                                <div class="product-badges product-badges-position product-badges-mrg">
+                                                        <span class="hot">-{{p.get_precentage|floatformat:0}}%</span>
+                                                </div>
                                                 {% endif %}
-                                                <!-- <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a> -->
-                                                <a aria-label="Detay"  class="action-btn go-to-detail" data-product-item="{{p.id}}"><i class="fi-rs-eye"></i></a>
+                                                </div>
+                                                <div class="product-content-wrap">
+                                                
+                                                <h2><a href="shop-product-right.html">{{ p.name }}</a></h2>
+                                                <div class="product-rate-cover">
+                                                        <i class="fas fa-star text-warning"></i>
+                                                        <span class="font-small ml-5 text-muted"> ({{ p.view_count }})</span>
 
-                                        </div>
-                                        {% if p.get_precentage != None %}
-                                        <div class="product-badges product-badges-position product-badges-mrg">
-                                                <span class="hot">-{{p.get_precentage|floatformat:0}}%</span>
-                                        </div>
-                                        {% endif %}
-                                        </div>
-                                        <div class="product-content-wrap">
+                                                </div>
                                         
-                                        <h2><a href="shop-product-right.html">{{ p.name }}</a></h2>
-                                        <div class="product-rate-cover">
-                                                <i class="fas fa-star text-warning"></i>
-                                                <span class="font-small ml-5 text-muted"> ({{ p.view_count }})</span>
-
-                                        </div>
-                                
-                                        <div class="product-card-bottom">
-                                                <div class="product-price">
-                                                <span>₺</span> <span class="current-product-price-{{ p.id }}">{{p.selling_price}}</span>
-                                                {% if p.selling_old_price != 0 %}
-                                                <span class="old-price">${{p.selling_old_price}}</span>
-                                                {% endif %}
+                                                <div class="product-card-bottom">
+                                                        <div class="product-price">
+                                                        <span>₺</span> <span class="current-product-price-{{ p.id }}">{{p.selling_price}}</span>
+                                                        {% if p.selling_old_price != 0 %}
+                                                        <span class="old-price">${{p.selling_old_price}}</span>
+                                                        {% endif %}
+                                                        </div>
+                                                        <div class="add-cart">
+                                                        <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ p.id }}">
+                                                        <input type="hidden" class="product-pid-{{ p.id }}" value="{{ p.pid }}">
+                                                        <input type="hidden" class="product-image-{{ p.id }}" value="{{ p.image.url }}">
+                                                        <input type="hidden" class="product-id-{{ p.id }}" value="{{ p.id }}">
+                                                        <input type="hidden" class="product-title-{{ p.id }}" value="{{ p.name }}">
+                                                        <div class="d-flex">
+                                                        <button class="add add-to-cart-btn" data-index="{{ p.id }}" style="border: none;" id="add-to-cart-btn"><i class="fi-rs-shopping-cart mr-5"></i>Ekle</button>
+                                                        {% if request.user.is_authenticated %}
+                                                        <button style="border: none; background: none;" class="add-to-wishlist" data-product-item="{{p.id}}"><i class="fi-rs-heart" style="fill: aqua;"></i></button>
+                                                        {% endif %}
+                                                        </div>
+                                                        <!-- <button class="add add-to-cart-btn" data-index="{{ p.id }}" style="border: none;" id="add-to-cart-btn"><i class="fi-rs-shopping-cart mr-5"></i>Add</button> -->
+                                                        </div>
                                                 </div>
-                                                <div class="add-cart">
-                                                <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ p.id }}">
-                                                <input type="hidden" class="product-pid-{{ p.id }}" value="{{ p.pid }}">
-                                                <input type="hidden" class="product-image-{{ p.id }}" value="{{ p.image.url }}">
-                                                <input type="hidden" class="product-id-{{ p.id }}" value="{{ p.id }}">
-                                                <input type="hidden" class="product-title-{{ p.id }}" value="{{ p.name }}">
-                                                <div class="d-flex">
-                                                <button class="add add-to-cart-btn" data-index="{{ p.id }}" style="border: none;" id="add-to-cart-btn"><i class="fi-rs-shopping-cart mr-5"></i>Ekle</button>
-                                                {% if request.user.is_authenticated %}
-                                                <button style="border: none; background: none;" class="add-to-wishlist" data-product-item="{{p.id}}"><i class="fi-rs-heart" style="fill: aqua;"></i></button>
-                                                {% endif %}
-                                                </div>
-                                                <!-- <button class="add add-to-cart-btn" data-index="{{ p.id }}" style="border: none;" id="add-to-cart-btn"><i class="fi-rs-shopping-cart mr-5"></i>Add</button> -->
                                                 </div>
                                         </div>
                                         </div>
+                                {% endfor %}
+                        {% else %}
+                                <div style="text-align: center;">
+                                        <img src="{% static 'assets/imgs/blog/sad.png' %}" alt="Üzgün Yüz İkonu" style="width: 100px; height: 100px;">
+                                        <p>Aradığınız ürün bulunamadı.</p>
+                                        <a href="{% url 'main:home' %}" class="btn btn-primary">Anasayfa</a>
                                 </div>
-                                </div>
-                        {% endfor %}
+                                        
+                        {% endif %}
                 </div>
             </div><button class="goToUp btn"><span class="icon"></span><span class="text">Yukarı çık</span></button>
             <div class="shoppingCartBackdrop hidden"></div>
