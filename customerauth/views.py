@@ -526,10 +526,13 @@ def reset_password(request):
 def wishlist_view(request):
     wishlistProducts = wishlist_model.objects.filter(user=request.user)
     title = "Beğendiklerim"
-    print("wishlistProducts",wishlistProducts.count())
+    wcount=0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
     context = {
         "wishlistProducts":wishlistProducts,
-        "title":title
+        "title":title,
+        "wcount":wcount
     }
     return render(request, "customerauth/wishlist.html", context)
 
@@ -537,12 +540,9 @@ def wishlist_view(request):
 def add_to_wishlist(request):
     product_id = request.GET['id']
     product = Product.objects.get(id=product_id)
-
     context = {}
-
     wishlist_count = wishlist_model.objects.filter(product=product, user=request.user).count()
-    print(wishlist_count)
-
+    
     if wishlist_count > 0:
         wishlist_count = wishlist_model.objects.filter(user=request.user).count()
         context = {
@@ -559,7 +559,6 @@ def add_to_wishlist(request):
             "bool": True,
             "wishlist_count":wishlist_count
         }
-
     return JsonResponse(context)
 
 @login_required(login_url='customerauth:sign-in')

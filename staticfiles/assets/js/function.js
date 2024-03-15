@@ -319,6 +319,13 @@ $(document).ready(function (){
                 console.log("Adding to wishlist...")
             },
             success: function(response){
+                const messageContainer = document.querySelector('.popup-message');
+                messageContainer.innerHTML = '<div class="alert alert-success">Başarılı bir şekilde eklendi!</div>';
+                messageContainer.style.display = 'block';
+
+                setTimeout(function () {
+                    messageContainer.style.display = 'none';
+                }, 5000); 
                 this_val.html("<i class='fas fa-heart text-danger'></i>")
                 var proCountElements = document.querySelectorAll('.pro-count');
                 proCountElements.forEach(function(element) {
@@ -346,6 +353,13 @@ $(document).ready(function (){
                 console.log("Deleting product from wishlist...");
             },
             success: function(response){
+                const messageContainer = document.querySelector('.popup-message');
+                messageContainer.innerHTML = '<div class="alert alert-success">Başarılı bir şekilde silindi!</div>';
+                messageContainer.style.display = 'block';
+
+                setTimeout(function () {
+                    messageContainer.style.display = 'none';
+                }, 5000); 
                 location.reload();
             }
         })
@@ -384,7 +398,13 @@ $(document).ready(function (){
             success: function(res){
                 console.log("Sent Data to server!");
                 
-                $("#message-response").html("Mesaj başarıyla gönderildi.")
+                const messageContainer = document.querySelector('.popup-message');
+                messageContainer.innerHTML = '<div class="alert alert-success">Başarılı bir şekilde gönderildi!</div>';
+                messageContainer.style.display = 'block';
+
+                setTimeout(function () {
+                    messageContainer.style.display = 'none';
+                }, 5000); 
             }
         })
     })
