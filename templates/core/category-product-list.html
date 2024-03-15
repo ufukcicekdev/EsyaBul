@@ -94,7 +94,7 @@
                         </div>
                         <div class="shop-product-fillter">
                                 <div class="totall-product">
-                                        <p>Sizin için <strong class="text-brand">{{ products.count }}</strong> ürün bulduk!</p>
+                                        <p>Sizin için <strong class="text-brand">{{ products.count|default:"0" }}</strong> ürün bulduk!</p>
                                     </div>
                               
                             </div>

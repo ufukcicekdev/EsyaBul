@@ -13,17 +13,17 @@
 <style>
     
     .left-side {
-        background-color: #FFFFFF;
-        height: 50vh;
-        width: 100%;
-    }
+            background-color: #FFFFFF;
+            height: 50vh;
+            width: 100%;
+            min-height: 100%; /* Değişiklik: min-height ekledik */
+            }
 
-    .right-side {
-        background-color: #F3F0EB;
-        height: 50vh;
-        width: 100%;
-        
-    }
+            .right-side {
+                background-color: #F3F0EB;
+                min-height: 100%; /* Değişiklik: min-height ekledik */
+                width: 100%;
+            }
 
     @media screen  and (min-width:768px) {
         
@@ -59,34 +59,45 @@
     
     <div class="col-md-6 no-gutters">
         <div class="right-side d-flex justify-content-center align-items-center">
-            <form method="post" method="POST">
-                {% csrf_token %}
-                <div class="form-group">
-                    {{ form.username }}
-                </div>
-                <div class="form-group">
-                    {{ form.email }}
-                </div>
-                <div class="form-group">
-                    {{ form.password1 }}
-                </div>
-                <div class="form-group">
-                    {{ form.password2 }}
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-heading btn-block hover-up custom-btn" name="login">Kayıt Ol</button>
-                </div>
-            </form>
-    
-            <!-- Google ile devam et butonunu ekleyin -->
-            <div class="col-lg-6 pr-30 d-none d-lg-block">
+
+
+            <div class="col-lg-6 pr-30  d-lg-block">
                 <div class="card-login mt-115">
-                    <a href="{% url 'social:begin' 'google-oauth2' %}" class="social-login google-login">
-                        <img src="{% static 'assets/imgs/theme/icons/logo-google.svg' %}" alt="" />
-                        <span>Google İle Giriş Yap</span>
-                    </a>
+                    <div class="social-buttons d-flex flex-column justify-content-between">
+                        <div class="col-lg-6">
+                            <a href="{% url 'social:begin' 'google-oauth2' %}" class="social-login google-login" >
+                                <img src="{% static 'assets/imgs/banner/google.png' %}" alt="" />
+                                <span>Google</span>
+                            </a>
+                        </div>
+                        
+                    </div>
+
+                    <form method="post" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {{ form.username }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.email }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.password1 }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.password2 }}
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-heading btn-block hover-up custom-btn" name="login">Kayıt Ol</button>
+                        </div>
+                    </form>
                 </div>
+
             </div>
+
+            
+    
+            
         </div>
     </div>
     

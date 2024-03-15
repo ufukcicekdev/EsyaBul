@@ -87,8 +87,10 @@ def category_product_list__view(request, slug):
     category = Category.objects.get(slug=slug) # food, Cosmetics
     products = Product.objects.filter(is_active=True, category=category)
     product_category = Category.objects.all()
+    wcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+    
     context = {
         "product_category":product_category,
         "category":category,
