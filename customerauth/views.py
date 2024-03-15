@@ -8,7 +8,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from products.models import RoomType, HomeType, HomeModel, SpaceDefinition, TimeRange, Product
 from django.core.mail import EmailMessage
-from django.views.decorators.http import require_POST
 from actstream import action
 import json
 from django.contrib.auth import update_session_auth_hash
@@ -66,13 +65,13 @@ def login_view(request):
     if request.method == "POST":
         email_or_username = request.POST.get("email_or_username") 
         password = request.POST.get("password") 
-        print("1******")
         try:
             user = User.objects.get(email=email_or_username)
         except User.DoesNotExist:
             try:
                 user = User.objects.get(username=email_or_username)
             except User.DoesNotExist:
+                messages.warning(request, "Hatalı şifre veya kullanıcı adı girdiniz.")
                 return render(request, "customerauth/sign-in.html")
         user = authenticate(request, email=user.email, password=password)
 
@@ -105,6 +104,9 @@ def logout_view(request):
 def profile_update(request):
     title = "Hesabım"
     profile = get_object_or_404(User, id=request.user.id)
+    wcount =0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
@@ -120,7 +122,8 @@ def profile_update(request):
     context = {
         "form": form,
         "profile": profile,
-        "title":title
+        "title":title,
+        "wcount":wcount
     }
 
     return render(request, "customerauth/profile-edit.html", context)
@@ -128,8 +131,10 @@ def profile_update(request):
 @login_required(login_url='customerauth:sign-in')
 def thank_you_view(request):
     user_name = request.user.username  # Örneğin, kullanıcı adını alıyorum
-
-    return render(request, "customerauth/thank-you.html", {'user_name': user_name})
+    wcount =0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
+    return render(request, "customerauth/thank-you.html", {'user_name': user_name, "wcount":wcount})
 
 
 @login_required(login_url='customerauth:sign-in')
@@ -163,6 +168,9 @@ def customer_dashboard(request):
 @login_required(login_url='customerauth:sign-in')
 def password_change(request):
     title = "Hesabım"
+    wcount=0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
     if request.method == "POST":
         form = CustomPasswordChangeForm(request.user, request.POST)
         if form.is_valid():
@@ -178,7 +186,8 @@ def password_change(request):
         
     context = {
         "form": form,
-        "title":title
+        "title":title,
+        "wcount":wcount
     }
     return render(request, 'customerauth/password_change.html', context)
 
@@ -188,6 +197,9 @@ def notifications(request):
     title="Bildirimlerim"
     user_profile = get_object_or_404(User, id=request.user.id)
   # varsayılan olarak user'ın profile'ını alır, profile yoksa oluşturur
+    wcount=0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
 
     print("user_profile",user_profile.receive_email_notifications)
     if request.method == 'POST':
@@ -201,21 +213,27 @@ def notifications(request):
     else:
         form = NotificationSettingsForm(instance=user_profile)
 
-    return render(request, 'customerauth/notifications.html', {'form': form, 'title':title})
+    return render(request, 'customerauth/notifications.html', {'form': form, 'title':title, "wcount":wcount})
 
 ###################### Address  Open #################
 
 @login_required(login_url='customerauth:sign-in')
 def address_list(request):
     title ="Adreslerim"
+    wcount =0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
     addresses = Address.objects.filter(user=request.user)
     form = AddressForm(request.POST or None) 
-    return render(request, 'customerauth/address.html', {'addresses': addresses, 'form': form, 'title':title })
+    return render(request, 'customerauth/address.html', {'addresses': addresses, 'form': form, 'title':title ,"wcount":wcount})
 
 
 @login_required(login_url='customerauth:sign-in')
 def create_address(request):
     title ="Adreslerim"
+    wcount =0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
     if request.method == 'POST':
         form = AddressForm(request.POST)
         if form.is_valid():
@@ -229,14 +247,16 @@ def create_address(request):
     else:
         form = AddressForm()
 
-    return render(request, 'customerauth/add-new-address.html', {'form': form, 'title': title})
+    return render(request, 'customerauth/add-new-address.html', {'form': form, 'title': title, "wcount":wcount})
 
 
 @login_required(login_url='customerauth:sign-in')
 def edit_address(request, address_id):
     title ="Adreslerim"
     address = get_object_or_404(Address, id=address_id)
-
+    wcount =0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
     if request.method == 'POST':
         form = AddressForm(request.POST, instance=address)
         if form.is_valid():
@@ -246,12 +266,12 @@ def edit_address(request, address_id):
     else:
         form = AddressForm(instance=address)
 
-    return render(request, 'customerauth/edit-address.html', {'form': form, 'address': address, 'title': title})
+    return render(request, 'customerauth/edit-address.html', {'form': form, 'address': address, 'title': title, "wcount":wcount})
 
 
 @login_required(login_url='customerauth:sign-in')
 def delete_address(request, address_id):
-    print("buradsın")
+
     address = get_object_or_404(Address, id=address_id)
     address.delete()
     messages.success(request, "Adresiniz başarıyla silinmiştir.")
@@ -274,7 +294,9 @@ def get_subregions(request):
 @login_required(login_url='customerauth:sign-in')
 def room_type_selected(request):
     active_room_types = RoomType.objects.filter(is_active=True)
-
+    wcount=0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
     if request.method == 'POST':
         user = request.user
         selected_room_type_id = request.POST.get('selected_room_type_id')
@@ -298,13 +320,15 @@ def room_type_selected(request):
             else:
                 messages.error(request, 'Invalid room type selected.')
 
-    return render(request, 'my_style/room_type_selected.html', {'room_types': active_room_types})
+    return render(request, 'my_style/room_type_selected.html', {'room_types': active_room_types, "wcount":wcount})
 
 
 @login_required(login_url='customerauth:sign-in')
 def home_type_selected(request):
     active_home_types = HomeType.objects.filter(is_active=True)
-
+    wcount=0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
     if request.method == 'POST':
         user = request.user
         selected_home_type_id = request.POST.get('selected_home_type_id')
@@ -328,13 +352,15 @@ def home_type_selected(request):
             else:
                 messages.error(request, 'Invalid room type selected.')
 
-    return render(request, 'my_style/home_type_selected.html', {'home_types': active_home_types})
+    return render(request, 'my_style/home_type_selected.html', {'home_types': active_home_types, "wcount":wcount})
 
 
 @login_required(login_url='customerauth:sign-in')
 def home_model_selected(request):
     active_space_definations = HomeModel.objects.filter(is_active=True)
-
+    wcount=0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
     if request.method == 'POST':
         user = request.user
         selected_home_model_id = request.POST.get('selected_home_model_id')
@@ -359,13 +385,15 @@ def home_model_selected(request):
                 messages.error(request, 'Invalid room type selected.')
     
 
-    return render(request, 'my_style/home_model_selected.html', {'home_models': active_space_definations})
+    return render(request, 'my_style/home_model_selected.html', {'home_models': active_space_definations, "wcount":wcount})
 
 
 @login_required(login_url='customerauth:sign-in')
 def space_definations_selected(request):
     active_space_def = SpaceDefinition.objects.filter(is_active=True)
-
+    wcount=0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
     if request.method == 'POST':
         user = request.user
         selected_space_def_id = request.POST.get('selected_space_def_id')
@@ -390,13 +418,15 @@ def space_definations_selected(request):
                 messages.error(request, 'Invalid room type selected.')
     
 
-    return render(request, 'my_style/space_definations_selected.html', {'space_defs': active_space_def})
+    return render(request, 'my_style/space_definations_selected.html', {'space_defs': active_space_def, "wcount":wcount})
 
 
 @login_required(login_url='customerauth:sign-in')
 def time_range_selected(request):
     active_time_range = TimeRange.objects.filter(is_active=True)
-
+    wcount=0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
     if request.method == 'POST':
         user = request.user
         selected_time_range_id = request.POST.get('selected_time_range_id')
@@ -421,7 +451,7 @@ def time_range_selected(request):
                 messages.error(request, 'Invalid room type selected.')
     
 
-    return render(request, 'my_style/time_range_selected.html', {'time_ranges': active_time_range})
+    return render(request, 'my_style/time_range_selected.html', {'time_ranges': active_time_range, "wcount":wcount})
 
 
 def update_user_my_style_status(user):

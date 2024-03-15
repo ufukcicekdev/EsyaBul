@@ -9,10 +9,10 @@ from customerauth.models import wishlist_model
 def home(request):
     social_media_links = SocialMedia.objects.all()
     product_category = Category.objects.all()
+    wcount = 0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
-    else:
-        wcount = 0
+        
     return render(request, 'core/home.html', {'social_media_links': social_media_links, 'product_category': product_category, "wcount": wcount})
 
 
@@ -22,10 +22,12 @@ def home(request):
 def my_style_start(request):
     user = request.user
     user_name = user.username
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
     if user.my_style:
         return redirect('main:home')
 
-    return render(request, 'my_style/my_style_start.html', {'user_name': user_name})
+    return render(request, 'my_style/my_style_start.html', {'user_name': user_name, "wcount":wcount})
 
 
 ################### Errors Open ################
@@ -44,7 +46,10 @@ def custom_500_page(request):
 
 
 def contact(request):
-    return render(request, "main/contact.html")
+    wcount=0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
+    return render(request, "main/contact.html", {'wcount':wcount})
 
 
 def ajax_contact_form(request):
@@ -76,9 +81,12 @@ def ajax_contact_form(request):
 
 def category_list(request):
     categories = Category.objects.filter(is_active=True)
-
+    wcount=0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
     context = {
-        "categories":categories
+        "categories":categories,
+        "wcount":wcount
     }
     return render(request, 'core/categories.html', context)
 
