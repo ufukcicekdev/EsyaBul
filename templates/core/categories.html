@@ -9,24 +9,24 @@
         <main class="site-main">
             <div class="container">
                 <div class="categories">
-                    {% for category in categories %}
-                    {% if category.name == "Tüm Ürünler" %}
-                        <div class="categories__item" role="button" data-url="{% url 'main:category-product-list' category.slug %}">
+                    {% for cat in categories_with_subcategories %}
+                    {% if cat.category.name == "Tüm Ürünler" %}
+                        <div class="categories__item" role="button" data-url="{% url 'main:category-product-list' cat.category.slug %}">
                             <div class="item__image">
-                                <img alt="{{ category.alt }}" src="{{ category.image.url }}" style="max-width: 256px; max-height: 154px; width: auto; height: auto;">
+                                <img alt="{{ cat.category.alt }}" src="{{ cat.category.image.url }}" style="max-width: 256px; max-height: 154px; width: auto; height: auto;">
                             </div>
-                            <div class="item__label body-medium-14-17">{{ category.name }}</div>
+                            <div class="item__label body-medium-14-17">{{ cat.category.name }}</div>
                         </div>
                         {% endif %}
                     {% endfor %}    
 
-                    {% for category in categories %}
-                        {% if category.name != "Tüm Ürünler" %}
-                        <div class="categories__item" role="button" data-url="{% url 'main:category-product-list' category.slug %}">
+                    {% for cat in categories_with_subcategories %}
+                        {% if cat.category.name != "Tüm Ürünler" %}
+                        <div class="categories__item" role="button" data-url="{% url 'main:category-product-list' cat.category.slug %}">
                             <div class="item__image">
-                                <img alt="{{ category.alt }}" src="{{ category.image.url }}" style="max-width: 256px; max-height: 154px; width: auto; height: auto;">
+                                <img alt="{{ cat.category.alt }}" src="{{ cat.category.image.url }}" style="max-width: 256px; max-height: 154px; width: auto; height: auto;">
                             </div>
-                            <div class="item__label body-medium-14-17">{{ category.name }}</div>
+                            <div class="item__label body-medium-14-17">{{ cat.category.name }}</div>
                         </div>
                         {% endif %}
                     {% endfor %}

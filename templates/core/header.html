@@ -114,33 +114,47 @@
     </div>
     <nav class="header__categories customPages">
         <div class="categoriesWrapper">
-            <ul class="sc-eldPxv iwaTuT">
-                
-                {% for pc in product_category %}
-                <li class="sc-blmEgr hUOPpR">
-                    <a href="{% url 'main:category-product-list' pc.slug %}">
-                            <span class="sc-ifyrAs fjiCBF">
-                                    <span class="sc-dJGMql gEMhdk">
-                                            <svg
-                                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg" name="Discovery">
-                                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                                            d="M8.27051 14.9515L9.86319 9.86221L14.9524 8.26953L13.3598 13.3588L8.27051 14.9515Z"
-                                                            stroke="#474C6D" stroke-width="2" stroke-linecap="round"
-                                                            stroke-linejoin="round"></path>
-                                                    <circle cx="11.611" cy="11.611" r="9.61098" stroke="#474C6D" stroke-width="2"
-                                                            stroke-linecap="round" stroke-linejoin="round"></circle>
-                                            </svg>
-                                    </span>
-                                    <strong class="sc-hIPBNq eHjACQ caption-semi-bold-12-15">{{ pc.name }}</strong>
+            <ul class="sc-ifyrAs TkHPT">
+                {% for pc in categories_with_subcategories %}
+                <li class="sc-dJGMql jJBYfP dropdown1">
+                    <a href="{% url 'main:category-product-list' pc.category.slug %}">
+                        <span class="sc-hIPBNq bsELPD">
+                            <span class="sc-dmXWDj IDDLZ">
+                                <div class="sc-hLQSwg bxePrT">
+                                    <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.261 21.8538C10.0904 20.5179 8.07111 18.9456 6.23929 17.1652C4.95144 15.8829 3.97101 14.3198 3.3731 12.5954C2.29714 9.25031 3.55393 5.42083 7.07112 4.28752C8.91961 3.69243 10.9384 4.03255 12.4961 5.20148C14.0543 4.03398 16.0725 3.69398 17.9211 4.28752C21.4383 5.42083 22.7041 9.25031 21.6281 12.5954C21.0302 14.3198 20.0498 15.8829 18.7619 17.1652C16.9301 18.9456 14.9108 20.5179 12.7402 21.8538L12.5051 22L12.261 21.8538Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        <path d="M16.2393 8.05469C17.3046 8.39499 18.0615 9.35139 18.1561 10.4767" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                </div>
                             </span>
+                            <strong class="sc-khjJXk lfiPWu">{{ pc.category.name }}</strong>
+                        </span>
                     </a>
+                    <!-- Alt menü -->
+                    {% if pc.category.name != 'Tüm Ürünler' %}
+                    <ul class="sc-fLseNd KWrmr dropdown-content">
+                        {% for sub in pc.subcategories %}
+                        {% if sub.parent_category == pc.category %}
+                        <li class="sc-bBkKde gMERLQ">
+                            <ul class="sc-iuOOrT jnAhDX">
+                                <li class="sc-cyZbeP ftZsRy">
+                                    <a href="{% url 'main:sub-category-product-list' pc.category.slug sub.slug %}">
+                                        <span class="sc-lnsjTu dgBxPh">{{ sub.name }}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    
                 </li>
                 {% endfor %}
-
             </ul>
         </div>
     </nav>
+    
 </header>
 
 <nav class="mobile-nav">

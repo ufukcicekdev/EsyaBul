@@ -1,7 +1,74 @@
 {% extends 'partials/base.html' %}
 {% load static %}
 {% block content %}
-
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+        
+        .select-menu {
+            width: 200px; /* Değiştirilebilir */
+            margin: 20px auto; /* Değiştirilebilir */
+        }
+        
+        .select-menu .select-btn {
+            display: flex;
+            height: 40px; /* Değiştirilebilir */
+            background: #fff;
+            padding: 10px; /* Değiştirilebilir */
+            font-size: 14px; /* Değiştirilebilir */
+            font-weight: 400;
+            border-radius: 6px; /* Değiştirilebilir */
+            align-items: center;
+            cursor: pointer;
+            justify-content: space-between;
+            box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .select-btn i {
+            font-size: 20px; /* Değiştirilebilir */
+            transition: 0.3s;
+        }
+        
+        .select-menu .options {
+                position: relative;
+                padding: 10px;
+                margin-top: 5px;
+                border-radius: 6px;
+                background: #fff;
+                box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+                display: none;
+                max-height: 150px; /* Maksimum yükseklik */
+                overflow-y: auto; /* Dikey kaydırma çubuğunu etkinleştir */
+        }
+        
+        .select-menu.active .options {
+            display: block;
+        }
+        
+        .options .option {
+            display: flex;
+            height: 40px; /* Değiştirilebilir */
+            cursor: pointer;
+            padding: 0 10px; /* Değiştirilebilir */
+            border-radius: 6px; /* Değiştirilebilir */
+            align-items: center;
+            background: #fff;
+        }
+        
+        .options .option:hover {
+            background: #F2F2F2;
+        }
+        
+        .option i {
+            font-size: 20px; /* Değiştirilebilir */
+            margin-right: 8px; /* Değiştirilebilir */
+        }
+        
+        .option .option-text {
+            font-size: 14px; /* Değiştirilebilir */
+            color: #333;
+        }
+        
+        </style>
 
 <div id="__next">
     <div class="site-container">
@@ -13,7 +80,7 @@
                                         <div class="container">
                                             <div class="archive-header">
                                                 <div class="row align-items-center">
-                                                    <div class="col-xl-3">
+                                                    <div class="col-xl-5">
                                                         <h2 class="mb-15">{{category.name}}</h2>
                                                         <div class="breadcrumbWrapper">
                                                                 <div class="row align-items-center justify-content-between position-relative">
@@ -36,45 +103,64 @@
                                                                                                                 </svg></span><a href="{% url 'main:category-list' %}"><span
                                                                                                                         class="sc-iBdnpw ksbpfb caption-bold-12-15">Anasayfa</span></a>
                                                                                                 </li>
-                                                                                                <li class="sc-gLLuof bGrkxs"><span
-                                                                                                                class="sc-qZrbh dIcBim"><svg
-                                                                                                                        width="16px" height="16px"
-                                                                                                                        viewBox="0 0 24 24" fill="none"
-                                                                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                                                                        name="ArrowSmallLeft"
-                                                                                                                        onclick="handleArrowClick()">
-                                                                                                                        <path d="M14 16L10 12L14 8"
-                                                                                                                                stroke="#0A103D"
-                                                                                                                                stroke-width="2"
-                                                                                                                                stroke-linecap="round"
-                                                                                                                                stroke-linejoin="round">
-                                                                                                                        </path>
-                                                                                                                </svg></span><a
-                                                                                                                href="{% url 'main:category-product-list' category.slug %}"><span
-                                                                                                                        class="sc-fsYfdN hSLwkI"><svg
-                                                                                                                                width="24" height="24"
-                                                                                                                                viewBox="0 0 24 24"
-                                                                                                                                fill="none"
-                                                                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                                                                                name="ArrowSmallRightStroke">
-                                                                                                                                <path d="M14 8L18 12L14 16"
-                                                                                                                                        stroke="#0A103D"
-                                                                                                                                        stroke-width="2"
-                                                                                                                                        stroke-linecap="round"
-                                                                                                                                        stroke-linejoin="round">
-                                                                                                                                </path>
-                                                                                                                                <path d="M18 12L7.6709 12"
-                                                                                                                                        stroke="#0A103D"
-                                                                                                                                        stroke-width="2"
-                                                                                                                                        stroke-linecap="round"
-                                                                                                                                        stroke-linejoin="round">
-                                                                                                                                </path>
-                                                                                                                        </svg></span><span
-                                                                                                                        class="sc-iBdnpw ksbpfb caption-bold-12-15">
-                                                                                                                        {{ category.name}}
-                                                                                                                    </span>
-                                                                                                                    </a>
-                                                                                                                </li>
+                                                                                                
+
+                                                                                                <li class="sc-gLLuof bGrkxs">
+                                                                                                        <span class="sc-qZrbh dIcBim">
+                                                                                                            <svg width="16px" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" name="ArrowSmallLeft" onclick="handleArrowClick()">
+                                                                                                                <path d="M14 16L10 12L14 8" stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                                                                            </svg>
+                                                                                                        </span>
+                                                                                                        <a href="{% url 'main:category-product-list' category.slug %}">
+                                                                                                            <span class="sc-fsYfdN hSLwkI">
+                                                                                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" name="ArrowSmallRightStroke">
+                                                                                                                    <path d="M14 8L18 12L14 16" stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                                                                                    <path d="M18 12L7.6709 12" stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                                                                                </svg>
+                                                                                                            </span>
+                                                                                                            <span class="sc-iBdnpw ksbpfb caption-bold-12-15">{{ category.name }}</span>
+                                                                                                        </a>
+                                                                                                    </li>
+                                                                                                    
+                                                                                                    <li class="sc-gLLuof bGrkxs">
+                                                                                                        <span class="sc-fsYfdN hSLwkI">
+                                                                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" name="ArrowSmallRightStroke">
+                                                                                                                <path d="M14 8L18 12L14 16" stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                                                                                <path d="M18 12L7.6709 12" stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                                                                            </svg>
+                                                                                                        </span>
+                                                                                                        <div class="select-menu">
+                                                                                                                <div class="select-btn">
+                                                                                                                    <span class="sBtn-text">Alt Kategoriler</span>
+                                                                                                                    <i class="bx bx-chevron-down"></i>
+                                                                                                                </div>
+                                                                                                                <ul class="options">
+                                                                                                                        <li class="option">
+                                                                                                                        <a href="{% url 'main:category-product-list' category.slug %}">
+                                                                                                                                <span class="option-text">Tüm Ürünler</span>
+                                                                                                                        </a>
+                                                                                                                        </li>
+                                                                                                                    {% for subcategory in subcategories %}
+                                                                                                                        {% if subcategory.slug == sub_category_slug %}
+                                                                                                                            <li class="option selected">
+                                                                                                                                <a href="{% url 'main:sub-category-product-list' category.slug subcategory.slug %}">
+                                                                                                                                    <span class="option-text">{{ subcategory.name }}</span>
+                                                                                                                                </a>
+                                                                                                                            </li>
+                                                                                                                        {% else %}
+                                                                                                                            <li class="option">
+                                                                                                                                <a href="{% url 'main:sub-category-product-list' category.slug subcategory.slug %}">
+                                                                                                                                    <span class="option-text">{{ subcategory.name }}</span>
+                                                                                                                                </a>
+                                                                                                                            </li>
+                                                                                                                        {% endif %}
+                                                                                                                    {% endfor %}
+                                                                                                                </ul>
+                                                                                                            </div>
+                                                                                                    </li>
+                                                                                                    
+
+                                                                                                        
                                                                                           
                                                                                         </ul>
                                                                               
@@ -190,6 +276,37 @@
         var redirectURL = "{% url 'main:category-list' %}";
         window.location.href = redirectURL;
     }
+
+
+
+
+
+    const optionMenu = document.querySelector(".select-menu");
+const selectBtn = optionMenu.querySelector(".select-btn");
+const options = optionMenu.querySelectorAll(".option");
+const sBtnText = optionMenu.querySelector(".sBtn-text");
+
+selectBtn.addEventListener("click", () => optionMenu.classList.toggle("active"));
+
+options.forEach(option => {
+    option.addEventListener("click", () => {
+        options.forEach(opt => opt.classList.remove("selected"));
+        option.classList.add("selected");
+        let selectedOption = option.querySelector(".option-text").innerText;
+        sBtnText.innerText = selectedOption;
+        optionMenu.classList.remove("active");
+    });
+});
+
+// Sayfa yüklendiğinde seçili olan seçeneğin adını gösterme
+window.onload = () => {
+    const selectedOption = optionMenu.querySelector(".selected");
+    if (selectedOption) {
+        const selectedOptionText = selectedOption.querySelector(".option-text").innerText;
+        sBtnText.innerText = selectedOptionText;
+    }
+};
+    
 </script>
 
 

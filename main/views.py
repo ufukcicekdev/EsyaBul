@@ -1,19 +1,27 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from main.models import ContactUs,SocialMedia
 from django.http import JsonResponse
-from products.models import Category,Product
+from products.models import Category,Product, SubCategory
 from customerauth.models import wishlist_model
 
 def home(request):
     social_media_links = SocialMedia.objects.all()
-    product_category = Category.objects.all()
+    categories_with_subcategories = []
+    
+    for category in Category.objects.all():
+        category_data = {
+            'category': category,
+            'subcategories': category.subcategories.all()  # Alt kategorileri al
+        }
+        categories_with_subcategories.append(category_data)
+
     wcount = 0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
         
-    return render(request, 'core/home.html', {'social_media_links': social_media_links, 'product_category': product_category, "wcount": wcount})
+    return render(request, 'core/home.html', {'social_media_links': social_media_links, 'categories_with_subcategories': categories_with_subcategories, "wcount": wcount})
 
 
 
@@ -80,29 +88,59 @@ def ajax_contact_form(request):
 
 
 def category_list(request):
-    categories = Category.objects.filter(is_active=True)
+    categories_with_subcategories = []
+    
+    for category in Category.objects.all():
+        category_data = {
+            'category': category,
+            'subcategories': category.subcategories.all()  # Alt kategorileri al
+        }
+        categories_with_subcategories.append(category_data)
     wcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
     context = {
-        "categories":categories,
+        "categories_with_subcategories":categories_with_subcategories,
         "wcount":wcount
     }
     return render(request, 'core/categories.html', context)
 
 
-def category_product_list__view(request, slug):
-    category = Category.objects.get(slug=slug) # food, Cosmetics
+def category_product_list_view(request, slug):
+    category = get_object_or_404(Category, slug=slug)
     products = Product.objects.filter(is_active=True, category=category)
-    product_category = Category.objects.all()
-    wcount=0
+    subcategories = category.subcategories.all()
+    wcount = 0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
     
     context = {
-        "product_category":product_category,
-        "category":category,
-        "products":products,
-        "wcount":wcount
+        "product_category": Category.objects.all(),
+        "category": category,
+        "products": products,
+        "wcount": wcount,
+        "subcategories": subcategories
     }
+    
     return render(request, "core/category-product-list.html", context)
+
+
+def sub_category_product_list_view(request, primary_category_slug, sub_category_slug):
+    primary_category = get_object_or_404(Category, slug=primary_category_slug)
+    sub_category = get_object_or_404(SubCategory, slug=sub_category_slug, parent_category=primary_category)
+    products = Product.objects.filter(category=primary_category, subcategory=sub_category,  is_active=True)
+    product_category = Category.objects.all()
+    subcategories = primary_category.subcategories.all()
+    wcount = 0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
+    
+    context = {
+        "product_category": product_category,
+        "category": primary_category,
+        "products": products,
+        "wcount": wcount,
+        "subcategories":subcategories,
+        "sub_category_slug":sub_category_slug
+    }
+    return render(request, "core/sub-category-product-list.html", context)

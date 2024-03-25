@@ -85,7 +85,23 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
-    
+class SubCategory(models.Model):
+    name = models.CharField(max_length=100)
+    slug = AutoSlugField(populate_from='name', unique=True)
+    image = models.ImageField(upload_to='subcategory/', null=True, blank=True)
+    img_alt = models.CharField(max_length=255, unique=True)
+    img_title = models.CharField(max_length=255, unique=True)
+    description = models.TextField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    parent_category = models.ForeignKey(Category, related_name='subcategories', on_delete=models.CASCADE)
+
+    def product_count(self):
+        return Product.objects.filter(category__in=self.get_descendants(include_self=True)).count()
+
+    def __str__(self):
+        return self.name
+
+
 class Product(models.Model):
     name = models.CharField(max_length=255)
     slug = AutoSlugField(populate_from='name', unique=True)
@@ -106,6 +122,7 @@ class Product(models.Model):
     space_definitions = models.ManyToManyField(SpaceDefinition, related_name='products', blank=True)
     time_ranges = models.ManyToManyField(TimeRange, related_name='products', blank=True)
     category = models.ManyToManyField(Category, related_name='products', blank=True)
+    subcategory = models.ManyToManyField(SubCategory, related_name='products', blank=True)
 
     view_count = models.PositiveIntegerField(default=0)
 
@@ -133,7 +150,7 @@ class ProductRentalPrice(models.Model):
     RENTAL_MOUTHLY_CHOICES = (
         ('0-3', '0-3'),
         ('0-6', '0-6'),
-        ('0-9', '0-6'),
+        ('0-9', '0-9'),
         ('0-12', '0-12'),
     )
     product = models.ForeignKey(Product, related_name='related_products_price', on_delete=models.CASCADE)

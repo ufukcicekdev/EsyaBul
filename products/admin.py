@@ -1,5 +1,5 @@
 from django.contrib import admin
-from products.models import Product, ProductImage, ProductRentalPrice, RoomType, HomeType, HomeModel, SpaceDefinition, TimeRange, Category
+from products.models import Product, ProductImage, ProductRentalPrice, RoomType, HomeType, HomeModel, SpaceDefinition, TimeRange, Category, SubCategory
 
 
 class ProductImagesAdmin(admin.TabularInline):
@@ -49,8 +49,16 @@ class TimeRangeAdmin(admin.ModelAdmin):
     list_display_links =   ('slug',)  
 
 # Category için admin kaydı
+    
+class SubCategoryAdmin(admin.TabularInline):
+    model = SubCategory
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
+    inlines = [SubCategoryAdmin]
     list_display = ('name', 'slug', 'description')
     list_display_links =   ('slug',)  
+
+
+ 
 
