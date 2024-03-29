@@ -1,6 +1,6 @@
-{% extends 'partials/base.html' %}
-{% block title %} {{title}} - EşyaBul {% endblock %}
+{% extends 'partialsBase/base.html' %}
 {% load static %}
+{% block title %} {{title}} - Eşyala {% endblock title %}
 {% block content %}
 
 
@@ -10,11 +10,39 @@
 }
 </style>
 
-<div id="__next"><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5BR43KH" height="0"
-    width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <div class="site-container">
+<!-- main container of all the page elements -->
+<div id="wrapper">
+    <!-- Page Loader -->
+    <div id="pre-loader" class="loader-container">
+        <div class="loader">
+            <img src="{% static 'basestatic/images/svg/rings.svg' %}" alt="loader">
+        </div>
+    </div>
+    <!-- W1 start here -->
+    <div class="w1">
+        <!-- mt header style4 start here -->
+        {% include 'coreBase/header.html' %}
+        <main id="mt-main">  
+            <section class="mt-contact-banner mt-banner-22" style="background-image: url({% static 'basestatic/images/img-76.jpg' %}); background-size: cover; background-position: center;">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <h1 class="text-center">Hesabım</h1>
+                      <!-- Breadcrumbs of the Page -->
+                      <nav class="breadcrumbs">
+                        <ul class="list-unstyled">
+                          <li><a href="{% url 'main:home' %}">Anasayfa <i class="fa fa-angle-right"></i></a></li>
+                          <li>Hesabım</li>
+                        </ul>
+                      </nav>
+                      <!-- Breadcrumbs of the Page end -->
+                    </div>
+                  </div>
+                </div>
+              </section>
 
-        {% include 'core/header.html' %}
+        </main>
+        
         <main class="site-main">
             <div class="site-main__container">
                 <div class="container">
@@ -46,11 +74,11 @@
                 <div class="shoppingCartBackdrop hidden"></div>
             </div>
         </main>
-        {% include 'core/footer.html' %}
+        {% include 'coreBase/footer.html' %}
+        <!-- footer of the Page end -->
+    </div><!-- W1 end here -->
+    <span id="back-top" class="fa fa-arrow-up"></span>
+</div>
 
-    </div>
-</div>  
 
-
-
-{% endblock content %}
+{%  endblock %}

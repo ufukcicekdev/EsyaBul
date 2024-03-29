@@ -71,6 +71,7 @@ class TimeRange(models.Model):
     
 class Category(models.Model):
     name = models.CharField(max_length=100)
+    parent = models.ForeignKey('self', blank=True, null=True, related_name='children', on_delete=models.CASCADE)
     slug = AutoSlugField(populate_from='name', unique=True)
     image = models.ImageField(upload_to='category/', null=True, blank=True)
     mainImage = models.ImageField(upload_to='category/', null=True, blank=True)
@@ -81,25 +82,19 @@ class Category(models.Model):
 
     def product_count(self):
         return Product.objects.filter(category=self).count()
-
-    def __str__(self):
-        return self.name
     
-class SubCategory(models.Model):
-    name = models.CharField(max_length=100)
-    slug = AutoSlugField(populate_from='name', unique=True)
-    image = models.ImageField(upload_to='subcategory/', null=True, blank=True)
-    img_alt = models.CharField(max_length=255, unique=True)
-    img_title = models.CharField(max_length=255, unique=True)
-    description = models.TextField(blank=True, null=True)
-    is_active = models.BooleanField(default=True)
-    parent_category = models.ForeignKey(Category, related_name='subcategories', on_delete=models.CASCADE)
-
-    def product_count(self):
-        return Product.objects.filter(category__in=self.get_descendants(include_self=True)).count()
+    class Meta:
+        unique_together = ('slug', 'parent',)
+        verbose_name_plural = "categories"
 
     def __str__(self):
-        return self.name
+        full_path = [self.name]
+        k = self.parent
+        while k is not None:
+            full_path.append(k.name)
+            k = k.parent
+        return ' -> '.join(full_path[::-1])
+    
 
 
 class Product(models.Model):
@@ -121,8 +116,7 @@ class Product(models.Model):
     home_models = models.ManyToManyField(HomeModel, related_name='products', blank=True)
     space_definitions = models.ManyToManyField(SpaceDefinition, related_name='products', blank=True)
     time_ranges = models.ManyToManyField(TimeRange, related_name='products', blank=True)
-    category = models.ManyToManyField(Category, related_name='products', blank=True)
-    subcategory = models.ManyToManyField(SubCategory, related_name='products', blank=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     view_count = models.PositiveIntegerField(default=0)
 

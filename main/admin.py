@@ -18,7 +18,6 @@ class ContactUsAdmin(admin.ModelAdmin):
     list_display = ('full_name', 'email', 'phone', 'subject', 'is_read')
     list_filter = ('is_read',)
     search_fields = ('full_name', 'email', 'phone', 'subject', 'message')
-    readonly_fields = ('full_name', 'email', 'phone', 'subject', 'message', 'is_read')
     ordering = ('-id',)  # Assuming you want to order by the latest entries first
 
 @admin.register(SocialMedia)

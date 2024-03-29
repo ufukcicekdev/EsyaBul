@@ -54,7 +54,10 @@ class ProfileForm(forms.ModelForm):
         model = User
         fields = ['username', 'first_name', 'last_name', 'phone']
         widgets = {
-            'phone': forms.NumberInput(attrs={'type': 'number', 'inputmode':'numeric'})
+            'phone': forms.TextInput(attrs={'class': 'form-control', "type":"number"}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
     def clean_phone(self):
@@ -86,7 +89,74 @@ class AddressForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'form-control'}),
         label='İl', required=True
     )
-    phone = forms.IntegerField( )
+
+    class Meta:
+        model = Address
+        fields = ['address_type', 'username', 'usersurname', 'phone', 'city', 'region',
+                  'address_name', 'address_line1', 'postal_code', 'firm_name','firm_taxcode','firm_tax_home']
+        widgets = {
+            'address_type': forms.RadioSelect(attrs={'class': 'radioButtons'}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'usersurname': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'type':"number"}),
+            'city': forms.Select(attrs={'class': 'form-control'}),
+            'region': forms.Select(attrs={'class': 'form-control'}),
+            'address_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'address_line1': forms.TextInput(attrs={'class': 'form-control'}),
+            'postal_code': forms.TextInput(attrs={'class': 'form-control'}),
+            'firm_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'firm_taxcode': forms.TextInput(attrs={'class': 'form-control'}),
+            'firm_tax_home': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+        labels = {
+            'address_type': 'Fatura Tipi',
+            'username': 'Ad',
+            'usersurname': 'Soyad',
+            'phone': 'Telefon Numarası',
+            'city': 'İl',
+            'region': 'İlçe',
+            'address_name': 'Adres Başlığı',
+            'address_line1': 'Adres',
+            'postal_code': 'Posta Kodu',
+            'firm_name':'Firma Adı',
+            'firm_taxcode':'Vergi Kodu',
+            'firm_tax_home':'Vergi Dairesi'
+        }
+
+    firm_name = forms.CharField(required=False)
+    firm_taxcode = forms.CharField(required=False)
+    firm_tax_home = forms.CharField(required=False)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        address_type = cleaned_data.get('address_type')
+
+        if address_type == 2:
+            firm_name = cleaned_data.get('firm_name')
+            if not firm_name:
+                self.add_error('firm_name', 'Firma Adı zorunludur.')
+
+            firm_taxcode = cleaned_data.get('firm_taxcode')
+            if not firm_taxcode:
+                self.add_error('firm_taxcode', 'Firma Vergi Kodu zorunludur.')
+
+            firm_tax_home = cleaned_data.get('firm_tax_home')
+            if not firm_tax_home:
+                self.add_error('firm_tax_home', 'Firma Vergi Dairesi zorunludur.')
+
+        return cleaned_data
+
+
+
+
+
+class AddressForm1(forms.ModelForm):
+    city = forms.ModelChoiceField(
+        queryset=Region.objects.all().order_by('name'),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label='İl', required=True
+    )
 
     firm_name = forms.CharField(required=False)
     firm_taxcode = forms.CharField(required=False)
@@ -100,7 +170,7 @@ class AddressForm(forms.ModelForm):
             'address_type': forms.RadioSelect(attrs={'class': 'radioButtons'}),
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'usersurname': forms.TextInput(attrs={'class': 'form-control'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'type':"number"}),
             'city': forms.Select(attrs={'class': 'form-control'}),
             'region': forms.Select(attrs={'class': 'form-control'}),
             'address_name': forms.TextInput(attrs={'class': 'form-control'}),

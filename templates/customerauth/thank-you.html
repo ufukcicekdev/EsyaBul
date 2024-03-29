@@ -1,92 +1,93 @@
-{% extends 'partials/customerauthbase.html' %}
+{% extends 'partialsBase/base.html' %}
 {% load static %}
-
+{% block title %} Esyala {% endblock title %}
 {% block content %}
 
+<style>
+    body {
+        background-color: #FFFFFF;
+    }
 
+    .vertical-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
 
-<div id="__next">
-    <div class="site-container">
+    .image-container {
+        text-align: center; /* Görüntüleri ortalamak için */
+    }
 
-        {% include 'core/header.html' %}
-        <style>
-    
-            body {
-                background-color: #FFFFFF;
-            }
-        
-            @media screen  and (min-width:768px) {
-                
-                .left-side,.right-side{
-                    height: 100vh;
-                }
-            }
-        
-            
-            .text-center {
-                text-align: center;
-            }
-        
-            .vertical-center {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                height: 100vh;
-            }
-            .image-container {
-                display: flex;
-                flex-wrap: wrap; 
-                justify-content: center; 
-              }
-        
-              .option-image {
-                position: relative;
-                width: 80px;
-                height: 80px;
-                border-radius: 50%;
-                margin-left: 10px;
-                cursor: pointer;
-              }
-        
-              .option-image img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-              }
-        
-        </style>
-        
-        <div class="row no-gutters justify-content-center align-items-center">
+    .option-image {
+        display: inline-block; /* Görüntülerin yan yana gelmesini sağlamak için */
+        margin: 0 10px; /* Boşlukları ayarla */
+        cursor: pointer;
+    }
+
+    .option-image img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+</style>
+
+<div id="wrapper">
+    <!-- Page Loader -->
+    <div id="pre-loader" class="loader-container">
+        <div class="loader">
+            <img src="{% static 'basestatic/images/svg/rings.svg' %}" alt="loader">
+        </div>
+    </div>
+    <div class="w1">
+        <!-- mt -header style14 start from here -->
+        {% include 'coreBase/header.html' %}
+        <!-- mt -header style14 end here -->
+        <!-- mt search popup start here -->
+        <div class="mt-search-popup">
+            <div class="mt-holder">
+                <a href="#" class="search-close"><span></span><span></span></a>
+                <div class="mt-frame">
+                    <form action="#">
+                        <fieldset>
+                            <input type="text" placeholder="Search...">
+                            <span class="icon-microphone"></span>
+                            <button class="icon-magnifier" type="submit"></button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div><!-- mt search popup end here -->
+        <!-- Main of the Page -->
+        <main id="mt-main">
             <div class="vertical-center">
                 <div class="text-center">
                     <div class="mb-5">
                         <h1>{{ success_messages }}</h1>
-        
+
                         <div class="image-container">
                             <div class="option-image">
-                              <img src="{% static 'assets/imgs/banner/wave.png' %}" />
+                                <img src="{% static 'basestatic/images/wave.png' %}" />
                             </div>
-                          </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            
-        </div>
-        
-        
-        <div id="targetUrl" data-url="{% url target_url %}"></div>
-        
-        <script>
-            var targetUrl = document.getElementById('targetUrl').dataset.url;
-            console.log(targetUrl);
-        
-            setTimeout(function() {
-                window.location.href = targetUrl;
-            }, 5000);
-        </script>
-        {% include 'core/footer.html' %}
+        </main>
+
+        <!-- footer of the Page -->
+        {% include 'coreBase/footer.html' %}
+        <!-- footer of the Page end -->
     </div>
+    <span id="back-top" class="fa fa-arrow-up"></span>
 </div>
 
+<script>
+    // Sayfanın yönlendirilme zamanlayıcısı
+    setTimeout(function() {
+        window.location.href = '/hedef-url'; // Hedef URL'yi değiştir
+    }, 5000);
+</script>
 
 {% endblock content %}

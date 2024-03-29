@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from customerauth.forms import UserRegisterForm, ProfileForm, AddressForm,CustomPasswordChangeForm, NotificationSettingsForm
+from customerauth.forms import UserRegisterForm, ProfileForm, AddressForm,CustomPasswordChangeForm, NotificationSettingsForm,AddressForm1
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.conf import settings
@@ -235,7 +235,7 @@ def create_address(request):
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
     if request.method == 'POST':
-        form = AddressForm(request.POST)
+        form = AddressForm1(request.POST)
         if form.is_valid():
             new_address = form.save(commit=False)
             new_address.user = request.user

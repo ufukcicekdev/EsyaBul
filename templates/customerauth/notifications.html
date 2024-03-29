@@ -1,12 +1,41 @@
-{% extends 'partials/base.html' %}
+{% extends 'partialsBase/base.html' %}
 {% block title %} {{title}} - EşyaBul {% endblock %}
 {% load static %}
 {% block content %}
 
-<div id="__next">
-    <div class="site-container">
+<div id="wrapper">
+    <!-- Page Loader -->
+    <div id="pre-loader" class="loader-container">
+        <div class="loader">
+            <img src="{% static 'basestatic/images/svg/rings.svg' %}" alt="loader">
+        </div>
+    </div>
+    <!-- W1 start here -->
+    <div class="w1">
+        <!-- mt header style4 start here -->
+        {% include 'coreBase/header.html' %}
+        <main id="mt-main">  
+            <section class="mt-contact-banner mt-banner-22" style="background-image: url({% static 'basestatic/images/img-76.jpg' %}); background-size: cover; background-position: center;">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <h1 class="text-center">Hesabım</h1>
+                      <!-- Breadcrumbs of the Page -->
+                      <nav class="breadcrumbs">
+                        <ul class="list-unstyled">
+                          <li><a href="{% url 'main:home' %}">Anasayfa <i class="fa fa-angle-right"></i></a></li>
+                          <li><a href="{% url 'customerauth:dashboard' %}">Hesabım <i class="fa fa-angle-right"></i></a></li>
+                          <li>Bildirim Ayarları</li>
+                        </ul>
+                      </nav>
+                      <!-- Breadcrumbs of the Page end -->
+                    </div>
+                  </div>
+                </div>
+              </section>
 
-        {% include 'core/header.html' %}
+        </main>
+        
         <main class="site-main">
             <div class="site-main__container">
                 <div class="container">
@@ -32,18 +61,9 @@
                                 </ul>
                             </div>
                         </div>
+
                         <div class="right">
-                            <div class="historyBack body-bold-14-17">
-                                <a icon="ArrowSmallLeft" href="{% url 'customerauth:dashboard' %}" iconwidth="24px" iconheight="24px" variant="primary"
-                                class="sc-bZHSRq RZBnd">
-                                <div class="sc-ilxebA inMzQv">
-                                        <div class="sc-kMzELR hyoizp"><svg width="24px" height="24px" viewBox="0 0 24 24" fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg" name="ArrowSmallLeft">
-                                                        <path d="M14 16L10 12L14 8" stroke="#0A103D" stroke-width="2"
-                                                                stroke-linecap="round" stroke-linejoin="round"></path>
-                                                </svg></div>Hesabıma dön
-                                </div>
-                        </a></div>
+                            
                             <div id="notificationSettings" class="sc-bVHCgj bvQtLI"><strong class="contentTitle headline-bold-20-24">Bildirim
                                 ayarları</strong>
                                 <form id="NotificationSettingsForm" class="customForm" method="POST" enctype="multipart/form-data">
@@ -70,25 +90,27 @@
                                         
                                     </div>
                                     <div class="buttonContainer">
-                                        <button class="sc-aXZVg fyDxag body-bold-14-17" width="188px" type="submit">
+                                        <button class="btn-type3" width="188px" type="submit">
                                             <div class="children">Değişiklikleri Kaydet</div>
                                         </button>
                                     </div>
                                 </form>
                                 
                                 
-                                
-                                
                             </div>
                         </div>
+                  
                     </div>
-                    
                 </div>
+                <div class="shoppingCartBackdrop hidden"></div>
             </div>
         </main>
-        {% include 'core/footer.html' %}
-    </div>
+        {% include 'coreBase/footer.html' %}
+        <!-- footer of the Page end -->
+    </div><!-- W1 end here -->
+    <span id="back-top" class="fa fa-arrow-up"></span>
 </div>
+
 
 <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -152,3 +174,6 @@
 
 
 {% endblock %}
+
+
+

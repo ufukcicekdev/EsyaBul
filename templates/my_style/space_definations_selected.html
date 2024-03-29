@@ -1,132 +1,59 @@
-{% extends 'partials/customerauthbase.html' %}
+{% extends 'partialsBase/base.html' %}
 {% load static %}
-
+{% block title %} Alanınız - Eşyala {% endblock title %}
 {% block content %}
 
-<div id="__next">
-    <div class="site-container">
-
-        {% include 'core/header.html' %}
-
-
-<style>
-    .left-side {
-        background-color: #FFFFFF;
-        height: 50vh;
-        width: 100%;
-    }
-
-    .right-side {
-        background-color: #F3F0EB;
-        height: 50vh;
-        width: 100%;
-        position: relative;
-    }
-
-    @media screen and (min-width: 768px) {
-        .left-side,
-        .right-side {
-            height: 100vh;
-        }
-    }
-
-    .custom-btn {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        margin-bottom: 20px;
-        margin-right: 20px;
-        background-color: #F2C791;
-    }
-
-    .custom-btn1 {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        margin-bottom: 20px;
-        margin-left: 20px;
-        background-color: #F2C791;
-    }
-
-    .left-side h1 {
-        font-family: 'Roboto', sans-serif;
-        font-weight: 700;
-        font-size: 2em;
-    }
-
-    .left-side h6 {
-        font-family: 'Roboto', sans-serif;
-        font-weight: 400;
-    }
-
-    .option-image.selected img {
-        background-color: orange;
-    }
-
-    .image-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-    }
-
-    .option-image {
-        position: relative;
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        margin-left: 10px;
-        cursor: pointer;
-        background-color: #f0f0f0;
-        margin-right: 10px;
-    }
-
-    .option-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .checkmark {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        display: none;
-        color: rgb(61, 147, 0);
-        font-size: 4em; /* Checkmark boyutu */
-        font-weight: bold; /* Checkmark kalınlığı */
-        /* Diğer özelleştirmeleri buraya ekleyin */
-    }
-</style>
-
-<div class="row no-gutters">
-    <div class="col-md-4 no-gutters">
-        <div class="left-side d-flex flex-column align-items-center justify-content-center" style="margin-top: -60px;">
-            <h1 class="mb-5">Alanınızın Mevcut Durumunu En iyi Hangisi Tanımlar?</h1>
+<!-- main container of all the page elements -->
+<div id="wrapper">
+    <!-- Page Loader -->
+    <div id="pre-loader" class="loader-container">
+        <div class="loader">
+            <img src="{% static 'basestatic/images/svg/rings.svg' %}" alt="loader">
         </div>
     </div>
-
-    <div class="col-md-8 no-gutters">
-        <div class="right-side d-flex justify-content-center align-items-center">
-            <div class="image-container">
-                {% for space_def in space_defs %}
-                    <div class="option-image text-center" onclick="selectImage(this)" data-space-def-id="{{ space_def.id }}">
-                        <img src="{{ space_def.image.url }}" alt="{{ space_def.img_alt }}" title="{{ space_def.img_title }}" />
-                        <i class="fas fa-check checkmark"></i>
-                        <span>{{ space_def.name }}</span>
+    <!-- W1 start here -->
+    <div class="w1">
+        <!-- mt header style4 start here -->
+        {% include 'coreBase/header.html' %}
+        
+        <main id="mt-main">
+            <div class="split-container">
+                <div class="split left-side">
+                    <div class="centered">
+                        <h1 class="mb-5">Alanınızın Mevcut Durumunu En iyi Hangisi Tanımlar?</h1>
                     </div>
-                {% endfor %}
+                </div>
+                <div class="split right-side">
+                    <div class="centered">
+                        <div class="image-container">
+                            {% for space_def in space_defs %}
+                                <div class="option-image text-center" onclick="selectImage(this)" data-space-def-id="{{ space_def.id }}">
+                                    <img src="{{ space_def.image.url }}" alt="{{ space_def.img_alt }}" title="{{ space_def.img_title }}" />
+                                    <i class="fas fa-check checkmark"></i>
+                                    <span>{{ space_def.name }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="button-container">
+                            <button type="submit" class="btn btn-heading custom-btn" onclick="save_type()" name="login">Sonraki Adım</button>
+                            <button type="submit" class="btn btn-heading custom-btn" onclick="goToPreviousPage()" name="prev">Önceki Adım</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="btn btn-heading btn-block hover-up custom-btn" onclick="save_type()" name="login">Sonraki Adım</button>
-            <button type="submit" class="btn btn-heading btn-block hover-up custom-btn1" onclick="goToPreviousPage()" name="prev">Önceki Adım</button>
-        </div>
-    </div>
+        </main>
+
+        <form id="roomTypeForm" method="post">
+            {% csrf_token %}
+            <input type="hidden" id="selectedSpaceDefId" name="selected_space_def_id" value="">
+        </form>
+        
+        {% include 'coreBase/footer.html' %}
+        <!-- footer of the Page end -->
+    </div><!-- W1 end here -->
+    <span id="back-top" class="fa fa-arrow-up"></span>
 </div>
 
-<form id="roomTypeForm" method="post">
-    {% csrf_token %}
-    <input type="hidden" id="selectedSpaceDefId" name="selected_space_def_id" value="">
-</form>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
@@ -201,9 +128,5 @@
         window.location.href = previousPageUrl;
     }
 </script>
-          
-        {% include 'core/footer.html' %}
-    </div>
-</div>
 
-{% endblock content %}
+{%  endblock %}

@@ -1,187 +1,117 @@
-{% extends 'partials/base.html' %}
+{% extends 'partialsBase/base.html' %}
+
 {% load static %}
+
+{% block title %} Beğendiklerim - Eşyala {% endblock title %}
+
 {% block content %}
 
 
-<div id="__next">
-    <div class="site-container">
-        {% include 'core/header.html' %}
-        <main id="siteMain">
-                <div class="container">
-                        <div>
-                                <div class="page-header mt-30 mb-50">
-                                        <div class="container">
-                                            <div class="archive-header">
-                                                <div class="row align-items-center">
-                                                    <div class="col-xl-3">
-                                                        <h2 class="mb-15">{{title}}</h2>
-                                                        <div class="breadcrumbWrapper">
-                                                                <div class="row align-items-center justify-content-between position-relative">
-                                                                        <div class="col">
-                                                                                <div class="sc-eDLKkx hhosGh">
-                                                                                        <ul class="sc-jTQCzO dKrhyP">
-                                                                                                <li class="sc-gLLuof bGrkxs"><span
-                                                                                                                class="sc-qZrbh dIcBim"><svg
-                                                                                                                        width="16px" height="16px"
-                                                                                                                        viewBox="0 0 24 24" fill="none"
-                                                                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                                                                        name="ArrowSmallLeft"
-                                                                                                                        onclick="handleArrowClick()">
-                                                                                                                        <path d="M14 16L10 12L14 8"
-                                                                                                                                stroke="#0A103D"
-                                                                                                                                stroke-width="2"
-                                                                                                                                stroke-linecap="round"
-                                                                                                                                stroke-linejoin="round">
-                                                                                                                        </path>
-                                                                                                                </svg></span><a href="{% url 'main:home' %}"><span
-                                                                                                                        class="sc-iBdnpw ksbpfb caption-bold-12-15">Anasayfa</span></a>
-                                                                                                </li>
-                                                                                                <li class="sc-gLLuof bGrkxs"><span
-                                                                                                                class="sc-qZrbh dIcBim"><svg
-                                                                                                                        width="16px" height="16px"
-                                                                                                                        viewBox="0 0 24 24" fill="none"
-                                                                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                                                                        name="ArrowSmallLeft"
-                                                                                                                        onclick="handleArrowClick()">
-                                                                                                                        <path d="M14 16L10 12L14 8"
-                                                                                                                                stroke="#0A103D"
-                                                                                                                                stroke-width="2"
-                                                                                                                                stroke-linecap="round"
-                                                                                                                                stroke-linejoin="round">
-                                                                                                                        </path>
-                                                                                                                </svg></span><a
-                                                                                                                href="{% url 'customerauth:wishlist' %}"><span
-                                                                                                                        class="sc-fsYfdN hSLwkI"><svg
-                                                                                                                                width="24" height="24"
-                                                                                                                                viewBox="0 0 24 24"
-                                                                                                                                fill="none"
-                                                                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                                                                                name="ArrowSmallRightStroke">
-                                                                                                                                <path d="M14 8L18 12L14 16"
-                                                                                                                                        stroke="#0A103D"
-                                                                                                                                        stroke-width="2"
-                                                                                                                                        stroke-linecap="round"
-                                                                                                                                        stroke-linejoin="round">
-                                                                                                                                </path>
-                                                                                                                                <path d="M18 12L7.6709 12"
-                                                                                                                                        stroke="#0A103D"
-                                                                                                                                        stroke-width="2"
-                                                                                                                                        stroke-linecap="round"
-                                                                                                                                        stroke-linejoin="round">
-                                                                                                                                </path>
-                                                                                                                        </svg></span><span
-                                                                                                                        class="sc-iBdnpw ksbpfb caption-bold-12-15">
-                                                                                                                        {{ title }}
-                                                                                                                    </span>
-                                                                                                                    </a>
-                                                                                                                </li>
-                                                                                          
-                                                                                        </ul>
-                                                                              
-                                                                                </div>
-                                                                        </div>
-                                                                        
-                                                                </div>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-                                </div>
-                                
-                            
-                        </div>
-                        <div class="shop-product-fillter">
-                                <div class="totall-product">
-                                    <p>Sizin için <strong class="text-brand">{{ wishlistProducts.count|default:"0" }}</strong> ürün bulduk!</p>
-                                    </div>
-                              
-                            </div>
-                        <div class="row product-grid">
-                        {% if wishlistProducts %}
-                        <div class="table-responsive shopping-summery">
-                            <table class="table table-wishlist">
-                                <thead>
-                                    <tr class="main-heading">
-                                        <th class="start pl-30"></th>
-                                        <th scope="col" colspan="2">Ürün</th>
-
-                                        <th scope="col">Fiyat</th>
-                                        <th scope="col">Stok</th>
-                                        <th scope="col">Aksiyon</th>
-                                        <th scope="col" class="end">Sil</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for w in wishlistProducts %}
-                                        
-                                    <tr class="pt-30">
-                                        <td class="pl-30"> </td>
-                                        <td class="image product-thumbnail pt-40">
-                                            {% with first_image=w.product.related_products.first %}
-                                                {% if first_image %}
-                                                        <img class="default-img" style="height: 100px;width: auto;" src="{{ first_image.image.url }}" alt="{{ first_image.img_alt }}" title="{{ first_image.img_title }}" style="height: 280px; width: 280px; object-fit: cover;" />
-                                                {% endif %}
-                                            {% endwith %}
-                                        
-                                        </td>
-                                        <td class="product-des product-name">
-                                            <h6><a class="product-name mb-10" href="">{{ w.product.name|truncatechars:30 }}</a></h6>
-                                            
-                                        </td>
-                                        <td class="price d-fdlex fs-1" data-title="Fiyat">
-                                            <span class="text-brand">₺</span><span class="text-brand current-product-price-{{ w.product.id }}">{{ w.product.selling_price }}</span>
-                                        </td>
-                                        <td class="text-center detail-info" data-title="Stok">
-                                            <span class="stock-status in-stock mb-0"> {% if w.product.in_stock %} Stokda {% else %} Stok Dışı {% endif %}</span>
-                                        </td>
-                                        <td class="text-right" data-title="Sepete Ekle">
-    
-    
-                                            <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ w.product.id }}">
-                                            <input type="hidden" class="product-pid-{{ w.product.id }}" value="{{ w.product.pid }}">
-                                            <input type="hidden" class="product-id-{{ w.product.id }}" value="{{ w.product.id }}">
-                                            <input type="hidden" class="product-title-{{ w.product.id }}" value="{{ w.product.name }}">
-    
-                                            <button class="btn btn-sm add-to-cart-btn" data-index="{{ w.product.id }}">Sepete Ekle</button>
-                                        </td>
-                                        <td class="action text-center" data-title="Sil">
-                                            <button style="border: none; background: none;" data-wishlist-product="{{ w.id }}"  class="text-body delete-wishlist-product"><i class="fi-rs-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        {% else %}
-                                <div style="text-align: center;">
-                                        <img src="{% static 'assets/imgs/blog/sad.png' %}" alt="Üzgün Yüz İkonu" style="width: 100px; height: 100px;">
-                                        <p>Beğendiklerim sayfasında ürün bulunamadı.</p>
-                                        <a href="{% url 'main:home' %}" class="btn btn-primary">Anasayfa</a>
-                                </div>
-                                        
-                        {% endif %}
-                </div>
-            </div><button class="goToUp btn"><span class="icon"></span><span class="text">Yukarı çık</span></button>
-            <div class="shoppingCartBackdrop hidden"></div>
-            
-            
-
-        </main>
-        {% include 'core/footer.html' %}
+  <!-- main container of all the page elements -->  
+  <div id="wrapper">
+    <!-- Page Loader -->
+    <div id="pre-loader" class="loader-container">
+      <div class="loader">
+        <img src="{% static 'basestatic/images/svg/rings.svg' %}" alt="loader">
+      </div>
     </div>
-</div>
+    <div class="w1">
+      <!-- mt -header style14 start from here -->
+      {% include 'coreBase/header.html' %}
+      <!-- mt -header style14 end here -->
+      <!-- mt search popup start here -->
+      <div class="mt-search-popup">
+        <div class="mt-holder">
+          <a href="#" class="search-close"><span></span><span></span></a>
+          <div class="mt-frame">
+            <form action="#">
+              <fieldset>
+                <input type="text" placeholder="Search...">
+                <span class="icon-microphone"></span>
+                <button class="icon-magnifier" type="submit"></button>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+      </div><!-- mt search popup end here -->
+      <!-- Main of the Page -->
+      <main id="mt-main">            
+        <section class="mt-contact-banner mt-banner-22" style="background-image: url({% static 'basestatic/images/img-76.jpg' %}); background-size: cover; background-position: center;">
+          <div class="container">
+            <div class="row">
+              <div class="col-xs-12">
+                <h1 class="text-center">Beğendiklerim</h1>
+                <!-- Breadcrumbs of the Page -->
+                <nav class="breadcrumbs">
+                  <ul class="list-unstyled">
+                    <li><a href="{% url 'main:home' %}">Anasayfa <i class="fa fa-angle-right"></i></a></li>
+                    <li>Beğendiklerim</li>
+                  </ul>
+                </nav>
+                <!-- Breadcrumbs of the Page end -->
+              </div>
+            </div>
+          </div>
+        </section>
+        <div class="paddingbootom-md hidden-xs"></div>
+        <!-- Mt Product Table of the Page -->
+        <div class="mt-product-table paddingtop-md paddingbootom-md">
+          <div class="container">
+            {% if wishlistProducts %}
+                {% for w in wishlistProducts %}
+                <div class="row border">
+                    <div class="col-xs-12 col-sm-2">
+                      <div class="img-holder">
+                          {% with first_image=w.product.related_products.first %}
+                              {% if first_image %}
+                                  <img src="{{ first_image.image.url }}" title="{{ first_image.img_title }}" alt="{{ first_image.img_alt }}">
+                              {% endif %}
+                          {% endwith %}
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-5">
+                      <strong class="product-name">{{ w.product.name|truncatechars:30 }}</strong>
+                    </div>
+                    <div class="col-xs-12 col-sm-2">
+                      <strong class="product-name"><i class="fa fa-try"></i> {{ w.product.selling_price }}</strong>
+                    </div>
+                    <div class="col-xs-12 col-sm-2">
+                      <form action="#" class="coupon-form">
+                        <fieldset>
+                          <button type="submit" style="margin-top: 15px;">Sepete Ekle</button>
+                        </fieldset>
+                      </form>
+                    </div>
+                    <div class="col-xs-12 col-sm-1">
+                      <a href="" data-wishlist-product="{{ w.id }}" class="delete-wishlist-product" ><i class="fa fa-close"></i></a>
+                    </div>
+                  </div>
+                {% endfor %}
+            {% endif %}
+            
 
+            <div style="text-align: center;">
+                <h1>Beğendiklerim sayfasında ürün bulunamadı.</h1>
+                <button class="btn-type3" onclick="handleArrowClick()" type="submit">Anasayfa</button> 
+            </div>
+            
+          </div>
+        </div><!-- Mt Product Table of the Page end -->
+        <div class="paddingbootom-md hidden-xs"></div>
+      </main><!-- Main of the Page end here -->
+      <!-- footer of the Page -->
+      {% include 'coreBase/footer.html' %}
+      <!-- footer of the Page end -->
+    </div>
+    <span id="back-top" class="fa fa-arrow-up"></span>
+  </div>
 
-<script>
-
+  <script>
 
     function handleArrowClick() {
-        var redirectURL = "{% url 'customerauth:wishlist' %}";
+        var redirectURL = "{% url 'main:home' %}";
         window.location.href = redirectURL;
     }
 </script>
 
-
-{% endblock %}
+{%  endblock %}

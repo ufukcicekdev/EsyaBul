@@ -1,16 +1,45 @@
-{% extends 'partials/base.html' %}
+{% extends 'partialsBase/base.html' %}
 {% block title %} {{title}} - EşyaBul {% endblock %}
 {% load static %}
 {% block content %}
 
-<div id="__next">
-    <div class="site-container">
+<div id="wrapper">
+    <!-- Page Loader -->
+    <div id="pre-loader" class="loader-container">
+        <div class="loader">
+            <img src="{% static 'basestatic/images/svg/rings.svg' %}" alt="loader">
+        </div>
+    </div>
+    <!-- W1 start here -->
+    <div class="w1">
+        <!-- mt header style4 start here -->
+        {% include 'coreBase/header.html' %}
+        <main id="mt-main">  
+            <section class="mt-contact-banner mt-banner-22" style="background-image: url({% static 'basestatic/images/img-76.jpg' %}); background-size: cover; background-position: center;">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <h1 class="text-center">Hesabım</h1>
+                      <!-- Breadcrumbs of the Page -->
+                      <nav class="breadcrumbs">
+                        <ul class="list-unstyled">
+                          <li><a href="{% url 'main:home' %}">Anasayfa <i class="fa fa-angle-right"></i></a></li>
+                          <li><a href="{% url 'customerauth:dashboard' %}">Hesabım <i class="fa fa-angle-right"></i></a></li>
+                          <li>Adreslerim</li>
+                        </ul>
+                      </nav>
+                      <!-- Breadcrumbs of the Page end -->
+                    </div>
+                  </div>
+                </div>
+              </section>
 
-        {% include 'core/header.html' %}
+        </main>
+        
         <main class="site-main">
             <div class="site-main__container">
                 <div class="container">
-                    <h1 class="pageTitle headline-bold-24-29">Hesabım</h1>
+                    <h1 class="pageTitle headline-bold-24-29">Adreslerim</h1>
                     <div class="profileLayout">
                         <div class="left">
                             <div class="accountList">
@@ -32,50 +61,43 @@
                                 </ul>
                             </div>
                         </div>
+
                         <div class="right">
-                            <div class="historyBack body-bold-14-17">
-                                <a icon="ArrowSmallLeft" href="{% url 'customerauth:dashboard' %}" iconwidth="24px" iconheight="24px" variant="primary"
-                                class="sc-bZHSRq RZBnd">
-                                <div class="sc-ilxebA inMzQv">
-                                        <div class="sc-kMzELR hyoizp"><svg width="24px" height="24px" viewBox="0 0 24 24" fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg" name="ArrowSmallLeft">
-                                                        <path d="M14 16L10 12L14 8" stroke="#0A103D" stroke-width="2"
-                                                                stroke-linecap="round" stroke-linejoin="round"></path>
-                                                </svg></div>Hesabıma dön
-                                </div>
-                        </a></div>
                             <div id="addressPage" class="sc-bVHCgj bvQtLI">
-                                
                                 <form method="post">
                                     {% csrf_token %}
                                     {% for field in form %}
-                                    <div class="form-group">
-                                        {{ field.label_tag }} {{ field }}
-                                        {% if field.errors %}
-                                            <div class="text-danger">
-                                                {% for error in field.errors %}
-                                                    {{ error }}
-                                                {% endfor %}
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                {% endfor %}
-                                    <button type="submit" class="btn btn-primary">Kaydet</button>
-                                  </form>
-                                
+                                        <div class="form-group">
+                                            {{ field.label_tag }} {{ field }}
+                                            {% if field.errors %}
+                                                <div class="text-danger">
+                                                    {% for error in field.errors %}
+                                                        {{ error }}
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                    <button type="submit" class="btn-type3">Kaydet</button>
+                                </form>
                             </div>
                         </div>
                     </div>
-                    
                 </div>
+                <div class="shoppingCartBackdrop hidden"></div>
             </div>
         </main>
-        {% include 'core/footer.html' %}
-    </div>
+        {% include 'coreBase/footer.html' %}
+        <!-- footer of the Page end -->
+    </div><!-- W1 end here -->
+    <span id="back-top" class="fa fa-arrow-up"></span>
 </div>
 
 
 <script>
+    document.getElementById("id_firm_name").classList.add("form-control");
+    document.getElementById("id_firm_taxcode").classList.add("form-control");
+    document.getElementById("id_firm_tax_home").classList.add("form-control");
    $(document).ready(function () {
     // "Fatura Tipi" değeri '1' olanı seç
     $("input[name='address_type'][value='1']").prop('checked', true);
@@ -161,3 +183,7 @@ $("#id_region").change(function () {
 
 
 {% endblock %}
+
+
+
+

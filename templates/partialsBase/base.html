@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{% block title %}Eşya Bul{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'basestatic/css/bootstrap.css' %}">
+	<link rel="stylesheet" href="{% static 'basestatic/css/animate.css' %}">
+	<link rel="stylesheet" href="{% static 'basestatic/css/icon-fonts.css' %}">
+	<link rel="stylesheet" href="{% static 'basestatic/css/main.css' %}">
+	<link rel="stylesheet" href="{% static 'basestatic/css/responsive.css' %}">
+	<link rel="stylesheet" href="{% static 'basestatic/css/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'basestatic/css/bcf16bd37f5afe2e.css' %}" />
+    <link rel="stylesheet" href="{% static 'basestatic/css/64af1e68a7d29183.css' %}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    {% include 'message.html' %}
+    {% block content %}
+
+    {% endblock content %}
+    <script src="{% static 'basestatic/js/jquery.js' %}"></script>
+    <script src="{% static 'basestatic/js/function.js' %}"></script>
+    <script src="{% static 'basestatic/js/plugins.js' %}"></script>
+    <script src="{% static 'basestatic/js/jquery.main.js' %}"></script>
+    <script src="{% static 'basestatic/js/getpath.js' %}"></script>
+    <script src="{% static 'basestatic/js/main2.js' %}"></script>
+
+</body>
+
+</html>
