@@ -9,14 +9,14 @@ urlpatterns = [
     path('', include('main.urls')),
     path('', include('products.urls')),
     path('', include('notification.urls')),
-
     path("social-auth/",include('social_django.urls',namespace='social')),
 
     path("ckeditor5/", include('django_ckeditor_5.urls')),
 ]
 
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = "main.views.custom_404_page"
 handler500 = "main.views.custom_500_page"
