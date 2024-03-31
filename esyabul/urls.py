@@ -19,9 +19,6 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
-urlpatterns += [
-    path("ckeditor5/", include('django_ckeditor_5.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = "main.views.custom_404_page"
 handler500 = "main.views.custom_500_page"

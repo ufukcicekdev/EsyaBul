@@ -87,13 +87,15 @@
                     </div>
                   </div>
                 {% endfor %}
+            {% else %}
+            <div style="text-align: center;">
+              <h1>Beğendiklerim sayfasında ürün bulunamadı.</h1>
+              <button class="btn-type3" onclick="handleArrowClick()" type="submit">Anasayfa</button> 
+            </div>
             {% endif %}
             
 
-            <div style="text-align: center;">
-                <h1>Beğendiklerim sayfasında ürün bulunamadı.</h1>
-                <button class="btn-type3" onclick="handleArrowClick()" type="submit">Anasayfa</button> 
-            </div>
+            
             
           </div>
         </div><!-- Mt Product Table of the Page end -->

@@ -83,11 +83,15 @@
     <span id="back-top" class="fa fa-arrow-up"></span>
 </div>
 
-<script>
-    // Sayfanın yönlendirilme zamanlayıcısı
-    setTimeout(function() {
-        window.location.href = '/hedef-url'; // Hedef URL'yi değiştir
-    }, 5000);
-</script>
+<div id="targetUrl" data-url="{% url target_url %}"></div>
+        
+        <script>
+            var targetUrl = document.getElementById('targetUrl').dataset.url;
+            console.log(targetUrl);
+        
+            setTimeout(function() {
+                window.location.href = targetUrl;
+            }, 5000);
+        </script>
 
 {% endblock content %}

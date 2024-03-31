@@ -78,32 +78,43 @@
                       </header>
                       <form method="post" method="POST" style="margin: 0 0 80px;">
                         <fieldset>
-                          
                           <div class="row">
-                            <div class="col-xs-12 col-sm-6">
-                                <input type="text" class="input" name="username" placeholder="Kullanıcı Adı" required="" id="id_username">
-                            </div>
-                            <div class="col-xs-12 col-sm-6">
-                            <input type="email" name="email"  class="input" placeholder="Email" autofocus="" required="" id="id_email">
-                            </div>
+                              <div class="col-xs-12">
+                                  <input type="text" class="input" name="username" placeholder="Kullanıcı Adı" required="" id="id_username">
+                              </div>
                           </div>
-                          
                           <div class="row">
-                            <div class="col-xs-12 col-sm-6">
-                                <input type="password" class="input" name="password1" placeholder="Şifreniz" required="" id="id_password1">
-                            </div>
-                            <div class="col-xs-12 col-sm-6">
-                                <input type="password" class="input" name="password2" placeholder="Tekrar Şifreniz" required="" id="id_password2">
-                            </div>
+                              <div class="col-xs-12">
+                                  <input type="email" name="email" class="input" placeholder="Email" autofocus="" required="" id="id_email">
+                              </div>
                           </div>
-                          <div class="box">
-                            <a href="{% url 'customerauth:sign-in' %}" class="help">Giriş Yap</a>
+                          <div class="row">
+                              <div class="col-xs-12">
+                                  <input type="password" class="input" name="password1" placeholder="Şifreniz" required="" id="id_password1">
+                              </div>
                           </div>
-                          <button type="submit" class="btn-type1" name="login">Kayıt Ol</button>
-                        </fieldset>
+                          <div class="row">
+                              <div class="col-xs-12">
+                                  <input type="password" class="input" name="password2" placeholder="Tekrar Şifreniz" required="" id="id_password2">
+                              </div>
+                          </div>
+                          <div class="row">
+                              <div class="col-xs-12 col-sm-6">
+                                  <button type="submit" class="btn-type1" name="login">Kayıt Ol</button>
+                              </div>
+                              <div class="col-xs-12 col-sm-6">
+                                <button type="button" onclick="GetRegisterPage()" class="btn-type1" >Giriş Yap</button>
+                                
+                              </div>
+                          </div>
+                      
+                      </fieldset>
+                      
+                      
                       </form>
                       <header>
-
+                        <h2 style="margin: 0 0 5px;">Sosyal Medya ile Kayıt Ol</h2>
+                        <p>Sosyal medya kullanarak bir hesap oluşturun</p>
                       </header>
                       <ul class="mt-socialicons">
                         <li class="mt-google"><a href="{% url 'social:begin' 'google-oauth2' %}"><i class="fa fa-google"></i></a></li>

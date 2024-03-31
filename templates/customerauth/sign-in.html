@@ -3,7 +3,11 @@
 {% block title %} Giriş Yap - Eşyala {% endblock title %}
 
 {% block content %}
-
+<style>
+  .bold-text {
+      font-weight: bold;
+  }
+</style>
 
   <!-- main container of all the page elements -->
   <div id="wrapper">
@@ -75,7 +79,8 @@
                       <header>
                         <h2 style="margin: 0 0 5px;">Giriş Yap</h2>
                         <p>Tekrar hoşgeldiniz! Hesabınıza giriş yapın</p>
-                      </header>
+                        <p>Hesabınız yok mu? <a href="{% url 'customerauth:sign-up' %}"class="bold-text" >Kaydolun</a></p>
+                    </header>
                       <form method="POST">
                         {% csrf_token %}
                         <fieldset>
@@ -89,7 +94,8 @@
                         </fieldset>
                       </form>
                       <header>
-                        
+                        <h2 style="margin-top: 10px;">Sosyal Medya ile Giriş Yap</h2>
+                        <p>Sosyal medya kullanarak giriş yap</p>
                       </header>
                       <ul class="mt-socialicons">
                         <li class="mt-google"><a href="{% url 'social:begin' 'google-oauth2' %}"><i class="fa fa-google"></i></a></li>

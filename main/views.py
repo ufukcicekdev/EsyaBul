@@ -8,11 +8,12 @@ from customerauth.models import wishlist_model
 
 def home(request):
     social_media_links = SocialMedia.objects.all()
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     wcount = 0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
         
-    return render(request, 'coreBase/home.html', {'social_media_links': social_media_links, "wcount": wcount})
+    return render(request, 'coreBase/home.html', {'social_media_links': social_media_links, "wcount": wcount, 'main_categories':main_categories})
 
 
 
@@ -98,40 +99,28 @@ def category_list(request):
 
 
 def category_product_list_view(request, slug):
-    category = get_object_or_404(Category, slug=slug)
-    products = Product.objects.filter(is_active=True, category=category)
-    subcategories = category.subcategories.all()
+    products = get_products_in_category(slug)
+
     wcount = 0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
     
     context = {
         "product_category": Category.objects.all(),
-        "category": category,
         "products": products,
-        "wcount": wcount,
-        "subcategories": subcategories
+        "wcount": wcount
     }
     
     return render(request, "core/category-product-list.html", context)
 
 
-def sub_category_product_list_view(request, primary_category_slug, sub_category_slug):
-    # primary_category = get_object_or_404(Category, slug=primary_category_slug)
-    # sub_category = "---s"
-    # products = Product.objects.filter(category=primary_category, subcategory=sub_category,  is_active=True)
-    # product_category = Category.objects.all()
-    # subcategories = primary_category.subcategories.all()
-    # wcount = 0
-    # if request.user.is_authenticated:
-    #     wcount = wishlist_model.objects.filter(user=request.user).count()
-    
-    context = {
-        # "product_category": product_category,
-        # "category": primary_category,
-        # "products": products,
-        # "wcount": wcount,
-        # "subcategories":subcategories,
-        # "sub_category_slug":sub_category_slug
-    }
-    return render(request, "core/sub-category-product-list.html", context)
+
+def get_products_in_category(category_slug):
+    category = Category.objects.get(slug=category_slug)
+    products = category.product_set.all()  
+    sub_categories = category.children.all()  
+
+    for sub_category in sub_categories:
+        products |= sub_category.product_set.all()
+
+    return products

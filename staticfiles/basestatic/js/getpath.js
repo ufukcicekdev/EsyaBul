@@ -22,3 +22,18 @@ function getProfile() {
 
   window.location.href = previousPageUrl;
 }
+
+
+function logOut() {
+  const previousPageUrl ="/sign-out/";
+
+  window.location.href = previousPageUrl;
+}
+
+function GetRegisterPage() {
+  const previousPageUrl ="/sign-in/";
+
+  window.location.href = previousPageUrl;
+}
+
+

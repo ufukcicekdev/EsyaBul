@@ -1,313 +1,516 @@
-{% extends 'partials/base.html' %}
+{% extends 'partialsBase/base.html' %}
 {% load static %}
 {% block content %}
-<style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
-        
-        .select-menu {
-            width: 200px; /* Değiştirilebilir */
-            margin: 20px auto; /* Değiştirilebilir */
-        }
-        
-        .select-menu .select-btn {
-            display: flex;
-            height: 40px; /* Değiştirilebilir */
-            background: #fff;
-            padding: 10px; /* Değiştirilebilir */
-            font-size: 14px; /* Değiştirilebilir */
-            font-weight: 400;
-            border-radius: 6px; /* Değiştirilebilir */
-            align-items: center;
-            cursor: pointer;
-            justify-content: space-between;
-            box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
-        }
-        
-        .select-btn i {
-            font-size: 20px; /* Değiştirilebilir */
-            transition: 0.3s;
-        }
-        
-        .select-menu .options {
-                position: relative;
-                padding: 10px;
-                margin-top: 5px;
-                border-radius: 6px;
-                background: #fff;
-                box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
-                display: none;
-                max-height: 150px; /* Maksimum yükseklik */
-                overflow-y: auto; /* Dikey kaydırma çubuğunu etkinleştir */
-        }
-        
-        .select-menu.active .options {
-            display: block;
-        }
-        
-        .options .option {
-            display: flex;
-            height: 40px; /* Değiştirilebilir */
-            cursor: pointer;
-            padding: 0 10px; /* Değiştirilebilir */
-            border-radius: 6px; /* Değiştirilebilir */
-            align-items: center;
-            background: #fff;
-        }
-        
-        .options .option:hover {
-            background: #F2F2F2;
-        }
-        
-        .option i {
-            font-size: 20px; /* Değiştirilebilir */
-            margin-right: 8px; /* Değiştirilebilir */
-        }
-        
-        .option .option-text {
-            font-size: 14px; /* Değiştirilebilir */
-            color: #333;
-        }
-        
-        </style>
 
-<div id="__next">
-    <div class="site-container">
-        {% include 'core/header.html' %}
-        <main id="siteMain">
-                <div class="container">
-                        <div>
-                                <div class="page-header mt-30 mb-50">
-                                        <div class="container">
-                                            <div class="archive-header">
-                                                <div class="row align-items-center">
-                                                    <div class="col-xl-5">
-                                                        <h2 class="mb-15">{{category.name}}</h2>
-                                                        <div class="breadcrumbWrapper">
-                                                                <div class="row align-items-center justify-content-between position-relative">
-                                                                        <div class="col">
-                                                                                <div class="sc-eDLKkx hhosGh">
-                                                                                        <ul class="sc-jTQCzO dKrhyP">
-                                                                                                <li class="sc-gLLuof bGrkxs"><span
-                                                                                                                class="sc-qZrbh dIcBim"><svg
-                                                                                                                        width="16px" height="16px"
-                                                                                                                        viewBox="0 0 24 24" fill="none"
-                                                                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                                                                        name="ArrowSmallLeft"
-                                                                                                                        onclick="handleArrowClick()">
-                                                                                                                        <path d="M14 16L10 12L14 8"
-                                                                                                                                stroke="#0A103D"
-                                                                                                                                stroke-width="2"
-                                                                                                                                stroke-linecap="round"
-                                                                                                                                stroke-linejoin="round">
-                                                                                                                        </path>
-                                                                                                                </svg></span><a href="{% url 'main:category-list' %}"><span
-                                                                                                                        class="sc-iBdnpw ksbpfb caption-bold-12-15">Anasayfa</span></a>
-                                                                                                </li>
-                                                                                                
-
-                                                                                                <li class="sc-gLLuof bGrkxs">
-                                                                                                        <span class="sc-qZrbh dIcBim">
-                                                                                                            <svg width="16px" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" name="ArrowSmallLeft" onclick="handleArrowClick()">
-                                                                                                                <path d="M14 16L10 12L14 8" stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                                                                            </svg>
-                                                                                                        </span>
-                                                                                                        <a href="{% url 'main:category-product-list' category.slug %}">
-                                                                                                            <span class="sc-fsYfdN hSLwkI">
-                                                                                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" name="ArrowSmallRightStroke">
-                                                                                                                    <path d="M14 8L18 12L14 16" stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                                                                                    <path d="M18 12L7.6709 12" stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                                                                                </svg>
-                                                                                                            </span>
-                                                                                                            <span class="sc-iBdnpw ksbpfb caption-bold-12-15">{{ category.name }}</span>
-                                                                                                        </a>
-                                                                                                    </li>
-                                                                                                    
-                                                                                                    <li class="sc-gLLuof bGrkxs">
-                                                                                                        <span class="sc-fsYfdN hSLwkI">
-                                                                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" name="ArrowSmallRightStroke">
-                                                                                                                <path d="M14 8L18 12L14 16" stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                                                                                <path d="M18 12L7.6709 12" stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                                                                            </svg>
-                                                                                                        </span>
-                                                                                                        <div class="select-menu">
-                                                                                                                <div class="select-btn">
-                                                                                                                    <span class="sBtn-text">Alt Kategoriler</span>
-                                                                                                                    <i class="bx bx-chevron-down"></i>
-                                                                                                                </div>
-                                                                                                                <ul class="options">
-                                                                                                                        <li class="option">
-                                                                                                                        <a href="{% url 'main:category-product-list' category.slug %}">
-                                                                                                                                <span class="option-text">Tüm Ürünler</span>
-                                                                                                                        </a>
-                                                                                                                        </li>
-                                                                                                                    {% for subcategory in subcategories %}
-                                                                                                                        {% if subcategory.slug == sub_category_slug %}
-                                                                                                                            <li class="option selected">
-                                                                                                                                <a href="{% url 'main:sub-category-product-list' category.slug subcategory.slug %}">
-                                                                                                                                    <span class="option-text">{{ subcategory.name }}</span>
-                                                                                                                                </a>
-                                                                                                                            </li>
-                                                                                                                        {% else %}
-                                                                                                                            <li class="option">
-                                                                                                                                <a href="{% url 'main:sub-category-product-list' category.slug subcategory.slug %}">
-                                                                                                                                    <span class="option-text">{{ subcategory.name }}</span>
-                                                                                                                                </a>
-                                                                                                                            </li>
-                                                                                                                        {% endif %}
-                                                                                                                    {% endfor %}
-                                                                                                                </ul>
-                                                                                                            </div>
-                                                                                                    </li>
-                                                                                                    
-
-                                                                                                        
-                                                                                          
-                                                                                        </ul>
-                                                                              
-                                                                                </div>
-                                                                        </div>
-                                                                        
-                                                                </div>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-                                </div>
-                                
-                            
-                        </div>
-                        <div class="shop-product-fillter">
-                                <div class="totall-product">
-                                        <p>Sizin için <strong class="text-brand">{{ products.count|default:"0" }}</strong> ürün bulduk!</p>
-                                    </div>
-                              
-                            </div>
-                        <div class="row product-grid">
-                        {% if products %}
-                                {% for p in products %}
-                                        <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
-                                        <div class="product-cart-wrap mb-30">
-                                                <div class="product-img-action-wrap">
-                                                <div class="product-img product-img-zoom">
-                                                        <a href="">
-                                                        {% with first_image=p.related_products.first %}
-                                                                {% if first_image %}
-                                                                        <img class="default-img" src="{{ first_image.image.url }}" alt="{{ first_image.img_alt }}" title="{{ first_image.img_title }}" style="height: 280px; width: 280px; object-fit: cover;" />
-                                                                {% endif %}
-                                                        {% endwith %}
-
-                                                        </a>
-                                                </div>
-                                                <div class="product-action-1">
-                                                        {% if request.user.is_authenticated %}
-                                                        <a aria-label="Beğendiklerim"  class="action-btn add-to-wishlist" data-product-item="{{p.id}}"><i class="fi-rs-heart"></i></a>
-                                                        {% endif %}
-                                                        <!-- <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a> -->
-                                                        <a aria-label="Detay"  class="action-btn go-to-detail" data-product-item="{{p.id}}"><i class="fi-rs-eye"></i></a>
-
-                                                </div>
-                                                {% if p.get_precentage != None %}
-                                                <div class="product-badges product-badges-position product-badges-mrg">
-                                                        <span class="hot">-{{p.get_precentage|floatformat:0}}%</span>
-                                                </div>
-                                                {% endif %}
-                                                </div>
-                                                <div class="product-content-wrap">
-                                                
-                                                <h2><a href="shop-product-right.html">{{ p.name }}</a></h2>
-                                                <div class="product-rate-cover">
-                                                        <i class="fas fa-star text-warning"></i>
-                                                        <span class="font-small ml-5 text-muted"> ({{ p.view_count }})</span>
-
-                                                </div>
-                                        
-                                                <div class="product-card-bottom">
-                                                        <div class="product-price">
-                                                        <span>₺</span> <span class="current-product-price-{{ p.id }}">{{p.selling_price}}</span>
-                                                        {% if p.selling_old_price != 0 %}
-                                                        <span class="old-price">${{p.selling_old_price}}</span>
-                                                        {% endif %}
-                                                        </div>
-                                                        <div class="add-cart">
-                                                        <input type="hidden" value="1" id="product-quantity" class="product-quantity-{{ p.id }}">
-                                                        <input type="hidden" class="product-pid-{{ p.id }}" value="{{ p.pid }}">
-                                                        <input type="hidden" class="product-image-{{ p.id }}" value="{{ p.image.url }}">
-                                                        <input type="hidden" class="product-id-{{ p.id }}" value="{{ p.id }}">
-                                                        <input type="hidden" class="product-title-{{ p.id }}" value="{{ p.name }}">
-                                                        <div class="d-flex">
-                                                        <button class="add add-to-cart-btn" data-index="{{ p.id }}" style="border: none;" id="add-to-cart-btn"><i class="fi-rs-shopping-cart mr-5"></i>Ekle</button>
-                                                        {% if request.user.is_authenticated %}
-                                                        <button style="border: none; background: none;" class="add-to-wishlist" data-product-item="{{p.id}}"><i class="fi-rs-heart" style="fill: aqua;"></i></button>
-                                                        {% endif %}
-                                                        </div>
-                                                        <!-- <button class="add add-to-cart-btn" data-index="{{ p.id }}" style="border: none;" id="add-to-cart-btn"><i class="fi-rs-shopping-cart mr-5"></i>Add</button> -->
-                                                        </div>
-                                                </div>
-                                                </div>
-                                        </div>
-                                        </div>
-                                {% endfor %}
-                        {% else %}
-                                <div style="text-align: center;">
-                                        <img src="{% static 'assets/imgs/blog/sad.png' %}" alt="Üzgün Yüz İkonu" style="width: 100px; height: 100px;">
-                                        <p>Aradığınız ürün bulunamadı.</p>
-                                        <a href="{% url 'main:home' %}" class="btn btn-primary">Anasayfa</a>
-                                </div>
-                                        
-                        {% endif %}
-                </div>
-            </div><button class="goToUp btn"><span class="icon"></span><span class="text">Yukarı çık</span></button>
-            <div class="shoppingCartBackdrop hidden"></div>
-            
-            
-
-        </main>
-        {% include 'core/footer.html' %}
+<div id="wrapper">
+    <!-- Page Loader -->
+    <div id="pre-loader" class="loader-container">
+        <div class="loader">
+            <img src="{% static 'basestatic/images/svg/rings.svg' %}" alt="loader">
+        </div>
     </div>
+    <!-- W1 start here -->
+    <div class="w1">
+        <!-- mt header style4 start here -->
+        {% include 'coreBase/header.html' %}
+        <!-- mt header style4 end here -->
+        <!-- mt side menu start here -->
+    
+        <main id="mt-main">
+            <!-- Mt Contact Banner of the Page -->
+            <section class="mt-contact-banner style4" style="background-image: url({% static 'basestatic/images/img11.jpg' %});">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <h1>CHAIRS</h1>
+                            <!-- Breadcrumbs of the Page -->
+                            <nav class="breadcrumbs">
+                                <ul class="list-unstyled">
+                                    <li><a href="#">Home <i class="fa fa-angle-right"></i></a></li>
+                                    <li><a href="#">Products <i class="fa fa-angle-right"></i></a></li>
+                                    <li>Chairs</li>
+                                </ul>
+                            </nav><!-- Breadcrumbs of the Page end -->
+                        </div>
+                    </div>
+                </div>
+            </section><!-- Mt Contact Banner of the Page end -->
+            <div class="container">
+                <div class="row">
+                    <!-- sidebar of the Page start here -->
+                    <aside id="sidebar" class="col-xs-12 col-sm-4 col-md-3 wow fadeInLeft" data-wow-delay="0.4s">
+                        <!-- shop-widget filter-widget of the Page start here -->
+                        <section class="shop-widget filter-widget bg-grey">
+                            <h2>FILTER</h2>
+                            <span class="sub-title">Filter by Brands</span>
+                            <!-- nice-form start here -->
+                            <ul class="list-unstyled nice-form">
+                                <li>
+                                    <label for="check-1">
+                                        <input id="check-1" type="checkbox">
+                                        <span class="fake-input"></span>
+                                        <span class="fake-label">Casali</span>
+                                    </label>
+                                    <span class="num">2</span>
+                                </li>
+                                <li>
+                                    <label for="check-2">
+                                        <input id="check-2" type="checkbox">
+                                        <span class="fake-input"></span>
+                                        <span class="fake-label">Decar</span>
+                                    </label>
+                                    <span class="num">12</span>
+                                </li>
+                                <li>
+                                    <label for="check-3">
+                                        <input id="check-3" checked="checked" type="checkbox">
+                                        <span class="fake-input"></span>
+                                        <span class="fake-label">Fantini</span>
+                                    </label>
+                                    <span class="num">4</span>
+                                </li>
+                                <li>
+                                    <label for="check-4">
+                                        <input id="check-4" type="checkbox">
+                                        <span class="fake-input"></span>
+                                        <span class="fake-label">Flamentstyle</span>
+                                    </label>
+                                    <span class="num">4</span>
+                                </li>
+                                <li>
+                                    <label for="check-5">
+                                        <input id="check-5" type="checkbox">
+                                        <span class="fake-input"></span>
+                                        <span class="fake-label">Heerenhuis</span>
+                                    </label>
+                                    <span class="num">6</span>
+                                </li>
+                                <li>
+                                    <label for="check-6">
+                                        <input id="check-6" type="checkbox">
+                                        <span class="fake-input"></span>
+                                        <span class="fake-label">Hoffmann</span>
+                                    </label>
+                                    <span class="num">10</span>
+                                </li>
+                                <li>
+                                    <label for="check-7">
+                                        <input id="check-7" type="checkbox">
+                                        <span class="fake-input"></span>
+                                        <span class="fake-label">Italfloor</span>
+                                    </label>
+                                    <span class="num">3</span>
+                                </li>
+                            </ul><!-- nice-form end here -->
+                            <span class="sub-title">Filter by Price</span>
+                            <div class="price-range">
+                                <div class="range-slider">
+                                    <span class="dot"></span>
+                                    <span class="dot dot2"></span>
+                                </div>
+                                <span class="price">Price &nbsp;   $ 10  &nbsp;  -  &nbsp;   $ 599</span>
+                                <a href="#" class="filter-btn">Filter</a>
+                            </div>
+                        </section><!-- shop-widget filter-widget of the Page end here -->
+                        <!-- shop-widget of the Page start here -->
+                        <section class="shop-widget">
+                            <h2>CATEGORIES</h2>
+                            <!-- category list start here -->
+                            <ul class="list-unstyled category-list">
+                                <li>
+                                    <a href="#">
+                                        <span class="name">CHAIRS</span>
+                                        <span class="num">12</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <span class="name">SOFAS</span>
+                                        <span class="num">24</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <span class="name">ARMCHAIRS</span>
+                                        <span class="num">9</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <span class="name">BEDROOM</span>
+                                        <span class="num">2</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <span class="name">LIGHTING</span>
+                                        <span class="num">17</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <span class="name">KITCHEN</span>
+                                        <span class="num">10</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <span class="name">ACCESSORIES</span>
+                                        <span class="num">23</span>
+                                    </a>
+                                </li>
+                            </ul><!-- category list end here -->
+                        </section><!-- shop-widget of the Page end here -->
+                        <!-- shop-widget of the Page start here -->
+                        <section class="shop-widget">
+                            <h2>HOT SALE</h2>
+                            <!-- mt product4 start here -->
+                            <div class="mt-product4 mt-paddingbottom20">
+                                <div class="img">
+                                    <a href="product-detail.html"><img src="images/products/img14.jpg" alt="image description"></a>
+                                </div>
+                                <div class="text">
+                                    <div class="frame">
+                                        <strong><a href="product-detail.html">Egon Wooden Chair</a></strong>
+                                        <ul class="mt-stars">
+                                            <li><i class="fa fa-star"></i></li>
+                                            <li><i class="fa fa-star"></i></li>
+                                            <li><i class="fa fa-star"></i></li>
+                                            <li><i class="fa fa-star-o"></i></li>
+                                        </ul>
+                                    </div>
+                                    <del class="off">$75,00</del>
+                                    <span class="price">$55,00</span>
+                                </div>
+                            </div><!-- mt product4 end here -->
+                            <!-- mt product4 start here -->
+                            <div class="mt-product4 mt-paddingbottom20">
+                                <div class="img">
+                                    <a href="product-detail.html"><img src="images/products/img15.jpg" alt="image description"></a>
+                                </div>
+                                <div class="text">
+                                    <div class="frame">
+                                        <strong><a href="product-detail.html">Oyo Cantilever Chair</a></strong>
+                                    </div>
+                                    <del class="off">$75,00</del>
+                                    <span class="price">$55,00</span>
+                                </div>
+                            </div><!-- mt product4 end here -->
+                            <!-- mt product4 start here -->
+                            <div class="mt-product4 mt-paddingbottom20">
+                                <div class="img">
+                                    <a href="product-detail.html"><img src="images/products/img16.jpg" alt="image description"></a>
+                                </div>
+                                <div class="text">
+                                    <div class="frame">
+                                        <strong><a href="product-detail.html">Kurve Chair</a></strong>
+                                        <ul class="mt-stars">
+                                            <li><i class="fa fa-star"></i></li>
+                                            <li><i class="fa fa-star"></i></li>
+                                            <li><i class="fa fa-star"></i></li>
+                                            <li><i class="fa fa-star-o"></i></li>
+                                        </ul>
+                                    </div>
+                                    <del class="off">$75,00</del>
+                                    <span class="price">$55,00</span>
+                                </div>
+                            </div><!-- mt product4 end here -->
+                            <!-- mt product4 start here -->
+                            <div class="mt-product4 mt-paddingbottom20">
+                                <div class="img">
+                                    <a href="product-detail.html"><img src="images/products/img20.jpg" alt="image description"></a>
+                                </div>
+                                <div class="text">
+                                    <div class="frame">
+                                        <strong><a href="product-detail.html">Marvelous Wooden Chair</a></strong>
+                                    </div>
+                                    <del class="off">$75,00</del>
+                                    <span class="price">$55,00</span>
+                                </div>
+                            </div><!-- mt product4 end here -->
+                        </section><!-- shop-widget of the Page end here -->
+                    </aside><!-- sidebar of the Page end here -->
+                    <div class="col-xs-12 col-sm-8 col-md-9 wow fadeInRight" data-wow-delay="0.4s">
+                        <!-- mt shoplist header start here -->
+                        <header class="mt-shoplist-header">
+                            <!-- btn-box start here -->
+                            <div class="btn-box">
+                                <ul class="list-inline">
+                                    <li>
+                                        <a href="#" class="drop-link">
+                                            Default Sorting <i aria-hidden="true" class="fa fa-angle-down"></i>
+                                        </a>
+                                        <div class="drop">
+                                            <ul class="list-unstyled">
+                                                <li><a href="#">ASC</a></li>
+                                                <li><a href="#">DSC</a></li>
+                                                <li><a href="#">Price</a></li>
+                                                <li><a href="#">Relevance</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li><a class="mt-viewswitcher" href="#"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
+                                    <li><a class="mt-viewswitcher" href="#"><i class="fa fa-th-list" aria-hidden="true"></i></a></li>
+                                </ul>
+                            </div><!-- btn-box end here -->
+                            <!-- mt-textbox start here -->
+                            <div class="mt-textbox">
+                                <p>Showing  <strong>1–9</strong> of  <strong>65</strong> results</p>
+                                <p>View   <a href="#">9</a> / <a href="#">18</a> / <a href="#">27</a> / <a href="#">All</a></p>
+                            </div><!-- mt-textbox end here -->
+                        </header><!-- mt shoplist header end here -->
+                        <!-- mt productlisthold start here -->
+                        <ul class="mt-productlisthold list-inline">
+                            
+                            {% for product in products %}
+                            <li>
+                                <!-- mt product2 start here -->
+                                <div class="mt-product2 large bg-grey">
+                                    <!-- box start here -->
+                                    <div class="box">
+                                        {% with first_image=product.related_products.first %}
+                                                {% if first_image %}
+                                                <a href="product-detail.html"><img src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}"></a>
+                                                {% endif %}
+                                        {% endwith %}
+                                        
+
+                                        {% if product.get_precentage != None %}
+                                        <span class="caption">
+                                            <span class="off">{{product.get_precentage|floatformat:0}}%</span>
+                                        </span>
+                                        {% endif %}
+
+                                        <ul class="mt-stars">
+                                            <li><i class="fa fa-star"></i></li>
+                                            <li><i class="fa fa-star"></i></li>
+                                            <li><i class="fa fa-star"></i></li>
+                                            <li><i class="fa fa-star-o"></i></li>
+                                        </ul>
+                                        <ul class="links">
+                                            {% if request.user.is_authenticated %}
+                                                <li><a href="#"><i class="icon-handbag"></i></a></li>
+                                            {% endif %}
+                                            {% if request.user.is_authenticated %}
+                                                <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{product.id}}" href="#"><i class="icon-heart"></i></a></li>
+                                            {% endif %}
+                                            <li><a href="#popup{{product.id}}" class="lightbox" ><i class="icomoon icon-eye"></i></a></li>
+
+                                        </ul>
+                                    </div><!-- box end here -->
+                                    <!-- txt end here -->
+
+                                    <div class="txt">
+                                        <strong class="title">{{ product.name }}</strong>
+                                        {% if product.selling_old_price is not null %}
+                                        <del class="off"><i class="fa fa-try"></i> <span>{{product.selling_old_price}}</span></del>
+                                        {% endif %}
+                                        <span class="price"><i class="fa fa-try"></i> <span>{{product.selling_price}}</span></span>
+                                    </div><!-- txt end here -->
+                                </div><!-- mt product2 end here -->
+                            </li>
+                            
+                            
+                            {% endfor %}
+                            
+                            
+                            
+                        </ul><!-- mt productlisthold end here -->
+                        <!-- mt pagination start here -->
+                        <nav class="mt-pagination">
+                            <ul class="list-inline">
+                                <li><a href="#">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                            </ul>
+                        </nav><!-- mt pagination end here -->
+                    </div>
+                </div>
+            </div>
+        </main><!-- mt main end here -->
+        <!-- footer of the Page -->
+        {% include 'coreBase/footer.html' %}
+        <!-- footer of the Page end -->
+    </div><!-- W1 end here -->
+    <span id="back-top" class="fa fa-arrow-up"></span>
 </div>
 
 
-<script>
+
+<div class="popup-holder">
+    <!-- Popup of the Page -->
+    {% for product in products %}
+    <div id="popup{{product.id}}" class="lightbox" style="display: none;">
+        <!-- Mt Product Detial of the Page -->
+        <section class="mt-product-detial">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- Slider of the Page -->
+                        <div class="slider">
+                            <!-- Comment List of the Page -->
+                            <ul class="list-unstyled comment-list">
+                                <li><a href="#"><i class="fa fa-heart"></i>27</a></li>
+                                <li><a href="#"><i class="fa fa-comments"></i>12</a></li>
+                                <li><a href="#"><i class="fa fa-share-alt"></i>14</a></li>
+                            </ul><!-- Comment List of the Page end -->
+                            <!-- Product Slider of the Page -->
+                            <div class="product-slider slick-initialized slick-slider">
+                                <div aria-live="polite" class="slick-list draggable">
+                                    <div class="slick-track" role="listbox" style="opacity: 1; width: 2284px;">
+                                        <div class="slide slick-slide" data-slick-index="0" aria-hidden="true" tabindex="-1"
+                                            role="option" aria-describedby="slick-slide50"
+                                            style="width: 571px; position: relative; left: 0px; top: 0px; z-index: 998; opacity: 0; transition: opacity 500ms ease 0s;">
+                                            <img src="{% static 'basestatic/images/img03.jpg' %}" alt="image descrption">
+                                        </div>
+                                        <div class="slide slick-slide" data-slick-index="1" aria-hidden="true" tabindex="-1"
+                                            role="option" aria-describedby="slick-slide51"
+                                            style="width: 571px; position: relative; left: -571px; top: 0px; z-index: 998; opacity: 0; transition: opacity 500ms ease 0s;">
+                                            <img src="{% static 'basestatic/images/img03.jpg' %}" alt="image descrption">
+                                        </div>
+                                        <div class="slide slick-slide" data-slick-index="2" aria-hidden="true" tabindex="-1"
+                                            role="option" aria-describedby="slick-slide52"
+                                            style="width: 571px; position: relative; left: -1142px; top: 0px; z-index: 998; opacity: 0; transition: opacity 500ms ease 0s;">
+                                            <img src="{% static 'basestatic/images/img03.jpg' %}" alt="image descrption">
+                                        </div>
+                                        <div class="slide slick-slide slick-current slick-active" data-slick-index="3"
+                                            aria-hidden="false" tabindex="-1" role="option" aria-describedby="slick-slide53"
+                                            style="width: 571px; position: relative; left: -1713px; top: 0px; z-index: 999; opacity: 1;">
+                                            <img src="{% static 'basestatic/images/img03.jpg' %}" alt="image descrption">
+                                        </div>
+                                    </div>
+                                </div>
+        
+        
+        
+                            </div><!-- Product Slider of the Page end -->
+                            <!-- Pagg Slider of the Page -->
+                            <ul class="list-unstyled slick-slider pagg-slider slick-initialized"><button type="button"
+                                    data-role="none" class="slick-prev slick-arrow" aria-label="Previous" role="button"
+                                    style="display: block;">Previous</button>
+                                <div aria-live="polite" class="slick-list draggable">
+                                    <div class="slick-track" role="listbox" style="opacity: 1; width: 1680px; left: -840px;">
+                                        <li class="slick-slide slick-cloned" data-slick-index="-4" aria-hidden="true"
+                                            tabindex="-1" style="width: 120px;"><img src="{% static 'basestatic/images/img03.jpg' %}"
+                                                alt="image description"></li>
+                                        <li class="slick-slide slick-cloned" data-slick-index="-3" aria-hidden="true"
+                                            tabindex="-1" style="width: 120px;"><img src="{% static 'basestatic/images/img03.jpg' %}"
+                                                alt="image description"></li>
+                                        <li class="slick-slide slick-cloned" data-slick-index="-2" aria-hidden="true"
+                                            tabindex="-1" style="width: 120px;"><img src="{% static 'basestatic/images/img03.jpg' %}"
+                                                alt="image description"></li>
+                                        <li class="slick-slide slick-cloned" data-slick-index="-1" aria-hidden="true"
+                                            tabindex="-1" style="width: 120px;"><img src="{% static 'basestatic/images/img03.jpg' %}"
+                                                alt="image description"></li>
+                                        <li class="slick-slide" data-slick-index="0" aria-hidden="true" tabindex="-1"
+                                            role="option" aria-describedby="slick-slide60" style="width: 120px;"><img
+                                                src="{% static 'basestatic/images/img03.jpg' %}" alt="image description"></li>
+                                        <li class="slick-slide" data-slick-index="1" aria-hidden="true" tabindex="-1"
+                                            role="option" aria-describedby="slick-slide61" style="width: 120px;"><img
+                                                src="{% static 'basestatic/images/img03.jpg' %}" alt="image description"></li>
+                                        <li class="slick-slide" data-slick-index="2" aria-hidden="true" tabindex="-1"
+                                            role="option" aria-describedby="slick-slide62" style="width: 120px;"><img
+                                                src="{% static 'basestatic/images/img03.jpg' %}" alt="image description"></li>
+                                        <li class="slick-slide slick-current slick-active" data-slick-index="3"
+                                            aria-hidden="false" tabindex="-1" role="option" aria-describedby="slick-slide63"
+                                            style="width: 120px;"><img src="{% static 'basestatic/images/img03.jpg' %}" alt="image description"></li>
+                                        <li class="slick-slide slick-active" data-slick-index="4" aria-hidden="false"
+                                            tabindex="-1" role="option" aria-describedby="slick-slide64" style="width: 120px;">
+                                            <img src="{% static 'basestatic/images/img03.jpg' %}" alt="image description"></li>
+                                        <li class="slick-slide slick-active" data-slick-index="5" aria-hidden="false"
+                                            tabindex="-1" role="option" aria-describedby="slick-slide65" style="width: 120px;">
+                                            <img src="{% static 'basestatic/images/img03.jpg' %}" alt="image description"></li>
+                                        <li class="slick-slide slick-cloned slick-active" data-slick-index="6"
+                                            aria-hidden="false" tabindex="-1" style="width: 120px;"><img src="{% static 'basestatic/images/img03.jpg' %}"
+                                                alt="image description"></li>
+                                        <li class="slick-slide slick-cloned" data-slick-index="7" aria-hidden="true"
+                                            tabindex="-1" style="width: 120px;"><img src="{% static 'basestatic/images/img03.jpg' %}"
+                                                alt="image description"></li>
+                                        <li class="slick-slide slick-cloned" data-slick-index="8" aria-hidden="true"
+                                            tabindex="-1" style="width: 120px;"><img src="{% static 'basestatic/images/img03.jpg' %}"
+                                                alt="image description"></li>
+                                        <li class="slick-slide slick-cloned" data-slick-index="9" aria-hidden="true"
+                                            tabindex="-1" style="width: 120px;"><img src="{% static 'basestatic/images/img03.jpg' %}"
+                                                alt="image description"></li>
+
+                                                
+                                    </div>
+                                </div>
+        
+        
+        
+        
+        
+                                <button type="button" data-role="none" class="slick-next slick-arrow" aria-label="Next"
+                                    role="button" style="display: block;">Next</button>
+                            </ul><!-- Pagg Slider of the Page end -->
+                        </div>
+                        <!-- Slider of the Page end -->
+                        <!-- Detail Holder of the Page -->
+                        <div class="detial-holder">
+                            <!-- Breadcrumbs of the Page -->
+                            <ul class="list-unstyled breadcrumbs">
+                                <li><a href="#">Chairs <i class="fa fa-angle-right"></i></a></li>
+                                <li>Products</li>
+                            </ul>
+                            <!-- Breadcrumbs of the Page end -->
+                            <h2>{{ product.name }}</h2>
+                            <!-- Rank Rating of the Page -->
+                            <div class="rank-rating">
+                                <ul class="list-unstyled rating-list">
+                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-star-o"></i></a></li>
+                                </ul>
+                                <span class="total-price">Reviews (12)</span>
+                            </div><!-- Rank Rating of the Page end -->
+                            <ul class="list-unstyled list">
+                                <li><a href="#"><i class="fa fa-share-alt"></i>SHARE</a></li>
+                                
+                                {% if request.user.is_authenticated %}
+                                    <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{product.id}}" href="#"><i class="icon-heart"></i></a></li>
+                                {% endif %}
+                            </ul>
+                            <div class="txt-wrap">
+                                <p>{{ product.description }}</p>
+                            </div>
+                            <div class="text-holder">
+                                {% if product.selling_old_price is not null %}
+                                        <del class="off"><i class="fa fa-try"></i> <span>{{product.selling_old_price}}</span></del>
+                                        {% endif %}
+                                        <span class="price"><i class="fa fa-try"></i> <span>{{product.selling_price}}</span></span>
+                            </div><!-- Product Form of the Page -->
+                            <form action="#" class="product-form">
+                                <fieldset>
+                                    <div class="row-val">
+                                        <label for="qty">qty</label>
+                                        <select id="clr">
+                                            <option>1</option>
+                                        </select>
+                                    </div>
+                                    <div class="row-val">
+                                        <button type="submit">ADD TO CART</button>
+                                    </div>
+                                </fieldset>
+                            </form><!-- Product Form of the Page end -->
+                        </div><!-- Detail Holder of the Page end -->
+                    </div>
+                </div>
+            </div>
+        </section><!-- Mt Product Detial of the Page end -->
+    </div>
+    {% endfor %}
+
+    <!-- Diğer modallar buraya eklenebilir -->
+</div>
 
 
-    function handleArrowClick() {
-        var redirectURL = "{% url 'main:category-list' %}";
-        window.location.href = redirectURL;
-    }
-
-
-
-
-
-    const optionMenu = document.querySelector(".select-menu");
-const selectBtn = optionMenu.querySelector(".select-btn");
-const options = optionMenu.querySelectorAll(".option");
-const sBtnText = optionMenu.querySelector(".sBtn-text");
-
-selectBtn.addEventListener("click", () => optionMenu.classList.toggle("active"));
-
-options.forEach(option => {
-    option.addEventListener("click", () => {
-        options.forEach(opt => opt.classList.remove("selected"));
-        option.classList.add("selected");
-        let selectedOption = option.querySelector(".option-text").innerText;
-        sBtnText.innerText = selectedOption;
-        optionMenu.classList.remove("active");
-    });
-});
-
-// Sayfa yüklendiğinde seçili olan seçeneğin adını gösterme
-window.onload = () => {
-    const selectedOption = optionMenu.querySelector(".selected");
-    if (selectedOption) {
-        const selectedOptionText = selectedOption.querySelector(".option-text").innerText;
-        sBtnText.innerText = selectedOptionText;
-    }
-};
-    
-</script>
 
 
 {% endblock %}
+
+
+
+

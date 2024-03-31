@@ -326,8 +326,8 @@ $(document).ready(function (){
                 setTimeout(function () {
                     messageContainer.style.display = 'none';
                 }, 5000); 
-                this_val.html("<i class='fas fa-heart text-danger'></i>")
-                var proCountElements = document.querySelectorAll('.pro-count');
+                this_val.html("<i class='fa fa-heart text-danger'></i>")
+                var proCountElements = document.querySelectorAll('.wish-count');
                 proCountElements.forEach(function(element) {
                     element.innerHTML = response.wishlist_count;
                 });
@@ -408,3 +408,5 @@ $(document).ready(function (){
     })
 
 });
+
+
