@@ -1,7 +1,8 @@
 from django.db import models
 from autoslug import AutoSlugField
 from django_ckeditor_5.fields import CKEditor5Field
-
+from django.utils import timezone
+from esyabul import settings
 # Oda Tipleri (Living Room, Bedroom, Kitchen vb.)
 class RoomType(models.Model):
     name = models.CharField(max_length=100)
@@ -87,13 +88,13 @@ class Category(models.Model):
         unique_together = ('slug', 'parent',)
         verbose_name_plural = "categories"
 
-    def __str__(self):
-        full_path = [self.name]
-        k = self.parent
-        while k is not None:
-            full_path.append(k.name)
-            k = k.parent
-        return ' -> '.join(full_path[::-1])
+    # def __str__(self):
+    #     full_path = [self.name]
+    #     k = self.parent
+    #     while k is not None:
+    #         full_path.append(k.name)
+    #         k = k.parent
+    #     return ' -> '.join(full_path[::-1])
     
 
 
@@ -127,6 +128,15 @@ class Product(models.Model):
         if self.selling_old_price !=0:
             new_price = (self.selling_price / self.selling_old_price) * 100
             return new_price
+
+class ProductReview(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
+    rating = models.IntegerField() 
+    comment = models.TextField(blank=True)  
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='related_products', on_delete=models.CASCADE)

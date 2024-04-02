@@ -7,6 +7,8 @@ app_name = "products"
 
 
 urlpatterns = [
+    path("product/<slug:product_slug>/", product_detail_view, name="product-detail-view"),
+    path('product/<int:product_id>/add_review/', add_product_review, name='add_product_review'),
 
 ]
 

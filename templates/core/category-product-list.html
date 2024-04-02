@@ -18,17 +18,17 @@
     
         <main id="mt-main">
             <!-- Mt Contact Banner of the Page -->
-            <section class="mt-contact-banner style4" style="background-image: url({% static 'basestatic/images/img11.jpg' %});">
+            <section class="mt-contact-banner style4" style="background-image: url({% static 'basestatic/images/img-76.jpg' %});">
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-12 text-center">
-                            <h1>CHAIRS</h1>
+                            <h1>{{ category_name.name }}</h1>
                             <!-- Breadcrumbs of the Page -->
                             <nav class="breadcrumbs">
                                 <ul class="list-unstyled">
-                                    <li><a href="#">Home <i class="fa fa-angle-right"></i></a></li>
-                                    <li><a href="#">Products <i class="fa fa-angle-right"></i></a></li>
-                                    <li>Chairs</li>
+                                    <li><a href="{% url 'main:home' %}">AnaSayfa <i class="fa fa-angle-right"></i></a></li>
+                                    <li><a href="#">Ürünler <i class="fa fa-angle-right"></i></a></li>
+                                    <li>{{ category_name.name }}</li>
                                 </ul>
                             </nav><!-- Breadcrumbs of the Page end -->
                         </div>
@@ -39,127 +39,33 @@
                 <div class="row">
                     <!-- sidebar of the Page start here -->
                     <aside id="sidebar" class="col-xs-12 col-sm-4 col-md-3 wow fadeInLeft" data-wow-delay="0.4s">
-                        <!-- shop-widget filter-widget of the Page start here -->
-                        <section class="shop-widget filter-widget bg-grey">
-                            <h2>FILTER</h2>
-                            <span class="sub-title">Filter by Brands</span>
-                            <!-- nice-form start here -->
-                            <ul class="list-unstyled nice-form">
-                                <li>
-                                    <label for="check-1">
-                                        <input id="check-1" type="checkbox">
-                                        <span class="fake-input"></span>
-                                        <span class="fake-label">Casali</span>
-                                    </label>
-                                    <span class="num">2</span>
-                                </li>
-                                <li>
-                                    <label for="check-2">
-                                        <input id="check-2" type="checkbox">
-                                        <span class="fake-input"></span>
-                                        <span class="fake-label">Decar</span>
-                                    </label>
-                                    <span class="num">12</span>
-                                </li>
-                                <li>
-                                    <label for="check-3">
-                                        <input id="check-3" checked="checked" type="checkbox">
-                                        <span class="fake-input"></span>
-                                        <span class="fake-label">Fantini</span>
-                                    </label>
-                                    <span class="num">4</span>
-                                </li>
-                                <li>
-                                    <label for="check-4">
-                                        <input id="check-4" type="checkbox">
-                                        <span class="fake-input"></span>
-                                        <span class="fake-label">Flamentstyle</span>
-                                    </label>
-                                    <span class="num">4</span>
-                                </li>
-                                <li>
-                                    <label for="check-5">
-                                        <input id="check-5" type="checkbox">
-                                        <span class="fake-input"></span>
-                                        <span class="fake-label">Heerenhuis</span>
-                                    </label>
-                                    <span class="num">6</span>
-                                </li>
-                                <li>
-                                    <label for="check-6">
-                                        <input id="check-6" type="checkbox">
-                                        <span class="fake-input"></span>
-                                        <span class="fake-label">Hoffmann</span>
-                                    </label>
-                                    <span class="num">10</span>
-                                </li>
-                                <li>
-                                    <label for="check-7">
-                                        <input id="check-7" type="checkbox">
-                                        <span class="fake-input"></span>
-                                        <span class="fake-label">Italfloor</span>
-                                    </label>
-                                    <span class="num">3</span>
-                                </li>
-                            </ul><!-- nice-form end here -->
-                            <span class="sub-title">Filter by Price</span>
-                            <div class="price-range">
-                                <div class="range-slider">
-                                    <span class="dot"></span>
-                                    <span class="dot dot2"></span>
-                                </div>
-                                <span class="price">Price &nbsp;   $ 10  &nbsp;  -  &nbsp;   $ 599</span>
-                                <a href="#" class="filter-btn">Filter</a>
-                            </div>
-                        </section><!-- shop-widget filter-widget of the Page end here -->
+                    
                         <!-- shop-widget of the Page start here -->
                         <section class="shop-widget">
-                            <h2>CATEGORIES</h2>
+                            <h2>Kategoriler</h2>
                             <!-- category list start here -->
                             <ul class="list-unstyled category-list">
-                                <li>
-                                    <a href="#">
-                                        <span class="name">CHAIRS</span>
-                                        <span class="num">12</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="name">SOFAS</span>
-                                        <span class="num">24</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="name">ARMCHAIRS</span>
-                                        <span class="num">9</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="name">BEDROOM</span>
-                                        <span class="num">2</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="name">LIGHTING</span>
-                                        <span class="num">17</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="name">KITCHEN</span>
-                                        <span class="num">10</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="name">ACCESSORIES</span>
-                                        <span class="num">23</span>
-                                    </a>
-                                </li>
+                                {% for subcategory in subcategories %}
+                                    <li>
+                                        <a href="{% url 'main:dynamic-category-product-list' category_slugs=category.slug|add:'/'|add:subcategory.slug %}">
+                                            <span class="name">{{ subcategory.name }}</span>
+                                            <span class="num">{{ subcategory.product_count }}</span>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                                
                             </ul><!-- category list end here -->
+                            <ul class="list-unstyled category-list">
+                                {% for category in main_categories1 %}
+                                <li>
+                                    <a href="{% url 'main:dynamic-category-product-list' category_slugs=category.slug %}"><span class="name">{{ category.name }}</span></a>
+                                    
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            
+                            
+                            
                         </section><!-- shop-widget of the Page end here -->
                         <!-- shop-widget of the Page start here -->
                         <section class="shop-widget">
@@ -255,8 +161,7 @@
                             </div><!-- btn-box end here -->
                             <!-- mt-textbox start here -->
                             <div class="mt-textbox">
-                                <p>Showing  <strong>1–9</strong> of  <strong>65</strong> results</p>
-                                <p>View   <a href="#">9</a> / <a href="#">18</a> / <a href="#">27</a> / <a href="#">All</a></p>
+                                <p><strong>{{ products.count }}</strong> sonuç</p>
                             </div><!-- mt-textbox end here -->
                         </header><!-- mt shoplist header end here -->
                         <!-- mt productlisthold start here -->
@@ -270,7 +175,7 @@
                                     <div class="box">
                                         {% with first_image=product.related_products.first %}
                                                 {% if first_image %}
-                                                <a href="product-detail.html"><img src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}"></a>
+                                                <a href="{% url 'products:product-detail-view' product.slug %}"><img src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}"></a>
                                                 {% endif %}
                                         {% endwith %}
                                         
@@ -355,96 +260,7 @@
                                 <li><a href="#"><i class="fa fa-comments"></i>12</a></li>
                                 <li><a href="#"><i class="fa fa-share-alt"></i>14</a></li>
                             </ul><!-- Comment List of the Page end -->
-                            <!-- Product Slider of the Page -->
-                            <div class="product-slider slick-initialized slick-slider">
-                                <div aria-live="polite" class="slick-list draggable">
-                                    <div class="slick-track" role="listbox" style="opacity: 1; width: 2284px;">
-                                        <div class="slide slick-slide" data-slick-index="0" aria-hidden="true" tabindex="-1"
-                                            role="option" aria-describedby="slick-slide50"
-                                            style="width: 571px; position: relative; left: 0px; top: 0px; z-index: 998; opacity: 0; transition: opacity 500ms ease 0s;">
-                                            <img src="{% static 'basestatic/images/img03.jpg' %}" alt="image descrption">
-                                        </div>
-                                        <div class="slide slick-slide" data-slick-index="1" aria-hidden="true" tabindex="-1"
-                                            role="option" aria-describedby="slick-slide51"
-                                            style="width: 571px; position: relative; left: -571px; top: 0px; z-index: 998; opacity: 0; transition: opacity 500ms ease 0s;">
-                                            <img src="{% static 'basestatic/images/img03.jpg' %}" alt="image descrption">
-                                        </div>
-                                        <div class="slide slick-slide" data-slick-index="2" aria-hidden="true" tabindex="-1"
-                                            role="option" aria-describedby="slick-slide52"
-                                            style="width: 571px; position: relative; left: -1142px; top: 0px; z-index: 998; opacity: 0; transition: opacity 500ms ease 0s;">
-                                            <img src="{% static 'basestatic/images/img03.jpg' %}" alt="image descrption">
-                                        </div>
-                                        <div class="slide slick-slide slick-current slick-active" data-slick-index="3"
-                                            aria-hidden="false" tabindex="-1" role="option" aria-describedby="slick-slide53"
-                                            style="width: 571px; position: relative; left: -1713px; top: 0px; z-index: 999; opacity: 1;">
-                                            <img src="{% static 'basestatic/images/img03.jpg' %}" alt="image descrption">
-                                        </div>
-                                    </div>
-                                </div>
-        
-        
-        
-                            </div><!-- Product Slider of the Page end -->
-                            <!-- Pagg Slider of the Page -->
-                            <ul class="list-unstyled slick-slider pagg-slider slick-initialized"><button type="button"
-                                    data-role="none" class="slick-prev slick-arrow" aria-label="Previous" role="button"
-                                    style="display: block;">Previous</button>
-                                <div aria-live="polite" class="slick-list draggable">
-                                    <div class="slick-track" role="listbox" style="opacity: 1; width: 1680px; left: -840px;">
-                                        <li class="slick-slide slick-cloned" data-slick-index="-4" aria-hidden="true"
-                                            tabindex="-1" style="width: 120px;"><img src="{% static 'basestatic/images/img03.jpg' %}"
-                                                alt="image description"></li>
-                                        <li class="slick-slide slick-cloned" data-slick-index="-3" aria-hidden="true"
-                                            tabindex="-1" style="width: 120px;"><img src="{% static 'basestatic/images/img03.jpg' %}"
-                                                alt="image description"></li>
-                                        <li class="slick-slide slick-cloned" data-slick-index="-2" aria-hidden="true"
-                                            tabindex="-1" style="width: 120px;"><img src="{% static 'basestatic/images/img03.jpg' %}"
-                                                alt="image description"></li>
-                                        <li class="slick-slide slick-cloned" data-slick-index="-1" aria-hidden="true"
-                                            tabindex="-1" style="width: 120px;"><img src="{% static 'basestatic/images/img03.jpg' %}"
-                                                alt="image description"></li>
-                                        <li class="slick-slide" data-slick-index="0" aria-hidden="true" tabindex="-1"
-                                            role="option" aria-describedby="slick-slide60" style="width: 120px;"><img
-                                                src="{% static 'basestatic/images/img03.jpg' %}" alt="image description"></li>
-                                        <li class="slick-slide" data-slick-index="1" aria-hidden="true" tabindex="-1"
-                                            role="option" aria-describedby="slick-slide61" style="width: 120px;"><img
-                                                src="{% static 'basestatic/images/img03.jpg' %}" alt="image description"></li>
-                                        <li class="slick-slide" data-slick-index="2" aria-hidden="true" tabindex="-1"
-                                            role="option" aria-describedby="slick-slide62" style="width: 120px;"><img
-                                                src="{% static 'basestatic/images/img03.jpg' %}" alt="image description"></li>
-                                        <li class="slick-slide slick-current slick-active" data-slick-index="3"
-                                            aria-hidden="false" tabindex="-1" role="option" aria-describedby="slick-slide63"
-                                            style="width: 120px;"><img src="{% static 'basestatic/images/img03.jpg' %}" alt="image description"></li>
-                                        <li class="slick-slide slick-active" data-slick-index="4" aria-hidden="false"
-                                            tabindex="-1" role="option" aria-describedby="slick-slide64" style="width: 120px;">
-                                            <img src="{% static 'basestatic/images/img03.jpg' %}" alt="image description"></li>
-                                        <li class="slick-slide slick-active" data-slick-index="5" aria-hidden="false"
-                                            tabindex="-1" role="option" aria-describedby="slick-slide65" style="width: 120px;">
-                                            <img src="{% static 'basestatic/images/img03.jpg' %}" alt="image description"></li>
-                                        <li class="slick-slide slick-cloned slick-active" data-slick-index="6"
-                                            aria-hidden="false" tabindex="-1" style="width: 120px;"><img src="{% static 'basestatic/images/img03.jpg' %}"
-                                                alt="image description"></li>
-                                        <li class="slick-slide slick-cloned" data-slick-index="7" aria-hidden="true"
-                                            tabindex="-1" style="width: 120px;"><img src="{% static 'basestatic/images/img03.jpg' %}"
-                                                alt="image description"></li>
-                                        <li class="slick-slide slick-cloned" data-slick-index="8" aria-hidden="true"
-                                            tabindex="-1" style="width: 120px;"><img src="{% static 'basestatic/images/img03.jpg' %}"
-                                                alt="image description"></li>
-                                        <li class="slick-slide slick-cloned" data-slick-index="9" aria-hidden="true"
-                                            tabindex="-1" style="width: 120px;"><img src="{% static 'basestatic/images/img03.jpg' %}"
-                                                alt="image description"></li>
-
-                                                
-                                    </div>
-                                </div>
-        
-        
-        
-        
-        
-                                <button type="button" data-role="none" class="slick-next slick-arrow" aria-label="Next"
-                                    role="button" style="display: block;">Next</button>
-                            </ul><!-- Pagg Slider of the Page end -->
+                            
                         </div>
                         <!-- Slider of the Page end -->
                         <!-- Detail Holder of the Page -->

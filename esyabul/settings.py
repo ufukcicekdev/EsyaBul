@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "notification",
     "storages",
     "easyaudit",
+    "django_social_share",
 
 ]
 

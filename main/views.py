@@ -5,6 +5,9 @@ from main.models import ContactUs,SocialMedia
 from django.http import JsonResponse
 from products.models import Category,Product
 from customerauth.models import wishlist_model
+from django.http import Http404
+from django.db.models import Q
+
 
 def home(request):
     social_media_links = SocialMedia.objects.all()
@@ -46,10 +49,11 @@ def custom_500_page(request):
 
 
 def contact(request):
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     wcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
-    return render(request, "mainBase/contact.html", {'wcount':wcount})
+    return render(request, "mainBase/contact.html", {'wcount':wcount, 'main_categories':main_categories})
 
 
 def ajax_contact_form(request):
@@ -78,49 +82,54 @@ def ajax_contact_form(request):
 
 ################### Contact Close ################
 
-
-def category_list(request):
-    categories_with_subcategories = []
+def dynamic_category_product_list_view(request, category_slugs):
+    category_slug_list = category_slugs.split('/')
     
-    for category in Category.objects.all():
-        category_data = {
-            'category': category,
-            'subcategories': category.subcategories.all()  # Alt kategorileri al
-        }
-        categories_with_subcategories.append(category_data)
     wcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
-    context = {
-        "categories_with_subcategories":categories_with_subcategories,
-        "wcount":wcount
-    }
-    return render(request, 'core/categories.html', context)
 
-
-def category_product_list_view(request, slug):
-    products = get_products_in_category(slug)
-
-    wcount = 0
-    if request.user.is_authenticated:
-        wcount = wishlist_model.objects.filter(user=request.user).count()
+    # Ana kategorileri al
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     
+    # Eğer category_slugs "tum-urunler" ise, tüm ürünleri getir
+    if category_slugs == "tum-urunler":
+        main_category = get_object_or_404(Category, slug=category_slug_list[0])
+        products = Product.objects.all()
+        context = {
+            "products": products,
+            "main_categories1": main_categories,
+            "category_name": main_category,
+            "all_categories": Category.objects.all()  # Tüm kategorileri döndür
+        }
+        return render(request, "core/category-product-list.html", context)
+    
+    # Eğer category_slugs bir kategoriye aitse, ilgili ürünleri getir
+    main_category = get_object_or_404(Category, slug=category_slug_list[0])
+    subcategories = main_category.children.all()
+    if len(category_slug_list) == 1:
+        target_category = main_category
+    else:
+        target_category = get_object_or_404(Category, slug=category_slug_list[-1])
+    if len(category_slug_list) == 1: 
+        products = Product.objects.filter(category=target_category)
+    else:
+        products = Product.objects.filter(category=target_category)
+        
+    for subcategory in subcategories:
+        subcategory.product_count = Product.objects.filter(category=subcategory).count()
+    
+    
+
     context = {
-        "product_category": Category.objects.all(),
         "products": products,
-        "wcount": wcount
+        "wcount": wcount,
+        "category": main_category,
+        "category_name": target_category,
+        "subcategories": subcategories,
+        "main_categories": main_categories,
     }
     
     return render(request, "core/category-product-list.html", context)
 
 
-
-def get_products_in_category(category_slug):
-    category = Category.objects.get(slug=category_slug)
-    products = category.product_set.all()  
-    sub_categories = category.children.all()  
-
-    for sub_category in sub_categories:
-        products |= sub_category.product_set.all()
-
-    return products

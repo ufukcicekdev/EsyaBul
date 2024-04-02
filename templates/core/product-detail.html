@@ -1,0 +1,707 @@
+{% extends 'partialsBase/base.html' %}
+{% load custom_filters %}
+{% load static %} {% block title %} Esyala {% endblock title %}
+{% load social_share %}
+
+{% block content %}
+
+
+<style>
+    .star {
+    cursor: pointer;
+    font-size: 25px;
+    color: rgb(168, 168, 168);
+}
+
+.selected {
+    color: gold;
+}
+
+.social-share {
+    display: inline-block;
+    margin-right: 10px; /* İstenilen boşluk miktarını ayarlayın */
+}
+
+.social-share a {
+    display: inline-block;
+    text-decoration: none;
+    color: #fff; /* Buton metin rengi */
+    background-color: #3b5998; /* Facebook rengi örneği */
+    padding: 10px 15px; /* Buton boyutu */
+    border-radius: 5px; /* Buton kenar yuvarlatma */
+}
+
+/* Farklı sosyal medya platformları için özel stiller */
+.social-share .twitter-share a {
+    background-color: #1da1f2; /* Twitter rengi */
+}
+
+.social-share .linkedin-share a {
+    background-color: #0077b5; /* LinkedIn rengi */
+}
+
+
+
+button{
+  outline: none;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  transition: background 0.1s linear, border-color 0.1s linear, color 0.1s linear;
+}
+
+
+::selection{
+  color: #fff;
+  background: #7d2ae8;
+}
+.view-modal, .popupSocial{
+  position: absolute;
+  left: 50%;
+  z-index: 5;
+}
+
+.view-modal{
+  top: 10%;
+  left: 90%;
+  color: #e8e4ee;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 10px 25px;
+  background: rgb(113, 5, 156);
+  transform: translate(-50%, -50%);
+}
+.popupSocial{
+  background: rgb(255, 254, 254);
+  padding: 25px;
+  border-radius: 15px;
+  top: 10%;
+  max-width: 380px;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0px 10px 15px rgba(0,0,0,0.1);
+  transform: translate(-50%, -50%) scale(1.2);
+  transition: top 0s 0.2s ease-in-out,
+              opacity 0.2s 0s ease-in-out,
+              transform 0.2s 0s ease-in-out;
+}
+.popupSocial.show{
+  top: 50%;
+  left: 50%;
+  opacity: 1;
+  pointer-events: auto;
+  transform:translate(-50%, -50%) scale(1);
+  transition: top 0s 0s ease-in-out,
+              opacity 0.2s 0s ease-in-out,
+              transform 0.2s 0s ease-in-out;
+
+}
+.popupSocial :is(header, .icons, .field){
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.popupSocial header{
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ebedf9;
+}
+header span{
+  font-size: 21px;
+  font-weight: 600;
+}
+header .close, .icons a{
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  justify-content: center;
+  transition: all 0.3s ease-in-out;
+} 
+header .close{
+  color: #878787;
+  font-size: 17px;
+  background: #f3f3f3;
+  height: 33px;
+  width: 33px;
+  cursor: pointer;
+}
+header .close:hover{
+  background: #ebedf9;
+}
+.popup .content{
+  margin: 20px 0;
+}
+.popup .icons{
+  margin: 15px 0 20px 0;
+}
+.content p{
+  font-size: 16px;
+}
+.content .icons a{
+  height: 50px;
+  width: 50px;
+  font-size: 20px;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+.icons a i{
+  transition: transform 0.3s ease-in-out;
+}
+.icons a:nth-child(1){
+  color: #1877F2;
+  border-color: #b7d4fb;
+}
+.icons a:nth-child(1):hover{
+  background: #1877F2;
+}
+.icons a:nth-child(2){
+  color: #46C1F6;
+  border-color: #b6e7fc;
+}
+.icons a:nth-child(2):hover{
+  background: #46C1F6;
+}
+.icons a:nth-child(3){
+  color: #e1306c;
+  border-color: #f5bccf;
+}
+.icons a:nth-child(3):hover{
+  background: #e1306c;
+}
+.icons a:nth-child(4){
+  color: #25D366;
+  border-color: #bef4d2;
+}
+.icons a:nth-child(4):hover{
+  background: #25D366;
+}
+.icons a:nth-child(5){
+  color: #0088cc;
+  border-color: #b3e6ff;
+}
+.icons a:nth-child(5):hover{
+  background: #0088cc;
+}
+.icons a:hover{
+  color: #fff;
+  border-color: transparent;
+}
+.icons a:hover i{
+  transform: scale(1.2);
+}
+.content .field{
+  margin: 12px 0 -5px 0;
+  height: 45px;
+  border-radius: 4px;
+  padding: 0 5px;
+  border: 1px solid #757171;
+}
+.field.active{
+  border-color: #7d2ae8;
+}
+.field i{
+  width: 50px;
+  font-size: 18px;
+  text-align: center;
+}
+.field.active i{
+  color: #7d2ae8;
+}
+
+
+.field input{
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 15px;
+}
+.field button{
+  color: #fff;
+  padding: 5px 18px;
+  background: #7d2ae8;
+}
+.field button:hover{
+  background: #8d39fa;
+}
+
+
+/* Diğer sosyal medya platformları için aynı şekilde devam edebilirsiniz */
+
+</style>
+
+<div id="wrapper">
+    <!-- Page Loader -->
+    <div id="pre-loader" class="loader-container">
+        <div class="loader">
+            <img src="{% static 'basestatic/images/svg/rings.svg' %}" alt="loader">
+        </div>
+    </div>
+    <!-- W1 start here -->
+    <div class="w1">
+        <!-- mt header style4 start here -->
+        {% include 'coreBase/header.html' %}
+        <!-- mt header style4 end here -->
+        <!-- mt side menu start here -->
+        <div class="mt-side-menu">
+            <!-- mt holder start here -->
+            <div class="mt-holder">
+                <a href="#" class="side-close"><span></span><span></span></a>
+                <strong class="mt-side-title">MY ACCOUNT</strong>
+                <!-- mt side widget start here -->
+                <div class="mt-side-widget">
+                    <header>
+                        <span class="mt-side-subtitle">SIGN IN</span>
+                        <p>Welcome back! Sign in to Your Account</p>
+                    </header>
+                    <form action="#">
+                        <fieldset>
+                            <input type="text" placeholder="Username or email address" class="input">
+                            <input type="password" placeholder="Password" class="input">
+                            <div class="box">
+                                <span class="left"><input class="checkbox" type="checkbox" id="check1"><label for="check1">Remember Me</label></span>
+                                <a href="#" class="help">Help?</a>
+                            </div>
+                            <button type="submit" class="btn-type1">Login</button>
+                        </fieldset>
+                    </form>
+                </div>
+                <!-- mt side widget end here -->
+                <div class="or-divider"><span class="txt">or</span></div>
+                <!-- mt side widget start here -->
+                <div class="mt-side-widget">
+                    <header>
+                        <span class="mt-side-subtitle">CREATE NEW ACCOUNT</span>
+                        <p>Create your very own account</p>
+                    </header>
+                    <form action="#">
+                        <fieldset>
+                            <input type="text" placeholder="Username or email address" class="input">
+                            <button type="submit" class="btn-type1">Register</button>
+                        </fieldset>
+                    </form>
+                </div>
+                <!-- mt side widget end here -->
+            </div>
+            <!-- mt holder end here -->
+        </div><!-- mt side menu end here -->
+        <!-- mt search popup start here -->
+        <div class="mt-search-popup">
+            <div class="mt-holder">
+                <a href="#" class="search-close"><span></span><span></span></a>
+                <div class="mt-frame">
+                    <form action="#">
+                        <fieldset>
+                            <input type="text" placeholder="Search...">
+                            <span class="icon-microphone"></span>
+                            <button class="icon-magnifier" type="submit"></button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div><!-- mt search popup end here -->
+        <!-- mt main start here -->
+        <main id="mt-main">
+            <!-- Mt Product Detial of the Page -->
+            <section class="mt-product-detial wow fadeInUp" data-wow-delay="0.4s">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <!-- Slider of the Page -->
+                            <div class="slider">
+                                <!-- Comment List of the Page -->
+                                <ul class="list-unstyled comment-list">
+                                    <li><a href="#"><i class="fa fa-heart"></i>{{ wishCount }}</a></li>
+                                    <li><a href="#"><i class="fa fa-comments"></i>({{ reviews.count }})</a></li>
+                                    <li><a href="#" class="share-modal"><i class="fa fa-share-alt"></i> Paylaş</a></li>
+
+                                </ul>
+                               
+                                <div class="popupSocial">
+                                    <header>
+                                        <span>Paylaşım Penceresi</span>
+                                        <div class="close"><i class="uil uil-times"></i></div>
+                                    </header>
+                                    <div class="content">
+                                        <p>Bu linki paylaşın:</p>
+                                        <ul class="icons">
+                                            <li><a href="#" id="facebookShareBtn"><i class="fab fa-facebook-f"></i></a></li>
+                                            <li><a href="#" id="twitterShareBtn"><i class="fab fa-twitter"></i></a></li>
+                                            <li><a href="#" id="linkedinShareBtn"><i class="fab fa-linkedin"></i></a></li>
+                                            <li><a href="#" id="whatsappShareBtn"><i class="fab fa-whatsapp"></i></a></li>
+                                            <li><a href="#" id="telegramShareBtn"><i class="fab fa-telegram-plane"></i></a></li>
+                                            <!-- Diğer sosyal medya platformları için benzer bağlantılar ekleyebilirsiniz -->
+                                        </ul>
+                                        <p>Veya linki kopyalayın:</p>
+                                        <div class="field">
+                                            <i class="url-icon uil uil-link"></i>
+                                            <input type="text" readonly value="{{ request.build_absolute_uri }}">
+                                            <button>Kopyala</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                                <!-- Comment List of the Page end -->
+                               
+                                <div class="product-slider">
+                                    {% for image in product.related_products.all %}
+                                        <div class="slide">
+                                            <img src="{{ image.image.url }}" alt="{{ image.img_alt }}">
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="list-unstyled slick-slider pagg-slider">
+                                    {% for image in product.related_products.all  %}
+                                    <li><div class="img"><img src="{{ image.image.url }}" alt="{{ image.alt }}"></div></li>
+                                    {% endfor %}
+                                </div>
+
+                            </div>
+                            <!-- Slider of the Page end -->
+                            <!-- Detail Holder of the Page -->
+                            <div class="detial-holder">
+                                <!-- Breadcrumbs of the Page -->
+                                <ul class="list-unstyled breadcrumbs">
+                                    <li><a href="#">Chairs <i class="fa fa-angle-right"></i></a></li>
+                                    <li>Products</li>
+                                </ul>
+                                <!-- Breadcrumbs of the Page end -->
+                                <h2>{{ product.name }}</h2>
+                                <!-- Rank Rating of the Page -->
+                                <div class="rank-rating">
+                                    <ul class="list-unstyled rating-list">
+                                        {% if average_rating %}
+                                        {% for star in average_rating|make_star_list %}
+                                        <li><i class="fa fa-star{% if not star %}-o{% endif %}"></i></li>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </ul>
+                                    <span class="total-price">Yorumlar ({{ reviews.count }})</span>
+                                </div>
+                                <!-- Rank Rating of the Page end -->
+                                <ul class="list-unstyled list">
+                                    {% if request.user.is_authenticated %}
+                                        <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{product.id}}" href="#"><i class="fa fa-heart"></i>Beğen</a></li>
+                                    {% endif %}
+                                </ul>
+                                <div class="txt-wrap">
+                                    <p>{{ product.description }}</p>
+                                </div>
+                                <div class="text-holder">
+                                    <span class="price">$ 79.00 <del>399,00</del></span>
+                                </div>
+                                <!-- Product Form of the Page -->
+                                <form action="#" class="product-form">
+                                    <fieldset>
+                                        <div class="row-val">
+                                            <label for="qty">qty</label>
+                                            <input type="number" id="qty" placeholder="1">
+                                        </div>
+                                        <div class="row-val">
+                                            <button type="submit">ADD TO CART</button>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                                <!-- Product Form of the Page end -->
+                            </div>
+                            <!-- Detail Holder of the Page end -->
+                        </div>
+                    </div>
+                </div>
+            </section><!-- Mt Product Detial of the Page end -->
+            <div class="product-detail-tab wow fadeInUp" data-wow-delay="0.4s">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <ul class="mt-tabs text-center text-uppercase">
+                                <li><a href="#tab1" class="active">Ürün Açıklaması</a></li>
+                                <li><a href="#tab2">Ürün Bilgisi</a></li>
+                                <li><a href="#tab3">Yorumlar ({{ reviews.count }})</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="tab1">
+                                    <p>Koila is a chair designed for restaurants and food lovers in general. Designed in collaboration with restaurant professionals, it ensures comfort and an ideal posture, as there are armrests on both sides of the chair. </p>
+                                    <p>Koila is a seat designed for restaurants and gastronomic places in general. Designed in collaboration with professional of restaurants and hotels field, this armchair is composed of a curved shell with a base in oak who has pinched the back upholstered in fabric or leather. It provides comfort and holds for ideal sitting position,the arms may rest on the sides ofthe armchair. <br>Solid oak construction.<br> Back in plywood (2  faces oak veneer) or upholstered in fabric, leather or eco-leather.<br> Seat upholstered in fabric, leather or eco-leather. <br> H 830 x L 585 x P 540 mm.</p>
+                                </div>
+                                <div id="tab2">
+                                    <p>Koila is a chair designed for restaurants and food lovers in general. Designed in collaboration with restaurant professionals, it ensures comfort and an ideal posture, as there are armrests on both sides of the chair. </p>
+                                    <p>Koila is a seat designed for restaurants and gastronomic places in general. Designed in collaboration with professional of restaurants and hotels field, this armchair is composed of a curved shell with a base in oak who has pinched the back upholstered in fabric or leather. It provides comfort and holds for ideal sitting position,the arms may rest on the sides ofthe armchair. <br>Solid oak construction.<br> Back in plywood (2  faces oak veneer) or upholstered in fabric, leather or eco-leather.<br> Seat upholstered in fabric, leather or eco-leather. <br> H 830 x L 585 x P 540 mm.</p>
+                                </div>
+                                <div id="tab3">
+                                    <div class="product-comment">
+                                        {% for review in reviews %}
+                                        <div class="mt-box">
+                                            <div class="mt-hold">
+                                                <ul class="mt-star">
+                                                    {% for star in review.rating|make_star_list %} <!-- Örneğin, rating 3 ise, 3 yıldız gösterir -->
+                                                    <li><i class="fa fa-star{% if not star %}-o{% endif %}"></i></li>
+                                                    {% endfor %}
+                                                </ul>
+                                                <span class="name">{{ review.user.username }}</span> <!-- Yorum yapan kullanıcının adı -->
+                                                <time datetime="{{ review.created_at }}">{{ review.created_at }}</time> <!-- Yorumun oluşturulma tarihi -->
+                                            </div>
+                                            <p>{{ review.comment }}</p> <!-- Yorum içeriği -->
+                                        </div>
+                                        {% endfor %}
+                                                                            
+
+                                        <form id="review-form" class="commentform" method="POST" action="{% url 'products:add_product_review' product_id=product.id %}">
+                                            {% csrf_token %}
+                                            <fieldset>
+                                                <h2>Yorum Ekle</h2>
+                                                <div class="mt-row">
+                                                    <label>Puan</label>
+                                                    <ul class="mt-star">
+                                                        <li><span class="star" data-value="1">&#9733;</span></li>
+                                                        <li><span class="star" data-value="2">&#9733;</span></li>
+                                                        <li><span class="star" data-value="3">&#9733;</span></li>
+                                                        <li><span class="star" data-value="4">&#9733;</span></li>
+                                                        <li><span class="star" data-value="5">&#9733;</span></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="mt-row">
+                                                    <label>Yorum</label>
+                                                    <textarea name="comment" class="form-control"></textarea>
+                                                </div>
+                                                <input type="hidden" id="rating" name="rating" value="0">
+                                                <button type="submit" class="btn-type4">Yorum Ekle</button>
+                                            </fieldset>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- related products start here -->
+            <div class="related-products wow fadeInUp" data-wow-delay="0.4s">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                        <h2>RELATED PRODUCTS</h2>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <!-- mt product1 center start here -->
+                                    <div class="mt-product1 mt-paddingbottom20">
+                                        <div class="box">
+                                            <div class="b1">
+                                                <div class="b2">
+                                                    <a href="product-detail.html"><img src="images/products/img01.jpg" alt="image description"></a>
+                                                    <span class="caption">
+                                                        <span class="new">NEW</span>
+                                                    </span>
+                                                    <ul class="mt-stars">
+                                                        <li><i class="fa fa-star"></i></li>
+                                                        <li><i class="fa fa-star"></i></li>
+                                                        <li><i class="fa fa-star"></i></li>
+                                                        <li><i class="fa fa-star-o"></i></li>
+                                                    </ul>
+                                                    <ul class="links">
+                                                        <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
+                                                        <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
+                                                        <li><a href="#"><i class="icomoon icon-exchange"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="txt">
+                                            <strong class="title"><a href="product-detail.html">Puff Chair</a></strong>
+                                            <span class="price"><i class="fa fa-eur"></i> <span>287,00</span></span>
+                                        </div>
+                                    </div><!-- mt product1 center end here -->
+                                    <!-- mt product1 center start here -->
+                                    <div class="mt-product1 mt-paddingbottom20">
+                                        <div class="box">
+                                            <div class="b1">
+                                                <div class="b2">
+                                                    <a href="product-detail.html"><img src="images/products/img02.jpg" alt="image description"></a>
+                                                    <ul class="links">
+                                                        <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
+                                                        <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
+                                                        <li><a href="#"><i class="icomoon icon-exchange"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="txt">
+                                            <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
+                                            <span class="price"><i class="fa fa-eur"></i> <span>399,00</span></span>
+                                        </div>
+                                    </div><!-- mt product1 center end here -->
+                                    <!-- mt product1 center start here -->
+                                    <div class="mt-product1 mt-paddingbottom20">
+                                        <div class="box">
+                                            <div class="b1">
+                                                <div class="b2">
+                                                    <a href="product-detail.html"><img src="images/products/img03.jpg" alt="image description"></a>
+                                                    <ul class="links">
+                                                        <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
+                                                        <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
+                                                        <li><a href="#"><i class="icomoon icon-exchange"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="txt">
+                                            <strong class="title"><a href="product-detail.html">Wood Chair</a></strong>
+                                            <span class="price"><i class="fa fa-eur"></i> <span>198,00</span></span>
+                                        </div>
+                                    </div><!-- mt product1 center end here -->
+                                    <!-- mt product1 center start here -->
+                                    <div class="mt-product1 mt-paddingbottom20">
+                                        <div class="box">
+                                            <div class="b1">
+                                                <div class="b2">
+                                                    <a href="product-detail.html"><img src="images/products/img04.jpg" alt="image description"></a>
+                                                    <span class="caption">
+                                                        <span class="off">15% Off</span>
+                                                        <span class="new">NEW</span>
+                                                    </span>
+                                                    <ul class="mt-stars">
+                                                        <li><i class="fa fa-star"></i></li>
+                                                        <li><i class="fa fa-star"></i></li>
+                                                        <li><i class="fa fa-star"></i></li>
+                                                        <li><i class="fa fa-star-o"></i></li>
+                                                    </ul>
+                                                    <ul class="links">
+                                                        <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
+                                                        <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
+                                                        <li><a href="#"><i class="icomoon icon-exchange"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="txt">
+                                            <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
+                                            <span class="price"><i class="fa fa-eur"></i> <span>200,00</span></span>
+                                        </div>
+                                    </div><!-- mt product1 center end here -->
+                                    <!-- mt product1 center start here -->
+                                    <div class="mt-product1 mt-paddingbottom20">
+                                        <div class="box">
+                                            <div class="b1">
+                                                <div class="b2">
+                                                    <a href="product-detail.html"><img src="images/products/img05.jpg" alt="image description"></a>
+                                                    <ul class="links">
+                                                        <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
+                                                        <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
+                                                        <li><a href="#"><i class="icomoon icon-exchange"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="txt">
+                                            <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
+                                            <span class="price"><i class="fa fa-eur"></i> <span>200,00</span></span>
+                                        </div>
+                                    </div><!-- mt product1 center end here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- related products end here -->
+            </div>
+        </main><!-- mt main end here -->
+        <!-- footer of the Page -->
+        {% include 'coreBase/footer.html' %}
+        <!-- footer of the Page end -->
+    </div><!-- W1 end here -->
+    <span id="back-top" class="fa fa-arrow-up"></span>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const stars = document.querySelectorAll('.star');
+    const ratingInput = document.getElementById('rating');
+    
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            const value = star.getAttribute('data-value');
+            ratingInput.value = value;
+            stars.forEach(s => {
+                if (parseInt(s.getAttribute('data-value')) <= value) {
+                    s.classList.add('selected');
+                } else {
+                    s.classList.remove('selected');
+                }
+            });
+        });
+    });
+});
+
+const viewBtn = document.querySelector(".share-modal");
+const popup = document.querySelector(".popupSocial");
+const close = popup.querySelector(".close");
+const field = popup.querySelector(".field");
+const input = field.querySelector("input");
+const copy = field.querySelector("button");
+
+viewBtn.addEventListener("click", function(event) {
+    event.preventDefault();
+    popup.classList.toggle("show");
+});
+
+close.addEventListener("click", function(event) {
+    event.preventDefault();
+    popup.classList.remove("show");
+});
+
+copy.addEventListener("click", function(event) {
+    event.preventDefault();
+    input.select(); // Select the input value
+    if (document.execCommand("copy")) { // If the selected text is copied
+        field.classList.add("active");
+        copy.innerText = "Kopyalandı";
+        setTimeout(function() {
+            window.getSelection().removeAllRanges(); // Remove selection from page
+            field.classList.remove("active");
+            copy.innerText = "Kopyala";
+        }, 3000);
+    }
+});
+
+
+document.getElementById("facebookShareBtn").addEventListener("click", function() {
+    var url = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(window.location.href);
+    window.open(url, "_blank", "width=600,height=400");
+});
+
+document.getElementById("twitterShareBtn").addEventListener("click", function() {
+    var url = "https://twitter.com/intent/tweet?url=" + encodeURIComponent(window.location.href);
+    window.open(url, "_blank", "width=600,height=400");
+});
+
+document.getElementById("linkedinShareBtn").addEventListener("click", function() {
+    var url = "https://www.linkedin.com/sharing/share-offsite/?url=" + encodeURIComponent(window.location.href);
+    window.open(url, "_blank", "width=600,height=400");
+});
+
+document.getElementById("whatsappShareBtn").addEventListener("click", function() {
+    var url = "https://api.whatsapp.com/send?text=" + encodeURIComponent(window.location.href);
+    window.open(url, "_blank", "width=600,height=400");
+});
+
+document.getElementById("telegramShareBtn").addEventListener("click", function() {
+    var url = "https://t.me/share/url?url=" + encodeURIComponent(window.location.href);
+    window.open(url, "_blank", "width=600,height=400");
+});
+
+</script>
+
+
+{% endblock %}
+
+
+
+
+
+
+		
+
+
+
+	
