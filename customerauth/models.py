@@ -126,7 +126,7 @@ class MyStyles(models.Model):
 
 class wishlist_model(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, related_name='wishes')
     date = models.DateTimeField(auto_now_add=True)
 
     class Meta:

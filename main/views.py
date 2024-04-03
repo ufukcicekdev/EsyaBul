@@ -3,10 +3,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from main.models import ContactUs,SocialMedia
 from django.http import JsonResponse
-from products.models import Category,Product
+from products.models import Category,Product, ProductReview
 from customerauth.models import wishlist_model
 from django.http import Http404
-from django.db.models import Q
+from django.db.models import Q,Avg
 
 
 def home(request):
@@ -24,13 +24,16 @@ def home(request):
 @login_required(login_url='customerauth:sign-in')
 def my_style_start(request):
     user = request.user
-    user_name = user.username
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
+    wcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+    user_name = user.username
+    
     if user.my_style:
         return redirect('main:home')
 
-    return render(request, 'my_style/my_style_start.html', {'user_name': user_name, "wcount":wcount})
+    return render(request, 'my_style/my_style_start.html', {'user_name': user_name, "wcount":wcount, "main_categories":main_categories})
 
 
 ################### Errors Open ################
@@ -100,6 +103,7 @@ def dynamic_category_product_list_view(request, category_slugs):
             "products": products,
             "main_categories1": main_categories,
             "category_name": main_category,
+            "wcount":wcount,
             "all_categories": Category.objects.all()  # Tüm kategorileri döndür
         }
         return render(request, "core/category-product-list.html", context)
@@ -112,7 +116,14 @@ def dynamic_category_product_list_view(request, category_slugs):
     else:
         target_category = get_object_or_404(Category, slug=category_slug_list[-1])
     if len(category_slug_list) == 1: 
-        products = Product.objects.filter(category=target_category)
+        getMainCategoryList = main_category.children.all()
+        category_query = Q()
+
+        for category in getMainCategoryList:
+            category_query |= Q(category=category)
+
+        products = Product.objects.filter(category_query)
+
     else:
         products = Product.objects.filter(category=target_category)
         
@@ -120,6 +131,11 @@ def dynamic_category_product_list_view(request, category_slugs):
         subcategory.product_count = Product.objects.filter(category=subcategory).count()
     
     
+    for product in products:
+        product.reviews.set(ProductReview.objects.filter(product=product))
+        product.wishes.set(wishlist_model.objects.filter(product=product))
+        product.average_rating = int(product.reviews.aggregate(Avg('rating'))['rating__avg'] or 0)
+
 
     context = {
         "products": products,

@@ -6,7 +6,7 @@ from django.conf import settings
 from customerauth.models import User, Address, MyStyles, wishlist_model
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from products.models import RoomType, HomeType, HomeModel, SpaceDefinition, TimeRange, Product
+from products.models import RoomType, HomeType, HomeModel, SpaceDefinition, TimeRange, Product, Category
 from django.core.mail import EmailMessage
 from actstream import action
 import json
@@ -16,7 +16,15 @@ from django.template.loader import render_to_string
 from cities_light.models import Country, City, Region, SubRegion
 from main.models import SocialMedia
 
+
+
+
+
 def register_view(request):
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
+    wcount =0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
         if form.is_valid():
@@ -28,7 +36,8 @@ def register_view(request):
                 user_name = request.user.username 
                 context1 = {
                     'success_messages': f"Tanıştığımıza memnun oldum, {user_name}!",
-                    'target_url':"main:my_style_start"
+                    'target_url':"main:my_style_start",
+                    'main_categories':main_categories
                 }
                 action.send(request.user , verb='register')
                 return render(request, "customerauth/thank-you.html", context1)
@@ -47,18 +56,22 @@ def register_view(request):
 
     context = {
         'form': form,
+        'main_categories':main_categories,
+        "wcount":wcount
     }
     
     return render(request, "customerauth/sign-up.html", context)
 
 
 def login_view(request):
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     if request.user.is_authenticated:
         action.send(request.user , verb='login')
         user_name = request.user.username 
         context1 = {
             'success_messages': f"Tekrar hoşgeldiniz, {user_name}!",
-            'target_url':"main:my_style_start"
+            'target_url':"main:my_style_start",
+            'main_categories':main_categories
         }
         return render(request, "customerauth/thank-you.html", context1)
     
@@ -81,14 +94,23 @@ def login_view(request):
             
             context1 = {
                 'success_messages': f"Tekrar hoşgeldiniz, {user_name}!",
-                'target_url':"main:my_style_start"
+                'target_url':"main:my_style_start",
+                'main_categories':main_categories
             }
             action.send(request.user , verb='login')
             return render(request, "customerauth/thank-you.html", context1)
         else:
             messages.warning(request, "Hatalı şifre veya kullanıcı adı girdiniz.")
+
+    wcount =0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
+    context= {
+        "main_categories":main_categories,
+        "wcount":wcount
+    }
     
-    return render(request, "customerauth/sign-in.html")
+    return render(request, "customerauth/sign-in.html",context)
         
 
 def logout_view(request):
@@ -102,6 +124,7 @@ def logout_view(request):
 
 @login_required(login_url='customerauth:sign-in')
 def profile_update(request):
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     title = "Hesabım"
     profile = get_object_or_404(User, id=request.user.id)
     wcount =0
@@ -123,22 +146,25 @@ def profile_update(request):
         "form": form,
         "profile": profile,
         "title":title,
-        "wcount":wcount
+        "wcount":wcount,
+        "main_categories":main_categories
     }
 
     return render(request, "customerauth/profile-edit.html", context)
 
 @login_required(login_url='customerauth:sign-in')
 def thank_you_view(request):
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     user_name = request.user.username  # Örneğin, kullanıcı adını alıyorum
     wcount =0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
-    return render(request, "customerauth/thank-you.html", {'user_name': user_name, "wcount":wcount})
+    return render(request, "customerauth/thank-you.html", {'user_name': user_name, "wcount":wcount, "main_categories":main_categories})
 
 
 @login_required(login_url='customerauth:sign-in')
 def customer_dashboard(request):
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     user_profile = get_object_or_404(User, id=request.user.id)
     addresses = Address.objects.filter(user=request.user)
     form = AddressForm(request.POST or None) 
@@ -160,13 +186,15 @@ def customer_dashboard(request):
         "addresses": addresses,
         "form": form ,
         "title":title,
-        "wcount":wcount
+        "wcount":wcount,
+        "main_categories":main_categories
     }
     return render(request, 'customerauth/dashboard.html', context)
 
 
 @login_required(login_url='customerauth:sign-in')
 def password_change(request):
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     title = "Hesabım"
     wcount=0
     if request.user.is_authenticated:
@@ -187,13 +215,15 @@ def password_change(request):
     context = {
         "form": form,
         "title":title,
-        "wcount":wcount
+        "wcount":wcount,
+        "main_categories":main_categories
     }
     return render(request, 'customerauth/password_change.html', context)
 
 
 @login_required(login_url='customerauth:sign-in')
 def notifications(request):
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     title="Bildirimlerim"
     user_profile = get_object_or_404(User, id=request.user.id)
   # varsayılan olarak user'ın profile'ını alır, profile yoksa oluşturur
@@ -213,24 +243,26 @@ def notifications(request):
     else:
         form = NotificationSettingsForm(instance=user_profile)
 
-    return render(request, 'customerauth/notifications.html', {'form': form, 'title':title, "wcount":wcount})
+    return render(request, 'customerauth/notifications.html', {'form': form, 'title':title, "wcount":wcount, "main_categories":main_categories})
 
 ###################### Address  Open #################
 
 @login_required(login_url='customerauth:sign-in')
 def address_list(request):
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     title ="Adreslerim"
     wcount =0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
     addresses = Address.objects.filter(user=request.user)
     form = AddressForm(request.POST or None) 
-    return render(request, 'customerauth/address.html', {'addresses': addresses, 'form': form, 'title':title ,"wcount":wcount})
+    return render(request, 'customerauth/address.html', {'addresses': addresses, 'form': form, 'title':title ,"wcount":wcount, "main_categories":main_categories})
 
 
 @login_required(login_url='customerauth:sign-in')
 def create_address(request):
     title ="Adreslerim"
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     wcount =0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
@@ -247,11 +279,12 @@ def create_address(request):
     else:
         form = AddressForm()
 
-    return render(request, 'customerauth/add-new-address.html', {'form': form, 'title': title, "wcount":wcount})
+    return render(request, 'customerauth/add-new-address.html', {'form': form, 'title': title, "wcount":wcount, "main_categories":main_categories})
 
 
 @login_required(login_url='customerauth:sign-in')
 def edit_address(request, address_id):
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     title ="Adreslerim"
     address = get_object_or_404(Address, id=address_id)
     wcount =0
@@ -266,7 +299,7 @@ def edit_address(request, address_id):
     else:
         form = AddressForm(instance=address)
 
-    return render(request, 'customerauth/edit-address.html', {'form': form, 'address': address, 'title': title, "wcount":wcount})
+    return render(request, 'customerauth/edit-address.html', {'form': form, 'address': address, 'title': title, "wcount":wcount, "main_categories":main_categories})
 
 
 @login_required(login_url='customerauth:sign-in')
@@ -293,6 +326,7 @@ def get_subregions(request):
 
 @login_required(login_url='customerauth:sign-in')
 def room_type_selected(request):
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     active_room_types = RoomType.objects.filter(is_active=True)
     wcount=0
     if request.user.is_authenticated:
@@ -320,11 +354,12 @@ def room_type_selected(request):
             else:
                 messages.error(request, 'Invalid room type selected.')
 
-    return render(request, 'my_style/room_type_selected.html', {'room_types': active_room_types, "wcount":wcount})
+    return render(request, 'my_style/room_type_selected.html', {'room_types': active_room_types, "wcount":wcount, "main_categories":main_categories})
 
 
 @login_required(login_url='customerauth:sign-in')
 def home_type_selected(request):
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     active_home_types = HomeType.objects.filter(is_active=True)
     wcount=0
     if request.user.is_authenticated:
@@ -352,12 +387,13 @@ def home_type_selected(request):
             else:
                 messages.error(request, 'Invalid room type selected.')
 
-    return render(request, 'my_style/home_type_selected.html', {'home_types': active_home_types, "wcount":wcount})
+    return render(request, 'my_style/home_type_selected.html', {'home_types': active_home_types, "wcount":wcount,"main_categories":main_categories})
 
 
 @login_required(login_url='customerauth:sign-in')
 def home_model_selected(request):
     active_space_definations = HomeModel.objects.filter(is_active=True)
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     wcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
@@ -385,12 +421,13 @@ def home_model_selected(request):
                 messages.error(request, 'Invalid room type selected.')
     
 
-    return render(request, 'my_style/home_model_selected.html', {'home_models': active_space_definations, "wcount":wcount})
+    return render(request, 'my_style/home_model_selected.html', {'home_models': active_space_definations, "wcount":wcount,"main_categories":main_categories})
 
 
 @login_required(login_url='customerauth:sign-in')
 def space_definations_selected(request):
     active_space_def = SpaceDefinition.objects.filter(is_active=True)
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     wcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
@@ -418,11 +455,12 @@ def space_definations_selected(request):
                 messages.error(request, 'Invalid room type selected.')
     
 
-    return render(request, 'my_style/space_definations_selected.html', {'space_defs': active_space_def, "wcount":wcount})
+    return render(request, 'my_style/space_definations_selected.html', {'space_defs': active_space_def, "wcount":wcount,"main_categories":main_categories})
 
 
 @login_required(login_url='customerauth:sign-in')
 def time_range_selected(request):
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     active_time_range = TimeRange.objects.filter(is_active=True)
     wcount=0
     if request.user.is_authenticated:
@@ -451,7 +489,7 @@ def time_range_selected(request):
                 messages.error(request, 'Invalid room type selected.')
     
 
-    return render(request, 'my_style/time_range_selected.html', {'time_ranges': active_time_range, "wcount":wcount})
+    return render(request, 'my_style/time_range_selected.html', {'time_ranges': active_time_range, "wcount":wcount, "main_categories":main_categories})
 
 
 def update_user_my_style_status(user):
@@ -471,6 +509,7 @@ def update_user_my_style_status(user):
 
 
 def forgot_password(request):
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     if request.method=="POST":
         un = request.POST["username"]
         pwd = request.POST["npass"]
@@ -485,7 +524,8 @@ def forgot_password(request):
 
         context1 = {
             'success_messages': f"Şifren başarıyla değiştirildi. Tekrar hoşgeldin, {user_name}!",
-            'target_url':"main:home"
+            'target_url':"main:home",
+            'main_categories':main_categories
         }
         return render(request, "customerauth/thank-you.html", context1)
     
@@ -495,6 +535,7 @@ def forgot_password(request):
 import random
 
 def reset_password(request):
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     username = request.GET.get("username")
     try:
         user = get_object_or_404(User, username=username)
@@ -503,7 +544,8 @@ def reset_password(request):
         context = {
             'username': user.username,
             'otp': otp,
-            "social_media_links":social_media_links
+            "social_media_links":social_media_links,
+            "main_categories":main_categories
         }
         email_content = render_to_string('email_templates/reset_password_email.html', context)
         try:
@@ -524,6 +566,7 @@ def reset_password(request):
     
 @login_required(login_url='customerauth:sign-in')
 def wishlist_view(request):
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     wishlistProducts = wishlist_model.objects.filter(user=request.user)
     title = "Beğendiklerim"
     wcount=0
@@ -532,7 +575,8 @@ def wishlist_view(request):
     context = {
         "wishlistProducts":wishlistProducts,
         "title":title,
-        "wcount":wcount
+        "wcount":wcount,
+        "main_categories":main_categories
     }
     return render(request, "customerauth/wishlist.html", context)
 
