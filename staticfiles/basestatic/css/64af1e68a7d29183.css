@@ -1163,8 +1163,7 @@ button:focus:not(:focus-visible) {
 button,
 input,
 optgroup,
-select,
-textarea {
+select {
     margin: 0;
     font-family: inherit;
     font-size: inherit;
@@ -1211,9 +1210,6 @@ button:not(:disabled) {
     border-style: none
 }
 
-textarea {
-    resize: vertical
-}
 
 fieldset {
     min-width: 0;

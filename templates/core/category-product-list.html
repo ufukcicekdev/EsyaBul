@@ -448,8 +448,8 @@ header .close:hover{
                         <div class="detial-holder">
                             <!-- Breadcrumbs of the Page -->
                             <ul class="list-unstyled breadcrumbs">
-                                <li><a href="#">Chairs <i class="fa fa-angle-right"></i></a></li>
-                                <li>Products</li>
+                                    <li class="breadcrumb-item">{{ product.get_category_breadcrumb }}</li>
+                                
                             </ul>
                             <!-- Breadcrumbs of the Page end -->
                             <h2>{{ product.name }}</h2>

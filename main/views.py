@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from main.models import ContactUs,SocialMedia
+from main.models import ContactUs,SocialMedia, HomeMainBanner
 from django.http import JsonResponse
 from products.models import Category,Product, ProductReview
 from customerauth.models import wishlist_model
@@ -12,11 +12,19 @@ from django.db.models import Q,Avg
 def home(request):
     social_media_links = SocialMedia.objects.all()
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
+    homemainbanners = HomeMainBanner.objects.filter(is_active=True)
     wcount = 0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+
+    context = {
+        'social_media_links': social_media_links, 
+        "wcount": wcount, 
+        'main_categories':main_categories,
+        "homemainbanners":homemainbanners
+    }
         
-    return render(request, 'coreBase/home.html', {'social_media_links': social_media_links, "wcount": wcount, 'main_categories':main_categories})
+    return render(request, 'coreBase/home.html', context)
 
 
 

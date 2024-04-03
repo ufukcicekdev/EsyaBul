@@ -128,6 +128,14 @@ class Product(models.Model):
         if self.selling_old_price !=0:
             new_price = (self.selling_price / self.selling_old_price) * 100
             return new_price
+        
+    def get_category_breadcrumb(self):
+        breadcrumbs = []
+        category = self.category
+        while category:
+            breadcrumbs.insert(0, category.name)
+            category = category.parent
+        return ' > '.join(breadcrumbs)
 
 class ProductReview(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

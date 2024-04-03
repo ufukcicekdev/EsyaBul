@@ -35,9 +35,9 @@
                         <li><a href="#" class="icon-magnifier"></a></li>
                         <li class="">
                             {% if request.user.is_authenticated %}
-                            <a href="#" class="icon-heart cart-opener"><span style="margin-bottom: -3px;" class="num wish-count">{{ wcount }}</span></a>
+                            <a href="{% url 'customerauth:wishlist' %}" class="icon-heart cart-opener"><span style="margin-bottom: -3px;" class="num wish-count">{{ wcount }}</span></a>
                             {% else %}
-                            <a href="#" class="icon-heart cart-opener"><span style="margin-bottom: -3px;" class="num wish-count">{{ wcount }}</span></a>
+                            <a href="{% url 'customerauth:wishlist' %}" class="icon-heart cart-opener"><span style="margin-bottom: -3px;" class="num wish-count">{{ wcount }}</span></a>
                             {% endif %}
                             
                             <!-- mt drop start here -->
@@ -174,34 +174,22 @@
                                         <div class="mt-f-box">
                                             {% if  main_categories.count > 0 %}
                                             {% for category in main_categories %}
-                                            <!-- mt col3 start here -->
-                                            <div class="mt-col-3">
-                                                <div class="sub-dropcont">
-                                                    <strong class="title"><a href="{% url 'main:dynamic-category-product-list' category.slug %}" class="mt-subopener">{{ category.name }}</a></strong>
-                                                    <div class="sub-drop">
-                                                        <ul>
-                                                            {% for child in category.children.all %}
-                                                                <li>
-                                                                    <a href="{% url 'main:dynamic-category-product-list' category_slugs=category.slug|add:'/'|add:child.slug %}">{{ child.name }}</a>
-                                                                    {% if child.children.exists %}
-                                                                        <!-- Alt kategoriler için dropdown -->
-                                                                        <div class="sub-drop">
-                                                                            <ul>
-                                                                                {% for sub_child in child.children.all %}
-                                                                                    <li><a href="{% url 'main:dynamic-category-product-list' category_slugs=category.slug|add:'/'|add:child.slug|add:'/'|add:sub_child.slug %}">{{ sub_child.name }}</a></li>
-                                                                                {% endfor %}
-                                                                            </ul>
-                                                                        </div>
-                                                                    {% endif %}
-                                                                </li>
-                                                            {% endfor %}
-                                                        </ul>
+                                                    <!-- mt col3 start here -->
+                                                    <div class="mt-col-3">
+                                                        <div class="sub-dropcont">
+                                                            <strong class="title"><a href="{% url 'main:dynamic-category-product-list' category.slug %}" class="mt-subopener">{{ category.name }}</a></strong>
+                                                            <div class="sub-drop">
+                                                                <ul>
+                                                                    {% for child in category.children.all %}
+                                                                        <li><a href="{% url 'main:dynamic-category-product-list' category_slugs=category.slug|add:'/'|add:child.slug %}">{{ child.name }}</a></li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            </div>
+                                                            <a href="{% url 'main:dynamic-category-product-list' category.slug %}" class=""><i class="fa fa-angle-right" aria-hidden="true">Tümünü Gör</i></a>
+                                                        </div>
                                                     </div>
-                                                    <a href="{% url 'main:dynamic-category-product-list' category.slug %}" class=""><i class="fa fa-angle-right" aria-hidden="true">Tümünü Gör</i></a>
-                                                </div>
-                                            </div>
-                                            <!-- mt col3 end here -->
-                                        {% endfor %}
+                                                    <!-- mt col3 end here -->
+                                                {% endfor %}
                                         
                                             {% else %}
                                             {% for category in main_categories %}

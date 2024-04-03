@@ -1,15 +1,6 @@
 from django.contrib import admin
-from main.models import HomeBanner, ContactUs,SocialMedia
+from main.models import ContactUs,SocialMedia, HomeMainBanner
 
-
-@admin.register(HomeBanner)
-class HomeBannerAdmin(admin.ModelAdmin):
-    list_display = ('img_title', 'is_active', 'link')
-    search_fields = ('img_title', 'link')
-    list_filter = ('is_active',)
-    ordering = ('-id',)
-    fields = ('img', 'img_alt', 'img_title', 'is_active', 'link')
-    readonly_fields = ('img_title',) 
 
 
 
@@ -24,3 +15,18 @@ class ContactUsAdmin(admin.ModelAdmin):
 class SocialMediaAdmin(admin.ModelAdmin):
     list_display = ('name', 'link')
     search_fields = ('name',)
+
+
+
+class HomeMainBannerAdmin(admin.ModelAdmin):
+    list_display = ('title', 'subtitle', 'image_preview')
+    readonly_fields = ('image_preview',)
+    fields = ('title', 'subtitle', 'image', 'text_color', 'description', 'title_position', 'link')
+
+    def image_preview(self, obj):
+        return obj.image_preview()
+
+    image_preview.short_description = 'Image Preview'
+
+admin.site.register(HomeMainBanner, HomeMainBannerAdmin)
+
