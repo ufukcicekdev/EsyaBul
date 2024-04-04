@@ -535,7 +535,6 @@ def forgot_password(request):
 import random
 
 def reset_password(request):
-    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     username = request.GET.get("username")
     try:
         user = get_object_or_404(User, username=username)
@@ -545,7 +544,6 @@ def reset_password(request):
             'username': user.username,
             'otp': otp,
             "social_media_links":social_media_links,
-            "main_categories":main_categories
         }
         email_content = render_to_string('email_templates/reset_password_email.html', context)
         try:
@@ -555,7 +553,8 @@ def reset_password(request):
             return JsonResponse({"status": "sent", "email": user.email, "rotp": otp})
         except:
             return JsonResponse({"status": "error", "email": user.email})
-    except:
+    except Exception as e:
+        print("----", e)
         return JsonResponse({"status": "failed"})
     
 ################### Forgot Passwords Close ################
