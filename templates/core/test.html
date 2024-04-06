@@ -1,80 +1,49 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<ul class="list-unstyled pagg-slider slick-initialized slick-slider"><button type="button" data-role="none"
+        class="slick-prev slick-arrow" aria-label="Previous" role="button" style="display: block;">Previous</button>
 
-    <title>Parola Sıfırlama</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .header {
-            text-align: center;
-        }
-        .content {
-            margin-top: 20px;
-        }
-        .footer {
-            margin-top: 20px;
-            text-align: center;
-        }
-        
-    </style>
-</head>
-<body>
-    <div class="container" >
-        <div class="header">
-            <h2>Parola Sıfırlama</h2>
+    <div aria-live="polite" class="slick-list draggable">
+        <div class="slick-track" role="listbox" style="opacity: 1; width: 1120px; left: -320px;">
+            <li class="slick-slide slick-cloned" tabindex="-1" role="option" aria-describedby="slick-slide62"
+                style="width: 80px;" data-slick-index="-4" aria-hidden="true"><img src="images/img03.jpg"
+                    alt="image description"></li>
+            <li class="slick-slide slick-cloned" tabindex="-1" role="option" aria-describedby="slick-slide63"
+                style="width: 80px;" data-slick-index="-3" aria-hidden="true"><img src="images/img03.jpg"
+                    alt="image description"></li>
+            <li class="slick-slide slick-cloned" tabindex="-1" role="option" aria-describedby="slick-slide64"
+                style="width: 80px;" data-slick-index="-2" aria-hidden="true"><img src="images/img03.jpg"
+                    alt="image description"></li>
+            <li class="slick-slide slick-cloned" tabindex="-1" role="option" aria-describedby="slick-slide65"
+                style="width: 80px;" data-slick-index="-1" aria-hidden="true"><img src="images/img03.jpg"
+                    alt="image description"></li>
+            <li class="slick-slide slick-current slick-active" tabindex="-1" role="option"
+                aria-describedby="slick-slide60" style="width: 80px;" data-slick-index="0" aria-hidden="false"><img
+                    src="images/img03.jpg" alt="image description"></li>
+            <li class="slick-slide slick-active" tabindex="-1" role="option" aria-describedby="slick-slide61"
+                style="width: 80px;" data-slick-index="1" aria-hidden="false"><img src="images/img03.jpg"
+                    alt="image description"></li>
+            <li class="slick-slide slick-active" tabindex="-1" role="option" aria-describedby="slick-slide62"
+                style="width: 80px;" data-slick-index="2" aria-hidden="false"><img src="images/img03.jpg"
+                    alt="image description"></li>
+            <li class="slick-slide slick-active" tabindex="-1" role="option" aria-describedby="slick-slide63"
+                style="width: 80px;" data-slick-index="3" aria-hidden="false"><img src="images/img03.jpg"
+                    alt="image description"></li>
+            <li class="slick-slide" tabindex="-1" role="option" aria-describedby="slick-slide64" style="width: 80px;"
+                data-slick-index="4" aria-hidden="true"><img src="images/img03.jpg" alt="image description"></li>
+            <li class="slick-slide" tabindex="-1" role="option" aria-describedby="slick-slide65" style="width: 80px;"
+                data-slick-index="5" aria-hidden="true"><img src="images/img03.jpg" alt="image description"></li>
+            <li class="slick-slide slick-cloned" tabindex="-1" role="option" aria-describedby="slick-slide60"
+                style="width: 80px;" data-slick-index="6" aria-hidden="true"><img src="images/img03.jpg"
+                    alt="image description"></li>
+            <li class="slick-slide slick-cloned" tabindex="-1" role="option" aria-describedby="slick-slide61"
+                style="width: 80px;" data-slick-index="7" aria-hidden="true"><img src="images/img03.jpg"
+                    alt="image description"></li>
+            <li class="slick-slide slick-cloned" tabindex="-1" role="option" aria-describedby="slick-slide62"
+                style="width: 80px;" data-slick-index="8" aria-hidden="true"><img src="images/img03.jpg"
+                    alt="image description"></li>
+            <li class="slick-slide slick-cloned" tabindex="-1" role="option" aria-describedby="slick-slide63"
+                style="width: 80px;" data-slick-index="9" aria-hidden="true"><img src="images/img03.jpg"
+                    alt="image description"></li>
         </div>
-        <div class="content" style="text-align: center">
-            <p>Merhaba {{ username }},</p>
-            <p>{{ otp }} Tek Kullanımlık Parolanız (OTP)</p>
-            <p>Başkalarıyla paylaşmayınız</p>
-            <p>Teşekkürler & Saygılar, EsyaBul</p>
-        </div>
-        <div class="footer" style="text-align: center;">
-            <img src="{% static 'basestatic/images/esyalacom.png' %}" alt="Logo">
-            <p>EsyaBul</p>
-            <div class="followUs">
-                {% if social_media_links.count > 0 %}
-                <div class="title body-bold-13-16">Bizi takip edin -</div>
-                <div class="socials">
-                    {% for social_media in social_media_links %}
-                        {% if social_media.name == 'facebook' %}
-                        <li><a target="_blank" rel="noopener noreferrer" href="{{ social_media.link }}"><i class="fa fa-facebook"></i></a></li>
-                        {% elif social_media.name == 'twitter' %}
-                        <li><a target="_blank" rel="noopener noreferrer" href="{{ social_media.link }}"><i class="fa fa-twitter"></i></a></li>
-                        {% elif social_media.name == 'instagram' %}
-                        <li><a target="_blank" rel="noopener noreferrer" href="{{ social_media.link }}"><i class="fa fa-instagram"></i></a></li>
-                        {% elif social_media.name == 'linkedin' %}
-                        <li><a target="_blank" rel="noopener noreferrer" href="{{ social_media.link }}"><i class="fa fa-linkedin"></i></a></li>
-                        {% elif social_media.name == 'youtube' %}
-                        <li><a target="_blank" rel="noopener noreferrer" href="{{ social_media.link }}"><i class="fa fa-youtube"></i></a></li>
-                        {% endif %}
-                    {% endfor %}
-
-
-                </div>
-
-                {% endif %}
-
-        </div>
-    </div>
-</body>
-</html>
-
+    </div><button type="button" data-role="none" class="slick-next slick-arrow" aria-label="Next" role="button"
+        style="display: block;">Next</button>
+</ul>

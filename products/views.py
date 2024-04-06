@@ -4,9 +4,11 @@ from customerauth.models import wishlist_model
 from products.forms import ProductReviewForm
 from django.urls import reverse
 from django.db.models import Avg
+from main.models import SocialMedia
 
 
 def product_detail_view(request, product_slug):
+    social_media_links = SocialMedia.objects.all()
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     product = get_object_or_404(Product, slug=product_slug, is_active=True)
     wcount=0
@@ -28,7 +30,8 @@ def product_detail_view(request, product_slug):
         'wcount':wcount,
         'reviews':reviews,
         'average_rating':average_rating,
-        'wishCount': wish_count
+        'wishCount': wish_count,
+        "social_media_links":social_media_links
     }
     
     return render(request, 'core/product-detail.html', context)

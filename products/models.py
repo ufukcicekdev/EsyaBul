@@ -99,9 +99,10 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=1000)
     slug = AutoSlugField(populate_from='name', unique=True)
     description = models.TextField(blank=True, null=True)
+    information = models.TextField(blank=True, null=True)
     selling_price = models.DecimalField(max_digits=10, decimal_places=2)
     selling_old_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     in_stock = models.IntegerField(default=10)
@@ -149,13 +150,18 @@ class ProductReview(models.Model):
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='related_products', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='product_images/')
-    img_alt = models.CharField(max_length=255, unique=True)
-    img_title = models.CharField(max_length=255, unique=True)
-
+    img_alt = models.CharField(max_length=1000, blank=True)
+    img_title = models.CharField(max_length=1000, blank=True)
 
     def __str__(self):
         return f"Image of {self.product.name}"
 
+    def save(self, *args, **kwargs):
+        if not self.img_alt:
+            self.img_alt = self.product.name
+        if not self.img_title:
+            self.img_title = self.product.name
+        super().save(*args, **kwargs)
 
 
 class ProductRentalPrice(models.Model):

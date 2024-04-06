@@ -1066,10 +1066,7 @@
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.05);
 }
 
-form {
-    width: 100%;
-    max-width: 400px; /* Form genişliğini isteğe bağlı olarak ayarlayın */
-}
+
 
 .form-group {
     margin-bottom: 15px;

@@ -32,6 +32,7 @@ def home(request):
 @login_required(login_url='customerauth:sign-in')
 def my_style_start(request):
     user = request.user
+    social_media_links = SocialMedia.objects.all()
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     wcount=0
     if request.user.is_authenticated:
@@ -41,16 +42,28 @@ def my_style_start(request):
     if user.my_style:
         return redirect('main:home')
 
-    return render(request, 'my_style/my_style_start.html', {'user_name': user_name, "wcount":wcount, "main_categories":main_categories})
+    return render(request, 'my_style/my_style_start.html', {'user_name': user_name, "wcount":wcount, "main_categories":main_categories,"social_media_links":social_media_links})
 
 
 ################### Errors Open ################
 
 def custom_404_page(request, exception):
-    return render(request, 'errors/404.html', status=404)
+    social_media_links = SocialMedia.objects.all()
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
+    context = {
+        "social_media_links":social_media_links,
+        "main_categories":main_categories
+    }
+    return render(request, 'errors/404.html', context, status=404)
 
 def custom_500_page(request):
-    return render(request, 'errors/500.html', status=500)
+    social_media_links = SocialMedia.objects.all()
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
+    context = {
+        "social_media_links":social_media_links,
+        "main_categories":main_categories
+    }
+    return render(request, 'errors/500.html', context, status=500)
 
 
 ################### Errors Close ################
@@ -60,11 +73,12 @@ def custom_500_page(request):
 
 
 def contact(request):
+    social_media_links = SocialMedia.objects.all()
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     wcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
-    return render(request, "mainBase/contact.html", {'wcount':wcount, 'main_categories':main_categories})
+    return render(request, "mainBase/contact.html", {'wcount':wcount, 'main_categories':main_categories, 'social_media_links':social_media_links})
 
 
 def ajax_contact_form(request):
@@ -94,6 +108,7 @@ def ajax_contact_form(request):
 ################### Contact Close ################
 
 def dynamic_category_product_list_view(request, category_slugs):
+    social_media_links = SocialMedia.objects.all()
     category_slug_list = category_slugs.split('/')
     
     wcount=0
@@ -112,6 +127,7 @@ def dynamic_category_product_list_view(request, category_slugs):
             "main_categories1": main_categories,
             "category_name": main_category,
             "wcount":wcount,
+            "social_media_links":social_media_links,
             "all_categories": Category.objects.all()  # Tüm kategorileri döndür
         }
         return render(request, "core/category-product-list.html", context)
@@ -152,6 +168,7 @@ def dynamic_category_product_list_view(request, category_slugs):
         "category_name": target_category,
         "subcategories": subcategories,
         "main_categories": main_categories,
+        "social_media_links":social_media_links
     }
     
     return render(request, "core/category-product-list.html", context)

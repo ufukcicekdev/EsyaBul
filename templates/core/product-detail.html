@@ -220,49 +220,7 @@ header .close:hover{
         <!-- mt header style4 start here -->
         {% include 'coreBase/header.html' %}
         <!-- mt header style4 end here -->
-        <!-- mt side menu start here -->
-        <div class="mt-side-menu">
-            <!-- mt holder start here -->
-            <div class="mt-holder">
-                <a href="#" class="side-close"><span></span><span></span></a>
-                <strong class="mt-side-title">MY ACCOUNT</strong>
-                <!-- mt side widget start here -->
-                <div class="mt-side-widget">
-                    <header>
-                        <span class="mt-side-subtitle">SIGN IN</span>
-                        <p>Welcome back! Sign in to Your Account</p>
-                    </header>
-                    <form action="#">
-                        <fieldset>
-                            <input type="text" placeholder="Username or email address" class="input">
-                            <input type="password" placeholder="Password" class="input">
-                            <div class="box">
-                                <span class="left"><input class="checkbox" type="checkbox" id="check1"><label for="check1">Remember Me</label></span>
-                                <a href="#" class="help">Help?</a>
-                            </div>
-                            <button type="submit" class="btn-type1">Login</button>
-                        </fieldset>
-                    </form>
-                </div>
-                <!-- mt side widget end here -->
-                <div class="or-divider"><span class="txt">or</span></div>
-                <!-- mt side widget start here -->
-                <div class="mt-side-widget">
-                    <header>
-                        <span class="mt-side-subtitle">CREATE NEW ACCOUNT</span>
-                        <p>Create your very own account</p>
-                    </header>
-                    <form action="#">
-                        <fieldset>
-                            <input type="text" placeholder="Username or email address" class="input">
-                            <button type="submit" class="btn-type1">Register</button>
-                        </fieldset>
-                    </form>
-                </div>
-                <!-- mt side widget end here -->
-            </div>
-            <!-- mt holder end here -->
-        </div><!-- mt side menu end here -->
+
         <!-- mt search popup start here -->
         <div class="mt-search-popup">
             <div class="mt-holder">
@@ -319,20 +277,18 @@ header .close:hover{
                                     </div>
                                 </div>
                                 
-                                
-                                <!-- Comment List of the Page end -->
-                               
+                                                           
                                 <div class="product-slider">
                                     {% for image in product.related_products.all %}
                                         <div class="slide">
-                                            <img src="{{ image.image.url }}" alt="{{ image.img_alt }}">
+                                            <img src="{{ image.image.url }}" alt="{{ image.img_alt }}" title="{{ image.title }}">
                                         </div>
                                     {% endfor %}
                                 </div>
 
                                 <div class="list-unstyled slick-slider pagg-slider">
                                     {% for image in product.related_products.all  %}
-                                    <li><div class="img"><img src="{{ image.image.url }}" alt="{{ image.alt }}"></div></li>
+                                    <li><div class="img"><img src="{{ image.image.url }}" alt="{{ image.alt }}" title="{{ image.title }}"></div></li>
                                     {% endfor %}
                                 </div>
 
@@ -368,7 +324,10 @@ header .close:hover{
                                     <p>{{ product.description }}</p>
                                 </div>
                                 <div class="text-holder">
-                                    <span class="price">$ 79.00 <del>399,00</del></span>
+                                    {% if product.selling_old_price is not null %}
+                                        <del class="off"><i class="fa fa-try"></i> <span>{{product.selling_old_price}}</span></del>
+                                        {% endif %}
+                                        <span class="price"><i class="fa fa-try"></i> <span>{{product.selling_price}}</span></span>
                                 </div>
                                 <!-- Product Form of the Page -->
                                 <form action="#" class="product-form">
