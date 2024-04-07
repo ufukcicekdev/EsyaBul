@@ -3,6 +3,9 @@ from autoslug import AutoSlugField
 from django_ckeditor_5.fields import CKEditor5Field
 from django.utils import timezone
 from esyabul import settings
+from django.core.exceptions import ValidationError
+
+
 # Oda Tipleri (Living Room, Bedroom, Kitchen vb.)
 class RoomType(models.Model):
     name = models.CharField(max_length=100)
@@ -166,16 +169,52 @@ class ProductImage(models.Model):
 
 class ProductRentalPrice(models.Model):
     RENTAL_MOUTHLY_CHOICES = (
-        ('0-3', '0-3'),
-        ('0-6', '0-6'),
-        ('0-9', '0-9'),
-        ('0-12', '0-12'),
+        ('1-3', '1-3'),
+        ('4-6', '4-6'),
+        ('7-9', '7-9'),
+        ('10-12', '10-12'),
+        ('13-18', '13-18'),
+        ('19-24', '19-24'),
     )
     product = models.ForeignKey(Product, related_name='related_products_price', on_delete=models.CASCADE)
     
-    name = models.CharField(max_length=20, choices=RENTAL_MOUTHLY_CHOICES, unique=True)
+    name = models.CharField(max_length=20, choices=RENTAL_MOUTHLY_CHOICES, unique=True, null=True)
     rental_price = models.DecimalField(max_digits=10, decimal_places=2)
     rental_old_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
+    def clean(self):
+        if self.rental_old_price < self.rental_price:
+            raise ValidationError("Eski kiralama fiyatı yeni fiyattan küçük olamaz.")
     def __str__(self):
         return self.get_name_display()
+    
+
+class Cart(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    items = models.ManyToManyField('CartItem', related_name='carts')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def total_price(self):
+        total = 0
+        for item in self.items.all():
+            total += item.subtotal()
+        return total
+    
+    
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    rental_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    selling_price = models.DecimalField(max_digits=10, decimal_places=2)
+    is_rental = models.BooleanField(default=False)
+    rental_period = models.CharField(max_length=20, choices=ProductRentalPrice.RENTAL_MOUTHLY_CHOICES, null=True, blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def subtotal(self):
+        if self.is_rental:
+            return self.rental_price * self.quantity
+        else:
+            return self.selling_price * self.quantity

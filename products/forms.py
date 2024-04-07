@@ -1,5 +1,5 @@
 from django import forms
-from .models import ProductReview
+from .models import ProductReview, CartItem
 
 class ProductReviewForm(forms.ModelForm):
     class Meta:
@@ -11,5 +11,12 @@ class ProductReviewForm(forms.ModelForm):
         }
 
 
+
+
+
+class CartItemForm(forms.ModelForm):
+    class Meta:
+        model = CartItem
+        fields = ['product', 'quantity', 'is_rental', 'rental_period']
 
 

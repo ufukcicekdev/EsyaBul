@@ -276,8 +276,8 @@ header .close:hover{
                                         </div>
                                     </div>
                                 </div>
-                                
-                                                           
+
+                              
                                 <div class="product-slider">
                                     {% for image in product.related_products.all %}
                                         <div class="slide">
@@ -314,6 +314,7 @@ header .close:hover{
                                     </ul>
                                     <span class="total-price">Yorumlar ({{ reviews.count }})</span>
                                 </div>
+
                                 <!-- Rank Rating of the Page end -->
                                 <ul class="list-unstyled list">
                                     {% if request.user.is_authenticated %}
@@ -323,24 +324,86 @@ header .close:hover{
                                 <div class="txt-wrap">
                                     <p>{{ product.description }}</p>
                                 </div>
-                                <div class="text-holder">
-                                    {% if product.selling_old_price is not null %}
-                                        <del class="off"><i class="fa fa-try"></i> <span>{{product.selling_old_price}}</span></del>
-                                        {% endif %}
-                                        <span class="price"><i class="fa fa-try"></i> <span>{{product.selling_price}}</span></span>
+                                <div class="price-options">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Fiyat Türü</th>
+                                                <th>Fiyat</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Satın Alma</td>
+                                                <td>
+                                                    {% if product.selling_old_price != 0 %}
+                                                        <del><i class="fa fa-try"></i> {{ product.selling_old_price }}</del><br>
+                                                    {% endif %}
+                                                    <span class="price"><i class="fa fa-try"></i> {{ product.selling_price }}</span>
+                                                </td>
+                                            </tr>
+                                            {% for price in product.related_products_price.all %}
+                                                <tr>
+                                                    <td>{{ price.name }} Ay Kiralama</td>
+                                                    <td>
+                                                        {% if price.rental_old_price != 0 %}
+                                                            <del><i class="fa fa-try"></i> {{ price.rental_old_price }}</del><br>
+                                                        {% endif %}
+                                                        <span class="price"><i class="fa fa-try"></i> {{ price.rental_price }}</span>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+    
+                                        </tbody>
+                                    </table>
+
+                                    <form id="add-to-cart-form">
+                                        <fieldset>
+                                            <input class="form-control" type="hidden" name="product_id" value="{{ product.id }}">
+                                            <div class="form-group">
+                                                <label for="price_type">Fiyat Türü:</label>
+                                                <select class="form-control" id="price_type" name="price_type">
+                                                    <option value="selling">Satın Alma</option>
+                                                    <option value="rental">Kiralama</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <!-- Satın Alma Fiyatı -->
+                                            <div id="selling_options">
+                                                <div class="form-group">
+                                                    <label for="selling_price">Satın Alma Fiyatı:</label>
+                                                    <span class="price"><i class="fa fa-try"></i> <span>{{ product.selling_price }}</span></span>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Kiralama Seçenekleri -->
+                                            <div id="rental_options" style="display: none;">
+                                                <div class="form-group">
+                                                    <label for="rental_period">Kiralama Süresi:</label>
+                                                    <select class="form-control" name="rental_period">
+                                                        {% for price in product.related_products_price.all %}
+                                                            <option value="{{ price.id }}">{{ price.name }} Ay - {{ price.rental_price }} ₺ </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Miktar Label ve Alanı -->
+                                            <div class="form-group">
+                                                <label for="quantity">Miktar:</label>
+                                                <input type="number" class="form-control" name="quantity" value="1">
+                                            </div>
+                                            
+                                            <!-- Sepete Ekle Butonu -->
+                                            <div class="row-val">
+                                                <button id="add-to-cart-btn" type="submit">Sepete Ekle</button>
+                                            </div>
+                                        </fieldset>
+                                    </form>
                                 </div>
-                                <!-- Product Form of the Page -->
-                                <form action="#" class="product-form">
-                                    <fieldset>
-                                        <div class="row-val">
-                                            <label for="qty">qty</label>
-                                            <input type="number" id="qty" placeholder="1">
-                                        </div>
-                                        <div class="row-val">
-                                            <button type="submit">ADD TO CART</button>
-                                        </div>
-                                    </fieldset>
-                                </form>
+                                
+                                
+                                
                                 <!-- Product Form of the Page end -->
                             </div>
                             <!-- Detail Holder of the Page end -->
@@ -625,6 +688,67 @@ document.getElementById("telegramShareBtn").addEventListener("click", function()
     var url = "https://t.me/share/url?url=" + encodeURIComponent(window.location.href);
     window.open(url, "_blank", "width=600,height=400");
 });
+
+
+
+$(document).ready(function() {
+    $('#price_type').change(function() {
+        var selectedType = $(this).val();
+        if (selectedType === 'rental') {
+            $('#rental_options').show();
+        } else {
+            $('#rental_options').hide();
+        }
+    });
+
+    $('#add-to-cart-btn').click(function() {
+        var productId = $('input[name="product_id"]').val();
+        var priceType = $('#price_type').val();
+        var quantity = $('input[name="quantity"]').val();
+        var rentalPeriodId = null;
+        if (priceType === 'rental') {
+            rentalPeriodId = $('select[name="rental_period"]').val();
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/add_to_cart/',
+            data: {
+                'product_id': productId,
+                'price_type': priceType,
+                'quantity': quantity,
+                'rental_period_id': rentalPeriodId,
+            },
+            success: function(response) {
+                if (response.success) {
+                    alert('Ürün sepete eklendi!');
+                } else {
+                    alert('Ürün eklenirken bir hata oluştu!');
+                }
+            },
+            error: function(xhr, errmsg, err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+    });
+});
+
+
+$(document).ready(function() {
+    $('#price_type').change(function() {
+        var selectedType = $(this).val();
+        if (selectedType === 'rental') {
+            $('#rental_options').show();
+            $('#selling_options').hide();
+        } else {
+            $('#rental_options').hide();
+            $('#selling_options').show();
+        }
+    });
+});
+
+
+
 
 </script>
 
