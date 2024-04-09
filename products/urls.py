@@ -9,6 +9,11 @@ app_name = "products"
 urlpatterns = [
     path("product/<slug:product_slug>/", product_detail_view, name="product-detail-view"),
     path('product/<int:product_id>/add_review/', add_product_review, name='add_product_review'),
+    path('add_to_cart/<int:product_id>', add_to_cart, name='add_to_cart'),
+    path('order-shopping-card/', order_shopping_card, name='order_shopping_card'),
+    path('remove/<int:cart_item_id>/', remove_from_cart, name='remove_from_cart'),
+    path('order-check-out/', order_checkout, name='order_checkout'),
+    path('payment/', payment, name='payment'),
 
 ]
 

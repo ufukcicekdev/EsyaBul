@@ -1,4 +1,3 @@
-console.log("working fine");
 
 const monthNames = ["Jan", "Feb", "Mar", "April", "May", "June",
   "July", "Aug", "Sept", "Oct", "Nov", "Dec"
@@ -410,3 +409,39 @@ $(document).ready(function (){
 });
 
 
+
+
+$(document).ready(function() {
+    $('#price_type').change(function() {
+        var selectedType = $(this).val();
+        if (selectedType === 'rental') {
+            $('#rental_options').show();
+            $('#selling_options').hide();
+            $('#rental_period').prop('required', true);
+        } else {
+            $('#rental_options').hide();
+            $('#selling_options').show();
+            $('#rental_period').removeAttr('required');
+        }
+    });
+});
+
+
+
+
+
+$(document).ready(function() {
+    // Sadece artı işareti ile miktarı artırma işlemi
+    $('#add-to-cart-form input[name="quantity"]').on('keydown', function(e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 38) { // Artı (+) tuşu
+            e.preventDefault();
+            var currentValue = parseInt($(this).val());
+            if (!isNaN(currentValue)) {
+                $(this).val(currentValue + 1);
+            } else {
+                $(this).val(1);
+            }
+        }
+    });
+});

@@ -1,5 +1,6 @@
 from django import forms
-from .models import ProductReview, CartItem
+from .models import ProductReview, ProductRentalPrice,Product
+from django.shortcuts import get_object_or_404
 
 class ProductReviewForm(forms.ModelForm):
     class Meta:
@@ -13,10 +14,28 @@ class ProductReviewForm(forms.ModelForm):
 
 
 
+class AddToCartForm(forms.Form):
+    product_id = forms.IntegerField(widget=forms.HiddenInput)
+    price_type = forms.ChoiceField(choices=(('selling', 'Satın Alma'), ('rental', 'Kiralama')), widget=forms.Select(attrs={'class': 'form-control', 'id': 'price_type'}))
+    quantity = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'name': 'quantity', 'value': '1'}),
+        min_value=1,
+        max_value=10,  # Örnek bir maksimum değer
+        error_messages={
+            'min_value': 'Miktar en az 1 olmalıdır.',
+            'max_value': 'Miktar çok yüksek, lütfen daha düşük bir değer girin.'
+        }
+    )
 
-class CartItemForm(forms.ModelForm):
-    class Meta:
-        model = CartItem
-        fields = ['product', 'quantity', 'is_rental', 'rental_period']
+    def __init__(self, *args, **kwargs):
+        product_id = kwargs.pop('product_id', None)
+        super(AddToCartForm, self).__init__(*args, **kwargs)
+        if product_id:
+            rental_prices = ProductRentalPrice.objects.filter(product_id=product_id)
+            rental_period_choices = [(price.id, price.name) for price in rental_prices]
+            self.fields['rental_period'] = forms.ChoiceField(choices=rental_period_choices, widget=forms.Select(attrs={'class': 'form-control', 'id': 'rental_period'}), required=False)
+
+
+
 
 

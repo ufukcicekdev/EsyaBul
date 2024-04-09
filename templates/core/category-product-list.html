@@ -293,23 +293,11 @@ header .close:hover{
                             <!-- btn-box start here -->
                             <div class="btn-box">
                                 <ul class="list-inline">
-                                    <li>
-                                        <a href="#" class="drop-link">
-                                            Default Sorting <i aria-hidden="true" class="fa fa-angle-down"></i>
-                                        </a>
-                                        <div class="drop">
-                                            <ul class="list-unstyled">
-                                                <li><a href="#">ASC</a></li>
-                                                <li><a href="#">DSC</a></li>
-                                                <li><a href="#">Price</a></li>
-                                                <li><a href="#">Relevance</a></li>
-                                            </ul>
-                                        </div>
-                                    </li>
+                                   
                                     <li><a class="mt-viewswitcher" href="#" id="card-view-btn"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
                                     <li><a class="mt-viewswitcher" href="#" id="list-view-btn"><i class="fa fa-th-list" aria-hidden="true"></i></a></li>
                                 </ul>
-                            </div><!-- btn-box end here -->
+                            </div>
                             <!-- mt-textbox start here -->
                             <div class="mt-textbox">
                                 <p><strong>{{ products.count }}</strong> sonuç</p>
@@ -326,16 +314,17 @@ header .close:hover{
                                         <div class="box">
                                             {% with first_image=product.related_products.first %}
                                                     {% if first_image %}
-                                                    <a href="{% url 'products:product-detail-view' product.slug %}"><img src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}"></a>
+                                                    <a href="{% url 'products:product-detail-view' product.slug %}"><img src="{{ first_image.image.url }}" style="width: 237px;height: 248px;" alt="{{ first_image.img_title }}"></a>
                                                     {% endif %}
                                             {% endwith %}
                                             
     
-                                            {% if product.get_precentage != None %}
-                                            <span class="caption">
-                                                <span class="off">{{product.get_precentage|floatformat:0}}%</span>
-                                            </span>
+                                            {% if product.get_percentage %}
+                                                <span class="caption">
+                                                    <span class="off">{{ product.get_percentage|floatformat:0 }}%</span>
+                                                </span>
                                             {% endif %}
+
     
                                             <ul class="mt-stars">
                                                 {% if product.average_rating %}
@@ -349,17 +338,24 @@ header .close:hover{
                                                 {% if request.user.is_authenticated %}
                                                     <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{product.id}}" href="#"><i class="icon-heart"></i></a></li>
                                                 {% endif %}
-                                                <li><a href="#popup{{product.id}}" class="lightbox" ><i class="icomoon icon-eye"></i></a></li>
+                                                <!-- <li><a href="#popup{{product.id}}" class="lightbox" ><i class="icomoon icon-eye"></i></a></li> -->
     
                                             </ul>
                                         </div><!-- box end here -->
                                         <!-- txt end here -->
     
                                         <div class="txt">
-                                            <strong class="title">{{ product.name }}</strong>
+                                            <strong class="title"><a href="{% url 'products:product-detail-view' product.slug %}">{{ product.name }}</a></strong>
                                             <p>{{ product.description|slice:":100" }}</p>
-                                            <a href="{% url 'products:product-detail-view' product.slug %}">Detay</a>
+                                            <a href="{% url 'products:product-detail-view' product.slug %}">Kiralam fiyatları için ürünü incele</a>
                                         </div><!-- txt end here -->
+                                        <div class="txt">
+                                            <strong class="title">Satış Fiyatı</strong>
+                                            {% if product.selling_old_price != 0 %}
+                                            <del class="off"><i class="fa fa-try"></i> <span>{{product.selling_old_price}}</span></del>
+                                            {% endif %}
+											<span class="price"><i class="fa fa-try"></i> <span>{{ product.selling_price }}</span></span>
+										</div>
                                     </div><!-- mt product2 end here -->
                                 </li>
                                 {% endfor %}
@@ -373,7 +369,7 @@ header .close:hover{
                             <div class="img-holder">
                                 {% with first_image=product.related_products.first %}
                                     {% if first_image %}
-                                    <a href="{% url 'products:product-detail-view' product.slug %}"><img src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}"></a>
+                                    <a href="{% url 'products:product-detail-view' product.slug %}"><img src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}"></a>
                                     {% endif %}
                                 {% endwith %}
                             </div><!-- img holder end here -->
@@ -404,6 +400,7 @@ header .close:hover{
                                         {% if request.user.is_authenticated %}
                                             <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{product.id}}" href="#"><i class="icon-heart">Beğen</i></a></li>
                                         {% endif %}
+                                        <a href="{% url 'products:product-detail-view' product.slug %}">Kiralam fiyatları için ürünü incele</a>
                                     </ul>
                                 </div><!-- align right end here -->
                             </div><!-- txt holder end here -->
@@ -433,239 +430,8 @@ header .close:hover{
 
 
 
-<div class="popup-holder">
-    <!-- Popup of the Page -->
-    {% for product in products %}
-    <div id="popup{{product.id}}" class="lightbox" style="display: none;">
-        <!-- Mt Product Detial of the Page -->
-        <section class="mt-product-detial">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <!-- Slider of the Page -->
-                        <div class="slider">
-                            <!-- Comment List of the Page -->
-                            <ul class="list-unstyled comment-list">
-                                <li><a href="#"><i class="fa fa-heart"></i>{{ product.wishes.count }}</a></li>
-                                <li><a href="#"><i class="fa fa-comments"></i>{{ product.reviews.count }}</a></li>
-                                <li><a href="#" class="share-modal"><i class="fa fa-share-alt"></i> Paylaş</a></li>
-                            </ul><!-- Comment List of the Page end -->
-
-                            <div class="popupSocial">
-                                <header>
-                                    <span>Paylaşım Penceresi</span>
-                                    <div class="close"><i class="uil uil-times"></i></div>
-                                </header>
-                                <div class="sociaContent">
-                                    <p>Bu linki paylaşın:</p>
-                                    <ul class="icons">
-                                        <li><a href="#" id="facebookShareBtn"><i class="fab fa-facebook-f"></i></a></li>
-                                        <li><a href="#" id="twitterShareBtn"><i class="fab fa-twitter"></i></a></li>
-                                        <li><a href="#" id="linkedinShareBtn"><i class="fab fa-linkedin"></i></a></li>
-                                        <li><a href="#" id="whatsappShareBtn"><i class="fab fa-whatsapp"></i></a></li>
-                                        <li><a href="#" id="telegramShareBtn"><i class="fab fa-telegram-plane"></i></a></li>
-                                        <!-- Diğer sosyal medya platformları için benzer bağlantılar ekleyebilirsiniz -->
-                                    </ul>
-                                    <p>Veya linki kopyalayın:</p>
-                                    <div class="field">
-                                        <i class="url-icon uil uil-link"></i>
-                                        <input type="text" readonly value="{{ request.build_absolute_uri }}">
-                                        <button>Kopyala</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="product-slider">
-                                {% for image in product.related_products.all %}
-                                    <div class="slide">
-                                        <img src="{{ image.image.url }}" alt="{{ image.img_alt }}" title="{{ image.title }}">
-                                    </div>
-                                {% endfor %}
-                            </div>
-
-                            <div class="list-unstyled slick-slider pagg-slider">
-                                {% for image in product.related_products.all  %}
-                                <li><div class="img"><img src="{{ image.image.url }}" alt="{{ image.alt }}" title="{{ image.title }}"></div></li>
-                                {% endfor %}
-                            </div> 
-                        </div>
-                        <!-- Slider of the Page end -->
-                        <!-- Detail Holder of the Page -->
-                        <div class="detial-holder">
-                            <!-- Breadcrumbs of the Page -->
-                            <ul class="list-unstyled breadcrumbs">
-                                    <li class="breadcrumb-item">{{ product.get_category_breadcrumb }}</li>
-                            </ul>
-                            <!-- Breadcrumbs of the Page end -->
-                            <h2>{{ product.name }}</h2>
-                            <!-- Rank Rating of the Page -->
-                            <div class="rank-rating">
-                                <ul class="list-unstyled rating-list">
-                                    {% if product.average_rating %}
-                                    {% for star in product.average_rating|make_star_list %}
-                                    <li><i class="fa fa-star{% if not star %}-o{% endif %}"></i></li>
-                                    {% endfor %}
-                                    {% endif %}
-                                </ul>
-                                <span class="total-price">Yorumlar ({{ product.reviews.count }})</span>
-                            </div><!-- Rank Rating of the Page end -->
-                            <ul class="list-unstyled list">                                
-                                {% if request.user.is_authenticated %}
-                                    <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{product.id}}" href="#"><i class="icon-heart"></i></a></li>
-                                {% endif %}
-                            </ul>
-                            <div class="txt-wrap">
-                                <p>{{ product.description }}</p>
-                            </div>
-                     
-                            <div class="price-options">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Fiyat Türü</th>
-                                            <th>Fiyat</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Satın Alma</td>
-                                            <td>
-                                                {% if product.selling_old_price != 0 %}
-                                                    <del><i class="fa fa-try"></i> {{ product.selling_old_price }}</del><br>
-                                                {% endif %}
-                                                <span class="price"><i class="fa fa-try"></i> {{ product.selling_price }}</span>
-                                            </td>
-                                        </tr>
-                                        {% for price in product.related_products_price.all %}
-                                            <tr>
-                                                <td>{{ price.name }} Ay Kiralama</td>
-                                                <td>
-                                                    {% if price.rental_old_price != 0 %}
-                                                        <del><i class="fa fa-try"></i> {{ price.rental_old_price }}</del><br>
-                                                    {% endif %}
-                                                    <span class="price"><i class="fa fa-try"></i> {{ price.rental_price }}</span>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-
-                                    </tbody>
-                                </table>
-                                <form id="add-to-cart-form">
-                                    <fieldset>
-                                        <input class="form-control" type="hidden" name="product_id" value="{{ product.id }}">
-                                        <div class="form-group">
-                                            <label for="price_type">Fiyat Türü:</label>
-                                            <select class="form-control" id="price_type" name="price_type">
-                                                <option value="selling">Satın Alma</option>
-                                                <option value="rental">Kiralama</option>
-                                            </select>
-                                        </div>
-                                        
-                                        <!-- Satın Alma Fiyatı -->
-                                        <div id="selling_options">
-                                            <div class="form-group">
-                                                <label for="selling_price">Satın Alma Fiyatı:</label>
-                                                <span class="price"><i class="fa fa-try"></i> <span>{{ product.selling_price }}</span></span>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Kiralama Seçenekleri -->
-                                        <div id="rental_options" style="display: none;">
-                                            <div class="form-group">
-                                                <label for="rental_period">Kiralama Süresi:</label>
-                                                <select class="form-control" name="rental_period">
-                                                    {% for price in product.related_products_price.all %}
-                                                        <option value="{{ price.id }}">{{ price.name }} Ay - {{ price.rental_price }} ₺ </option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Miktar Label ve Alanı -->
-                                        <div class="form-group">
-                                            <label for="quantity">Miktar:</label>
-                                            <input type="number" class="form-control" name="quantity" value="1">
-                                        </div>
-                                        
-                                        <!-- Sepete Ekle Butonu -->
-                                        <div class="row-val">
-                                            <button id="add-to-cart-btn" type="submit">Sepete Ekle</button>
-                                        </div>
-                                    </fieldset>
-                                </form>
-                            </div>
-                        </div><!-- Detail Holder of the Page end -->
-                    </div>
-                </div>
-            </div>
-        </section><!-- Mt Product Detial of the Page end -->
-    </div>
-    {% endfor %}
-
-    <!-- Diğer modallar buraya eklenebilir -->
-</div>
-
-
-
-
 <script>
 
-const viewBtn = document.querySelector(".share-modal");
-const popup = document.querySelector(".popupSocial");
-const close = popup.querySelector(".close");
-const field = popup.querySelector(".field");
-const input = field.querySelector("input");
-const copy = field.querySelector("button");
-
-viewBtn.addEventListener("click", function(event) {
-    event.preventDefault();
-    popup.classList.toggle("show");
-});
-
-close.addEventListener("click", function(event) {
-    event.preventDefault();
-    popup.classList.remove("show");
-});
-
-copy.addEventListener("click", function(event) {
-    event.preventDefault();
-    input.select(); // Select the input value
-    if (document.execCommand("copy")) { // If the selected text is copied
-        field.classList.add("active");
-        copy.innerText = "Kopyalandı";
-        setTimeout(function() {
-            window.getSelection().removeAllRanges(); // Remove selection from page
-            field.classList.remove("active");
-            copy.innerText = "Kopyala";
-        }, 3000);
-    }
-});
-
-
-document.getElementById("facebookShareBtn").addEventListener("click", function() {
-    var url = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(window.location.href);
-    window.open(url, "_blank", "width=600,height=400");
-});
-
-document.getElementById("twitterShareBtn").addEventListener("click", function() {
-    var url = "https://twitter.com/intent/tweet?url=" + encodeURIComponent(window.location.href);
-    window.open(url, "_blank", "width=600,height=400");
-});
-
-document.getElementById("linkedinShareBtn").addEventListener("click", function() {
-    var url = "https://www.linkedin.com/sharing/share-offsite/?url=" + encodeURIComponent(window.location.href);
-    window.open(url, "_blank", "width=600,height=400");
-});
-
-document.getElementById("whatsappShareBtn").addEventListener("click", function() {
-    var url = "https://api.whatsapp.com/send?text=" + encodeURIComponent(window.location.href);
-    window.open(url, "_blank", "width=600,height=400");
-});
-
-document.getElementById("telegramShareBtn").addEventListener("click", function() {
-    var url = "https://t.me/share/url?url=" + encodeURIComponent(window.location.href);
-    window.open(url, "_blank", "width=600,height=400");
-});
 
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -687,63 +453,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-
-
-$(document).ready(function() {
-    $('#price_type').change(function() {
-        var selectedType = $(this).val();
-        if (selectedType === 'rental') {
-            $('#rental_options').show();
-        } else {
-            $('#rental_options').hide();
-        }
-    });
-
-    $('#add-to-cart-btn').click(function() {
-        var productId = $('input[name="product_id"]').val();
-        var priceType = $('#price_type').val();
-        var quantity = $('input[name="quantity"]').val();
-        var rentalPeriodId = null;
-        if (priceType === 'rental') {
-            rentalPeriodId = $('select[name="rental_period"]').val();
-        }
-
-        $.ajax({
-            type: 'POST',
-            url: '/add_to_cart/',
-            data: {
-                'product_id': productId,
-                'price_type': priceType,
-                'quantity': quantity,
-                'rental_period_id': rentalPeriodId,
-            },
-            success: function(response) {
-                if (response.success) {
-                    alert('Ürün sepete eklendi!');
-                } else {
-                    alert('Ürün eklenirken bir hata oluştu!');
-                }
-            },
-            error: function(xhr, errmsg, err) {
-                console.log(xhr.status + ": " + xhr.responseText);
-            }
-        });
-    });
-});
-
-
-$(document).ready(function() {
-    $('#price_type').change(function() {
-        var selectedType = $(this).val();
-        if (selectedType === 'rental') {
-            $('#rental_options').show();
-            $('#selling_options').hide();
-        } else {
-            $('#rental_options').hide();
-            $('#selling_options').show();
-        }
-    });
-});
 
 </script>
 

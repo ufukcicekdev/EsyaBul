@@ -357,18 +357,15 @@ header .close:hover{
                                         </tbody>
                                     </table>
 
-                                    <form id="add-to-cart-form">
+                                    <form id="add-to-cart-form" method="post" action="{% url 'products:add_to_cart' product_id=product.id %}">
+                                        {% csrf_token %}
                                         <fieldset>
-                                            <input class="form-control" type="hidden" name="product_id" value="{{ product.id }}">
+                                            <input type="hidden" name="product_id" value="{{ product.id }}">
                                             <div class="form-group">
                                                 <label for="price_type">Fiyat Türü:</label>
-                                                <select class="form-control" id="price_type" name="price_type">
-                                                    <option value="selling">Satın Alma</option>
-                                                    <option value="rental">Kiralama</option>
-                                                </select>
+                                                {{ add_to_cart_form.price_type }}
                                             </div>
                                             
-                                            <!-- Satın Alma Fiyatı -->
                                             <div id="selling_options">
                                                 <div class="form-group">
                                                     <label for="selling_price">Satın Alma Fiyatı:</label>
@@ -376,30 +373,24 @@ header .close:hover{
                                                 </div>
                                             </div>
                                             
-                                            <!-- Kiralama Seçenekleri -->
                                             <div id="rental_options" style="display: none;">
                                                 <div class="form-group">
                                                     <label for="rental_period">Kiralama Süresi:</label>
-                                                    <select class="form-control" name="rental_period">
-                                                        {% for price in product.related_products_price.all %}
-                                                            <option value="{{ price.id }}">{{ price.name }} Ay - {{ price.rental_price }} ₺ </option>
-                                                        {% endfor %}
-                                                    </select>
+                                                    {{ add_to_cart_form.rental_period }}
                                                 </div>
                                             </div>
                                             
-                                            <!-- Miktar Label ve Alanı -->
                                             <div class="form-group">
                                                 <label for="quantity">Miktar:</label>
-                                                <input type="number" class="form-control" name="quantity" value="1">
+                                                {{ add_to_cart_form.quantity }}
                                             </div>
                                             
-                                            <!-- Sepete Ekle Butonu -->
                                             <div class="row-val">
                                                 <button id="add-to-cart-btn" type="submit">Sepete Ekle</button>
                                             </div>
                                         </fieldset>
                                     </form>
+                                    
                                 </div>
                                 
                                 
@@ -691,61 +682,6 @@ document.getElementById("telegramShareBtn").addEventListener("click", function()
 
 
 
-$(document).ready(function() {
-    $('#price_type').change(function() {
-        var selectedType = $(this).val();
-        if (selectedType === 'rental') {
-            $('#rental_options').show();
-        } else {
-            $('#rental_options').hide();
-        }
-    });
-
-    $('#add-to-cart-btn').click(function() {
-        var productId = $('input[name="product_id"]').val();
-        var priceType = $('#price_type').val();
-        var quantity = $('input[name="quantity"]').val();
-        var rentalPeriodId = null;
-        if (priceType === 'rental') {
-            rentalPeriodId = $('select[name="rental_period"]').val();
-        }
-
-        $.ajax({
-            type: 'POST',
-            url: '/add_to_cart/',
-            data: {
-                'product_id': productId,
-                'price_type': priceType,
-                'quantity': quantity,
-                'rental_period_id': rentalPeriodId,
-            },
-            success: function(response) {
-                if (response.success) {
-                    alert('Ürün sepete eklendi!');
-                } else {
-                    alert('Ürün eklenirken bir hata oluştu!');
-                }
-            },
-            error: function(xhr, errmsg, err) {
-                console.log(xhr.status + ": " + xhr.responseText);
-            }
-        });
-    });
-});
-
-
-$(document).ready(function() {
-    $('#price_type').change(function() {
-        var selectedType = $(this).val();
-        if (selectedType === 'rental') {
-            $('#rental_options').show();
-            $('#selling_options').hide();
-        } else {
-            $('#rental_options').hide();
-            $('#selling_options').show();
-        }
-    });
-});
 
 
 

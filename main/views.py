@@ -7,7 +7,7 @@ from products.models import Category,Product, ProductReview
 from customerauth.models import wishlist_model
 from django.http import Http404
 from django.db.models import Q,Avg
-
+from products.forms import AddToCartForm
 
 def home(request):
     social_media_links = SocialMedia.objects.all()
@@ -110,8 +110,7 @@ def ajax_contact_form(request):
 def dynamic_category_product_list_view(request, category_slugs):
     social_media_links = SocialMedia.objects.all()
     category_slug_list = category_slugs.split('/')
-    
-    wcount=0
+    wcount=0    
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
 
@@ -128,6 +127,7 @@ def dynamic_category_product_list_view(request, category_slugs):
             "category_name": main_category,
             "wcount":wcount,
             "social_media_links":social_media_links,
+            "add_to_cart_form":add_to_cart_form,
             "all_categories": Category.objects.all()  # Tüm kategorileri döndür
         }
         return render(request, "core/category-product-list.html", context)
@@ -168,7 +168,7 @@ def dynamic_category_product_list_view(request, category_slugs):
         "category_name": target_category,
         "subcategories": subcategories,
         "main_categories": main_categories,
-        "social_media_links":social_media_links
+        "social_media_links":social_media_links,
     }
     
     return render(request, "core/category-product-list.html", context)

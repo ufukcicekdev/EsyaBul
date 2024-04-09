@@ -7411,6 +7411,30 @@ a:hover {
   background: #000;
 }
 
+#add-to-cart-form button {
+  width: 173px;
+  padding: 12px 10px 10px;
+  text-align: center;
+  text-transform: uppercase;
+  display: block;
+  font-size: 14px;
+  line-height: 20px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  border: none;
+  outline: none;
+  border-radius: 25px;
+  -webkit-transition: all 0.25s linear;
+  -o-transition: all 0.25s linear;
+  transition: all 0.25s linear;
+  background: #ff8283;
+  color: #fff;
+}
+
+#add-to-cart-form button:hover {
+  background: #000;
+}
+
 .lightbox .mt-product-detial {
   padding: 0;
 }

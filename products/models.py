@@ -128,10 +128,12 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
-    def get_precentage(self):
-        if self.selling_old_price !=0:
-            new_price = (self.selling_price / self.selling_old_price) * 100
-            return new_price
+    def get_percentage(self):
+        if self.selling_old_price != 0:
+            discount_percentage = ((self.selling_old_price - self.selling_price) / self.selling_old_price) * 100
+            return discount_percentage
+        else:
+            return 0
         
     def get_category_breadcrumb(self):
         breadcrumbs = []
@@ -178,7 +180,7 @@ class ProductRentalPrice(models.Model):
     )
     product = models.ForeignKey(Product, related_name='related_products_price', on_delete=models.CASCADE)
     
-    name = models.CharField(max_length=20, choices=RENTAL_MOUTHLY_CHOICES, unique=True, null=True)
+    name = models.CharField(max_length=20, choices=RENTAL_MOUTHLY_CHOICES, null=True)
     rental_price = models.DecimalField(max_digits=10, decimal_places=2)
     rental_old_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
@@ -194,7 +196,7 @@ class Cart(models.Model):
     items = models.ManyToManyField('CartItem', related_name='carts')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+    order_completed = models.BooleanField(default=False)
     def total_price(self):
         total = 0
         for item in self.items.all():
@@ -207,11 +209,12 @@ class CartItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     rental_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    selling_price = models.DecimalField(max_digits=10, decimal_places=2)
+    selling_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     is_rental = models.BooleanField(default=False)
     rental_period = models.CharField(max_length=20, choices=ProductRentalPrice.RENTAL_MOUTHLY_CHOICES, null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
+    order_completed = models.BooleanField(default=False)
 
     def subtotal(self):
         if self.is_rental:

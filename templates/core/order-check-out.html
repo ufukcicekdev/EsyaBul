@@ -1,0 +1,403 @@
+{% extends 'partialsBase/base.html' %}
+{% load custom_filters %}
+{% load static %} {% block title %} Sepetim - Esyala {% endblock title %}
+{% load social_share %}
+
+{% block content %}
+
+
+
+<div id="wrapper">
+    <!-- Page Loader -->
+    <div id="pre-loader" class="loader-container">
+        <div class="loader">
+            <img src="{% static 'basestatic/images/svg/rings.svg' %}" alt="loader">
+        </div>
+    </div>
+    <!-- W1 start here -->
+    <div class="w1">
+        <!-- mt header style4 start here -->
+        {% include 'coreBase/header.html' %}
+        <!-- mt header style4 end here -->
+
+        <!-- mt search popup start here -->
+        <div class="mt-search-popup">
+            <div class="mt-holder">
+                <a href="#" class="search-close"><span></span><span></span></a>
+                <div class="mt-frame">
+                    <form action="#">
+                        <fieldset>
+                            <input type="text" placeholder="Search...">
+                            <span class="icon-microphone"></span>
+                            <button class="icon-magnifier" type="submit"></button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div><!-- mt search popup end here -->
+        <!-- mt main start here -->
+        <main id="mt-main">
+            <section class="mt-contact-banner mt-banner-22" style="background-image: url({% static 'basestatic/images/img-76.jpg' %}); background-size: cover; background-position: center;">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <h1 class="text-center">Sipariş Onayla</h1>
+                      <!-- Breadcrumbs of the Page -->
+                      <nav class="breadcrumbs">
+                        <ul class="list-unstyled">
+                          <li><a href="{% url 'main:home' %}">Anasayfa <i class="fa fa-angle-right"></i></a></li>
+                          <li><a href="{% url 'products:order_checkout' %}">Sipariş Onayla </a></li>
+                        </ul>
+                      </nav>
+                      <!-- Breadcrumbs of the Page end -->
+                    </div>
+                  </div>
+                </div>
+              </section>
+            <!-- Mt Process Section of the Page -->
+            <div class="mt-process-sec">
+              <div class="container">
+                <div class="row">
+                  <div class="col-xs-12">
+                    <!-- Process List of the Page -->
+                    <ul class="list-unstyled process-list">
+                      <li class="active">
+                        <span class="counter">01</span>
+                        <a href="{% url 'products:order_shopping_card' %}"><strong class="title">Sepetim</strong></a>
+                      </li>
+                      <li class="active">
+                        <span class="counter">02</span>
+                        <a href="{% url 'products:order_checkout' %}"><strong class="title">Sipariş Onayla</strong></a>
+                      </li>
+                    </ul>
+                    <!-- Process List of the Page end -->
+                  </div>
+                </div>
+              </div>
+            </div><!-- Mt Process Section of the Page end -->
+            <!-- Mt Detail Section of the Page -->
+            <section class="mt-detail-sec toppadding-zero">
+                <div class="container">
+                    <div class="row">
+
+
+                        {% if user_addresses.count > 0 %}
+                        
+                        <div class="col-xs-12 col-sm-6">
+                            <ul class="nav nav-tabs" id="myTabs" role="tablist">
+                                <li class="nav-item order-tab">
+                                    <a class="nav-link active" id="order-address-tab" data-toggle="tab" href="#order-address" role="tab" aria-controls="order-address" aria-selected="true">Sipariş Adresi</a>
+                                </li>
+                                <li class="nav-item billing-tab">
+                                    <a class="nav-link" id="billing-address-tab" data-toggle="tab" href="#billing-address" role="tab" aria-controls="billing-address" aria-selected="false">Fatura Adresi</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="order-address" role="tabpanel" aria-labelledby="order-address-tab">
+                                    <!-- Sipariş Adresi Formu -->
+                                    <form action="#" class="bill-detail">
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <select class="form-control" id="order-address-select" onchange="fillOrderAddressDetails()">
+                                                    <option value="">Adres Seçiniz</option>
+                                                    {% for address in user_addresses %}
+                                                    <option value="{{ address.id }}">{{ address.address_name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Ad" id="name" readonly>
+                                                <input type="text" class="form-control" placeholder="Soyad" id="last_name" readonly>
+                                            </div>
+                                    
+                                            <div class="form-group" id="company_name_field" style="display: none;">
+                                                <input type="text" class="form-control" placeholder="Şirket Adı" id="company_name" readonly>
+                                            </div>
+                                    
+                                            <div class="form-group" id="company_taxcode" style="display: none;">
+                                                <input type="text" class="form-control" placeholder="Vergi Numarası" id="firm_taxcode" readonly>
+                                            </div>
+                                    
+                                            <div class="form-group" id="company_tax_home" style="display: none;">
+                                                <input type="text" class="form-control" placeholder="Vergi Dairesi" id="firm_taxhome" readonly>
+                                            </div>
+                                    
+                                            <div class="form-group">
+                                                <textarea class="form-control" placeholder="Adres" id="address_line1" readonly></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Şehir" id="town_city" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="İl / Ülke" id="state_country" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Posta Kodu / Zip" id="postcode_zip" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="email" class="form-control" placeholder="E-posta Adresi" id="email" readonly>
+                                                <input type="tel" class="form-control" placeholder="Telefon Numarası" id="phone" readonly>
+                                            </div>
+                                    
+                                            <div class="form-group">
+                                                <textarea class="form-control" placeholder="Sipariş Notları" id="order_notes"></textarea>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                                <div class="tab-pane fade show" id="billing-address" role="tabpanel" aria-labelledby="billing-address-tab">
+                                    <!-- Fatura Adresi Formu -->
+                                    <form action="#" class="bill-detail" id="billing-form">
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <select class="form-control" id="billing-address-select" onchange="fillBillingAddressDetails()">
+                                                    <option value="">Adres Seçiniz</option>
+                                                    {% for address in user_addresses %}
+                                                    <option value="{{ address.id }}">{{ address.address_name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Ad" id="name1" readonly>
+                                                <input type="text" class="form-control" placeholder="Soyad" id="last_name1" readonly>
+                                            </div>
+                                    
+                                            <div class="form-group" id="company_name_field" style="display: none;">
+                                                <input type="text" class="form-control" placeholder="Şirket Adı" id="company_name1" readonly>
+                                            </div>
+                                    
+                                            <div class="form-group" id="company_taxcode" style="display: none;">
+                                                <input type="text" class="form-control" placeholder="Vergi Numarası" id="firm_taxcode1" readonly>
+                                            </div>
+                                    
+                                            <div class="form-group" id="company_tax_home" style="display: none;">
+                                                <input type="text" class="form-control" placeholder="Vergi Dairesi" id="firm_taxhome1" readonly>
+                                            </div>
+                                    
+                                            <div class="form-group">
+                                                <textarea class="form-control" placeholder="Adres" id="address_line11" readonly></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Şehir" id="town_city1" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="İl / Ülke" id="state_country1" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Posta Kodu / Zip" id="postcode_zip1" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="email" class="form-control" placeholder="E-posta Adresi" id="email1" readonly>
+                                                <input type="tel" class="form-control" placeholder="Telefon Numarası" id="phone1" readonly>
+                                            </div>
+
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {% else %}
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="block-holder">
+                                <p>Siparişe devam edebilmek için adres eklemeniz gerekmektedir</p>
+                                <a href="{% url 'customerauth:address-list' %}" class="process-btn">Adress Ekle <i class="fa fa-check"></i></a>
+                            </div>
+                            
+                        </div>
+
+                        {% endif %}
+
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="holder">
+                            <h2>Siparişlerim</h2>
+                                <ul class="list-unstyled block">
+                                <li>
+                                    <div class="txt-holder">
+                                        <div class="text-wrap pull-left">
+                                            <strong class="title">Ürünler</strong>
+                                            {% for cart_item in cart_items %}
+                                            <span>{{ cart_item.product.name }} x{{ cart_item.quantity }}</span>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="text-wrap txt text-right pull-right">
+                                            <strong class="title">Tutar</strong>
+                                            <span><i class="fa fa-try"></i> {{ cart_total }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="txt-holder">
+                                        <strong class="title sub-title pull-left">Sepet Tutarı</strong>
+                                        <div class="txt pull-right">
+                                            <span><i class="fa fa-try"></i> {{ cart_total }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="txt-holder">
+                                        <strong class="title sub-title pull-left">Kargo</strong>
+                                        <div class="txt pull-right">
+                                            <span>Ücretsiz Kargo</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li style="border-bottom: none;">
+                                    <div class="txt-holder">
+                                        <strong class="title sub-title pull-left">Sipariş Toplamı</strong>
+                                        <div class="txt pull-right">
+                                            <span><i class="fa fa-try"></i> {{ cart_total }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                </ul>
+                            </div>
+                            <div class="block-holder">
+                                <input type="checkbox" id="use-order-address"> Sipariş adresini fatura adresi olarak kullan
+                            </div>
+                            <div class="block-holder">
+                                <input type="checkbox" checked> I’ve read &amp; accept the <a href="#">terms &amp; conditions</a>
+                            </div>
+                            <a href="{% url 'products:payment' %}" class="process-btn">Siparişi Tamamla <i class="fa fa-check"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Mt Detail Section of the Page end -->
+          </main>
+        <!-- footer of the Page -->
+        {% include 'coreBase/footer.html' %}
+        <!-- footer of the Page end -->
+    </div><!-- W1 end here -->
+    <span id="back-top" class="fa fa-arrow-up"></span>
+</div>
+
+
+<script>
+    var addresses = [
+        {% for address in user_addresses %}
+            {
+                id: "{{ address.id }}",
+                username: "{{ address.username }}",
+                usersurname: "{{ address.usersurname }}",
+                firm_name: "{{ address.firm_name }}",
+                address_line1: "{{ address.address_line1 }}",
+                city: "{{ address.city }}",
+                region: "{{ address.region }}",
+                postal_code: "{{ address.postal_code }}",
+                email: "{{ address.user.email }}",
+                phone: "{{ address.phone }}"
+            },
+        {% endfor %}
+    ];
+    
+    function fillOrderAddressDetails() {
+    var selectedOrderId = document.getElementById('order-address-select').value;
+    var selectedAddress = addresses.find(address => address.id == selectedOrderId);
+
+    if (selectedAddress) {
+        document.getElementById('name').value = selectedAddress.username;
+        document.getElementById('last_name').value = selectedAddress.usersurname;
+        document.getElementById('address_line1').value = selectedAddress.address_line1;
+        document.getElementById('town_city').value = selectedAddress.city;
+        document.getElementById('state_country').value = selectedAddress.region;
+        document.getElementById('postcode_zip').value = selectedAddress.postal_code;
+        document.getElementById('email').value = selectedAddress.email;
+        document.getElementById('phone').value = selectedAddress.phone;
+        document.getElementById('company_name').value = selectedAddress.firm_name;
+        document.getElementById('firm_taxcode').value = selectedAddress.firm_taxcode;
+        document.getElementById('firm_taxhome').value = selectedAddress.firm_tax_home;
+
+        var addressType = selectedAddress.address_type;
+        if (addressType === '2') {
+            document.getElementById('company_name').style.display = 'block';
+            document.getElementById('firm_taxcode').style.display = 'block';
+            document.getElementById('firm_taxhome').style.display = 'block';
+
+        } else {
+            document.getElementById('company_name').style.display = 'none';
+            document.getElementById('firm_taxcode').style.display = 'none';
+            document.getElementById('firm_taxhome').style.display = 'none';
+
+        }  
+    }
+}
+
+function fillBillingAddressDetails() {
+    var selectedBillingId = document.getElementById('billing-address-select').value;
+    var selectedAddress = addresses.find(address => address.id == selectedBillingId);
+
+    if (selectedAddress) {
+        document.getElementById('name1').value = selectedAddress.username;
+        document.getElementById('last_name1').value = selectedAddress.usersurname;
+        document.getElementById('address_line11').value = selectedAddress.address_line1;
+        document.getElementById('town_city1').value = selectedAddress.city;
+        document.getElementById('state_country1').value = selectedAddress.region;
+        document.getElementById('postcode_zip1').value = selectedAddress.postal_code;
+        document.getElementById('email1').value = selectedAddress.email;
+        document.getElementById('phone1').value = selectedAddress.phone;
+        document.getElementById('company_name1').value = selectedAddress.firm_name;
+        document.getElementById('firm_taxcode1').value = selectedAddress.firm_taxcode;
+        document.getElementById('firm_taxhome1').value = selectedAddress.firm_tax_home;
+
+        var addressType = selectedAddress.address_type;
+        if (addressType === '2') {
+            document.getElementById('company_name1').style.display = 'block';
+            document.getElementById('firm_taxcode1').style.display = 'block';
+            document.getElementById('firm_taxhome1').style.display = 'block';
+
+        } else {
+            document.getElementById('company_name1').style.display = 'none';
+            document.getElementById('firm_taxcode1').style.display = 'none';
+            document.getElementById('firm_taxhome1').style.display = 'none';
+
+        }  
+    }
+}
+
+function toggleCompanyFields() {
+    var addressType = document.getElementById('address_type').value;
+    var firmNameInput = document.getElementById('company_name');
+    var firmTaxcodeInput = document.getElementById('firm_taxcode');
+    var firmTaxHomeInput = document.getElementById('firm_tax_home');
+
+    if (addressType == 2) {
+        // Adres tipi 2 ise alanları etkinleştir
+        firmNameInput.disabled = false;
+        firmTaxcodeInput.disabled = false;
+        firmTaxHomeInput.disabled = false;
+    } else {
+        // Diğer durumlarda alanları devre dışı bırak
+        firmNameInput.disabled = true;
+        firmTaxcodeInput.disabled = true;
+        firmTaxHomeInput.disabled = true;
+    }
+}
+
+
+document.getElementById("use-order-address").addEventListener("change", function() {
+    var billingForm = document.getElementById("billing-form");
+    var billingTab = document.getElementById("billing-address-tab");
+    if (this.checked) {
+        // Checkbox işaretli ise, Fatura Adresi sekmesini gizle
+        billingForm.style.display = "none";
+        billingTab.style.display = "none";
+    } else {
+        // Checkbox işaretli değilse, Fatura Adresi sekmesini göster
+        billingForm.style.display = "block";
+        billingTab.style.display = "block";
+    }
+});
+
+
+document.getElementById("order-address-select").addEventListener("change", function() {
+    var billingAddressSelect = document.getElementById("billing-address-select");
+    billingAddressSelect.disabled = true;
+});
+
+    </script>
+    
+{% endblock %}
+
+
+
