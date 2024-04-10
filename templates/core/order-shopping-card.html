@@ -169,7 +169,11 @@
                         </div>
                       </li>
                     </ul>
+                    {% if user_verified %}
                     <a href="{% url 'products:order_checkout' %}" class="process-btn">Sepeti Onayla <i class="fa fa-check"></i></a>
+                    {% else %}
+                    <a href="{% url 'customerauth:profile' %}" class="process-btn">Devam Etmek için Bilgilerini Güncelle <i class="fa fa-check"></i></a>
+                    {% endif %}
                   </div>
                 </div>
               </div>

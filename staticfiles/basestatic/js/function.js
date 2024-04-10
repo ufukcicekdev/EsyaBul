@@ -1,4 +1,3 @@
-console.log("working fine");
 
 const monthNames = ["Jan", "Feb", "Mar", "April", "May", "June",
   "July", "Aug", "Sept", "Oct", "Nov", "Dec"
@@ -408,6 +407,8 @@ $(document).ready(function (){
     })
 
 });
+
+
 
 
 $(document).ready(function() {

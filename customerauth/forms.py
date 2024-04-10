@@ -50,9 +50,11 @@ class NotificationSettingsForm(forms.ModelForm):
 
 
 class ProfileForm(forms.ModelForm):
+    tckn = forms.CharField(label='TC Kimlik No', max_length=11, min_length=11, widget=forms.TextInput(attrs={"class":"form-control", "type":"number"}))
+    birth_date = forms.DateField(label='Doğum Tarihi', widget=forms.DateInput(format='%Y-%m-%d', attrs={'class': 'form-control', 'type': 'date'}))
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'phone']
+        fields = ['username', 'first_name', 'last_name', 'phone', 'tckn', 'birth_date']
         widgets = {
             'phone': forms.TextInput(attrs={'class': 'form-control', "type":"number"}),
             'username': forms.TextInput(attrs={'class': 'form-control'}),
@@ -69,7 +71,18 @@ class ProfileForm(forms.ModelForm):
 
         return phone
 
-   
+    def clean_tckn(self):
+        tckn = self.cleaned_data.get('tckn')
+
+        # TC Kimlik No sadece sayısal karakterler içermeli
+        if not tckn.isdigit():
+            raise forms.ValidationError('TC Kimlik No yalnızca sayısal karakterler içermelidir.')
+
+        # TC Kimlik No 11 haneli olmalıdır
+        if len(tckn) != 11:
+            raise forms.ValidationError('TC Kimlik No 11 haneli olmalıdır.')
+
+        return tckn
     
 
 

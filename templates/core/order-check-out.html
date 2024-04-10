@@ -79,10 +79,7 @@
             <section class="mt-detail-sec toppadding-zero">
                 <div class="container">
                     <div class="row">
-
-
                         {% if user_addresses.count > 0 %}
-                        
                         <div class="col-xs-12 col-sm-6">
                             <ul class="nav nav-tabs" id="myTabs" role="tablist">
                                 <li class="nav-item order-tab">
@@ -196,16 +193,14 @@
                                 </div>
                             </div>
                         </div>
-                        
+                     
                         {% else %}
                         <div class="col-xs-12 col-sm-6">
                             <div class="block-holder">
                                 <p>Siparişe devam edebilmek için adres eklemeniz gerekmektedir</p>
                                 <a href="{% url 'customerauth:address-list' %}" class="process-btn">Adress Ekle <i class="fa fa-check"></i></a>
                             </div>
-                            
                         </div>
-
                         {% endif %}
 
                         <div class="col-xs-12 col-sm-6">
@@ -258,7 +253,22 @@
                             <div class="block-holder">
                                 <input type="checkbox" checked> I’ve read &amp; accept the <a href="#">terms &amp; conditions</a>
                             </div>
-                            <a href="{% url 'products:payment' %}" class="process-btn">Siparişi Tamamla <i class="fa fa-check"></i></a>
+                            <button type="submit" class="btn-type3" id="submit-order-btn">Siparişi Tamamla</button>
+                            <div id="hidden-order-form" style="display: none;">
+                                <form id="order-form" action="{% url 'products:payment' %}" method="post">
+                                    <!-- Diğer form alanları -->
+                                    <input type="hidden" id="selected-address-id" name="selected_address_id">
+                                    <input type="hidden" id="selected-billing-address-id" name="selected_billing_address_id">
+                                    <input type="hidden" id="card-id" name="card_id">
+                                    <input type="hidden" id="order-total" name="order_total">
+                                    <input type="hidden" id="created-date" name="created_date">
+                                    <input type="hidden" id="order-status" name="order_status">
+                                    <!-- Diğer gerekli gizli alanlar -->
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-type3" id="submit-order-btn">Siparişi Tamamla</button>
+
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -390,10 +400,37 @@ document.getElementById("use-order-address").addEventListener("change", function
 });
 
 
-document.getElementById("order-address-select").addEventListener("change", function() {
-    var billingAddressSelect = document.getElementById("billing-address-select");
-    billingAddressSelect.disabled = true;
+// Sipariş tamamla butonuna tıklanınca
+document.getElementById("submit-order-btn").addEventListener("click", function(event) {
+    // Form elemanlarının değerlerini al
+    var selectedAddressId = document.getElementById("order-address-select").value; // Sipariş adresinin ID'sini alır
+    var selectedBillingAddressId = document.getElementById("billing-address-select").value; // Fatura adresinin ID'sini alır
+    var cardId = "{{ cart_id }}";  // Kullanılan kartın ID'sini alır
+
+    // Diğer gerekli verileri de alabilirsiniz
+
+    // Formu sunucuya göndermek için önce gerekli alanları doldur
+    document.getElementById("selected-address-id").value = selectedAddressId; 
+    document.getElementById("selected-billing-address-id").value = selectedBillingAddressId; 
+    document.getElementById("card-id").value = cardId; 
+    document.getElementById("order-total").value = "{{ cart_total }}"; 
+    document.getElementById("created-date").value = currentDate(); 
+    document.getElementById("order-status").value = "Processing"; 
+
+    // Gizli formu sunucuya gönder
+    document.getElementById("order-form").submit();
+
+    // Sayfanın yeniden yüklenmesini engelle
+    event.preventDefault();
 });
+
+function currentDate() {
+    var now = new Date();
+    var day = ("0" + now.getDate()).slice(-2);
+    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+    var year = now.getFullYear();
+    return year + "-" + month + "-" + day;
+}
 
     </script>
     

@@ -14,6 +14,8 @@ class User(AbstractUser):
     verified = models.BooleanField(default=False)
     receive_email_notifications = models.BooleanField(default=True)
     receive_sms_notifications = models.BooleanField(default=True)
+    tckn = models.CharField(max_length=11, null=True, blank=True)  # TC Kimlik Numarası alanı
+    birth_date = models.DateField(null=True, blank=True)
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ['username']
 

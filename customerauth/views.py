@@ -15,6 +15,7 @@ from django.core import serializers
 from django.template.loader import render_to_string
 from cities_light.models import Country, City, Region, SubRegion
 from main.models import SocialMedia
+from .tcknrequest import TCKimlikNoSorgula
 
 
 
@@ -137,16 +138,36 @@ def profile_update(request):
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     title = "Hesabım"
     profile = get_object_or_404(User, id=request.user.id)
-    wcount =0
+    wcount = 0
+    
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+    
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            form.save()
-            messages.success(request, "Profile Updated Successfully.")
-            return redirect("customerauth:profile")
+            # Form verilerini al
+            tc_kimlik_no = form.cleaned_data['tckn']
+            ad = form.cleaned_data['first_name']
+            soyad = form.cleaned_data['last_name']
+            dogum_yili = form.cleaned_data['birth_date'].year 
+            
+            # TC Kimlik No doğrulama işlemini gerçekleştir
+            sorgu = TCKimlikNoSorgula(tc_kimlik_no, ad, soyad, dogum_yili)
+            sonuc = sorgu.sorgula()
+            
+            if sonuc:
+                # TC Kimlik No doğrulanırsa, profil güncellemesini yap
+                form.save()
+                request.user.verified = True  # Kullanıcının verified alanını True olarak güncelle
+                request.user.save() 
+                messages.success(request, "Profiliniz başarıyla güncellendi.")
+                return redirect("customerauth:profile")
+            else:
+                # TC Kimlik No doğrulanmazsa, hata mesajı göster
+                messages.error(request, "TC Kimlik No doğrulanamadı. Lütfen bilgilerinizi kontrol edin.")
         else:
+            # Form geçersizse, hata mesajlarını göster
             for error in form.errors.values():
                 messages.error(request, error)
     else:
@@ -155,10 +176,10 @@ def profile_update(request):
     context = {
         "form": form,
         "profile": profile,
-        "title":title,
-        "wcount":wcount,
-        "main_categories":main_categories,
-        "social_media_links":social_media_links
+        "title": title,
+        "wcount": wcount,
+        "main_categories": main_categories,
+        "social_media_links": social_media_links
     }
 
     return render(request, "customerauth/profile-edit.html", context)
