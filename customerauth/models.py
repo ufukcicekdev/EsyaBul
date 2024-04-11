@@ -136,3 +136,54 @@ class wishlist_model(models.Model):
 
     def __str__(self):
         return self.product.name
+    
+
+
+
+class Order(models.Model):
+    ORDER_STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Completed', 'Completed'),
+        ('Cancelled', 'Cancelled'),
+    ]
+
+    SHIPPING_STATUS_CHOICES = [
+        ('Preparing', 'Preparing'),
+        ('Shipped', 'Shipped'),
+        ('Delivered', 'Delivered'),
+        ('Returned', 'Returned'),
+        ('Lost', 'Lost'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    order_adress = models.TextField()
+    billing_adress = models.TextField()
+    order_details = models.TextField()
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    order_number = models.CharField(max_length=20, unique=True)
+    status = models.CharField(max_length=20, choices=ORDER_STATUS_CHOICES, default='Pending')
+    shipping_status = models.CharField(max_length=20, choices=SHIPPING_STATUS_CHOICES, default='Preparing')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    rental_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    selling_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    is_rental = models.BooleanField(default=False)
+    rental_period = models.CharField(max_length=20, choices=ProductRentalPrice.RENTAL_MOUTHLY_CHOICES, null=True, blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+    def subtotal(self):
+        if self.is_rental:
+            return self.rental_price * self.quantity
+        else:
+            return self.selling_price * self.quantity
+
+    def __str__(self):
+        return f"{self.product.name} ({self.quantity})"
+    
+
+

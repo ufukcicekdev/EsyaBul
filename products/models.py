@@ -221,3 +221,5 @@ class CartItem(models.Model):
             return self.rental_price * self.quantity
         else:
             return self.selling_price * self.quantity
+        
+

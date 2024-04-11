@@ -3,10 +3,10 @@ from customerauth.forms import UserRegisterForm, ProfileForm, AddressForm,Custom
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.conf import settings
-from customerauth.models import User, Address, MyStyles, wishlist_model
+from customerauth.models import User, Address, MyStyles, wishlist_model,Order,OrderItem
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from products.models import RoomType, HomeType, HomeModel, SpaceDefinition, TimeRange, Product, Category
+from products.models import RoomType, HomeType, HomeModel, SpaceDefinition, TimeRange, Product, Category,Cart,CartItem
 from django.core.mail import EmailMessage
 from actstream import action
 import json
@@ -24,9 +24,15 @@ from .tcknrequest import TCKimlikNoSorgula
 def register_view(request):
     social_media_links = SocialMedia.objects.all()
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
-    wcount =0
+    wcount = 0
+    hcount = 0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
         if form.is_valid():
@@ -61,7 +67,8 @@ def register_view(request):
         'form': form,
         'main_categories':main_categories,
         "wcount":wcount,
-        "social_media_links":social_media_links
+        "social_media_links":social_media_links,
+        "hcount":hcount
     }
     
     return render(request, "customerauth/sign-up.html", context)
@@ -110,12 +117,19 @@ def login_view(request):
             messages.warning(request, "Hatalı şifre veya kullanıcı adı girdiniz.")
 
     wcount =0
+    hcount = 0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
     context= {
         "main_categories":main_categories,
         "wcount":wcount,
-        "social_media_links":social_media_links
+        "social_media_links":social_media_links,
+        "hcount":hcount
     }
     
     return render(request, "customerauth/sign-in.html",context)
@@ -139,9 +153,14 @@ def profile_update(request):
     title = "Hesabım"
     profile = get_object_or_404(User, id=request.user.id)
     wcount = 0
-    
+    hcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
     
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=profile)
@@ -179,7 +198,8 @@ def profile_update(request):
         "title": title,
         "wcount": wcount,
         "main_categories": main_categories,
-        "social_media_links": social_media_links
+        "social_media_links": social_media_links,
+        "hcount":hcount
     }
 
     return render(request, "customerauth/profile-edit.html", context)
@@ -190,9 +210,24 @@ def thank_you_view(request):
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     user_name = request.user.username  # Örneğin, kullanıcı adını alıyorum
     wcount =0
+    hcount = 0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
-    return render(request, "customerauth/thank-you.html", {'user_name': user_name, "wcount":wcount, "main_categories":main_categories,"social_media_links":social_media_links})
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
+
+    context = {
+        'user_name': user_name, 
+        "wcount":wcount, 
+        "main_categories":main_categories,
+        "social_media_links":social_media_links,
+        "hcount":hcount
+    }
+
+    return render(request, "customerauth/thank-you.html", context)
 
 
 @login_required(login_url='customerauth:sign-in')
@@ -203,8 +238,15 @@ def customer_dashboard(request):
     addresses = Address.objects.filter(user=request.user)
     form = AddressForm(request.POST or None) 
     title ="Hesabım"
+    hcount =0
+    wcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
     if request.method == "POST":
         if form.is_valid():  
             new_address = form.save(commit=False) 
@@ -222,7 +264,8 @@ def customer_dashboard(request):
         "title":title,
         "wcount":wcount,
         "main_categories":main_categories,
-        "social_media_links":social_media_links
+        "social_media_links":social_media_links,
+        "hcount":hcount
     }
     return render(request, 'customerauth/dashboard.html', context)
 
@@ -233,8 +276,14 @@ def password_change(request):
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     title = "Hesabım"
     wcount=0
+    hcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
     if request.method == "POST":
         form = CustomPasswordChangeForm(request.user, request.POST)
         if form.is_valid():
@@ -253,7 +302,8 @@ def password_change(request):
         "title":title,
         "wcount":wcount,
         "main_categories":main_categories,
-        "social_media_links":social_media_links
+        "social_media_links":social_media_links,
+        "hcount":hcount
     }
     return render(request, 'customerauth/password_change.html', context)
 
@@ -266,8 +316,14 @@ def notifications(request):
     user_profile = get_object_or_404(User, id=request.user.id)
   # varsayılan olarak user'ın profile'ını alır, profile yoksa oluşturur
     wcount=0
+    hcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
 
     print("user_profile",user_profile.receive_email_notifications)
     if request.method == 'POST':
@@ -281,7 +337,16 @@ def notifications(request):
     else:
         form = NotificationSettingsForm(instance=user_profile)
 
-    return render(request, 'customerauth/notifications.html', {'form': form, 'title':title, "wcount":wcount, "main_categories":main_categories,"social_media_links":social_media_links})
+    context = {
+        'form': form, 
+        'title':title, 
+        "wcount":wcount, 
+        "main_categories":main_categories,
+        "social_media_links":social_media_links,
+        "hcount":hcount
+    }
+
+    return render(request, 'customerauth/notifications.html', context)
 
 ###################### Address  Open #################
 
@@ -291,12 +356,28 @@ def address_list(request):
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     title ="Adreslerim"
     wcount =0
+    hcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
     addresses = Address.objects.filter(user=request.user)
     form = AddressForm(request.POST or None) 
-    return render(request, 'customerauth/address.html', {'addresses': addresses, 'form': form, 'title':title ,"wcount":wcount, 
-                                                         "main_categories":main_categories, "social_media_links":social_media_links})
+
+    context = {
+        'addresses': addresses, 
+        'form': form, 
+        'title':title ,
+        "wcount":wcount, 
+        "main_categories":main_categories, 
+        "social_media_links":social_media_links,
+        "hcount":hcount
+    }
+
+    return render(request, 'customerauth/address.html', context)
 
 
 @login_required(login_url='customerauth:sign-in')
@@ -305,8 +386,14 @@ def create_address(request):
     social_media_links = SocialMedia.objects.all()
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     wcount =0
+    hcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
     if request.method == 'POST':
         form = AddressForm(request.POST)
         if form.is_valid():
@@ -320,8 +407,16 @@ def create_address(request):
     else:
         form = AddressForm()
 
-    return render(request, 'customerauth/add-new-address.html', 
-                  {'form': form, 'title': title, "wcount":wcount, "main_categories":main_categories,"social_media_links":social_media_links})
+    context = {
+        'form': form, 
+        'title': title, 
+        "wcount":wcount, 
+        "main_categories":main_categories,
+        "social_media_links":social_media_links,
+        "hcount":hcount
+    }
+
+    return render(request, 'customerauth/add-new-address.html', context)
 
 
 @login_required(login_url='customerauth:sign-in')
@@ -331,8 +426,14 @@ def edit_address(request, address_id):
     title ="Adreslerim"
     address = get_object_or_404(Address, id=address_id)
     wcount =0
+    hcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
     if request.method == 'POST':
         form = AddressForm(request.POST, instance=address)
         if form.is_valid():
@@ -342,8 +443,17 @@ def edit_address(request, address_id):
     else:
         form = AddressForm(instance=address)
 
-    return render(request, 'customerauth/edit-address.html', 
-                  {'form': form, 'address': address, 'title': title, "wcount":wcount, "main_categories":main_categories, "social_media_links":social_media_links})
+    context = {
+        'form': form, 
+        'address': address, 
+        'title': title, 
+        "wcount":wcount, 
+        "main_categories":main_categories, 
+        "social_media_links":social_media_links,
+        "hcount":hcount    
+    }
+
+    return render(request, 'customerauth/edit-address.html', context)
 
 
 @login_required(login_url='customerauth:sign-in')
@@ -374,8 +484,14 @@ def room_type_selected(request):
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     active_room_types = RoomType.objects.filter(is_active=True)
     wcount=0
+    hcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
     if request.method == 'POST':
         user = request.user
         selected_room_type_id = request.POST.get('selected_room_type_id')
@@ -399,8 +515,15 @@ def room_type_selected(request):
             else:
                 messages.error(request, 'Invalid room type selected.')
 
-    return render(request, 'my_style/room_type_selected.html', 
-                  {'room_types': active_room_types, "wcount":wcount, "main_categories":main_categories, "social_media_links":social_media_links})
+    context = {
+        'room_types': active_room_types, 
+        "wcount":wcount, 
+        "main_categories":main_categories, 
+        "social_media_links":social_media_links,
+        "hcount":hcount
+    }
+
+    return render(request, 'my_style/room_type_selected.html', context)
 
 
 @login_required(login_url='customerauth:sign-in')
@@ -409,8 +532,14 @@ def home_type_selected(request):
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     active_home_types = HomeType.objects.filter(is_active=True)
     wcount=0
+    hcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
     if request.method == 'POST':
         user = request.user
         selected_home_type_id = request.POST.get('selected_home_type_id')
@@ -434,8 +563,15 @@ def home_type_selected(request):
             else:
                 messages.error(request, 'Invalid room type selected.')
 
-    return render(request, 'my_style/home_type_selected.html', 
-                  {'home_types': active_home_types, "wcount":wcount,"main_categories":main_categories, "social_media_links":social_media_links})
+    context = {
+        'home_types': active_home_types, 
+        "wcount":wcount,
+        "main_categories":main_categories, 
+        "social_media_links":social_media_links,
+        "hcount":hcount
+    }
+
+    return render(request, 'my_style/home_type_selected.html', context)
 
 
 @login_required(login_url='customerauth:sign-in')
@@ -444,8 +580,14 @@ def home_model_selected(request):
     active_space_definations = HomeModel.objects.filter(is_active=True)
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     wcount=0
+    hcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
     if request.method == 'POST':
         user = request.user
         selected_home_model_id = request.POST.get('selected_home_model_id')
@@ -471,7 +613,8 @@ def home_model_selected(request):
     
 
     return render(request, 'my_style/home_model_selected.html', 
-                  {'home_models': active_space_definations, "wcount":wcount,"main_categories":main_categories,"social_media_links":social_media_links})
+                  {'home_models': active_space_definations, "wcount":wcount,"main_categories":main_categories,
+                   "social_media_links":social_media_links,"hcount":hcount})
 
 
 @login_required(login_url='customerauth:sign-in')
@@ -480,8 +623,14 @@ def space_definations_selected(request):
     active_space_def = SpaceDefinition.objects.filter(is_active=True)
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     wcount=0
+    hcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
     if request.method == 'POST':
         user = request.user
         selected_space_def_id = request.POST.get('selected_space_def_id')
@@ -507,7 +656,8 @@ def space_definations_selected(request):
     
 
     return render(request, 'my_style/space_definations_selected.html', 
-                  {'space_defs': active_space_def, "wcount":wcount,"main_categories":main_categories,"social_media_links":social_media_links})
+                  {'space_defs': active_space_def, "wcount":wcount,
+                   "main_categories":main_categories,"social_media_links":social_media_links,"hcount":hcount})
 
 
 @login_required(login_url='customerauth:sign-in')
@@ -516,8 +666,14 @@ def time_range_selected(request):
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     active_time_range = TimeRange.objects.filter(is_active=True)
     wcount=0
+    hcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
     if request.method == 'POST':
         user = request.user
         selected_time_range_id = request.POST.get('selected_time_range_id')
@@ -543,7 +699,8 @@ def time_range_selected(request):
     
 
     return render(request, 'my_style/time_range_selected.html', 
-                  {'time_ranges': active_time_range, "wcount":wcount, "main_categories":main_categories,"social_media_links":social_media_links})
+                  {'time_ranges': active_time_range, "wcount":wcount, 
+                   "main_categories":main_categories,"social_media_links":social_media_links,"hcount":hcount})
 
 
 def update_user_my_style_status(user):
@@ -577,11 +734,23 @@ def forgot_password(request):
 
         user_name = request.user.username 
 
+        wcount=0
+        hcount=0
+        if request.user.is_authenticated:
+            wcount = wishlist_model.objects.filter(user=request.user).count()
+            try:
+                handbag = Cart.objects.get(user=request.user, order_completed=False)
+                hcount = CartItem.objects.filter(cart=handbag).count()
+            except Cart.DoesNotExist:
+                pass
+
         context1 = {
             'success_messages': f"Şifren başarıyla değiştirildi. Tekrar hoşgeldin, {user_name}!",
             'target_url':"main:home",
             'main_categories':main_categories,
-            "social_media_links":social_media_links
+            "social_media_links":social_media_links,
+            "hcount":hcount,
+            "wcount":wcount
         }
         return render(request, "customerauth/thank-you.html", context1)
     
@@ -596,10 +765,24 @@ def reset_password(request):
         user = get_object_or_404(User, username=username)
         otp = random.randint(100000, 999999)
         social_media_links = SocialMedia.objects.all()
+        wcount=0
+        hcount=0
+        main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
+
+        if request.user.is_authenticated:
+            wcount = wishlist_model.objects.filter(user=request.user).count()
+            try:
+                handbag = Cart.objects.get(user=request.user, order_completed=False)
+                hcount = CartItem.objects.filter(cart=handbag).count()
+            except Cart.DoesNotExist:
+                pass
         context = {
             'username': user.username,
             'otp': otp,
             "social_media_links":social_media_links,
+            "wcount":wcount,
+            "hcount":hcount,
+            "main_categories":main_categories
         }
         email_content = render_to_string('email_templates/reset_password_email.html', context)
         try:
@@ -626,14 +809,21 @@ def wishlist_view(request):
     wishlistProducts = wishlist_model.objects.filter(user=request.user)
     title = "Beğendiklerim"
     wcount=0
+    hcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
     context = {
         "wishlistProducts":wishlistProducts,
         "title":title,
         "wcount":wcount,
         "main_categories":main_categories,
-        "social_media_links":social_media_links
+        "social_media_links":social_media_links,
+        "hcount":hcount
     }
     return render(request, "customerauth/wishlist.html", context)
 
@@ -643,6 +833,8 @@ def add_to_wishlist(request):
     product = Product.objects.get(id=product_id)
     context = {}
     wishlist_count = wishlist_model.objects.filter(product=product, user=request.user).count()
+
+    
     
     if wishlist_count > 0:
         wishlist_count = wishlist_model.objects.filter(user=request.user).count()
@@ -681,3 +873,31 @@ def remove_wishlist(request):
 ################### Wishlist Close ################
 
 
+
+
+@login_required(login_url='customerauth:sign-in')
+def orders_List(request):
+    social_media_links = SocialMedia.objects.all()
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
+    title ="Siparişlerim"
+    wcount =0
+    hcount=0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
+    order_lists = Order.objects.filter(user=request.user)
+
+    context = {
+        'order_lists': order_lists, 
+        'title':title ,
+        "wcount":wcount, 
+        "main_categories":main_categories, 
+        "social_media_links":social_media_links,
+        "hcount":hcount
+    }
+
+    return render(request, 'customerauth/customer-orders.html', context)

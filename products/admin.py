@@ -2,6 +2,7 @@ from django.contrib import admin
 from products.models import Product, ProductImage, ProductRentalPrice, RoomType, HomeType, HomeModel, SpaceDefinition, TimeRange, Category
 
 
+
 class ProductImagesAdmin(admin.TabularInline):
     model = ProductImage
 
@@ -56,5 +57,6 @@ admin.site.register(Category)
 
 
 
- 
+
+
 

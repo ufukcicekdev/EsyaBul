@@ -37,5 +37,10 @@ urlpatterns = [
     path("add-to-wishlist/", views.add_to_wishlist, name="add-to-wishlist"),
     path("remove-from-wishlist/", views.remove_wishlist, name="remove-from-wishlist"),
 
+
+    #orders#
+    path('dashboard/orders/', views.orders_List, name='orders-list'),
+
+
     path('', include('main.urls')),
 ]

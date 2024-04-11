@@ -1,5 +1,5 @@
 {% extends 'partialsBase/base.html' %}
-{% block title %} {{title}} - Eşyala {% endblock %}
+{% block title %} {{ title }} - Eşyala {% endblock %}
 {% load static %}
 {% block content %}
 
@@ -26,7 +26,7 @@
                         <ul class="list-unstyled">
                           <li><a href="{% url 'main:home' %}">Anasayfa <i class="fa fa-angle-right"></i></a></li>
                           <li><a href="{% url 'customerauth:dashboard' %}">Hesabım <i class="fa fa-angle-right"></i></a></li>
-                          <li>Adreslerim</li>
+                          <li>Siparişlerim</li>
                         </ul>
                       </nav>
                       <!-- Breadcrumbs of the Page end -->
@@ -45,8 +45,8 @@
                         <div class="left">
                             <div class="accountList">
                                 <ul class="sc-ecPEgm dCbnuA">
-                                    <li class="sc-gdyeKB xqfpj"><button onclick="getOrders()" class="sc-kzqdkY edqiAa title-bold-16-19">Siparişlerim</button></li>
-                                    <li class="sc-gdyeKB xqfpj"><button onclick="getAddress()" class="sc-kzqdkY hIpJTj title-bold-16-19">Adres
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getOrders()" class="sc-kzqdkY hIpJTj title-bold-16-19">Siparişlerim</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getAddress()" class="sc-kzqdkY edqiAa title-bold-16-19">Adres
                                             Bilgilerim</button></li>
                                             <li class="sc-gdyeKB xqfpj"><button onclick="getProfile()" class="sc-kzqdkY edqiAa title-bold-16-19">Kişisel
                                                 Bilgiler</button></li>
@@ -62,61 +62,45 @@
 
                         <div class="right">
                             
-                            <div id="addressPage" class="sc-bVHCgj bvQtLI">
+                            <div id="addressPage" class="sc-bVHCgj bvQtLI">   
+                                
                                 <div class="contentTitle heading">
-                                    <strong class="d-block headline-bold-20-24">Adres bilgilerim</strong>
-                                    <div class="insertAddress body-bold-14-17">
-                                        <a class="sc-iHGNWf bhQoUp d-block" href="{% url 'customerauth:create-address' %}">
-                                            <div class="sc-kOHTFB kABxmt">
-                                                <div class="sc-dtBdUo eeQyqX">
-                                                    <svg width="24px" height="24px" viewBox="0 0 16 16" fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg" name="PlusSmall">
-                                                        <g id="arrow/+">
-                                                            <g id="i-add">
-                                                                <path id="Path" d="M10.666 8.00104L5.33268 8.00104"
-                                                                    stroke="#0A103D" stroke-width="2" stroke-linecap="round"
-                                                                    stroke-linejoin="round"></path>
-                                                                <path id="Path_2" d="M7.99896 10.6673L7.99896 5.33398"
-                                                                    stroke="#0A103D" stroke-width="2" stroke-linecap="round"
-                                                                    stroke-linejoin="round"></path>
-                                                            </g>
-                                                        </g>
-                                                    </svg>
-                                                </div>
-                                                Yeni adres ekle
-                                            </div>
-                                        </a>
-                                    </div>
+                                    <strong class="d-block headline-bold-20-24">Siparişlerim</strong>
+                               
                                 </div>
-        
                                 <div class="addressList">
-                                    {% for address in addresses %}
+                                    {% for order in order_lists %}
                                         <div class="addressBox">
                                             <div class="header">
-                                                <strong class="title body-semi-bold-14-17">{{ address.address_name }}</strong>
+                                                <strong class="title body-semi-bold-14-17">Sipariş Numarası: {{ order.order_number }}</strong>
                                                 <div class="body-bold-14-17">
-                                                    <a href="{% url 'customerauth:delete-address' address.id %}"
+                                                    <a href=""
                                                         class="sc-iHGNWf bhQoUp d-block edit-address">
-                                                        <div class="sc-kOHTFB kABxmt">Sil</div>
-                                                    </a>
-                                                    
+                                                        <div class="sc-kOHTFB kABxmt">Detay</div>
+                                                    </a> 
                                                 </div>
-                                                <div class="body-bold-14-17">
-                                                    <a href="{% url 'customerauth:edit-address' address.id %}"
-                                                        class="sc-iHGNWf bhQoUp d-block edit-address">
-                                                        <div class="sc-kOHTFB kABxmt">Düzenle</div>
-                                                    </a>
-                                                    
-                                                </div>
-                                                
                                             </div>
                                             <div class="body">
-                                                <p class="description body-regular-14-17">{{ address.address_line1 }}</p>
-                                                <p class="description body-regular-14-17">{{ address.city.name }} /
-                                                    {{ address.region.name }} / {{ address.country.name }}</p>
+                                                <ul>
+                                                    {% for item in order.orderitem_set.all %}
+                                                        <li> <a href="{% url 'products:product-detail-view' item.product.slug %}">{{ item.product.name }}</a> - {{ item.quantity }} Adet </li>
+                                                    {% endfor %}
+                                                </ul>
+                                                <p class="description body-regular-14-17">Toplam Tutar: {{ order.total_amount }}</p>
+                                                <p class="description body-regular-14-17">Sipariş Tarihi: {{ order.created_at }}</p>
+                                                {% if order.status == 'Pending' %}
+                                                    <p class="description body-regular-14-17">Sipariş Durumu: Beklemede</p>
+                                                {% elif order.status == 'Completed' %}
+                                                    <p class="description body-regular-14-17">Sipariş Durumu: Tamamlandı</p>
+                                                {% elif order.status == 'Cancelled' %}
+                                                    <p class="description body-regular-14-17">Sipariş Durumu: İptal Edildi</p>
+                                                {% endif %}
+                                                <p class="description body-regular-14-17">Teslimat Adresi: {{ order.order_adress }}</p>
+                                                <p class="description body-regular-14-17">Fatura Adresi: {{ order.billing_adress }}</p>
                                             </div>
                                         </div>
                                     {% endfor %}
+
                                 </div>
                             </div>
                         </div>

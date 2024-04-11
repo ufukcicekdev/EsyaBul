@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from main.models import ContactUs,SocialMedia, HomeMainBanner
 from django.http import JsonResponse
-from products.models import Category,Product, ProductReview
+from products.models import Category,Product, ProductReview,Cart,CartItem
 from customerauth.models import wishlist_model
 from django.http import Http404
 from django.db.models import Q,Avg
@@ -14,14 +14,21 @@ def home(request):
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     homemainbanners = HomeMainBanner.objects.filter(is_active=True)
     wcount = 0
+    hcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
 
     context = {
         'social_media_links': social_media_links, 
         "wcount": wcount, 
         'main_categories':main_categories,
-        "homemainbanners":homemainbanners
+        "homemainbanners":homemainbanners,
+        "hcount":hcount
     }
         
     return render(request, 'coreBase/home.html', context)
@@ -35,14 +42,21 @@ def my_style_start(request):
     social_media_links = SocialMedia.objects.all()
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     wcount=0
+    hcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
     user_name = user.username
     
     if user.my_style:
         return redirect('main:home')
 
-    return render(request, 'my_style/my_style_start.html', {'user_name': user_name, "wcount":wcount, "main_categories":main_categories,"social_media_links":social_media_links})
+    return render(request, 'my_style/my_style_start.html', {'user_name': user_name, 
+                    "wcount":wcount, "main_categories":main_categories,"social_media_links":social_media_links,"hcount":hcount})
 
 
 ################### Errors Open ################
@@ -50,18 +64,40 @@ def my_style_start(request):
 def custom_404_page(request, exception):
     social_media_links = SocialMedia.objects.all()
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
+    wcount=0
+    hcount=0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
     context = {
         "social_media_links":social_media_links,
-        "main_categories":main_categories
+        "main_categories":main_categories,
+        "wcount":wcount,
+        "hcount":hcount
     }
     return render(request, 'errors/404.html', context, status=404)
 
 def custom_500_page(request):
     social_media_links = SocialMedia.objects.all()
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
+    wcount=0
+    hcount=0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
     context = {
         "social_media_links":social_media_links,
-        "main_categories":main_categories
+        "main_categories":main_categories,
+        "wcount":wcount,
+        "hcount":hcount
     }
     return render(request, 'errors/500.html', context, status=500)
 
@@ -76,9 +112,16 @@ def contact(request):
     social_media_links = SocialMedia.objects.all()
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     wcount=0
+    hcount=0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
-    return render(request, "mainBase/contact.html", {'wcount':wcount, 'main_categories':main_categories, 'social_media_links':social_media_links})
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
+    return render(request, "mainBase/contact.html", {'wcount':wcount, 'main_categories':main_categories, 
+                                                     'social_media_links':social_media_links,"hcount":hcount})
 
 
 def ajax_contact_form(request):
@@ -110,9 +153,15 @@ def ajax_contact_form(request):
 def dynamic_category_product_list_view(request, category_slugs):
     social_media_links = SocialMedia.objects.all()
     category_slug_list = category_slugs.split('/')
-    wcount=0    
+    wcount=0 
+    hcount=0   
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
 
     # Ana kategorileri al
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
@@ -126,8 +175,8 @@ def dynamic_category_product_list_view(request, category_slugs):
             "main_categories1": main_categories,
             "category_name": main_category,
             "wcount":wcount,
+            "hcount":hcount,
             "social_media_links":social_media_links,
-            "add_to_cart_form":add_to_cart_form,
             "all_categories": Category.objects.all()  # Tüm kategorileri döndür
         }
         return render(request, "core/category-product-list.html", context)
@@ -164,6 +213,7 @@ def dynamic_category_product_list_view(request, category_slugs):
     context = {
         "products": products,
         "wcount": wcount,
+        "hcount":hcount,
         "category": main_category,
         "category_name": target_category,
         "subcategories": subcategories,

@@ -37,3 +37,9 @@ function GetRegisterPage() {
 }
 
 
+
+function getOrders() {
+  const previousPageUrl = "/dashboard/orders/";
+
+  window.location.href = previousPageUrl;
+}

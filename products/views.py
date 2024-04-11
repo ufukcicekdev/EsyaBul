@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from .models import Product, Category, ProductReview, Cart, CartItem, ProductRentalPrice
-from customerauth.models import wishlist_model, Address, User
+from customerauth.models import wishlist_model, Address, User, Order, OrderItem
 from products.forms import ProductReviewForm,AddToCartForm
 from django.urls import reverse
 from django.db.models import Avg
@@ -18,6 +18,17 @@ import requests
 from cities_light.models import City, Country
 from ipware import get_client_ip
 from datetime import datetime
+import random
+import string
+from django.core.mail import send_mail
+import os
+from django.core.mail import EmailMessage
+from django.contrib.auth import get_user_model
+from dotenv import load_dotenv
+
+load_dotenv()
+
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 
 
 csrf_protect = decorator_from_middleware(CsrfViewMiddleware)
@@ -33,7 +44,11 @@ def product_detail_view(request, product_slug):
     hcount =0
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
-        hcount = Cart.objects.filter(user=request.user, order_completed=False).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
 
     
     reviews = ProductReview.objects.filter(product=product)
@@ -58,6 +73,9 @@ def product_detail_view(request, product_slug):
     }
     
     return render(request, 'core/product-detail.html', context)
+
+
+
 
 @login_required(login_url='customerauth:sign-in')
 def add_product_review(request, product_id):
@@ -127,24 +145,33 @@ def order_shopping_card(request):
     hcount = 0
     cart_items = []
     cart_total = 0  # Sepetin toplam tutarı
+    user_verified = False  # Kullanıcının doğrulanıp doğrulanmadığını başlangıçta False olarak ayarlayın
 
     if request.user.is_authenticated:
-        wcount = wishlist_model.objects.filter(user=request.user).count()
-        handbag = Cart.objects.get(user=request.user, order_completed=False)
-        hcount = CartItem.objects.filter(cart=handbag).count()
+        # Kullanıcının doğrulama durumunu kontrol edin
         user_verified = get_object_or_404(User, id=request.user.id).verified
 
+        # Kullanıcının isteğe bağlı olarak tanımlanmış sepetini alın
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
 
-        # Sepete eklenen ürünleri al
-        cart = Cart.objects.get(user=request.user, order_completed=False)
-        cart_items = cart.cartitem_set.all()
+        # Sepete eklenen ürünleri alın
+        cart = Cart.objects.filter(user=request.user, order_completed=False).first()
+        if cart:
+            cart_items = cart.cartitem_set.all()
 
-        # Sepetin toplam tutarını hesapla
-        for cart_item in cart_items:
-            if cart_item.is_rental:
-                cart_total += cart_item.rental_price * cart_item.quantity
-            else:
-                cart_total += cart_item.selling_price * cart_item.quantity
+            # Sepetin toplam tutarını hesaplayın
+            for cart_item in cart_items:
+                if cart_item.is_rental:
+                    cart_total += cart_item.rental_price * cart_item.quantity
+                else:
+                    cart_total += cart_item.selling_price * cart_item.quantity
+
+        # Kullanıcının dileği bağlı olarak oluşturulan sepeti yoksa, hcount sıfır olacak
+        # ve bu durumda kullanıcıya hata mesajı gösterebilirsiniz
 
     context = {
         'main_categories': main_categories,
@@ -153,10 +180,11 @@ def order_shopping_card(request):
         'cart_items': cart_items,
         'cart_total': cart_total,  # Sepetin toplam tutarı
         "social_media_links": social_media_links,
-        "user_verified":user_verified
+        "user_verified": user_verified
     }
 
     return render(request, 'core/order-shopping-card.html', context)
+
 
 @csrf_protect
 @login_required(login_url='customerauth:sign-in')
@@ -168,7 +196,7 @@ def remove_from_cart(request, cart_item_id):
         return redirect('products:order_shopping_card')
     except:
         
-        messages.warning(request, "Ürün silinnirken bir hata oluştu!")
+        messages.warning(request, "Ürün silinirken bir hata oluştu!")
         return redirect('products:order_shopping_card')
     
         
@@ -182,22 +210,30 @@ def order_checkout(request):
     cart_items = []
     cart_total = 0  # Sepetin toplam tutarı
     user_addresses = Address.objects.filter(user=request.user)
+    cart_id = None  # Sepet ID'sini başlangıçta None olarak ayarlayın
+
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
-        handbag = Cart.objects.get(user=request.user, order_completed=False)
-        hcount = CartItem.objects.filter(cart=handbag).count()
 
-        # Sepete eklenen ürünleri al
-        cart = Cart.objects.get(user=request.user, order_completed=False)
-        cart_id = cart.id
-        cart_items = cart.cartitem_set.all()
+        # Kullanıcının isteğe bağlı olarak tanımlanmış sepetini alın
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+            cart_id = handbag.id
+        except Cart.DoesNotExist:
+            pass
 
-        # Sepetin toplam tutarını hesapla
-        for cart_item in cart_items:
-            if cart_item.is_rental:
-                cart_total += cart_item.rental_price * cart_item.quantity
-            else:
-                cart_total += cart_item.selling_price * cart_item.quantity
+        # Kullanıcının sepetindeki ürünleri alın
+        cart = Cart.objects.filter(user=request.user, order_completed=False).first()
+        if cart:
+            cart_items = cart.cartitem_set.all()
+
+            # Sepetin toplam tutarını hesaplayın
+            for cart_item in cart_items:
+                if cart_item.is_rental:
+                    cart_total += cart_item.rental_price * cart_item.quantity
+                else:
+                    cart_total += cart_item.selling_price * cart_item.quantity
 
     context = {
         'main_categories': main_categories,
@@ -206,12 +242,11 @@ def order_checkout(request):
         'cart_items': cart_items,
         'cart_total': cart_total,  # Sepetin toplam tutarı
         "social_media_links": social_media_links,
-        "user_addresses":user_addresses,
-        "cart_id":cart_id,
+        "user_addresses": user_addresses,
+        "cart_id": cart_id,
     }
 
     return render(request, 'core/order-check-out.html', context)
-
 
 
 def my_view(request):
@@ -239,9 +274,18 @@ options = {
 }
 sozlukToken = list()
 
+def generate_order_number():
+    # 10 karakterlik bir rastgele sipariş numarası oluşturuyoruz
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+
+order_number = generate_order_number()
+
+order_data = {}
+
 @csrf_protect
 @login_required(login_url='customerauth:sign-in')
 def payment(request):
+    global order_data  # payment_params değişkenini global olarak kullanabilmek için
     if not request.user.is_authenticated:
         return redirect()
 
@@ -346,10 +390,19 @@ def payment(request):
 
         basket_items.append(item)
 
+    order_data = {
+        'user': request.user,
+        'user_order_addresses': user_order_addresses,
+        'billing_address': billing_address,
+        'basket_items': basket_items,
+        'order_total': order_total,
+        "cart_items":cart_items,
+        "card_id": card_id
+    }
 
     request={
         'locale': 'tr',
-        'conversationId': '123456789',
+        'conversationId': order_number,
         'price': str(order_total.replace(',','.')),
         'paidPrice': str(order_total.replace(',','.')),
         'currency': 'TRY',
@@ -364,7 +417,7 @@ def payment(request):
         #'debitCardAllowed': True
     }
 
-    print("------request",request)
+    
 
     checkout_form_initialize = iyzipay.CheckoutFormInitialize().create(request, options)
 
@@ -384,7 +437,18 @@ def payment(request):
 
 @csrf_exempt
 def result(request):
+    global order_data  # payment_params d
     context = dict()
+
+    user = order_data.get('user')
+    user_order_addresses = order_data.get('user_order_addresses')
+    billing_address = order_data.get('billing_address')
+    basket_items = order_data.get('basket_items')
+    order_total = order_data.get('order_total')
+    cart_items = order_data.get('cart_items')
+    card_id = order_data.get('card_id')
+
+
 
     url = request.META.get('index')
 
@@ -392,20 +456,20 @@ def result(request):
 
     request_data = {
         'locale': 'tr',
-        'conversationId': '123456789',
+        'conversationId': order_number,
         'token': sozlukToken[0]
     }
     checkout_form_result = iyzipay.CheckoutForm().retrieve(request_data, options)
-    print(type(checkout_form_result))
     result = checkout_form_result.read().decode('utf-8')
-    print(sozlukToken[0])   # Form oluşturulduğunda 
     sonuc = json.loads(result, object_pairs_hook=list)
-    for i in sonuc:
-        print(i)
-    print(sozlukToken)
     if sonuc:
         if sonuc[0][1] == 'success':
             messages.success(request, "Ödeme işleminiz başarıyla gerçekleşti!")
+            create_order_and_items(user, user_order_addresses, billing_address, basket_items, order_total, order_number, cart_items, card_id)
+
+            order = Order.objects.get(order_number=order_number)
+            order.status = 'Pending'
+            order.save()
         elif sonuc[0][1] == 'failure':
             messages.warning(request, sonuc[2][1])
     else:
@@ -413,4 +477,52 @@ def result(request):
 
     return redirect('products:order_checkout')
 
+
+
+def create_order_and_items(user, user_order_addresses, billing_address, basket_items, order_total, order_number, cart_items, card_id):
+    # Yeni bir sipariş oluştur
+    order = Order.objects.create(
+        user=user,
+        order_adress=user_order_addresses,
+        billing_adress=billing_address,
+        order_details=json.dumps(basket_items),
+        total_amount=float(order_total.replace(',', '.')),
+        order_number=order_number,
+        status='Pending',
+        shipping_status='Preparing'
+    )
+    order_create_mail(order_number)
+    cart_order_completed(card_id)
+    for cart_item in cart_items:
+        print("cart_item",cart_item)
+        OrderItem.objects.create(
+            order=order,
+            product=cart_item.product,
+            quantity=cart_item.quantity,
+            rental_price= cart_item.rental_price,
+            selling_price= cart_item.selling_price,
+            is_rental=cart_item.is_rental,
+            rental_period=cart_item.rental_period,
+        )
+
+    return order
+
+def order_create_mail(order_number):
+    subject = "Yeni bir sipariş oluşturuldu"
+    body = f"{order_number} sipariş numaralı yeni bir sipariş oluşturuldu."
+
+    recipients = get_user_model().objects.filter(is_superuser=True).values_list('email', flat=True)
+
+    # E-posta gönderme işlemi
+    email = EmailMessage(subject, body, EMAIL_HOST_USER, recipients)
+    email.send()
+
+def cart_order_completed(card_id):
+    cart = Cart.objects.get(order_completed=False, id=card_id)
+    cart.order_completed = True
+    cart.save()
+
+    cart_items = CartItem.objects.get(order_completed=False, cart_id=card_id)
+    cart_items.order_completed = True
+    cart_items.save()
 
