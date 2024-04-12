@@ -1,0 +1,228 @@
+{% extends 'partialsBase/base.html' %}
+{% block title %} {{ title }} - Eşyala {% endblock %}
+{% load static %}
+{% block content %}
+
+
+<style>
+    /* Tablo Stili */
+.order-details-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.order-details-table th,
+.order-details-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.order-details-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+/* Alternatif Satır Stili */
+.order-details-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+
+/* Tablo Stili */
+.order-items-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.order-items-table th,
+.order-items-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.order-items-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+/* Alternatif Satır Stili */
+.order-items-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Resim Stili */
+.order-items-table img {
+    width: 80px;
+    height: 80px;
+    border-radius: 5px;
+}
+
+
+</style>
+
+<div id="wrapper">
+    <!-- Page Loader -->
+    <div id="pre-loader" class="loader-container">
+        <div class="loader">
+            <img src="{% static 'basestatic/images/svg/rings.svg' %}" alt="loader">
+        </div>
+    </div>
+    <!-- W1 start here -->
+    <div class="w1">
+        <!-- mt header style4 start here -->
+        {% include 'coreBase/header.html' %}
+        <main id="mt-main">  
+            <section class="mt-contact-banner mt-banner-22" style="background-image: url({% static 'basestatic/images/img-76.jpg' %}); background-size: cover; background-position: center;">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <h1 class="text-center">Hesabım</h1>
+                      <!-- Breadcrumbs of the Page -->
+                      <nav class="breadcrumbs">
+                        <ul class="list-unstyled">
+                          <li><a href="{% url 'main:home' %}">Anasayfa <i class="fa fa-angle-right"></i></a></li>
+                          <li><a href="{% url 'customerauth:dashboard' %}">Hesabım <i class="fa fa-angle-right"></i></a></li>
+                          <li>Siparişlerim</li>
+                        </ul>
+                      </nav>
+                      <!-- Breadcrumbs of the Page end -->
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+        </main>
+        
+        <main class="site-main">
+            <div class="site-main__container">
+                <div class="container">
+                    <h1 class="pageTitle headline-bold-24-29">Adreslerim</h1>
+                    <div class="profileLayout">
+                        <div class="left">
+                            <div class="accountList">
+                                <ul class="sc-ecPEgm dCbnuA">
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getOrders()" class="sc-kzqdkY hIpJTj title-bold-16-19">Siparişlerim</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getAddress()" class="sc-kzqdkY edqiAa title-bold-16-19">Adres
+                                            Bilgilerim</button></li>
+                                            <li class="sc-gdyeKB xqfpj"><button onclick="getProfile()" class="sc-kzqdkY edqiAa title-bold-16-19">Kişisel
+                                                Bilgiler</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getNotify()" class="sc-kzqdkY edqiAa title-bold-16-19">Bildirim
+                                            Ayarları</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getPasswordProcess()" class="sc-kzqdkY edqiAa title-bold-16-19">Şifre
+                                            İşlemleri</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="logOut()" class="sc-kzqdkY edqiAa title-bold-16-19">Çıkış
+                                            Yap</button></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="right">
+                            <div id="addressPage" class="sc-bVHCgj bvQtLI">
+                                <div class="contentTitle heading">
+                                    <strong class="d-block headline-bold-20-24">Siparişim: {{ orders_detail.order_number }}</strong>
+                                </div>
+                                <div class="order-details">
+                                    <h2>Sipariş Detayları</h2>
+                                    <table class="order-details-table">
+                                        <tr>
+                                            <th>Sipariş Numarası</th>
+                                            <td>{{ orders_detail.order_number }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Toplam Tutar</th>
+                                            <td>{{ orders_detail.total_amount }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Sipariş Tarihi</th>
+                                            <td>{{ orders_detail.created_at }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Sipariş Durumu</th>
+                                            <td>
+                                                {% if orders_detail.status == 'Pending' %}
+                                                    Beklemede
+                                                {% elif orders_detail.status == 'Completed' %}
+                                                    Tamamlandı
+                                                {% elif orders_detail.status == 'Cancelled' %}
+                                                    İptal Edildi
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Sipariş Adresi</th>
+                                            <td>{{ orders_detail.order_adress }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Fatura Adresi</th>
+                                            <td>{{ orders_detail.billing_adress }}</td>
+                                        </tr>
+                                        <!-- Diğer sipariş detayları buraya eklenebilir -->
+                                    </table>
+                                </div>
+                                
+                                <div class="order-items">
+                                    <h2>Sipariş Kalemleri</h2>
+                                    <table class="order-items-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Ürün Resmi</th>
+                                                <th>Ürün Adı</th>
+                                                <th>Adet</th>
+                                                <th>Birim Fiyat</th>
+                                                <th>Kiralama Süresi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in order_items %}
+                                                <tr>
+                                                    <td>
+                                                        {% with first_image=item.product.related_products.first %}
+                                                            {% if first_image %}
+                                                                <a href="{% url 'products:product-detail-view' item.product.slug %}">
+                                                                    <img src="{{ first_image.image.url }}" style="width: 80px; height: 80px;" alt="{{ first_image.img_title }}">
+                                                                </a>
+                                                            {% endif %}
+                                                        {% endwith %}
+                                                    </td>
+                                                    <td>{{ item.product.name }}</td>
+                                                    <td>{{ item.quantity }}</td>
+                                                    <td>
+                                                        {% if item.is_rental %}
+                                                            {{ item.rental_price }}
+                                                        {% else %}
+                                                            {{ item.selling_price }}
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ item.rental_period }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <!-- Diğer sipariş detaylarını buraya ekleyin -->
+                            </div>
+                        </div>
+                        
+                  
+                    </div>
+                </div>
+                <div class="shoppingCartBackdrop hidden"></div>
+            </div>
+        </main>
+        {% include 'coreBase/footer.html' %}
+        <!-- footer of the Page end -->
+    </div><!-- W1 end here -->
+    <span id="back-top" class="fa fa-arrow-up"></span>
+</div>
+
+
+
+{% endblock %}
+
+
+

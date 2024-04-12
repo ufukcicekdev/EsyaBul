@@ -834,8 +834,6 @@ def add_to_wishlist(request):
     context = {}
     wishlist_count = wishlist_model.objects.filter(product=product, user=request.user).count()
 
-    
-    
     if wishlist_count > 0:
         wishlist_count = wishlist_model.objects.filter(user=request.user).count()
         context = {
@@ -901,3 +899,38 @@ def orders_List(request):
     }
 
     return render(request, 'customerauth/customer-orders.html', context)
+
+
+
+@login_required(login_url='customerauth:sign-in')
+def orders_detail(request, order_number):
+    social_media_links = SocialMedia.objects.all()
+    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
+    title ="Sipariş Detayları"
+    wcount =0
+    hcount=0
+    if request.user.is_authenticated:
+        wcount = wishlist_model.objects.filter(user=request.user).count()
+        try:
+            handbag = Cart.objects.get(user=request.user, order_completed=False)
+            hcount = CartItem.objects.filter(cart=handbag).count()
+        except Cart.DoesNotExist:
+            pass
+    
+    # Sipariş detaylarını al
+    orders_detail = get_object_or_404(Order, order_number=order_number, user=request.user)
+    
+    # Sipariş kalemlerini al
+    order_items = orders_detail.order_items.all()
+
+    context = {
+        'orders_detail': orders_detail,
+        'order_items': order_items,
+        'title': title,
+        "wcount": wcount,
+        "main_categories": main_categories,
+        "social_media_links": social_media_links,
+        "hcount": hcount
+    }
+
+    return render(request, 'customerauth/order-detail.html', context)

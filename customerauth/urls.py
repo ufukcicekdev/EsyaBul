@@ -40,7 +40,7 @@ urlpatterns = [
 
     #orders#
     path('dashboard/orders/', views.orders_List, name='orders-list'),
-
+    path('dashboard/orders-detail/<str:order_number>/', views.orders_detail, name='orders-detail'),
 
     path('', include('main.urls')),
 ]

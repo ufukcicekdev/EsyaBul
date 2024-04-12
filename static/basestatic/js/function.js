@@ -427,9 +427,6 @@ $(document).ready(function() {
 });
 
 
-
-
-
 $(document).ready(function() {
     // Sadece artı işareti ile miktarı artırma işlemi
     $('#add-to-cart-form input[name="quantity"]').on('keydown', function(e) {

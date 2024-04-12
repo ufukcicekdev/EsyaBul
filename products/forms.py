@@ -16,7 +16,10 @@ class ProductReviewForm(forms.ModelForm):
 
 class AddToCartForm(forms.Form):
     product_id = forms.IntegerField(widget=forms.HiddenInput)
-    price_type = forms.ChoiceField(choices=(('selling', 'Satın Alma'), ('rental', 'Kiralama')), widget=forms.Select(attrs={'class': 'form-control', 'id': 'price_type'}))
+    price_type = forms.ChoiceField(
+        choices=(('selling', 'Satın Alma'), ('rental', 'Kiralama')),
+        widget=forms.Select(attrs={'class': 'form-control', 'id': 'price_type'})
+    )
     quantity = forms.IntegerField(
         widget=forms.NumberInput(attrs={'class': 'form-control', 'name': 'quantity', 'value': '1'}),
         min_value=1,
@@ -33,9 +36,17 @@ class AddToCartForm(forms.Form):
         if product_id:
             rental_prices = ProductRentalPrice.objects.filter(product_id=product_id)
             rental_period_choices = [(price.id, price.name) for price in rental_prices]
-            self.fields['rental_period'] = forms.ChoiceField(choices=rental_period_choices, widget=forms.Select(attrs={'class': 'form-control', 'id': 'rental_period'}), required=False)
+            self.fields['rental_period'] = forms.ChoiceField(
+                choices=rental_period_choices,
+                widget=forms.Select(attrs={'class': 'form-control', 'id': 'rental_period'})
+            )
 
+        
+    def clean(self):
+        cleaned_data = super().clean()
+        price_type = cleaned_data.get('price_type')
+        rental_period = cleaned_data.get('rental_period')
 
-
-
+        if price_type == 'rental' and not rental_period:
+            raise forms.ValidationError("Kiralama tipi seçildiği zaman kiralama süresi belirtmelisiniz.")
 

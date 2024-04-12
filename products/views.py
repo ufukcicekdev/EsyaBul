@@ -15,15 +15,16 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.http import HttpResponse, HttpResponseRedirect
 import json
 import requests
-from cities_light.models import City, Country
+from cities_light.models import City, Country, SubRegion
 from ipware import get_client_ip
 from datetime import datetime
 import random
 import string
-from django.core.mail import send_mail
+from django.core.mail import send_mail,EmailMultiAlternatives,EmailMessage
 import os
-from django.core.mail import EmailMessage
 from django.contrib.auth import get_user_model
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -101,25 +102,24 @@ def add_to_cart(request, product_id):
     if not request.user.is_authenticated:
         return redirect()
     if request.method == 'POST':
-        # Formu oluştur ve gelen verileri kontrol et
-        add_to_cart_form = AddToCartForm(request.POST)
+        add_to_cart_form = AddToCartForm(request.POST, product_id=product_id)
         product = get_object_or_404(Product, pk=product_id)
         if add_to_cart_form.is_valid():
             product_id = add_to_cart_form.cleaned_data['product_id']
             price_type = add_to_cart_form.cleaned_data['price_type']
             quantity = add_to_cart_form.cleaned_data['quantity']
             rental_period_id = add_to_cart_form.cleaned_data['rental_period']
-            cart, created = Cart.objects.get_or_create(user=request.user, order_completed=False)
-
-            cart_item_exists = CartItem.objects.filter(cart__user=request.user, product=product, order_completed=False).exists()
             
-            if cart_item_exists:
+            print("rental_period_id",rental_period_id)
+     
+            if check_product_in_cart(request.user, product_id):
                 messages.warning(request, "Ürün Sepetinizde Ekli!")
                 return redirect('products:product-detail-view', product_slug=product.slug )
             # Sepete ürünü ekle
+            cart = Cart.objects.create(user=request.user, order_completed=False)
             cart_item = CartItem(cart=cart, product=product, quantity=quantity)
             if price_type == 'rental':
-                rental_period = get_object_or_404(ProductRentalPrice, name=rental_period_id, product = product_id)
+                rental_period = get_object_or_404(ProductRentalPrice, id=rental_period_id, product = product_id)
                 cart_item.rental_price = rental_period.rental_price
                 cart_item.is_rental = True
                 cart_item.rental_period = rental_period.name
@@ -136,6 +136,10 @@ def add_to_cart(request, product_id):
 
     # POST isteği değilse, uygun bir hata yanıtı döndür
     return redirect('main:home')
+
+def check_product_in_cart(user, product_id):
+    cart_item_exists = CartItem.objects.filter(cart__user=user, product_id=product_id, order_completed=False).exists()
+    return cart_item_exists
 
 @login_required(login_url='customerauth:sign-in')
 def order_shopping_card(request):
@@ -304,12 +308,35 @@ def payment(request):
     userInfo = get_object_or_404(User, id=request.user.id)
     order_city = City.objects.get(pk=order_city_id)
     order_country = Country.objects.get(pk=order_city.country_id)
+    order_subregion = SubRegion.objects.get(id=user_order_addresses.region_id)
+
+
+    address_parts = [
+            user_order_addresses.address_line1,
+            order_city.name,
+            order_subregion.name,
+            order_country.name
+    ]
+    order_completed_order_address = ' '.join(filter(None, address_parts))
+
+
+
     if selected_billing_address_id:
         user_billing_addresses = Address.objects.filter(user=request.user, id=selected_billing_address_id)
         billing_city_id = user_billing_addresses.city_id
         billing_country_id = user_billing_addresses.region_id
         billing_city = City.objects.get(pk=billing_city_id)
+        billing_subregion = SubRegion.objects.get(id=user_billing_addresses.region_id)
         billing_country = Country.objects.get(pk=billing_country_id)
+
+        address_parts = [
+            user_billing_addresses.address_line1,
+            billing_city.name,
+            billing_subregion.name,
+            billing_country.name
+        ]
+        order_completed_billing_address = ' '.join(filter(None, address_parts))
+
 
         billing_address = {
             'contactName': user_billing_addresses.username,
@@ -327,6 +354,14 @@ def payment(request):
             'address': user_order_addresses.address_line1,
             'zipCode': user_order_addresses.postal_code,
         }
+
+        address_parts = [
+            user_order_addresses.address_line1,
+            order_city.name,
+            order_subregion.name,
+            order_country.name
+        ]
+        order_completed_billing_address = ' '.join(filter(None, address_parts))
 
     
 
@@ -392,8 +427,8 @@ def payment(request):
 
     order_data = {
         'user': request.user,
-        'user_order_addresses': user_order_addresses,
-        'billing_address': billing_address,
+        'order_completed_order_address': order_completed_order_address,
+        'order_completed_billing_address': order_completed_billing_address,
         'basket_items': basket_items,
         'order_total': order_total,
         "cart_items":cart_items,
@@ -417,7 +452,6 @@ def payment(request):
         #'debitCardAllowed': True
     }
 
-    
 
     checkout_form_initialize = iyzipay.CheckoutFormInitialize().create(request, options)
 
@@ -426,12 +460,6 @@ def payment(request):
     header = {'Content-Type': 'application/json'}
     content = checkout_form_initialize.read().decode('utf-8')
     json_content = json.loads(content)
-    print("------*******json_content",json_content)
-    print(type(json_content))
-    print(json_content["checkoutFormContent"])
-    print("************************")
-    print(json_content["token"])
-    print("************************")
     sozlukToken.append(json_content["token"])
     return HttpResponse(json_content["checkoutFormContent"])
 
@@ -441,18 +469,13 @@ def result(request):
     context = dict()
 
     user = order_data.get('user')
-    user_order_addresses = order_data.get('user_order_addresses')
-    billing_address = order_data.get('billing_address')
+    order_completed_order_address = order_data.get('order_completed_order_address')
+    order_completed_billing_address = order_data.get('order_completed_billing_address')
     basket_items = order_data.get('basket_items')
     order_total = order_data.get('order_total')
     cart_items = order_data.get('cart_items')
     card_id = order_data.get('card_id')
-
-
-
     url = request.META.get('index')
-
-    print("sozlukToken[0]",sozlukToken[0])
 
     request_data = {
         'locale': 'tr',
@@ -465,11 +488,12 @@ def result(request):
     if sonuc:
         if sonuc[0][1] == 'success':
             messages.success(request, "Ödeme işleminiz başarıyla gerçekleşti!")
-            create_order_and_items(user, user_order_addresses, billing_address, basket_items, order_total, order_number, cart_items, card_id)
+            create_order_and_items(user, order_completed_order_address, order_completed_billing_address, basket_items, order_total, order_number, cart_items, card_id)
 
             order = Order.objects.get(order_number=order_number)
             order.status = 'Pending'
             order.save()
+            return redirect('products:order_shopping_card')
         elif sonuc[0][1] == 'failure':
             messages.warning(request, sonuc[2][1])
     else:
@@ -479,12 +503,12 @@ def result(request):
 
 
 
-def create_order_and_items(user, user_order_addresses, billing_address, basket_items, order_total, order_number, cart_items, card_id):
+def create_order_and_items(user, order_completed_order_address, order_completed_billing_address, basket_items, order_total, order_number, cart_items, card_id):
     # Yeni bir sipariş oluştur
     order = Order.objects.create(
         user=user,
-        order_adress=user_order_addresses,
-        billing_adress=billing_address,
+        order_adress=order_completed_order_address,
+        billing_adress=order_completed_billing_address,
         order_details=json.dumps(basket_items),
         total_amount=float(order_total.replace(',', '.')),
         order_number=order_number,
@@ -493,6 +517,7 @@ def create_order_and_items(user, user_order_addresses, billing_address, basket_i
     )
     order_create_mail(order_number)
     cart_order_completed(card_id)
+    #order_user_mail(order_number, user, card_id)
     for cart_item in cart_items:
         print("cart_item",cart_item)
         OrderItem.objects.create(
@@ -526,3 +551,36 @@ def cart_order_completed(card_id):
     cart_items.order_completed = True
     cart_items.save()
 
+
+
+
+def order_user_mail(order_number, user, card_id):
+    subject = 'Sipariş Alındı'
+    social_media_links = SocialMedia.objects.all()
+    cart_items = []
+    cart_total = 0  
+
+    cart = Cart.objects.get(user=user, id=card_id)
+    if cart:
+        cart_items = cart.cartitem_set.all()
+
+        # Sepetin toplam tutarını hesaplayın
+        for cart_item in cart_items:
+            if cart_item.is_rental:
+                cart_total += cart_item.rental_price * cart_item.quantity
+            else:
+                cart_total += cart_item.selling_price * cart_item.quantity
+
+    context = {
+        'cart_items': cart_items,
+        'cart_total': cart_total,  
+        "social_media_links": social_media_links,
+        "order_number":order_number
+    }
+
+    html_content = render_to_string('email_templates/order_email.html', context)
+    text_content = strip_tags(html_content)  # HTML etiketlerini kaldır
+
+    email = EmailMultiAlternatives(subject, text_content, 'gonderen@example.com', [user.email])
+    email.attach_alternative(html_content, "text/html")
+    email.send()

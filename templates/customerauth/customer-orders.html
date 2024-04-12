@@ -76,27 +76,24 @@
                                                 <div class="body-bold-14-17">
                                                     <a href=""
                                                         class="sc-iHGNWf bhQoUp d-block edit-address">
-                                                        <div class="sc-kOHTFB kABxmt">Detay</div>
+                                                        <div class="sc-kOHTFB kABxmt">
+                                                            
+                                                            <a class="sc-iHGNWf bhQoUp d-block" href="{% url 'customerauth:orders-detail' order.order_number %}">Detay</a>
+                                                            </div>
                                                     </a> 
                                                 </div>
                                             </div>
                                             <div class="body">
-                                                <ul>
-                                                    {% for item in order.orderitem_set.all %}
-                                                        <li> <a href="{% url 'products:product-detail-view' item.product.slug %}">{{ item.product.name }}</a> - {{ item.quantity }} Adet </li>
-                                                    {% endfor %}
-                                                </ul>
-                                                <p class="description body-regular-14-17">Toplam Tutar: {{ order.total_amount }}</p>
-                                                <p class="description body-regular-14-17">Sipariş Tarihi: {{ order.created_at }}</p>
+                                          
+                                                <p class="description body-regular-14-17"><strong>Toplam Tutar: </strong> {{ order.total_amount }} <i class="fa fa-try"></i></p>
+                                                <p class="description body-regular-14-17"><strong>Sipariş Tarihi: </strong>{{ order.created_at }}</p>
                                                 {% if order.status == 'Pending' %}
-                                                    <p class="description body-regular-14-17">Sipariş Durumu: Beklemede</p>
+                                                    <p class="description body-regular-14-17"> <strong>Sipariş Durumu: </strong>Beklemede</p>
                                                 {% elif order.status == 'Completed' %}
-                                                    <p class="description body-regular-14-17">Sipariş Durumu: Tamamlandı</p>
+                                                    <p class="description body-regular-14-17"><strong>Sipariş Durumu: </strong>Tamamlandı</p>
                                                 {% elif order.status == 'Cancelled' %}
-                                                    <p class="description body-regular-14-17">Sipariş Durumu: İptal Edildi</p>
+                                                    <p class="description body-regular-14-17"><strong>Sipariş Durumu: </strong>İptal Edildi</p>
                                                 {% endif %}
-                                                <p class="description body-regular-14-17">Teslimat Adresi: {{ order.order_adress }}</p>
-                                                <p class="description body-regular-14-17">Fatura Adresi: {{ order.billing_adress }}</p>
                                             </div>
                                         </div>
                                     {% endfor %}

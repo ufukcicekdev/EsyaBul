@@ -1,0 +1,88 @@
+{% load static %}
+{% block content %}
+
+<style>
+    .user-icon {
+    width: 30px;
+    height: 30px;
+    background-color: #ccc;
+    border-radius: 50%; /* Yuvarlak şekil için */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    color: #fff;
+}
+</style>
+
+<header id="mt-header" class="style4">
+    <!-- mt bottom bar start here -->
+    <div class="mt-bottom-bar">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- mt logo start here -->
+                    <div class="mt-logo"><a href="{% url 'main:home' %}"><img style="height:50px;" src="{% static 'basestatic/images/esyalacom.png' %}" alt="Esyala"></a></div>
+                    <!-- mt icon list start here -->
+                    <ul class="mt-icon-list">
+                        <li class="hidden-lg hidden-md">
+                            <a href="#" class="bar-opener mobile-toggle">
+                                <span class="bar"></span>
+                                <span class="bar small"></span>
+                                <span class="bar"></span>
+                            </a>
+                        </li>
+                        <li><a href="#" class="icon-magnifier"></a></li>
+                        <li class="">
+                      
+                            
+                            <!-- mt drop start here -->
+                            <div class="mt-drop">
+                                <!-- mt drop sub start here -->
+                                <div class="mt-drop-sub">
+                             
+                                </div>
+                                <!-- mt drop sub end here -->
+                            </div><!-- mt drop end here -->
+                            <span class="mt-mdropover"></span>
+                        </li>
+                        <li class="drop">
+                     
+                           
+                            <!-- mt drop start here -->
+                            <div class="mt-drop">
+                                <!-- mt drop sub start here -->
+                                <div class="mt-drop-sub">
+                                    <!-- mt side widget start here -->
+                                    <div class="mt-side-widget">
+                                       
+                                    </div><!-- mt side widget end here -->
+                                </div>
+                                <!-- mt drop sub end here -->
+                            </div><!-- mt drop end here -->
+                            <span class="mt-mdropover"></span>
+                        </li>
+                        <li id="user-icon">
+                            
+                        </li>
+
+                        
+                    </ul><!-- mt icon list end here -->
+                    <!-- navigation start here -->
+                    <nav id="nav">
+                        <ul>
+                            
+                        </ul>
+                    </nav>
+                    <!-- mt icon list end here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- mt bottom bar end here -->
+    <span class="mt-side-over"></span>
+</header>
+
+
+
+{%  endblock %}
