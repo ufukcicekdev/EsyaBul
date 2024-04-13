@@ -99,27 +99,24 @@ def add_product_review(request, product_id):
 
 @login_required(login_url='customerauth:sign-in')
 def add_to_cart(request, product_id):
-    if not request.user.is_authenticated:
-        return redirect()
     if request.method == 'POST':
         add_to_cart_form = AddToCartForm(request.POST, product_id=product_id)
         product = get_object_or_404(Product, pk=product_id)
         if add_to_cart_form.is_valid():
-            product_id = add_to_cart_form.cleaned_data['product_id']
             price_type = add_to_cart_form.cleaned_data['price_type']
             quantity = add_to_cart_form.cleaned_data['quantity']
-            rental_period_id = add_to_cart_form.cleaned_data['rental_period']
-            
-            print("rental_period_id",rental_period_id)
-     
-            if check_product_in_cart(request.user, product_id):
-                messages.warning(request, "Ürün Sepetinizde Ekli!")
-                return redirect('products:product-detail-view', product_slug=product.slug )
+            rental_period_id = add_to_cart_form.cleaned_data.get('rental_period')
+
+            # Kullanıcının tamamlanmamış bir alışveriş sepetini kontrol et
+            active_cart = Cart.objects.filter(user=request.user, order_completed=False).first()
+            if not active_cart:
+                # Aktif bir sepet yoksa, yeni bir tane oluştur
+                active_cart = Cart.objects.create(user=request.user, order_completed=False)
+
             # Sepete ürünü ekle
-            cart = Cart.objects.create(user=request.user, order_completed=False)
-            cart_item = CartItem(cart=cart, product=product, quantity=quantity)
+            cart_item = CartItem(cart=active_cart, product=product, quantity=quantity)
             if price_type == 'rental':
-                rental_period = get_object_or_404(ProductRentalPrice, id=rental_period_id, product = product_id)
+                rental_period = get_object_or_404(ProductRentalPrice, id=rental_period_id, product=product)
                 cart_item.rental_price = rental_period.rental_price
                 cart_item.is_rental = True
                 cart_item.rental_period = rental_period.name
@@ -129,13 +126,15 @@ def add_to_cart(request, product_id):
             cart_item.save()
 
             messages.success(request, "Ürün başarılı bir şekilde eklendi.")
-            return redirect('products:product-detail-view', product_slug=product.slug )
+            return redirect('products:product-detail-view', product_slug=product.slug)
         else:            
-            messages.warning(request, "Ürünü sepete eklenirken bir sorun oluştu!")
-            return redirect('products:product-detail-view', product_slug=product.slug )
+            messages.warning(request, "Ürünü sepete eklerken bir sorun oluştu!")
+            return redirect('products:product-detail-view', product_slug=product.slug)
 
     # POST isteği değilse, uygun bir hata yanıtı döndür
     return redirect('main:home')
+
+
 
 def check_product_in_cart(user, product_id):
     cart_item_exists = CartItem.objects.filter(cart__user=user, product_id=product_id, order_completed=False).exists()

@@ -347,7 +347,7 @@ header .close:hover{
                                         <div class="txt">
                                             <strong class="title"><a href="{% url 'products:product-detail-view' product.slug %}">{{ product.name }}</a></strong>
                                             <p>{{ product.description|slice:":100" }}</p>
-                                            <a href="{% url 'products:product-detail-view' product.slug %}">Kiralam fiyatları için ürünü incele</a>
+                                            <a href="{% url 'products:product-detail-view' product.slug %}">Kiralama fiyatları için ürünü incele</a>
                                         </div><!-- txt end here -->
                                         <div class="txt">
                                             <strong class="title">Satış Fiyatı</strong>
@@ -400,7 +400,7 @@ header .close:hover{
                                         {% if request.user.is_authenticated %}
                                             <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{product.id}}" href="#"><i class="icon-heart">Beğen</i></a></li>
                                         {% endif %}
-                                        <a href="{% url 'products:product-detail-view' product.slug %}">Kiralam fiyatları için ürünü incele</a>
+                                        <a href="{% url 'products:product-detail-view' product.slug %}">Kiralama fiyatları için ürünü incele</a>
                                     </ul>
                                 </div><!-- align right end here -->
                             </div><!-- txt holder end here -->

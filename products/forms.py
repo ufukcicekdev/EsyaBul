@@ -38,10 +38,12 @@ class AddToCartForm(forms.Form):
             rental_period_choices = [(price.id, price.name) for price in rental_prices]
             self.fields['rental_period'] = forms.ChoiceField(
                 choices=rental_period_choices,
-                widget=forms.Select(attrs={'class': 'form-control', 'id': 'rental_period'})
+                widget=forms.Select(attrs={'class': 'form-control', 'id': 'rental_period'}),
+                required=rental_prices.exists()  # Eğer rental_prices boş değilse rental_period zorunlu olacak
             )
+            if rental_prices.count() == 0:
+                self.fields['price_type'].choices = [('selling', 'Satın Alma')]  # Kiralama fiyatı yoksa price_type seçeneğini değiştir
 
-        
     def clean(self):
         cleaned_data = super().clean()
         price_type = cleaned_data.get('price_type')
