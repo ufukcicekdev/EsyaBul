@@ -100,6 +100,12 @@ class Category(models.Model):
         return ' -> '.join(full_path[::-1])
     
 
+class Brand(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
 
 class Product(models.Model):
     name = models.CharField(max_length=1000)
@@ -111,8 +117,9 @@ class Product(models.Model):
     in_stock = models.IntegerField(default=10)
     is_active = models.BooleanField(default=True)
     sku = models.CharField(max_length=50, unique=True)
-    brand = models.CharField(max_length=100, blank=True, null=True)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products', blank=True, null=True)
     is_featured = models.BooleanField(default=False)
+    best_seller = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

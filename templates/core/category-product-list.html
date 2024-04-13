@@ -322,6 +322,7 @@ header .close:hover{
                                             {% if product.get_percentage %}
                                                 <span class="caption">
                                                     <span class="off">{{ product.get_percentage|floatformat:0 }}%</span>
+                                                    <span class="best-price">En İyi Fiyat</span>
                                                 </span>
                                             {% endif %}
 
@@ -354,8 +355,8 @@ header .close:hover{
                                             {% if product.selling_old_price != 0 %}
                                             <del class="off"><i class="fa fa-try"></i> <span>{{product.selling_old_price}}</span></del>
                                             {% endif %}
-											<span class="price"><i class="fa fa-try"></i> <span>{{ product.selling_price }}</span></span>
-										</div>
+                                            <span class="price"><i class="fa fa-try"></i> <span>{{ product.selling_price }}</span></span>
+                                          </div>
                                     </div><!-- mt product2 end here -->
                                 </li>
                                 {% endfor %}

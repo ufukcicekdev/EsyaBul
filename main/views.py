@@ -8,11 +8,19 @@ from customerauth.models import wishlist_model
 from django.http import Http404
 from django.db.models import Q,Avg
 from products.forms import AddToCartForm
+import random
 
 def home(request):
     social_media_links = SocialMedia.objects.all()
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     homemainbanners = HomeMainBanner.objects.filter(is_active=True)
+    best_seller_products = Product.objects.filter(is_active=True, best_seller=True).order_by('?')[:16]
+    featured_products = Product.objects.filter(is_active=True, is_featured=True).order_by('?')[:16]
+    latest_products = list(Product.objects.filter(is_active=True).order_by('-created_at')[:30])
+    best_products = Product.objects.filter(is_active=True, best_seller=True).order_by('?')[:16]
+    random.shuffle(latest_products)
+    latest_products = latest_products[:16]
+
     wcount = 0
     hcount=0
     if request.user.is_authenticated:
@@ -28,7 +36,11 @@ def home(request):
         "wcount": wcount, 
         'main_categories':main_categories,
         "homemainbanners":homemainbanners,
-        "hcount":hcount
+        "hcount":hcount,
+        "best_seller_products":best_seller_products,
+        "featured_products":featured_products,
+        "latest_products":latest_products,
+        "best_products":best_products
     }
         
     return render(request, 'coreBase/home.html', context)

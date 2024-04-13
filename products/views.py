@@ -40,6 +40,8 @@ def product_detail_view(request, product_slug):
     social_media_links = SocialMedia.objects.all()
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     product = get_object_or_404(Product, slug=product_slug, is_active=True)
+
+    related_products = Product.objects.filter(category_id=product.category_id).exclude(id=product.id).order_by('?')[:10]
     add_to_cart_form = AddToCartForm(request.POST, product_id=product.id)
     wcount=0
     hcount =0
@@ -70,7 +72,8 @@ def product_detail_view(request, product_slug):
         'average_rating':average_rating,
         'wishCount': wish_count,
         "social_media_links":social_media_links,
-        "add_to_cart_form":add_to_cart_form
+        "add_to_cart_form":add_to_cart_form,
+        "related_products":related_products
     }
     
     return render(request, 'core/product-detail.html', context)

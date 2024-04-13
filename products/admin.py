@@ -1,31 +1,30 @@
 from django.contrib import admin
 from products.models import Product, ProductImage, ProductRentalPrice, RoomType, HomeType, HomeModel, SpaceDefinition, TimeRange, Category
 
+from django.utils.html import format_html
 
 
 class ProductImagesAdmin(admin.TabularInline):
     model = ProductImage
-    extra = 1
 
-class ProductRentalPriceInline(admin.TabularInline):
+class ProductRentalPriceAdmin(admin.TabularInline):
     model = ProductRentalPrice
-    extra = 1
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    inlines = [ProductImagesAdmin, ProductRentalPriceInline]
-    list_display = ('name', 'slug', 'description', 'selling_price')
-    list_editable = ('description', 'selling_price')
+    inlines = [ProductImagesAdmin, ProductRentalPriceAdmin]
+    list_display = ('name', 'sku', 'slug', 'selling_price', 'image_preview')
+    list_filter = ('name', 'sku', 'created_at')
     list_display_links = ('slug',)
+    search_fields = ('name', 'sku',)
 
-    def get_inline_instances(self, request, obj=None):
-        if not obj:
-            return []
-        return super().get_inline_instances(request, obj)
-
-@admin.register(ProductRentalPrice)
-class ProductRentalPriceAdmin(admin.ModelAdmin):
-    pass
+    def image_preview(self, obj):
+        if obj.related_products.exists():
+            first_image = obj.related_products.first()
+            return format_html('<img src="{}" width="100" />', first_image.image.url)
+        else:
+            return "(No image)"
+    image_preview.short_description = 'Image Preview'
 
 
 # RoomType için admin kaydı

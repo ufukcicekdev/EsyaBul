@@ -1,5 +1,5 @@
 {% extends 'partialsBase/base.html' %}
-
+{% load custom_filters %}
 {% load static %}
 
 {% block title %} Anasayfa {% endblock title %}
@@ -19,20 +19,6 @@
         <!-- mt header style4 start here -->
         {% include 'coreBase/header.html' %}
 
-        <div class="mt-search-popup">
-            <div class="mt-holder">
-                <a href="#" class="search-close"><span></span><span></span></a>
-                <div class="mt-frame">
-                    <form action="#">
-                        <fieldset>
-                            <input type="text" placeholder="Search...">
-                            <span class="icon-microphone"></span>
-                            <button class="icon-magnifier" type="submit"></button>
-                        </fieldset>
-                    </form>
-                </div>
-            </div>
-        </div><!-- mt search popup end here -->
         <!-- mt main slider start here -->
         <div class="mt-main-slider">
             <!-- slider banner-slider start here -->
@@ -129,912 +115,157 @@
                         <div class="mt-producttabs wow fadeInUp" data-wow-delay="0.4s">
                             <!-- producttabs start here -->
                             <ul class="producttabs">
-                                <li><a href="#tab1" class="active">FEATURED</a></li>
-                                <li><a href="#tab2">LATEST</a></li>
-                                <li><a href="#tab3">BEST SELLER</a></li>
+                                <li><a href="#tab1" class="active">Öne Çıkanlar</a></li>
+                                <li><a href="#tab2">Son Yüklenenler</a></li>
+                                <li><a href="#tab3">Çok Satanlar</a></li>
                             </ul>
                             <!-- producttabs end here -->
                             <div class="tab-content text-center">
                                 <div id="tab1">
                                     <!-- tabs slider start here -->
                                     <div class="tabs-slider">
-                                        <!-- slide start here -->
-                                        <div class="slide">
-                                            <!-- mt product1 center start here -->
+                                        {% for featured_product in featured_products %}
+                                        {% if forloop.counter0|divisibleby:2 %}<div class="slide">{% endif %}
                                             <div class="mt-product1 mt-paddingbottom20">
                                                 <div class="box">
                                                     <div class="b1">
                                                         <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img01.jpg" alt="image description"></a>
-                                                            <span class="caption">
-                                                                <span class="new">NEW</span>
-                                                            </span>
+                                                            {% with first_image=featured_product.related_products.first %}
+                                                            {% if first_image %}
+                                                            <a href="{% url 'products:product-detail-view' featured_product.slug %}"><img src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}"></a>
+                                                            {% endif %}
+                                                            {% endwith %}
+                                                            {% if featured_product.get_percentage %}
+                                                                <span class="caption">
+                                                                    <span class="off">{{ featured_product.get_percentage|floatformat:0 }}%</span>
+                                                                    <span class="best-price">En İyi Fiyat</span>
+                                                                </span>
+                                                            {% endif %}
                                                             <ul class="mt-stars">
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star-o"></i></li>
+                                                                {% if featured_product.average_rating %}
+                                                                {% for star in featured_product.average_rating|make_star_list %}
+                                                                <li><i class="fa fa-star{% if not star %}-o{% endif %}"></i></li>
+                                                                {% endfor %}
+                                                                {% endif %}
                                                             </ul>
                                                             <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
+                                                                {% if request.user.is_authenticated %}
+                                                                <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{featured_product.id}}" href="#"><i class="icon-heart"></i></a></li>
+                                                                {% endif %}
                                                             </ul>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Puff Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>287,00</span></span>
+                                                    <strong class="title"><a href="{% url 'products:product-detail-view' featured_product.slug %}">{{ featured_product.name }}</a></strong>
+                                                    <strong class="title">Satış Fiyatı</strong>
+                                                    {% if featured_product.selling_old_price != 0 %}
+                                                    <del class="off"><i class="fa fa-try"></i> <span>{{ featured_product.selling_old_price }}</span></del>
+                                                    {% endif %}
+                                                    <span class="price"><i class="fa fa-try"></i> <span>{{ featured_product.selling_price }}</span></span>
                                                 </div>
                                             </div><!-- mt product1 center end here -->
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img06.jpg" alt="image description"></a>
-                                                            <ul class="mt-stars">
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star-o"></i></li>
-                                                            </ul>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Easy chair with armrests</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>287,00</span></span>
-                                                </div>
-                                            </div>
-                                            <!-- mt product1 center end here -->
-                                        </div>
-                                        <!-- slide end here -->
-                                        <!-- slide start here -->
-                                        <div class="slide">
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img02.jpg" alt="image description"></a>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>399,00</span></span>
-                                                </div>
-                                            </div><!-- mt product1 center end here -->
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img07.jpg" alt="image description"></a>
-                                                            <span class="caption">
-                                                                <span class="off">15% Off</span>
-                                                            </span>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Upholstered chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>399,00</span></span>
-                                                </div>
-                                            </div>
-                                            <!-- mt product1 center end here -->
-                                        </div>
-                                        <!-- slide end here -->
-                                        <!-- slide start here -->
-                                        <div class="slide">
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img03.jpg" alt="image description"></a>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Wood Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>198,00</span></span>
-                                                </div>
-                                            </div><!-- mt product1 center end here -->
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img08.jpg" alt="image description"></a>
-                                                            <ul class="mt-stars">
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star-o"></i></li>
-                                                            </ul>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Trestle-based chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>198,00</span></span>
-                                                </div>
-                                            </div>
-                                            <!-- mt product1 center end here -->
-                                        </div>
-                                        <!-- slide end here -->
-                                        <!-- slide start here -->
-                                        <div class="slide">
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img04.jpg" alt="image description"></a>
-                                                            <span class="caption">
-                                                                <span class="off">15% Off</span>
-                                                                <span class="new">NEW</span>
-                                                            </span>
-                                                            <ul class="mt-stars">
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star-o"></i></li>
-                                                            </ul>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>200,00</span></span>
-                                                </div>
-                                            </div><!-- mt product1 center end here -->
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img09.jpg" alt="image description"></a>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>200,00</span></span>
-                                                </div>
-                                            </div>
-                                            <!-- mt product1 center end here -->
-                                        </div>
-                                        <!-- slide end here -->
-                                        <!-- slide start here -->
-                                        <div class="slide">
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img05.jpg" alt="image description"></a>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>200,00</span></span>
-                                                </div>
-                                            </div><!-- mt product1 center end here -->
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img10.jpg" alt="image description"></a>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>200,00</span></span>
-                                                </div>
-                                            </div>
-                                            <!-- mt product1 center end here -->
-                                        </div>
-                                        <!-- slide end here -->
-                                        <!-- slide start here -->
-                                        <div class="slide">
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img02.jpg" alt="image description"></a>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>399,00</span></span>
-                                                </div>
-                                            </div><!-- mt product1 center end here -->
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img07.jpg" alt="image description"></a>
-                                                            <span class="caption">
-                                                                <span class="off">15% Off</span>
-                                                            </span>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Upholstered chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>399,00</span></span>
-                                                </div>
-                                            </div>
-                                            <!-- mt product1 center end here -->
-                                        </div>
-                                        <!-- slide end here -->
+                                        {% if forloop.last or forloop.counter|divisibleby:2 %}</div>{% endif %}
+                                        {% endfor %}
                                     </div>
+                                    
                                     <!-- tabs slider end here -->
                                 </div>
                                 <div id="tab2">
                                     <!-- tabs slider start here -->
                                     <div class="tabs-slider">
-                                        <!-- slide start here -->
-                                        <div class="slide">
-                                            <!-- mt product1 center start here -->
+                                        {% for latest_product in latest_products %}
+                                        {% if forloop.counter0|divisibleby:2 %}<div class="slide">{% endif %}
                                             <div class="mt-product1 mt-paddingbottom20">
                                                 <div class="box">
                                                     <div class="b1">
                                                         <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img06.jpg" alt="image description"></a>
+                                                            {% with first_image=latest_product.related_products.first %}
+                                                            {% if first_image %}
+                                                            <a href="{% url 'products:product-detail-view' latest_product.slug %}"><img src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}"></a>
+                                                            {% endif %}
+                                                            {% endwith %}
+                                                            {% if latest_product.get_percentage %}
+                                                                <span class="caption">
+                                                                    <span class="off">{{ latest_product.get_percentage|floatformat:0 }}%</span>
+                                                                    <span class="best-price">En İyi Fiyat</span>
+                                                                </span>
+                                                            {% endif %}
                                                             <ul class="mt-stars">
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star-o"></i></li>
+                                                                {% if latest_product.average_rating %}
+                                                                {% for star in latest_product.average_rating|make_star_list %}
+                                                                <li><i class="fa fa-star{% if not star %}-o{% endif %}"></i></li>
+                                                                {% endfor %}
+                                                                {% endif %}
                                                             </ul>
                                                             <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
+                                                                {% if request.user.is_authenticated %}
+                                                                <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{latest_product.id}}" href="#"><i class="icon-heart"></i></a></li>
+                                                                {% endif %}
                                                             </ul>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Easy chair with armrests</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>287,00</span></span>
-                                                </div>
-                                            </div>
-                                            <!-- mt product1 center end here -->
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img01.jpg" alt="image description"></a>
-                                                            <span class="caption">
-                                                                <span class="new">NEW</span>
-                                                            </span>
-                                                            <ul class="mt-stars">
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star-o"></i></li>
-                                                            </ul>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Puff Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>287,00</span></span>
+                                                    <strong class="title"><a href="{% url 'products:product-detail-view' latest_product.slug %}">{{ latest_product.name }}</a></strong>
+                                                    <strong class="title">Satış Fiyatı</strong>
+                                                    {% if latest_product.selling_old_price != 0 %}
+                                                    <del class="off"><i class="fa fa-try"></i> <span>{{ latest_product.selling_old_price }}</span></del>
+                                                    {% endif %}
+                                                    <span class="price"><i class="fa fa-try"></i> <span>{{ latest_product.selling_price }}</span></span>
                                                 </div>
                                             </div><!-- mt product1 center end here -->
-                                        </div>
-                                        <!-- slide end here -->
-                                        <!-- slide start here -->
-                                        <div class="slide">
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img07.jpg" alt="image description"></a>
-                                                            <span class="caption">
-                                                                <span class="off">15% Off</span>
-                                                            </span>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Upholstered chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>399,00</span></span>
-                                                </div>
-                                            </div>
-                                            <!-- mt product1 center end here -->
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img02.jpg" alt="image description"></a>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>399,00</span></span>
-                                                </div>
-                                            </div><!-- mt product1 center end here -->
-                                        </div>
-                                        <!-- slide end here -->
-                                        <!-- slide start here -->
-                                        <div class="slide">
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img08.jpg" alt="image description"></a>
-                                                            <ul class="mt-stars">
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star-o"></i></li>
-                                                            </ul>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Trestle-based chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>198,00</span></span>
-                                                </div>
-                                            </div>
-                                            <!-- mt product1 center end here -->
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img03.jpg" alt="image description"></a>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Wood Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>198,00</span></span>
-                                                </div>
-                                            </div><!-- mt product1 center end here -->
-                                        </div>
-                                        <!-- slide end here -->
-                                        <!-- slide start here -->
-                                        <div class="slide">
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img09.jpg" alt="image description"></a>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>200,00</span></span>
-                                                </div>
-                                            </div>
-                                            <!-- mt product1 center end here -->
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img04.jpg" alt="image description"></a>
-                                                            <span class="caption">
-                                                                <span class="off">15% Off</span>
-                                                                <span class="new">NEW</span>
-                                                            </span>
-                                                            <ul class="mt-stars">
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star-o"></i></li>
-                                                            </ul>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>200,00</span></span>
-                                                </div>
-                                            </div><!-- mt product1 center end here -->
-                                        </div>
-                                        <!-- slide end here -->
-                                        <!-- slide start here -->
-                                        <div class="slide">
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img10.jpg" alt="image description"></a>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>200,00</span></span>
-                                                </div>
-                                            </div>
-                                            <!-- mt product1 center end here -->
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img05.jpg" alt="image description"></a>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>200,00</span></span>
-                                                </div>
-                                            </div><!-- mt product1 center end here -->
-                                        </div>
-                                        <!-- slide end here -->
-                                        <!-- slide start here -->
-                                        <div class="slide">
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img07.jpg" alt="image description"></a>
-                                                            <span class="caption">
-                                                                <span class="off">15% Off</span>
-                                                            </span>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Upholstered chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>399,00</span></span>
-                                                </div>
-                                            </div>
-                                            <!-- mt product1 center end here -->
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img02.jpg" alt="image description"></a>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>399,00</span></span>
-                                                </div>
-                                            </div><!-- mt product1 center end here -->
-                                        </div>
-                                        <!-- slide end here -->
+                                        {% if forloop.last or forloop.counter|divisibleby:2 %}</div>{% endif %}
+                                        {% endfor %}
                                     </div>
                                     <!-- tabs slider end here -->
                                 </div>
                                 <div id="tab3">
                                     <!-- tabs slider start here -->
                                     <div class="tabs-slider">
-                                        <!-- slide start here -->
-                                        <div class="slide">
-                                            <!-- mt product1 center start here -->
+                                        {% for best_product in best_products %}
+                                        {% if forloop.counter0|divisibleby:2 %}<div class="slide">{% endif %}
                                             <div class="mt-product1 mt-paddingbottom20">
                                                 <div class="box">
                                                     <div class="b1">
                                                         <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img01.jpg" alt="image description"></a>
-                                                            <span class="caption">
-                                                                <span class="new">NEW</span>
-                                                            </span>
+                                                            {% with first_image=best_product.related_products.first %}
+                                                            {% if first_image %}
+                                                            <a href="{% url 'products:product-detail-view' best_product.slug %}"><img src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}"></a>
+                                                            {% endif %}
+                                                            {% endwith %}
+                                                            {% if best_product.get_percentage %}
+                                                                <span class="caption">
+                                                                    <span class="off">{{ best_product.get_percentage|floatformat:0 }}%</span>
+                                                                    <span class="best-price">En İyi Fiyat</span>
+                                                                </span>
+                                                            {% endif %}
                                                             <ul class="mt-stars">
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star-o"></i></li>
+                                                                {% if best_product.average_rating %}
+                                                                {% for star in best_product.average_rating|make_star_list %}
+                                                                <li><i class="fa fa-star{% if not star %}-o{% endif %}"></i></li>
+                                                                {% endfor %}
+                                                                {% endif %}
                                                             </ul>
                                                             <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
+                                                                {% if request.user.is_authenticated %}
+                                                                <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{best_product.id}}" href="#"><i class="icon-heart"></i></a></li>
+                                                                {% endif %}
                                                             </ul>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Puff Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>287,00</span></span>
+                                                    <strong class="title"><a href="{% url 'products:product-detail-view' best_product.slug %}">{{ best_product.name }}</a></strong>
+                                                    <strong class="title">Satış Fiyatı</strong>
+                                                    {% if best_product.selling_old_price != 0 %}
+                                                    <del class="off"><i class="fa fa-try"></i> <span>{{ best_product.selling_old_price }}</span></del>
+                                                    {% endif %}
+                                                    <span class="price"><i class="fa fa-try"></i> <span>{{ best_product.selling_price }}</span></span>
                                                 </div>
                                             </div><!-- mt product1 center end here -->
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img06.jpg" alt="image description"></a>
-                                                            <ul class="mt-stars">
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star-o"></i></li>
-                                                            </ul>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Easy chair with armrests</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>287,00</span></span>
-                                                </div>
-                                            </div>
-                                            <!-- mt product1 center end here -->
-                                        </div>
-                                        <!-- slide end here -->
-                                        <!-- slide start here -->
-                                        <div class="slide">
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img07.jpg" alt="image description"></a>
-                                                            <span class="caption">
-                                                                <span class="off">15% Off</span>
-                                                            </span>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Upholstered chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>399,00</span></span>
-                                                </div>
-                                            </div>
-                                            <!-- mt product1 center end here -->
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img02.jpg" alt="image description"></a>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>399,00</span></span>
-                                                </div>
-                                            </div><!-- mt product1 center end here -->
-                                        </div>
-                                        <!-- slide end here -->
-                                        <!-- slide start here -->
-                                        <div class="slide">
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img03.jpg" alt="image description"></a>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Wood Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>198,00</span></span>
-                                                </div>
-                                            </div><!-- mt product1 center end here -->
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img08.jpg" alt="image description"></a>
-                                                            <ul class="mt-stars">
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star-o"></i></li>
-                                                            </ul>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Trestle-based chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>198,00</span></span>
-                                                </div>
-                                            </div>
-                                            <!-- mt product1 center end here -->
-                                        </div>
-                                        <!-- slide end here -->
-                                        <!-- slide start here -->
-                                        <div class="slide">
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img09.jpg" alt="image description"></a>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>200,00</span></span>
-                                                </div>
-                                            </div>
-                                            <!-- mt product1 center end here -->
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img04.jpg" alt="image description"></a>
-                                                            <span class="caption">
-                                                                <span class="off">15% Off</span>
-                                                                <span class="new">NEW</span>
-                                                            </span>
-                                                            <ul class="mt-stars">
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star"></i></li>
-                                                                <li><i class="fa fa-star-o"></i></li>
-                                                            </ul>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>200,00</span></span>
-                                                </div>
-                                            </div><!-- mt product1 center end here -->
-                                        </div>
-                                        <!-- slide end here -->
-                                        <!-- slide start here -->
-                                        <div class="slide">
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img05.jpg" alt="image description"></a>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>200,00</span></span>
-                                                </div>
-                                            </div><!-- mt product1 center end here -->
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img10.jpg" alt="image description"></a>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>200,00</span></span>
-                                                </div>
-                                            </div>
-                                            <!-- mt product1 center end here -->
-                                        </div>
-                                        <!-- slide end here -->
-                                        <!-- slide start here -->
-                                        <div class="slide">
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img07.jpg" alt="image description"></a>
-                                                            <span class="caption">
-                                                                <span class="off">15% Off</span>
-                                                            </span>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Upholstered chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>399,00</span></span>
-                                                </div>
-                                            </div>
-                                            <!-- mt product1 center end here -->
-                                            <!-- mt product1 center start here -->
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            <a href="product-detail.html"><img src="images/products/img02.jpg" alt="image description"></a>
-                                                            <ul class="links">
-                                                                <li><a href="#"><i class="icon-handbag"></i><span>Add to Cart</span></a></li>
-                                                                <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                                <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                                    <span class="price"><i class="fa fa-eur"></i> <span>399,00</span></span>
-                                                </div>
-                                            </div><!-- mt product1 center end here -->
-                                        </div>
-                                        <!-- slide end here -->
+                                        {% if forloop.last or forloop.counter|divisibleby:2 %}</div>{% endif %}
+                                        {% endfor %}
                                     </div>
                                     <!-- tabs slider end here -->
                                 </div>
@@ -1049,148 +280,48 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-12 mt-heading text-uppercase">
-                            <h2 class="heading">BEST SELLER</h2>
-                            <p>EXCEPTEUR SINT OCCAECAT</p>
+                            <h2 class="heading">Çok Satanlar</h2>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="bestseller-slider">
+                                {% for best_seller_product in best_seller_products  %}
                                 <div class="slide">
                                     <!-- mt product1 center start here -->
                                     <div class="mt-product1 large">
                                         <div class="box">
                                             <div class="b1">
                                                 <div class="b2">
-                                                    <a href="product-detail.html"><img src="images/products/img11.jpg" alt="image description"></a>
-                                                    <span class="caption">
-                                                        <span class="best-price">Best Price</span>
-                                                    </span>
-                                                    <ul class="links add">
-                                                        <li><a href="#"><i class="icon-handbag"></i></a></li>
-                                                        <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                        <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                    </ul>
+                                                    {% with first_image=best_seller_product.related_products.first %}
+                                                        {% if first_image %}
+                                                        <a href="{% url 'products:product-detail-view' best_seller_product.slug %}"><img src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}"></a>
+                                                        {% endif %}
+                                                    {% endwith %}
+                                                    {% if best_seller_product.get_percentage %}
+                                                        <span class="caption">
+                                                            <span class="off">{{ best_seller_product.get_percentage|floatformat:0 }}%</span>
+                                                            <span class="best-price">En İyi Fiyat</span>
+                                                        </span>
+                                                    {% endif %}
+                                                    <ul class="links">
+                                                        {% if request.user.is_authenticated %}
+                                                        <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{best_seller_product.id}}" href="#"><i class="icon-heart"></i></a></li>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="txt">
-                                            <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                            <span class="price"><i class="fa fa-eur"></i> <span>399,00</span></span>
+                                            <strong class="title"><a href="{% url 'products:product-detail-view' best_seller_product.slug %}">{{ best_seller_product.name }}</a></strong>
+                                            <strong class="title">Satış Fiyatı</strong>
+                                            {% if best_seller_product.selling_old_price != 0 %}
+                                            <del class="off"><i class="fa fa-try"></i> <span>{{ best_seller_product.selling_old_price }}</span></del>
+                                            {% endif %}
+                                            <span class="price"><i class="fa fa-try"></i> <span>{{ best_seller_product.selling_price }}</span></span>
                                         </div>
                                     </div><!-- mt product1 center end here -->
                                 </div>
-                                <div class="slide">
-                                    <!-- mt product1 center start here -->
-                                    <div class="mt-product1 large">
-                                        <div class="box">
-                                            <div class="b1">
-                                                <div class="b2">
-                                                    <a href="product-detail.html"><img src="images/products/img12.jpg" alt="image description"></a>
-                                                    <ul class="links add">
-                                                        <li><a href="#"><i class="icon-handbag"></i></a></li>
-                                                        <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                        <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="txt">
-                                            <strong class="title"><a href="product-detail.html">Marvelous Modern 3 Seater</a></strong>
-                                            <span class="price"><i class="fa fa-eur"></i> <span>599,00</span></span>
-                                        </div>
-                                    </div><!-- mt product1 center end here -->
-                                </div>
-                                <div class="slide">
-                                    <!-- mt product1 center start here -->
-                                    <div class="mt-product1 large">
-                                        <div class="box">
-                                            <div class="b1">
-                                                <div class="b2">
-                                                    <a href="product-detail.html"><img src="images/products/img13.jpg" alt="image description"></a>
-                                                    <ul class="links add">
-                                                        <li><a href="#"><i class="icon-handbag"></i></a></li>
-                                                        <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                        <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="txt">
-                                            <strong class="title"><a href="product-detail.html">Puff  Armchair</a></strong>
-                                            <span class="price"><i class="fa fa-eur"></i> <span>200,00</span></span>
-                                        </div>
-                                    </div><!-- mt product1 center end here -->
-                                </div>
-                                <div class="slide">
-                                    <!-- mt product1 center start here -->
-                                    <div class="mt-product1 large">
-                                        <div class="box">
-                                            <div class="b1">
-                                                <div class="b2">
-                                                    <a href="product-detail.html"><img src="images/products/img11.jpg" alt="image description"></a>
-                                                    <span class="caption">
-                                                        <span class="best-price">Best Price</span>
-                                                    </span>
-                                                    <ul class="links add">
-                                                        <li><a href="#"><i class="icon-handbag"></i></a></li>
-                                                        <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                        <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="txt">
-                                            <strong class="title"><a href="product-detail.html">Bombi Chair</a></strong>
-                                            <span class="price"><i class="fa fa-eur"></i> <span>399,00</span></span>
-                                        </div>
-                                    </div><!-- mt product1 center end here -->
-                                </div>
-                                <div class="slide">
-                                    <!-- mt product1 center start here -->
-                                    <div class="mt-product1 large">
-                                        <div class="box">
-                                            <div class="b1">
-                                                <div class="b2">
-                                                    <a href="product-detail.html"><img src="images/products/img12.jpg" alt="image description"></a>
-                                                    <ul class="links add">
-                                                        <li><a href="#"><i class="icon-handbag"></i></a></li>
-                                                        <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                        <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="txt">
-                                            <strong class="title"><a href="product-detail.html">Marvelous Modern 3 Seater</a></strong>
-                                            <span class="price"><i class="fa fa-eur"></i> <span>599,00</span></span>
-                                        </div>
-                                    </div><!-- mt product1 center end here -->
-                                </div>
-                                <div class="slide">
-                                    <!-- mt product1 center start here -->
-                                    <div class="mt-product1 large">
-                                        <div class="box">
-                                            <div class="b1">
-                                                <div class="b2">
-                                                    <a href="product-detail.html"><img src="images/products/img13.jpg" alt="image description"></a>
-                                                    <span class="caption">
-                                                        <span class="off">15% Off</span>
-                                                    </span>
-                                                    <ul class="links add">
-                                                        <li><a href="#"><i class="icon-handbag"></i></a></li>
-                                                        <li><a href="#"><i class="icomoon icon-heart-empty"></i></a></li>
-                                                        <li><a href="#popup1" class="lightbox"><i class="icomoon icon-eye"></i></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="txt">
-                                            <strong class="title"><a href="product-detail.html">Puff  Armchair</a></strong>
-                                            <span class="price"><i class="fa fa-eur"></i> <span>200,00</span></span>
-                                        </div>
-                                    </div><!-- mt product1 center end here -->
-                                </div>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
