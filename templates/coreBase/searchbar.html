@@ -6,12 +6,14 @@
     <div class="mt-holder">
         <a href="#" class="search-close"><span></span><span></span></a>
         <div class="mt-frame">
-            <form action="#">
+            <form id="search_form" action="/search/" method="GET">
                 <fieldset>
-                    <input type="text" placeholder="Ara...">
-                    <button class="icon-magnifier" type="submit"></button>
+                    <input type="text" name="query" placeholder="Ara...">
+                    <button id="search_button" type="submit" class="icon-magnifier1">
+                    </button>
                 </fieldset>
             </form>
+            
         </div>
     </div>
 </div>

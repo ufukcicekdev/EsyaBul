@@ -2,7 +2,7 @@
 {% load bootstrap_pagination %}
 {% load custom_filters %}
 {% load static %}
-{% block title %} {{ category_name.name }} - Esyala {% endblock title %}
+{% block title %} Arama - Esyala {% endblock title %}
 {% load social_share %}
 {% block content %}
 
@@ -245,13 +245,12 @@ header .close:hover{
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-12 text-center">
-                            <h1>{{ category_name.name }}</h1>
+                            <h1>Arama</h1>
                             <!-- Breadcrumbs of the Page -->
                             <nav class="breadcrumbs">
                                 <ul class="list-unstyled">
                                     <li><a href="{% url 'main:home' %}">AnaSayfa <i class="fa fa-angle-right"></i></a></li>
                                     <li><a href="#">Ürünler <i class="fa fa-angle-right"></i></a></li>
-                                    <li>{{ category_name.name }}</li>
                                 </ul>
                             </nav><!-- Breadcrumbs of the Page end -->
                         </div>
@@ -266,18 +265,7 @@ header .close:hover{
                         <!-- shop-widget of the Page start here -->
                         <section class="shop-widget">
                             <h2>Kategoriler</h2>
-                            <!-- category list start here -->
-                            <ul class="list-unstyled category-list">
-                                {% for subcategory in subcategories %}
-                                    <li>
-                                        <a href="{% url 'main:dynamic-category-product-list' category_slugs=category.slug|add:'/'|add:subcategory.slug %}">
-                                            <span class="name">{{ subcategory.name }}</span>
-                                            <span class="num">{{ subcategory.product_count }}</span>
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                                
-                            </ul><!-- category list end here -->
+                            
                             <ul class="list-unstyled category-list">
                                 {% for category in main_categories1 %}
                                 <li>

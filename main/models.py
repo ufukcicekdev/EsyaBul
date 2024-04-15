@@ -86,4 +86,34 @@ class HomeMainBanner(models.Model):
     def image_preview(self):
         return mark_safe('<img src="{}" width="150" height="150" />'.format(self.image.url))
 
-    
+
+class HomeSubBanner(models.Model):
+    CHOOSE_BANNER = [
+        ('banner1', 'Banner 1'),
+        ('banner2', 'Banner 2'),
+        ('banner3', 'Banner 3'),
+        ('banner4', 'Banner 4'),
+    ]
+    choose = models.CharField(max_length=20, choices=CHOOSE_BANNER)
+    title = models.CharField(max_length=1000)
+    subtitle = models.CharField(max_length=1000)
+    description = models.TextField()
+    image = models.ImageField(upload_to='banners/')
+    link = models.CharField(max_length=2000, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    TEXT_COLOR_CHOICES = [
+        ('red', 'Red'),
+        ('blue', 'Blue'),
+        ('green', 'Green'),
+        ('yellow', 'Yellow'),
+        ('white', 'White'),
+        ('black', 'Black'),
+    ]
+    text_color = models.CharField(max_length=1000, choices=TEXT_COLOR_CHOICES, default='black')
+
+    def __str__(self):
+        return self.title
+
+    # Resim önizlemesi sağlayan metot
+    def image_preview(self):
+        return mark_safe('<img src="{}" width="150" height="150" />'.format(self.image.url))

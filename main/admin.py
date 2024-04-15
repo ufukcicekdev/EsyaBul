@@ -1,5 +1,5 @@
 from django.contrib import admin
-from main.models import ContactUs,SocialMedia, HomeMainBanner
+from main.models import ContactUs,SocialMedia, HomeMainBanner,HomeSubBanner
 
 
 
@@ -30,3 +30,15 @@ class HomeMainBannerAdmin(admin.ModelAdmin):
 
 admin.site.register(HomeMainBanner, HomeMainBannerAdmin)
 
+class HomeSubBannerAdmin(admin.ModelAdmin):
+    list_display = ('title', 'choose', 'image_preview', 'is_active')
+    list_filter = ('choose', 'is_active')
+    search_fields = ('title', 'subtitle', 'description')
+    readonly_fields = ('image_preview',)
+
+    def image_preview(self, obj):
+        return obj.image.url if obj.image else None
+    image_preview.short_description = 'Image Preview'
+    image_preview.allow_tags = True
+
+admin.site.register(HomeSubBanner, HomeSubBannerAdmin)

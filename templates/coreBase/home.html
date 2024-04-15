@@ -54,62 +54,62 @@
                     <div class="col-xs-12">
                         <!-- banner frame start here -->
                         <div class="banner-frame">
-                            <!-- banner-1 start here -->
-                            <div class="banner-1 wow fadeInLeft" data-wow-delay="0.4s">
-                                <img alt="image description" src="images/banner/img01.jpg">
-                                <div class="holder">
-                                    <h2>MY SMALL WRITING <br>DESK</h2>
-                                    <div class="txts">
-                                        <a class="btn-shop" href="product-detail.html">
-                                            <span>shop now</span>
-                                            <i class="fa fa-angle-right"></i>
-                                        </a>
-                                        <div class="discount">
-                                            <span>-20%</span>
+                            {% for homesubbanner in homesubbanners %}
+                                {% if homesubbanner.choose == 'banner1' %}
+                                    <div class="banner-1 wow fadeInLeft" data-wow-delay="0.4s">
+                                        <img alt="image description" src="{{ homesubbanner.image.url }}">
+                                        <div class="holder">
+                                            <h2>{{ homesubbanner.title }}</h2>
+                                            <div class="txts">
+                                                <a class="btn-shop" href="{{ homesubbanner.link }}">
+                                                    <span>Shop now</span>
+                                                    <i class="fa fa-angle-right"></i>
+                                                </a>
+                                                {% if homesubbanner.discount %}
+                                                    <div class="discount">
+                                                        <span>{{ homesubbanner.discount }}</span>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <!-- banner-1 end here -->
-
-                            <!-- banner-box first start here -->
-                            <div class="banner-box first">
-                                <!-- banner-2 start here -->
-                                <div class="banner-2 wow fadeInUp" data-wow-delay="0.4s">
-                                    <img alt="image description" src="images/banner/img02.jpg">
-                                    <div class="holder">
-                                        <h2>MODULAR LOUNGE <br>TEAK</h2>
-                                        <span class="price">$ 129.00</span>
+                                {% elif homesubbanner.choose == 'banner2' %}
+                                    <div class="banner-box first">
+                                        <div class="banner-2 wow fadeInUp" data-wow-delay="0.4s">
+                                            <img alt="image description" src="{{ homesubbanner.image.url }}">
+                                            <div class="holder">
+                                                <h2>{{ homesubbanner.title }}</h2>
+                                                <span class="price">{{ homesubbanner.price }}</span>
+                                            </div>
+                                        </div>
+                                {% elif homesubbanner.choose == 'banner3' %}
+                                        <div class="banner-3 right wow fadeInDown" data-wow-delay="0.4s">
+                                            <img alt="image description" src="{{ homesubbanner.image.url }}">
+                                            <div class="holder">
+                                                <h2>{{ homesubbanner.title }}</h2>
+                                                <a href="{{ homesubbanner.link }}" class="shop">SHOP NOW</a>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <!-- banner-2 end here -->
-
-                                <!-- banner-3 start here -->
-                                <div class="banner-3 right wow fadeInDown" data-wow-delay="0.4s">
-                                    <img alt="image description" src="images/banner/img03.jpg">
-                                    <div class="holder">
-                                        <h2>Modular technical <br>fabric sofa</h2>
-                                        <a href="product-detail.html" class="shop">SHOP NOW</a>
+                                {% elif homesubbanner.choose == 'banner4' %}
+                                    <div class="banner-4 hidden-sm wow fadeInRight" data-wow-delay="0.4s">
+                                        <img alt="image description" src="{{ homesubbanner.image.url }}">
+                                        <div class="holder">
+                                            <h2>{{ homesubbanner.title }}</h2>
+                                            <span class="price">{{ homesubbanner.price }}</span>
+                                            <a class="btn-shop add" href="{{ homesubbanner.link }}">
+                                                <span>shop now</span>
+                                                <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
-                                <!-- banner-3 end here -->
-                            </div>
-                            <!-- banner-box first end here -->
-
-                            <!-- banner-4 start here -->
-                            <div class="banner-4 hidden-sm wow fadeInRight" data-wow-delay="0.4s">
-                                <img alt="image description" src="images/banner/img04.jpg">
-                                <div class="holder">
-                                    <h2>Direct light <br>pendant lamp</h2>
-                                    <span class="price">$ 129.00</span>
-                                    <a class="btn-shop add" href="product-detail.html">
-                                        <span>shop now</span>
-                                        <i class="fa fa-angle-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <!-- banner-4 end here -->
+                                {% endif %}
+                            {% endfor %}
                         </div>
+                        
+                        
+                        
+                        
                         <!-- banner frame end here -->
                         <!-- mt producttabs start here -->
                         <div class="mt-producttabs wow fadeInUp" data-wow-delay="0.4s">
@@ -327,215 +327,7 @@
                     </div>
                 </div>
             </div>
-            <!-- mt bestseller start here -->
-            <div class="mt-smallproducts">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-6 col-md-3 mt-paddingbottomsm wow fadeInLeft" data-wow-delay="0.4s">
-                            <h3 class="heading">Hot Sale</h3>
-                            <!-- mt product4 start here -->
-                            <div class="mt-product4 mt-paddingbottom20">
-                                <div class="img">
-                                    <a href="product-detail.html"><img alt="image description" src="images/products/img14.jpg"></a>
-                                </div>
-                                <div class="text">
-                                    <div class="frame">
-                                        <strong><a href="product-detail.html">Egon Wooden Chair</a></strong>
-                                        <ul class="mt-stars">
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star-o"></i></li>
-                                        </ul>
-                                    </div>
-                                    <del class="off">$75,00</del>
-                                    <span class="price">$55,00</span>
-                                </div>
-                            </div><!-- mt product4 end here -->
-                            <!-- mt product4 start here -->
-                            <div class="mt-product4 mt-paddingbottom20">
-                                <div class="img">
-                                    <a href="product-detail.html"><img alt="image description" src="images/products/img15.jpg"></a>
-                                </div>
-                                <div class="text">
-                                    <div class="frame">
-                                        <strong><a href="product-detail.html">Oyo Cantilever Chair</a></strong>
-                                    </div>
-                                    <del class="off">$75,00</del>
-                                    <span class="price">$55,00</span>
-                                </div>
-                            </div><!-- mt product4 end here -->
-                            <!-- mt product4 start here -->
-                            <div class="mt-product4 mt-paddingbottom20">
-                                <div class="img">
-                                    <a href="product-detail.html"><img alt="image description" src="images/products/img16.jpg"></a>
-                                </div>
-                                <div class="text">
-                                    <div class="frame">
-                                        <strong><a href="product-detail.html">Kurve Chair</a></strong>
-                                        <ul class="mt-stars">
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star-o"></i></li>
-                                        </ul>
-                                    </div>
-                                    <del class="off">$75,00</del>
-                                    <span class="price">$55,00</span>
-                                </div>
-                            </div><!-- mt product4 end here -->
-                        </div>
-                        <div class="col-xs-12 col-sm-6 col-md-3 mt-paddingbottomsm wow fadeInLeft" data-wow-delay="0.4s">
-                            <h3 class="heading">Featured Products</h3>
-                            <!-- mt product4 start here -->
-                            <div class="mt-product4 mt-paddingbottom20">
-                                <div class="img">
-                                    <a href="product-detail.html"><img alt="image description" src="images/products/img17.jpg"></a>
-                                </div>
-                                <div class="text">
-                                    <div class="frame">
-                                        <strong><a href="product-detail.html">Bombi Chair</a></strong>
-                                    </div>
-                                    <del class="off">$75,00</del>
-                                    <span class="price">$33,00</span>
-                                </div>
-                            </div><!-- mt product4 end here -->
-                            <!-- mt product4 start here -->
-                            <div class="mt-product4 mt-paddingbottom20">
-                                <div class="img">
-                                    <a href="product-detail.html"><img alt="image description" src="images/products/img18.jpg"></a>
-                                </div>
-                                <div class="text">
-                                    <div class="frame">
-                                        <strong><a href="product-detail.html">Oyo Cantilever Chair</a></strong>
-                                    </div>
-                                    <span class="price">$55,00</span>
-                                </div>
-                            </div><!-- mt product4 end here -->
-                            <!-- mt product4 start here -->
-                            <div class="mt-product4 mt-paddingbottom20">
-                                <div class="img">
-                                    <a href="product-detail.html"><img alt="image description" src="images/products/img19.jpg"></a>
-                                </div>
-                                <div class="text">
-                                    <div class="frame">
-                                        <strong><a href="product-detail.html">Puff Chair</a></strong>
-                                    </div>
-                                    <del class="off">$75,00</del>
-                                    <span class="price">$55,00</span>
-                                </div>
-                            </div><!-- mt product4 end here -->
-                        </div>
-                        <div class="col-xs-12 col-sm-6 col-md-3 mt-paddingbottomxs wow fadeInRight" data-wow-delay="0.4s">
-                            <h3 class="heading">Sale Products</h3>
-                            <!-- mt product4 start here -->
-                            <div class="mt-product4 mt-paddingbottom20">
-                                <div class="img">
-                                    <a href="product-detail.html"><img alt="image description" src="images/products/img20.jpg"></a>
-                                </div>
-                                <div class="text">
-                                    <div class="frame">
-                                        <strong><a href="product-detail.html">Marvelous Wooden Chair</a></strong>
-                                    </div>
-                                    <del class="off">$75,00</del>
-                                    <span class="price">$55,00</span>
-                                </div>
-                            </div><!-- mt product4 end here -->
-                            <!-- mt product4 start here -->
-                            <div class="mt-product4 mt-paddingbottom20">
-                                <div class="img">
-                                    <a href="product-detail.html"><img alt="image description" src="images/products/img21.jpg"></a>
-                                </div>
-                                <div class="text">
-                                    <div class="frame">
-                                        <strong><a href="product-detail.html">Oyo Cantilever Chair</a></strong>
-                                        <ul class="mt-stars">
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star-o"></i></li>
-                                        </ul>
-                                    </div>
-                                    <span class="price">$55,00</span>
-                                </div>
-                            </div><!-- mt product4 end here -->
-                            <!-- mt product4 start here -->
-                            <div class="mt-product4 mt-paddingbottom20">
-                                <div class="img">
-                                    <a href="product-detail.html"><img alt="image description" src="images/products/img16.jpg"></a>
-                                </div>
-                                <div class="text">
-                                    <div class="frame">
-                                        <strong><a href="product-detail.html">Kurve Chair</a></strong>
-                                    </div>
-                                    <del class="off">$75,00</del>
-                                    <span class="price">$55,00</span>
-                                </div>
-                            </div><!-- mt product4 end here -->
-                        </div>
-                        <div class="col-xs-12 col-sm-6 col-md-3 wow fadeInRight" data-wow-delay="0.4s">
-                            <h3 class="heading">Top Rated Products</h3>
-                            <!-- mt product4 start here -->
-                            <div class="mt-product4 mt-paddingbottom20">
-                                <div class="img">
-                                    <a href="product-detail.html"><img alt="image description" src="images/products/img14.jpg"></a>
-                                </div>
-                                <div class="text">
-                                    <div class="frame">
-                                        <strong><a href="product-detail.html">Egon Wooden Chair</a></strong>
-                                        <ul class="mt-stars">
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star-o"></i></li>
-                                        </ul>
-                                    </div>
-                                    <del class="off">$75,00</del>
-                                    <span class="price">$55,00</span>
-                                </div>
-                            </div><!-- mt product4 end here -->
-                            <!-- mt product4 start here -->
-                            <div class="mt-product4 mt-paddingbottom20">
-                                <div class="img">
-                                    <a href="product-detail.html"><img alt="image description" src="images/products/img15.jpg"></a>
-                                </div>
-                                <div class="text">
-                                    <div class="frame">
-                                        <strong><a href="product-detail.html">Oyo Cantilever Chair</a></strong>
-                                        <ul class="mt-stars">
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star-o"></i></li>
-                                        </ul>
-                                    </div>
-                                    <del class="off">$75,00</del>
-                                    <span class="price">$55,00</span>
-                                </div>
-                            </div><!-- mt product4 end here -->
-                            <!-- mt product4 start here -->
-                            <div class="mt-product4 mt-paddingbottom20">
-                                <div class="img">
-                                    <a href="product-detail.html"><img alt="image description" src="images/products/img16.jpg"></a>
-                                </div>
-                                <div class="text">
-                                    <div class="frame">
-                                        <strong><a href="product-detail.html">Kurve Chair</a></strong>
-                                        <ul class="mt-stars">
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star-o"></i></li>
-                                        </ul>
-                                    </div>
-                                    <del class="off">$75,00</del>
-                                    <span class="price">$55,00</span>
-                                </div>
-                            </div><!-- mt product4 end here -->
-                        </div>
-                    </div>
-                </div>
-            </div><!-- mt bestseller end here -->
+         
         </main>
 
     

@@ -47,7 +47,7 @@ function initNavOpener() {
 		jQuery(".mobile-toggle").toggleClass("active");
 		return false;
 	});
-
+	
 	jQuery(".search-close, .icon-magnifier, .fa-search").click(function(){
 		jQuery("body").toggleClass("search-active");
 		return false;

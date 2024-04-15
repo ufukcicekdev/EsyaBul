@@ -191,6 +191,10 @@ a:hover {
   position: relative;
   top: 2px;
 }
+#mt-header .icon-magnifier1 {
+  position: relative;
+  top: 2px;
+}
 
 #mt-header.style2 .mt-logo {
   float: none;
@@ -292,8 +296,23 @@ a:hover {
   padding: 6px 0 0 6px;
   border: 1px solid #2e2e2e;
 }
+#mt-header.style5 .icon-magnifier1 {
+  width: 25px;
+  height: 25px;
+  color: #2e2e2e;
+  display: block;
+  font-size: 11px;
+  border-radius: 50%;
+  padding: 6px 0 0 6px;
+  border: 1px solid #2e2e2e;
+}
 
 #mt-header.style5 .icon-magnifier:hover {
+  color: #ff6060;
+  border-color: #ff6060;
+}
+
+#mt-header.style5 .icon-magnifier1:hover {
   color: #ff6060;
   border-color: #ff6060;
 }
@@ -2541,10 +2560,31 @@ a:hover {
   -o-transition: all 0.4s linear;
   transition: all 0.4s linear;
 }
+.mt-search-popup .icon-magnifier1{
+  border: 0;
+  top: 19px;
+  right: 5px;
+  padding: 0;
+  outline: none;
+  color: #9d9d9d;
+  font-size: 23px;
+  position: absolute;
+  background: transparent;
+  -moz-transition: all 0.4s linear;
+  -webkit-transition: all 0.4s linear;
+  -o-transition: all 0.4s linear;
+  transition: all 0.4s linear;
+}
+
 
 .mt-search-popup .icon-magnifier:hover {
   color: #ff6060;
 }
+
+.mt-search-popup .icon-magnifier1:hover {
+  color: #ff6060;
+}
+
 
 .mt-search-popup input {
   margin: 0;
