@@ -182,7 +182,7 @@ def dynamic_category_product_list_view(request, category_slugs):
     
     if category_slugs == "tum-urunler":
         main_category = get_object_or_404(Category, slug=category_slug_list[0])
-        products = Product.objects.all()
+        products = Product.objects.all().order_by["id"]
         paginator = Paginator(products, 12)  
         page_number = request.GET.get('page')
         try:
@@ -217,10 +217,10 @@ def dynamic_category_product_list_view(request, category_slugs):
         for category in getMainCategoryList:
             category_query |= Q(category=category)
 
-        products = Product.objects.filter(category_query)
+        products = Product.objects.filter(category_query).order_by("id")
 
     else:
-        products = Product.objects.filter(category=target_category)
+        products = Product.objects.filter(category=target_category).order_by("id")
         
     for subcategory in subcategories:
         subcategory.product_count = Product.objects.filter(category=subcategory).count()

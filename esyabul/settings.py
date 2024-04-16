@@ -59,9 +59,7 @@ INSTALLED_APPS = [
     "storages",
     "easyaudit",
     "django_social_share",
-    "ipware",
-    "bootstrap_pagination",
-    
+    "ipware",    
 ]
 
 MIDDLEWARE = [
