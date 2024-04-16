@@ -558,7 +558,6 @@ def cart_order_completed(card_id):
 
 def order_user_mail(order_number, user, card_id):
     subject = 'Sipariş Alındı'
-    social_media_links = SocialMedia.objects.all()
     cart_items = []
     cart_total = 0  
 
@@ -574,15 +573,14 @@ def order_user_mail(order_number, user, card_id):
                 cart_total += cart_item.selling_price * cart_item.quantity
 
     context = {
-        'cart_items': cart_items,
+        'subject':subject,
+        'username': user.username,
         'cart_total': cart_total,  
-        "social_media_links": social_media_links,
         "order_number":order_number
     }
 
-    html_content = render_to_string('email_templates/order_email.html', context)
-    text_content = strip_tags(html_content)  # HTML etiketlerini kaldır
 
-    email = EmailMultiAlternatives(subject, text_content, 'gonderen@example.com', [user.email])
-    email.attach_alternative(html_content, "text/html")
+    email_content = render_to_string('email_templates/order_checkout.html', context)
+    email = EmailMessage(subject, email_content,EMAIL_HOST_USER, to=[user.email])
+    email.content_subtype = 'html' 
     email.send()

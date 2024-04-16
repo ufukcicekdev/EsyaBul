@@ -227,7 +227,7 @@ table, td { color: #000000; } #u_body a { color: #161a39; text-decoration: under
       <td style="overflow-wrap:break-word;word-break:break-word;padding:0px 10px 30px;font-family:'Lato',sans-serif;" align="left">
         
   <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-    <p style="font-size: 14px; line-height: 140%; text-align: center;"><span style="font-size: 28px; line-height: 39.2px; color: #ffffff; font-family: Lato, sans-serif;">Şifremi Unuttum </span></p>
+    <p style="font-size: 14px; line-height: 140%; text-align: center;"><span style="font-size: 28px; line-height: 39.2px; color: #ffffff; font-family: Lato, sans-serif;">{{ subject }}</span></p>
   </div>
 
       </td>
@@ -263,15 +263,28 @@ table, td { color: #000000; } #u_body a { color: #161a39; text-decoration: under
     <tr>
       <td style="overflow-wrap:break-word;word-break:break-word;padding:40px 40px 30px;font-family:'Lato',sans-serif;" align="left">
         
-  <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-    <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Sayın {{ username }}</span></p>
-<p style="font-size: 14px; line-height: 140%;">&nbsp;</p>
-<p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">{{ otp }} Tek Kullanımlık Parolanız (OTP)</span></p>
-<p style="font-size: 14px; line-height: 140%;">&nbsp;</p>
-<p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Başkalarıyla paylaşmayınız</span></p>
-<p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Teşekkürler & Saygılar, Eşyala</span></p>
-
-  </div>
+        <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
+            <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Sayın {{ username }}</span></p>
+            <p style="font-size: 14px; line-height: 140%;">&nbsp;</p>
+            <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Beğendiğiniz ürünler hala stoklarda ve sizi bekliyor:</span></p>
+        
+            {% for product in products %}
+            <div style="margin-bottom: 20px;">
+                {% with first_image=product.related_products.first %}
+    {% if first_image %}
+        <a href="{{ BASE_URL }}{% url 'products:product-detail-view' product.slug %}"><img src="{{ first_image.image.url }}" style="width: 237px;height: 248px;" alt="{{ first_image.img_title }}"></a>
+    {% endif %}
+{% endwith %}
+                
+                <p style="font-size: 14px; line-height: 140%;">- <a href="{{ product.link }}" style="text-decoration: none; color: #007bff;">{{ product.name }}</a></p>
+            </div>
+            {% endfor %}
+        
+            <p style="font-size: 14px; line-height: 140%;">&nbsp;</p>
+            <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Detaylı bilgi için sitemize göz atabilirsiniz.</span></p>
+            <p style="font-size: 14px; line-height: 140%;">&nbsp;</p>
+            <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Teşekkürler & Saygılar, Eşyala</span></p>
+        </div>
 
       </td>
     </tr>

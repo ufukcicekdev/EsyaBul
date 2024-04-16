@@ -764,25 +764,9 @@ def reset_password(request):
     try:
         user = get_object_or_404(User, username=username)
         otp = random.randint(100000, 999999)
-        social_media_links = SocialMedia.objects.all()
-        wcount=0
-        hcount=0
-        main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
-
-        if request.user.is_authenticated:
-            wcount = wishlist_model.objects.filter(user=request.user).count()
-            try:
-                handbag = Cart.objects.get(user=request.user, order_completed=False)
-                hcount = CartItem.objects.filter(cart=handbag).count()
-            except Cart.DoesNotExist:
-                pass
         context = {
             'username': user.username,
             'otp': otp,
-            "social_media_links":social_media_links,
-            "wcount":wcount,
-            "hcount":hcount,
-            "main_categories":main_categories
         }
         email_content = render_to_string('email_templates/reset_password_email.html', context)
         try:
@@ -793,7 +777,6 @@ def reset_password(request):
         except:
             return JsonResponse({"status": "error", "email": user.email})
     except Exception as e:
-        print("----", e)
         return JsonResponse({"status": "failed"})
     
 ################### Forgot Passwords Close ################
