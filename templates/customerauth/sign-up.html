@@ -60,7 +60,8 @@
                     <div class="mt-side-widget">
                       <header>
                         <h2 style="margin: 0 0 5px;">Kayıt Ol</h2>
-                        <p>Hesabınız yok mu?</p>
+                        <p>Hesabınız var mı? <a href="{% url 'customerauth:sign-in' %}"class="bold-text" >Giriş Yap</a></p>
+
                       </header>
                       <form method="post" method="POST" style="margin: 0 0 80px;">
                         <fieldset>
@@ -88,10 +89,7 @@
                               <div class="col-xs-12 col-sm-6">
                                   <button type="submit" class="btn-type1" name="login">Kayıt Ol</button>
                               </div>
-                              <div class="col-xs-12 col-sm-6">
-                                <button type="button" onclick="GetRegisterPage()" class="btn-type1" >Giriş Yap</button>
-                                
-                              </div>
+                           
                           </div>
                       
                       </fieldset>
@@ -122,75 +120,57 @@
               <div class="col-xs-12">
                 <!-- banner frame start here -->
                 <div class="banner-frame toppadding-zero">
-                  <!-- banner 5 white start here -->
-                  <div class="banner-5 white wow fadeInLeft" data-wow-delay="0.6s">
-                    <img src="{% static 'basestatic/images/banner/img05.jpg' %}" alt="image description">
-                    <div class="holder">
-                      <div class="texts">
-                        <strong class="title">FURNITURE DESIGNS IDEAS</strong>
-                        <h3><strong>New</strong> Collection</h3>
-                        <p>Consectetur adipisicing elit. Beatae accusamus, optio, repellendus inventore</p>
-                        <span class="price-add">$ 79.00</span>
-                      </div>
-                    </div>
-                  </div><!-- banner 5 white end here -->
-                  <!-- banner 6 white start here -->
-                  <div class="banner-6 white wow fadeInRight" data-wow-delay="0.6s">
-                    <img src="{% static 'basestatic/images/banner/img06.jpg' %}" alt="image description">
-                    <div class="holder">
-                      <strong class="sub-title">SOFAS &amp; ARMCHAIRS</strong>
-                      <h3>3 Seater Leather Sofa</h3>
-                      <span class="offer">
-                        <span class="price-less">$ 659.00</span>
-                        <span class="prices">$ 499.00</span>
-                      </span>
-                      <a href="product-detail.html" class="btn-shop">
-                        <span>shop now</span>
-                        <i class="fa fa-angle-right"></i>
-                      </a>
-                    </div>
-                  </div><!-- banner 5 white end here -->
-                  <!-- banner box two start here -->
-                  <div class="banner-box two">
-                    <!-- banner 7 right start here -->
-                    <div class="banner-7 right wow fadeInUp" data-wow-delay="0.6s">
-                      <img src="{% static 'basestatic/images/banner/img07.jpg' %}" alt="image description">
-                      <div class="holder">
-                        <h2><strong>ACRYLIC FABRIC <br>BEAN BAG</strong></h2>
-                        <ul class="mt-stars">
-                          <li><i class="fa fa-star"></i></li>
-                          <li><i class="fa fa-star"></i></li>
-                          <li><i class="fa fa-star"></i></li>
-                          <li><i class="fa fa-star-o"></i></li>
-                        </ul>
-                        <div class="price-tag">
-                          <span class="price">$ 99.00</span>
-                          <a class="shop-now" href="product-detail.html">SHOP NOW</a>
+                  {% for homesubbanner in homesubbanners %}
+                {% if homesubbanner.choose == 'banner1' %}
+                    <div class="banner-1 wow fadeInLeft" data-wow-delay="0.4s">
+                        <img alt="image description" src="{{ homesubbanner.image.url }}">
+                        <div class="holder">
+                            <h2>{{ homesubbanner.title }}</h2>
+                            <div class="txts">
+                                <a class="btn-shop" href="{{ homesubbanner.link }}">
+                                    <span>Shop now</span>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                                {% if homesubbanner.discount %}
+                                    <div class="discount">
+                                        <span>{{ homesubbanner.discount }}</span>
+                                    </div>
+                                {% endif %}
+                            </div>
                         </div>
-                      </div>
-                    </div><!-- banner 7 right end here -->
-                    <!-- banner 8 start here -->
-                    <div class="banner-8 wow fadeInDown" data-wow-delay="0.6s">
-                      <img src="{% static 'basestatic/images/banner/img08.jpg' %}" alt="image description">
-                      <div class="holder">
-                        <h2><strong>CHAIR WITH <br>ARMRESTS</strong></h2>
-                        <ul class="mt-stars">
-                          <li><i class="fa fa-star"></i></li>
-                          <li><i class="fa fa-star"></i></li>
-                          <li><i class="fa fa-star"></i></li>
-                          <li><i class="fa fa-star-o"></i></li>
-                        </ul>
-                        <div class="price-tag">
-                          <span class="price-off">$ 129.00</span>
-                          <span class="price">$ 99.00</span>
-                          <a class="btn-shop" href="product-detail.html">
-                            <span>HURRY UP!</span> 
-                            <i class="fa fa-angle-right"></i>
-                          </a>
+                    </div>
+                {% elif homesubbanner.choose == 'banner2' %}
+                    <div class="banner-box first">
+                        <div class="banner-2 wow fadeInUp" data-wow-delay="0.4s">
+                            <img alt="image description" src="{{ homesubbanner.image.url }}">
+                            <div class="holder">
+                                <h2>{{ homesubbanner.title }}</h2>
+                                <span class="price">{{ homesubbanner.price }}</span>
+                            </div>
                         </div>
-                      </div>
-                    </div><!-- banner 8 start here -->
-                  </div>
+                {% elif homesubbanner.choose == 'banner3' %}
+                        <div class="banner-3 right wow fadeInDown" data-wow-delay="0.4s">
+                            <img alt="image description" src="{{ homesubbanner.image.url }}">
+                            <div class="holder">
+                                <h2>{{ homesubbanner.title }}</h2>
+                                <a href="{{ homesubbanner.link }}" class="shop">SHOP NOW</a>
+                            </div>
+                        </div>
+                    </div>
+                {% elif homesubbanner.choose == 'banner4' %}
+                    <div class="banner-4 hidden-sm wow fadeInRight" data-wow-delay="0.4s">
+                        <img alt="image description" src="{{ homesubbanner.image.url }}">
+                        <div class="holder">
+                            <h2>{{ homesubbanner.title }}</h2>
+                            <span class="price">{{ homesubbanner.price }}</span>
+                            <a class="btn-shop add" href="{{ homesubbanner.link }}">
+                                <span>shop now</span>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}   
                 </div><!-- banner frame end here -->
               </div>
             </div>

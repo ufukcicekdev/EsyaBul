@@ -14,7 +14,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.core import serializers
 from django.template.loader import render_to_string
 from cities_light.models import Country, City, Region, SubRegion
-from main.models import SocialMedia
+from main.models import SocialMedia,HomeSubBanner
 from .tcknrequest import TCKimlikNoSorgula
 
 
@@ -24,6 +24,7 @@ from .tcknrequest import TCKimlikNoSorgula
 def register_view(request):
     social_media_links = SocialMedia.objects.all()
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
+    homesubbanners = HomeSubBanner.objects.filter(is_active=True)
     wcount = 0
     hcount = 0
     if request.user.is_authenticated:
@@ -46,7 +47,8 @@ def register_view(request):
                     'success_messages': f"Tanıştığımıza memnun oldum, {user_name}!",
                     'target_url':"main:my_style_start",
                     'main_categories':main_categories,
-                    "social_media_links":social_media_links
+                    "social_media_links":social_media_links,
+                    "homesubbanners":homesubbanners
                 }
                 action.send(request.user , verb='register')
                 return render(request, "customerauth/thank-you.html", context1)
@@ -68,7 +70,8 @@ def register_view(request):
         'main_categories':main_categories,
         "wcount":wcount,
         "social_media_links":social_media_links,
-        "hcount":hcount
+        "hcount":hcount,
+        "homesubbanners":homesubbanners
     }
     
     return render(request, "customerauth/sign-up.html", context)
@@ -76,6 +79,7 @@ def register_view(request):
 
 def login_view(request):
     social_media_links = SocialMedia.objects.all()
+    homesubbanners = HomeSubBanner.objects.filter(is_active=True)
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     if request.user.is_authenticated:
         action.send(request.user , verb='login')
@@ -109,7 +113,8 @@ def login_view(request):
                 'success_messages': f"Tekrar hoşgeldiniz, {user_name}!",
                 'target_url':"main:my_style_start",
                 'main_categories':main_categories,
-                "social_media_links":social_media_links
+                "social_media_links":social_media_links,
+                "homesubbanners":homesubbanners
             }
             action.send(request.user , verb='login')
             return render(request, "customerauth/thank-you.html", context1)
@@ -129,7 +134,8 @@ def login_view(request):
         "main_categories":main_categories,
         "wcount":wcount,
         "social_media_links":social_media_links,
-        "hcount":hcount
+        "hcount":hcount,
+        "homesubbanners":homesubbanners
     }
     
     return render(request, "customerauth/sign-in.html",context)
@@ -722,6 +728,8 @@ def update_user_my_style_status(user):
 def forgot_password(request):
     social_media_links = SocialMedia.objects.all()
     main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
+    wcount=0
+    hcount=0
     if request.method=="POST":
         un = request.POST["username"]
         pwd = request.POST["npass"]
@@ -734,8 +742,6 @@ def forgot_password(request):
 
         user_name = request.user.username 
 
-        wcount=0
-        hcount=0
         if request.user.is_authenticated:
             wcount = wishlist_model.objects.filter(user=request.user).count()
             try:
