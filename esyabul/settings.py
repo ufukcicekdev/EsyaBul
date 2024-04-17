@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG =False
 
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["esyala.com"]
 
 
 CSRF_TRUSTED_ORIGINS = ["https://*."]
