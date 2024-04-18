@@ -26,6 +26,7 @@ from django.contrib.auth import get_user_model
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from dotenv import load_dotenv
+from main.mainContent import mainContent
 
 load_dotenv()
 
@@ -37,25 +38,12 @@ csrf_protect = decorator_from_middleware(CsrfViewMiddleware)
 
 
 def product_detail_view(request, product_slug):
-    social_media_links = SocialMedia.objects.all()
-    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     product = get_object_or_404(Product, slug=product_slug, is_active=True)
-
     related_products = Product.objects.filter(category_id=product.category_id).exclude(id=product.id).order_by('?')[:10]
     add_to_cart_form = AddToCartForm(request.POST, product_id=product.id)
-    wcount=0
-    hcount =0
-    if request.user.is_authenticated:
-        wcount = wishlist_model.objects.filter(user=request.user).count()
-        try:
-            handbag = Cart.objects.get(user=request.user, order_completed=False)
-            hcount = CartItem.objects.filter(cart=handbag).count()
-        except Cart.DoesNotExist:
-            pass
-
-    
     reviews = ProductReview.objects.filter(product=product)
     wishCount = wishlist_model.objects.filter(product=product)
+    mainContext = mainContent(request)
     if wishCount.exists():
         wish_count = wishCount.count()
     else:
@@ -65,16 +53,14 @@ def product_detail_view(request, product_slug):
 
     context = {
         'product': product,
-        'main_categories':main_categories,
-        'wcount':wcount,
-        'hcount':hcount,
         'reviews':reviews,
         'average_rating':average_rating,
         'wishCount': wish_count,
-        "social_media_links":social_media_links,
         "add_to_cart_form":add_to_cart_form,
         "related_products":related_products
     }
+
+    context.update(mainContext)
     
     return render(request, 'core/product-detail.html', context)
 
@@ -110,13 +96,10 @@ def add_to_cart(request, product_id):
             quantity = add_to_cart_form.cleaned_data['quantity']
             rental_period_id = add_to_cart_form.cleaned_data.get('rental_period')
 
-            # Kullanıcının tamamlanmamış bir alışveriş sepetini kontrol et
             active_cart = Cart.objects.filter(user=request.user, order_completed=False).first()
             if not active_cart:
-                # Aktif bir sepet yoksa, yeni bir tane oluştur
                 active_cart = Cart.objects.create(user=request.user, order_completed=False)
 
-            # Sepete ürünü ekle
             cart_item = CartItem(cart=active_cart, product=product, quantity=quantity)
             if price_type == 'rental':
                 rental_period = get_object_or_404(ProductRentalPrice, id=rental_period_id, product=product)
@@ -134,7 +117,6 @@ def add_to_cart(request, product_id):
             messages.warning(request, "Ürünü sepete eklerken bir sorun oluştu!")
             return redirect('products:product-detail-view', product_slug=product.slug)
 
-    # POST isteği değilse, uygun bir hata yanıtı döndür
     return redirect('main:home')
 
 
@@ -145,50 +127,29 @@ def check_product_in_cart(user, product_id):
 
 @login_required(login_url='customerauth:sign-in')
 def order_shopping_card(request):
-    social_media_links = SocialMedia.objects.all()
-    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
-    wcount = 0
-    hcount = 0
+    mainContext = mainContent(request)
     cart_items = []
-    cart_total = 0  # Sepetin toplam tutarı
-    user_verified = False  # Kullanıcının doğrulanıp doğrulanmadığını başlangıçta False olarak ayarlayın
+    cart_total = 0 
+    user_verified = False
 
     if request.user.is_authenticated:
-        # Kullanıcının doğrulama durumunu kontrol edin
         user_verified = get_object_or_404(User, id=request.user.id).verified
 
-        # Kullanıcının isteğe bağlı olarak tanımlanmış sepetini alın
-        try:
-            handbag = Cart.objects.get(user=request.user, order_completed=False)
-            hcount = CartItem.objects.filter(cart=handbag).count()
-        except Cart.DoesNotExist:
-            pass
-
-        # Sepete eklenen ürünleri alın
         cart = Cart.objects.filter(user=request.user, order_completed=False).first()
         if cart:
             cart_items = cart.cartitem_set.all()
 
-            # Sepetin toplam tutarını hesaplayın
             for cart_item in cart_items:
                 if cart_item.is_rental:
                     cart_total += cart_item.rental_price * cart_item.quantity
                 else:
                     cart_total += cart_item.selling_price * cart_item.quantity
-
-        # Kullanıcının dileği bağlı olarak oluşturulan sepeti yoksa, hcount sıfır olacak
-        # ve bu durumda kullanıcıya hata mesajı gösterebilirsiniz
-
     context = {
-        'main_categories': main_categories,
-        'wcount': wcount,
-        'hcount': hcount,
         'cart_items': cart_items,
-        'cart_total': cart_total,  # Sepetin toplam tutarı
-        "social_media_links": social_media_links,
+        'cart_total': cart_total, 
         "user_verified": user_verified
     }
-
+    context.update(mainContext)
     return render(request, 'core/order-shopping-card.html', context)
 
 
@@ -243,6 +204,7 @@ def order_checkout(request):
 
     context = {
         'main_categories': main_categories,
+         "main_categories2":main_categories,
         'wcount': wcount,
         'hcount': hcount,
         'cart_items': cart_items,

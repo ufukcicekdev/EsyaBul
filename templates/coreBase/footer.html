@@ -1,22 +1,71 @@
 {% load static %}
 {% block content %}
 
-<!-- footer of the Page -->
-<footer id="mt-footer" class="style1 wow fadeInUp" data-wow-delay="0.4s">
-    <!-- Footer Holder of the Page -->
-    <div class="footer-holder dark">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12 col-sm-6 col-md-6 mt-paddingbottomsm">
-                    <!-- F Widget About of the Page -->
-                    <div class="f-widget-about">
-                        <div class="logo">
-                            <a href="#"><img src="{% static 'basestatic/images/esyalacom.png' %}" alt="Esyala"></a>
-                        </div>
-                        <p>Exercitation ullamco laboris nisi ut aliquip ex commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                        <!-- Social Network of the Page -->
 
-                        {% if social_media_links.count > 0 %}
+<footer id="mt-footer" class="style7 wow fadeInUp" data-wow-delay="0.4s">
+    <div class="footer-holder bg-grey">
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12 col-sm-4 mt-paddingbottomsm">
+            <!-- F Widget About of the Page -->
+            <div class="f-widget-about">
+              <div class="logo">
+                <a href="{% url 'main:home' %}"><img src="{% static 'basestatic/images/esyalacom.png' %}" alt="Esyala"></a>
+              </div>
+              <ul class="list-unstyled address-list">
+                <li><i class="fa fa-map-marker"></i><address>Veysel Karani, Çolakoğlu Sokağı No: 10, 34885 Rings Rezidans Kat :5 Daire :87  <br>Sancaktepe/İstanbul</address></li>
+                <li><i class="fa fa-phone"></i><a href="tel:15553332211">+1 (555) 333 22 11</a></li>
+                <li><i class="fa fa-envelope-o"></i><a href="mailto:info@esyala.com">info@esyala.com</a></li>
+              </ul>
+            </div>
+            <!-- F Widget About of the Page end -->
+          </div>
+          <nav class="col-xs-12 col-sm-8 col-md-5 mt-paddingbottomsm">
+            <!-- Footer Nav of the Page -->
+            <div class="nav-widget-1">
+              <h3 class="f-widget-heading">Kategoriler</h3>
+
+              
+              <ul class="list-unstyled f-widget-nav">
+                {% for category in main_categories2 %}
+                  <li><a href="{% url 'main:dynamic-category-product-list' category_slugs=category.slug %}">{{ category.name }}</a></li>
+                    
+                {% endfor %}
+              </ul>
+            </div>
+            <!-- Footer Nav of the Page end -->
+            <!-- Footer Nav of the Page -->
+            <div class="nav-widget-1">
+              <h3 class="f-widget-heading">Bilgilendirme</h3>
+              <ul class="list-unstyled f-widget-nav">
+                <li><a href="{% url 'main:home' %}">Ana Sayfa</a></li>
+                <li><a href="{% url 'main:about' %}">Hakkımızda</a></li>
+                <li><a href="{% url 'main:contact' %}"> İletişim</a></li>
+                <li><a href="#">Hizmet Politikamız</a></li>
+                <li><a href="{% url 'main:faqs' %}">SSS</a></li>
+              </ul>
+            </div>
+            <!-- Footer Nav of the Page end -->
+            <!-- Footer Nav of the Page -->
+            <div class="nav-widget-1">
+              <h3 class="f-widget-heading">Hesap</h3>
+              <ul class="list-unstyled f-widget-nav">
+                <li><a href="{% url 'customerauth:dashboard' %}">Hesabım</a></li>
+                <li><a href="{% url 'customerauth:orders-list' %}">Siparişlerim</a></li>
+                <li><a href="{% url 'customerauth:wishlist' %}">Beğendiklerim</a></li>
+                <li><a href="{% url 'products:order_shopping_card' %}">Sepetim</a></li>
+
+              </ul>
+            </div>
+            <!-- Footer Nav of the Page end -->
+          </nav>
+          <div class="col-xs-12 col-md-3 text-right hidden-sm">
+            <!-- F Widget Newsletter of the Page -->
+            <div class="f-widget-newsletter">
+         
+              <h4 class="f-widget-heading follow">Bizi Takip Edin</h4>
+              <!-- Social Network of the Page -->
+              {% if social_media_links.count > 0 %}
                             <ul class="list-unstyled social-network">
                             {% for social_media in social_media_links %}
                                     {% if social_media.name == 'facebook' %}
@@ -33,45 +82,33 @@
                             {% endfor %}
                             </ul>
                         {% endif %}
-                       
-                        <!-- Social Network of the Page end -->
-                    </div>
-                    <!-- F Widget About of the Page end -->
-                </div>
-             
-                <div class="col-xs-12 col-sm-6 col-md-6 text-right">
-                    <!-- F Widget About of the Page -->
-                    <div class="f-widget-about">
-                        <h3 class="f-widget-heading">İletişim</h3>
-                        <ul class="list-unstyled address-list align-right">
-                            <li><i class="fa fa-map-marker"></i><address>Veysel Karani, Çolakoğlu Sokağı No: 10, 34885 Rings Rezidans Kat :5 Daire :87  <br>Sancaktepe/İstanbul</address></li>
-                            <li><i class="fa fa-phone"></i><a href="tel:15553332211">+1 (555) 333 22 11</a></li>
-                            <li><i class="fa fa-envelope-o"></i><a href="mailto:info@esyala.com">info@esyala.com</a></li>
-                        </ul>
-                    </div>
-                    <!-- F Widget About of the Page end -->
-                </div>
+              <!-- Social Network of the Page end -->
             </div>
+            <!-- F Widget Newsletter of the Page end -->
+          </div>
         </div>
+      </div>
     </div>
-    <!-- Footer Holder of the Page end -->
     <!-- Footer Area of the Page -->
     <div class="footer-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12 col-sm-6">
-                    <p>© <a href="#">esyala.</a> - All rights Reserved</p>
-                </div>
-                <div class="col-xs-12 col-sm-6 text-right">
-                    <div class="bank-card">
-                        <img src="{% static 'basestatic/images/bank-card.png' %}" alt="bank-card">
-                    </div>
-                </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12 col-sm-6">
+            <p>© <a href="{% url 'main:home' %}">esyala.</a> - Her Hakkı Saklıdır</p>
+          </div>
+          <div class="col-xs-12 col-sm-6 text-right">
+            <div class="bank-card-2">
+              <img src="{% static 'basestatic/images/bank-card.png' %}" alt="Bank Card">
             </div>
+          </div>
         </div>
+      </div>
     </div>
     <!-- Footer Area of the Page end -->
-</footer><!-- footer of the Page end -->
-
+  </footer>
 
 {% endblock %}
+
+
+
+

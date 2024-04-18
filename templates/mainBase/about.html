@@ -1,0 +1,174 @@
+
+{% extends 'partialsBase/base.html' %}
+
+{% load static %}
+
+{% block title %} Hakkımızda - Esyala {% endblock title %}
+
+{% block content %}
+
+<!-- main container of all the page elements -->
+<div id="wrapper">
+    <!-- Page Loader -->
+    <div id="pre-loader" class="loader-container">
+        <div class="loader">
+            <img src="{% static 'basestatic/images/svg/rings.svg' %}" alt="loader">
+        </div>
+    </div>
+    <!-- W1 start here -->
+    <div class="w1">
+        <!-- mt header style4 start here -->
+        {% include 'coreBase/header.html' %}
+
+        <main id="mt-main">
+            <!-- Mt Content Banner of the Page -->
+            <section class="mt-contact-banner wow fadeInUp" data-wow-delay="0.4s" style="background-image: url({% static 'basestatic/images/img43.jpg' %}); background-size: cover; background-position: center;">
+              <div class="container">
+                <div class="row">
+                  <div class="col-xs-12 text-center">
+                    <h1>Hakkımızda</h1>
+                    <nav class="breadcrumbs">
+                      <ul class="list-unstyled">
+                        <li><a href="{% url 'main:home' %}">Ana Sayfa <i class="fa fa-angle-right"></i></a></li>
+                        <li>Hakkımızda</li>
+                      </ul>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <!-- Mt Content Banner of the Page end -->
+            <!-- Mt About Section of the Page -->
+            <section class="mt-about-sec">
+              <div class="container">
+                <div class="row">
+                  <div class="col-xs-12">
+                    <div class="txt wow fadeInUp" data-wow-delay="0.4s">
+                      <h2>Biz Kimiz?</h2>
+                      <p>Merhaba! Biz Esyala.com ekibi olarak, sizlere en iyi kiralama ve satın alma deneyimini sunmak için buradayız. Misyonumuz, kullanıcılarımıza geniş bir ürün yelpazesi sunarak onların ihtiyaçlarına uygun çözümler sağlamaktır.</p>
+                      <p>Esyala.com olarak, güvenilirlik, kalite ve müşteri memnuniyetini ön planda tutuyoruz. Her adımda sizin için en iyisini sunmak için çalışıyor ve her talebi özenle değerlendiriyoruz.</p>
+                        <p>Sunduğumuz ürünler arasında mobilya, elektronik eşyalar, ev aletleri ve daha fazlası bulunmaktadır. Ayrıca, esnek kiralama seçenekleri ve uygun fiyatlarla, ihtiyaçlarınıza uygun çözümler sunuyoruz.</p>
+                        <p>Siz değerli müşterilerimizin memnuniyeti bizim için en önemli önceliktir. Her zaman daha iyiye ve daha iyisine ulaşmak için çalışıyoruz. Sizlere hizmet etmekten mutluluk duyuyoruz ve her zaman yanınızdayız.</p>
+                        <p><strong>Teşekkür ederiz, Esyala.com Ekibi </strong></p>
+                    </div>
+                    <div class="mt-follow-holder">
+                      <span class="title">Bizi Takip Edin</span>
+                      <!-- Social Network of the Page -->
+                      {% if social_media_links.count > 0 %}
+                            <ul class="list-unstyled social-network">
+                            {% for social_media in social_media_links %}
+                                    {% if social_media.name == 'facebook' %}
+                                    <li><a target="_blank" href="{{ social_media.link }}"><i class="fa fa-facebook"></i></a></li>
+                                    {% elif social_media.name == 'twitter' %}
+                                    <li><a target="_blank" href="{{ social_media.link }}"><i class="fa fa-twitter"></i></a></li>
+                                    {% elif social_media.name == 'instagram' %}
+                                    <li><a target="_blank" href="{{ social_media.link }}"><i class="fa fa-instagram"></i></a></li>
+                                    {% elif social_media.name == 'linkedin' %}
+                                    <li><a target="_blank" href="{{ social_media.link }}"><i class="fa fa-linkedin"></i></a></li>
+                                    {% elif social_media.name == 'youtube' %}
+                                    <li><a target="_blank" href="{{ social_media.link }}"><i class="fa fa-youtube"></i></a></li>
+                                    {% endif %}
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+                      <!-- Social Network of the Page end -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <!-- Mt About Section of the Page -->
+            <!-- Mt Team Section of the Page -->
+            <section class="mt-team-sec">
+              <div class="container">
+                <div class="row">
+                  <div class="col-xs-12">
+                    <h3>Takımımız</h3>
+                    <div class="holder">
+                      <!-- col of the Page -->
+                      <div class="col wow fadeInUp" data-wow-delay="0.4s">
+                        <div class="img-holder">
+                          <a href="#">
+                            <img src="images/img44.jpg" alt="CLARA WOODEN">
+                            <ul class="list-unstyled social-icon">
+                              <li><i class="fa fa-twitter"></i></li>
+                              <li><i class="fa fa-facebook"></i></li>
+                              <li><i class="fa fa-linkedin"></i></li>
+                            </ul>
+                          </a>
+                        </div>
+                        <div class="mt-txt">
+                          <h4><a href="#">Yakup Ulusoy</a></h4>
+                          <span class="sub-title">DESIGNER</span>
+                        </div>
+                      </div>
+                      <!-- col of the Page end -->
+                      <!-- col of the Page -->
+                      <div class="col wow fadeInUp" data-wow-delay="0.6s">
+                        <div class="img-holder">
+                          <a href="#">
+                            <img src="images/img45.jpg" alt="JOHN WICK">
+                            <ul class="list-unstyled social-icon">
+                              <li><i class="fa fa-twitter"></i></li>
+                              <li><i class="fa fa-facebook"></i></li>
+                              <li><i class="fa fa-linkedin"></i></li>
+                            </ul>
+                          </a>
+                        </div>
+                        <div class="mt-txt">
+                          <h4><a href="#">Vedat Barut</a></h4>
+                          <span class="sub-title">FOUNDER</span>
+                        </div>
+                      </div>
+                      <!-- col of the Page end -->
+                      <!-- col of the Page -->
+                      <div class="col wow fadeInUp" data-wow-delay="0.8s">
+                        <div class="img-holder">
+                          <a href="#">
+                            <img src="images/img46.jpg" alt="HARRY KANE">
+                            <ul class="list-unstyled social-icon">
+                              <li><i class="fa fa-twitter"></i></li>
+                              <li><i class="fa fa-facebook"></i></li>
+                              <li><i class="fa fa-linkedin"></i></li>
+                            </ul>
+                          </a>
+                        </div>
+                        <div class="mt-txt">
+                          <h4><a href="#">Ufuk Çiçek</a></h4>
+                          <span class="sub-title">DESIGNER</span>
+                        </div>
+                      </div>
+                      <!-- col of the Page end -->
+                 
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <!-- Mt About Section of the Page -->
+
+          </main>
+      
+
+
+        {% include 'coreBase/footer.html' %}
+        <!-- footer of the Page end -->
+    </div><!-- W1 end here -->
+    <span id="back-top" class="fa fa-arrow-up"></span>
+</div>
+
+
+{%  endblock %}
+
+
+
+
+
+
+
+
+
+    
+     
+
+ 

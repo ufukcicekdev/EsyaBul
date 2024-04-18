@@ -11,10 +11,10 @@ from products.forms import AddToCartForm
 import random
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import ProductSearchForm
+from .mainContent import mainContent
+
 
 def home(request):
-    social_media_links = SocialMedia.objects.all()
-    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
     homemainbanners = HomeMainBanner.objects.filter(is_active=True)
     homesubbanners = HomeSubBanner.objects.filter(is_active=True)
     best_seller_products = Product.objects.filter(is_active=True, best_seller=True).order_by('?')[:16]
@@ -23,28 +23,18 @@ def home(request):
     best_products = Product.objects.filter(is_active=True, best_seller=True).order_by('?')[:16]
     random.shuffle(latest_products)
     latest_products = latest_products[:16]
-    wcount = 0
-    hcount=0
-    if request.user.is_authenticated:
-        wcount = wishlist_model.objects.filter(user=request.user).count()
-        try:
-            handbag = Cart.objects.get(user=request.user, order_completed=False)
-            hcount = CartItem.objects.filter(cart=handbag).count()
-        except Cart.DoesNotExist:
-            pass
 
+    mainContext = mainContent(request)
     context = {
-        'social_media_links': social_media_links, 
-        "wcount": wcount, 
-        'main_categories':main_categories,
         "homemainbanners":homemainbanners,
-        "hcount":hcount,
         "best_seller_products":best_seller_products,
         "featured_products":featured_products,
         "latest_products":latest_products,
         "best_products":best_products,
         "homesubbanners":homesubbanners,
     }
+
+    context.update(mainContext)
         
     return render(request, 'coreBase/home.html', context)
 
@@ -54,67 +44,27 @@ def home(request):
 @login_required(login_url='customerauth:sign-in')
 def my_style_start(request):
     user = request.user
-    social_media_links = SocialMedia.objects.all()
-    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
-    wcount=0
-    hcount=0
-    if request.user.is_authenticated:
-        wcount = wishlist_model.objects.filter(user=request.user).count()
-        try:
-            handbag = Cart.objects.get(user=request.user, order_completed=False)
-            hcount = CartItem.objects.filter(cart=handbag).count()
-        except Cart.DoesNotExist:
-            pass
     user_name = user.username
-    
+    mainContext = mainContent(request)
     if user.my_style:
         return redirect('main:home')
-
-    return render(request, 'my_style/my_style_start.html', {'user_name': user_name, 
-                    "wcount":wcount, "main_categories":main_categories,"social_media_links":social_media_links,"hcount":hcount})
+    
+    context ={
+        'user_name': user_name,  
+    }
+    context.update(mainContext)
+    return render(request, 'my_style/my_style_start.html', )
 
 
 ################### Errors Open ################
 
 def custom_404_page(request, exception):
-    social_media_links = SocialMedia.objects.all()
-    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
-    wcount=0
-    hcount=0
-    if request.user.is_authenticated:
-        wcount = wishlist_model.objects.filter(user=request.user).count()
-        try:
-            handbag = Cart.objects.get(user=request.user, order_completed=False)
-            hcount = CartItem.objects.filter(cart=handbag).count()
-        except Cart.DoesNotExist:
-            pass
-    context = {
-        "social_media_links":social_media_links,
-        "main_categories":main_categories,
-        "wcount":wcount,
-        "hcount":hcount
-    }
-    return render(request, 'errors/404.html', context, status=404)
+    mainContext = mainContent(request)
+    return render(request, 'errors/404.html', mainContext, status=404)
 
 def custom_500_page(request):
-    social_media_links = SocialMedia.objects.all()
-    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
-    wcount=0
-    hcount=0
-    if request.user.is_authenticated:
-        wcount = wishlist_model.objects.filter(user=request.user).count()
-        try:
-            handbag = Cart.objects.get(user=request.user, order_completed=False)
-            hcount = CartItem.objects.filter(cart=handbag).count()
-        except Cart.DoesNotExist:
-            pass
-    context = {
-        "social_media_links":social_media_links,
-        "main_categories":main_categories,
-        "wcount":wcount,
-        "hcount":hcount
-    }
-    return render(request, 'errors/500.html', context, status=500)
+    mainContext = mainContent(request)
+    return render(request, 'errors/500.html', mainContext, status=500)
 
 
 ################### Errors Close ################
@@ -124,19 +74,16 @@ def custom_500_page(request):
 
 
 def contact(request):
-    social_media_links = SocialMedia.objects.all()
-    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
-    wcount=0
-    hcount=0
-    if request.user.is_authenticated:
-        wcount = wishlist_model.objects.filter(user=request.user).count()
-        try:
-            handbag = Cart.objects.get(user=request.user, order_completed=False)
-            hcount = CartItem.objects.filter(cart=handbag).count()
-        except Cart.DoesNotExist:
-            pass
-    return render(request, "mainBase/contact.html", {'wcount':wcount, 'main_categories':main_categories, 
-                                                     'social_media_links':social_media_links,"hcount":hcount})
+    mainContext = mainContent(request)
+    return render(request, "mainBase/contact.html", mainContext)
+
+def about(request):
+    mainContext = mainContent(request)
+    return render(request, "mainBase/about.html", mainContext)
+
+def faqs(request):
+    mainContext = mainContent(request)
+    return render(request, "mainBase/faq.html", mainContext)
 
 
 def ajax_contact_form(request):
@@ -166,23 +113,13 @@ def ajax_contact_form(request):
 ################### Contact Close ################
 
 def dynamic_category_product_list_view(request, category_slugs):
-    social_media_links = SocialMedia.objects.all()
     category_slug_list = category_slugs.split('/')
-    wcount = 0 
-    hcount = 0   
-    if request.user.is_authenticated:
-        wcount = wishlist_model.objects.filter(user=request.user).count()
-        try:
-            handbag = Cart.objects.get(user=request.user, order_completed=False)
-            hcount = CartItem.objects.filter(cart=handbag).count()
-        except Cart.DoesNotExist:
-            pass
+  
 
-    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
-    
+    mainContext = mainContent(request)
     if category_slugs == "tum-urunler":
         main_category = get_object_or_404(Category, slug=category_slug_list[0])
-        products = Product.objects.all().order_by["id"]
+        products = Product.objects.all().order_by("id")
         paginator = Paginator(products, 12)  
         page_number = request.GET.get('page')
         try:
@@ -194,13 +131,10 @@ def dynamic_category_product_list_view(request, category_slugs):
         context = {
             "products": page_products,
             "product_count":products.count(),
-            "main_categories1": main_categories,
             "category_name": main_category,
-            "wcount": wcount,
-            "hcount": hcount,
-            "social_media_links": social_media_links,
             "all_categories": Category.objects.all()  
         }
+        context.update(mainContext)
         return render(request, "core/category-product-list.html", context)
     
     # Eğer category_slugs bir kategoriye aitse, ilgili ürünleri getir
@@ -243,31 +177,18 @@ def dynamic_category_product_list_view(request, category_slugs):
     context = {
         "products": page_products, 
         "product_count":products.count(),
-        "wcount": wcount,
-        "hcount": hcount,
         "category": main_category,
         "category_name": target_category,
         "subcategories": subcategories,
-        "main_categories": main_categories,
-        "social_media_links": social_media_links,
     }
+    context.update(mainContext)
     
     return render(request, "core/category-product-list.html", context)
 
 
 
 def search_view(request):
-    social_media_links = SocialMedia.objects.all()
-    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
-    wcount = 0 
-    hcount = 0   
-    if request.user.is_authenticated:
-        wcount = wishlist_model.objects.filter(user=request.user).count()
-        try:
-            handbag = Cart.objects.get(user=request.user, order_completed=False)
-            hcount = CartItem.objects.filter(cart=handbag).count()
-        except Cart.DoesNotExist:
-            pass
+    mainContext = mainContent(request)
 
     search_form = ProductSearchForm(request.GET)
     products = []
@@ -293,11 +214,7 @@ def search_view(request):
         'search_form': search_form, 
         'products': page_products,
         "product_count": products.count(),
-        "social_media_links": social_media_links,
-        "wcount": wcount,
-        "hcount": hcount,
-        "main_categories1": main_categories
     }
-
+    context.update(mainContext)
     return render(request, 'core/search_results.html', context)
 
