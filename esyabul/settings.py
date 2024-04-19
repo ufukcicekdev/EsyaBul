@@ -29,15 +29,15 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG =True
 
-# ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*"]
 
 
-ALLOWED_HOSTS = ["esyala.com"]
-CSRF_TRUSTED_ORIGINS = ["https://*."]
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# ALLOWED_HOSTS = ["esyala.com"]
+# CSRF_TRUSTED_ORIGINS = ["https://*."]
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
 
 
 INSTALLED_APPS = [
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django.contrib.sitemaps',
     "django_ckeditor_5",
     "phonenumber_field",
     "cities_light",
@@ -169,6 +170,8 @@ CKEDITOR_UPLOAD_PATH = 'uploads/'
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+ROBOTS_TXT_PATH = os.path.join(BASE_DIR, 'robots.txt')
 
 
 JAZZMIN_SETTINGS = {

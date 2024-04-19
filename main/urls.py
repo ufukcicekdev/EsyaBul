@@ -2,8 +2,16 @@ from django.urls import path,include
 from django.conf.urls import handler404, handler500
 from django.views.generic import TemplateView
 from .views import *
+from django.contrib.sitemaps.views import sitemap
+from main.sitemap import ProductLinkSiteMap
 
 app_name = "main"
+
+
+sitemaps = {
+    'ProductLinkSiteMap':ProductLinkSiteMap, 
+
+}
 
 
 urlpatterns = [
@@ -15,6 +23,8 @@ urlpatterns = [
     path("ajax-contact-form/", ajax_contact_form, name="ajax-contact-form"),
     path("category/<path:category_slugs>/", dynamic_category_product_list_view, name="dynamic-category-product-list"),
     path('search/', search_view, name='search_results'),
+    path('sitemap.xml/', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt',TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
 ]
 
 
