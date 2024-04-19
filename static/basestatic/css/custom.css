@@ -1302,13 +1302,6 @@
     margin-top: auto; /* Footer'ı aşağı it */
 }
 
-/* Footer stilini burada ayarlayabilirsiniz */
-footer {
-    padding: 20px;
-    text-align: center;
-}
-
-
 
 .option-image.selected img {
     background-color: orange;
