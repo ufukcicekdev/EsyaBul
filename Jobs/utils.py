@@ -10,9 +10,16 @@ from customerauth.models import wishlist_model,User
 from collections import defaultdict
 from django.template.loader import render_to_string
 import os
+from django.conf import settings
 from dotenv import load_dotenv
 
-load_dotenv()
+if settings.DEBUG:
+    dotenv_path = os.path.join(os.path.dirname(__file__), '.env.production')
+    load_dotenv(dotenv_path)
+
+else:
+    dotenv_path = os.path.join(os.path.dirname(__file__), '.env.developmet')
+    load_dotenv(dotenv_path)
 
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 
@@ -40,10 +47,11 @@ def check_wishlist():
     user_wishlist = defaultdict(list)
 
     for user in users:
-        wishlist_items = wishlist_model.objects.filter(user=user)
+        if user.receive_email_notifications:
+            wishlist_items = wishlist_model.objects.filter(user=user)
 
-        for item in wishlist_items:
-            user_wishlist[user].append(item.product)
+            for item in wishlist_items:
+                user_wishlist[user].append(item.product)
 
     for user, products in user_wishlist.items():
         send_wishlist_reminder_email(user, products)

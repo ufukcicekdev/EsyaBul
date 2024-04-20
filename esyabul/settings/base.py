@@ -13,31 +13,15 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =True
-
-# ALLOWED_HOSTS = ["*"]
-
-
-ALLOWED_HOSTS = ["esyala.com"]
-CSRF_TRUSTED_ORIGINS = ["https://*."]
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SECRET_KEY = os.environ.get('SECRET_KEY')
+DEBUG=os.environ.get('DEBUG') == 'True'
 
 
 INSTALLED_APPS = [
@@ -102,20 +86,6 @@ WSGI_APPLICATION = "esyabul.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': os.getenv('DATABASE_ENGINE'),
-        'NAME': os.getenv('DATABASE_NAME'),
-        'USER': os.getenv('DATABASE_USER'),
-        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
-        'HOST': os.getenv('DATABASE_HOST'),
-        'PORT': os.getenv('DATABASE_PORT'),
-        'OPTIONS': {
-            'sslmode': 'require',  # SSL gereklilik durumu
-        },
-    }
-}
 
 
 
@@ -220,8 +190,7 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.google.GoogleOAuth2',
 )
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+
 
 
 
@@ -237,24 +206,8 @@ LOGOUT_REDIRECT_URL="main:home"
 PHONENUMBER_DEFAULT_REGION = 'TR'
 
 
-# EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
-# #TEST
-# EMAIL_HOST = os.getenv('EMAIL_HOST_TEST')
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER_TEST')
-# EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD_TEST')
-# EMAIL_USE_TLS = True
 
 
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.getenv('EMAIL_HOST_PROD')
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER_PROD')
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD_PROD')
-EMAIL_PORT = 587
-EMAIL_USE_SSL = False
-EMAIL_USE_TLS = True
 
 
 
@@ -430,12 +383,17 @@ CKEDITOR_5_CONFIGS = {
 }
 
 
-AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_CUSTOM_DOMAIN = os.getenv('AWS_S3_CUSTOM_DOMAIN')
-AWS_DEFAULT_ACL = os.getenv('AWS_DEFAULT_ACL')
-AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME")
-AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL")
-AWS_LOCATION = os.getenv("AWS_LOCATION")
-DEFAULT_FILE_STORAGE = 'esyabul.storage_backends.CustomS3Boto3Storage'
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv('EMAIL_HOST_PROD')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER_PROD')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD_PROD')
+EMAIL_PORT = 587
+EMAIL_USE_SSL = False
+EMAIL_USE_TLS = True

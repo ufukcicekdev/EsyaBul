@@ -2,7 +2,7 @@ from django.db import models
 from autoslug import AutoSlugField
 from django_ckeditor_5.fields import CKEditor5Field
 from django.utils import timezone
-from esyabul import settings
+from esyabul.settings.base import AUTH_USER_MODEL
 from django.core.exceptions import ValidationError
 
 
@@ -151,7 +151,7 @@ class Product(models.Model):
         return ' > '.join(breadcrumbs)
 
 class ProductReview(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
     rating = models.IntegerField() 
     comment = models.TextField(blank=True)  
@@ -199,7 +199,7 @@ class ProductRentalPrice(models.Model):
     
 
 class Cart(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     items = models.ManyToManyField('CartItem', related_name='carts')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
