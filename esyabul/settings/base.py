@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from distutils.util import strtobool 
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -21,8 +22,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 
 
 SECRET_KEY = os.getenv('SECRET_KEY')
-DEBUG=os.getenv('DEBUG')
 
+DEBUG=bool(strtobool(os.getenv('DEBUG_VALUE')))
 
 INSTALLED_APPS = [
     "jazzmin",

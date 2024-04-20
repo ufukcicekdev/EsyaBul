@@ -10,16 +10,9 @@ from customerauth.models import wishlist_model,User
 from collections import defaultdict
 from django.template.loader import render_to_string
 import os
-from django.conf import settings
 from dotenv import load_dotenv
 
-if settings.DEBUG:
-    dotenv_path = os.path.join(os.path.dirname(__file__), '.env.production')
-    load_dotenv(dotenv_path)
-
-else:
-    dotenv_path = os.path.join(os.path.dirname(__file__), '.env.developmet')
-    load_dotenv(dotenv_path)
+load_dotenv()
 
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 
