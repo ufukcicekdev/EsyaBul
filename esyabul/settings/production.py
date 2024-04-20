@@ -3,14 +3,13 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-ALLOWED_HOSTS = ["*"]
 
-# ALLOWED_HOSTS = ["esyala.com"]
-# CSRF_TRUSTED_ORIGINS = ["https://*."]
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-# SECURE_SSL_REDIRECT = True
-# SESSION_COOKIE_SECURE = True
-# CSRF_COOKIE_SECURE = True
+ALLOWED_HOSTS = ["esyala.com"]
+CSRF_TRUSTED_ORIGINS = ["https://*."]
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 
 
