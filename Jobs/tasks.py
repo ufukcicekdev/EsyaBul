@@ -10,6 +10,4 @@ def start():
 
     #scheduler.add_job(check_wishlist, 'interval', minutes=1)
 
-
-
     scheduler.start()
