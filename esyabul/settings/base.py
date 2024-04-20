@@ -20,8 +20,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 
 
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
-DEBUG=os.environ.get('DEBUG') == 'True'
+SECRET_KEY = os.getenv('SECRET_KEY')
+DEBUG=os.getenv('DEBUG')
 
 
 INSTALLED_APPS = [
