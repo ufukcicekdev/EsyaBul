@@ -43,35 +43,33 @@
         <div class="mt-product-table paddingtop-md paddingbootom-md">
           <div class="container">
             {% if wishlistProducts %}
-                {% for w in wishlistProducts %}
-                <div class="row border">
-                    <div class="col-xs-12 col-sm-2">
-                      <div class="img-holder">
-                          {% with first_image=w.product.related_products.first %}
-                              {% if first_image %}
-                                  <img src="{{ first_image.image.url }}" title="{{ first_image.img_title }}" alt="{{ first_image.img_alt }}">
-                              {% endif %}
-                          {% endwith %}
-                      </div>
+            {% for w in wishlistProducts %}
+            <div class="row border">
+                <div class="col-xs-12 col-sm-2">
+                    <div class="img-holder">
+                        {% with first_image=w.product.related_products.first %}
+                            {% if first_image %}
+                                <img src="{{ first_image.image.url }}" title="{{ first_image.img_title }}" alt="{{ first_image.img_alt }}">
+                            {% endif %}
+                        {% endwith %}
                     </div>
-                    <div class="col-xs-12 col-sm-5">
-                      <strong class="product-name">{{ w.product.name|truncatechars:30 }}</strong>
-                    </div>
-                    <div class="col-xs-12 col-sm-2">
-                      <strong class="product-name"><i class="fa fa-try"></i> {{ w.product.selling_price }}</strong>
-                    </div>
-                    <div class="col-xs-12 col-sm-2">
-                      <form action="#" class="coupon-form">
-                        <fieldset>
-                          <button type="submit" style="margin-top: 15px;">Sepete Ekle</button>
-                        </fieldset>
-                      </form>
-                    </div>
-                    <div class="col-xs-12 col-sm-1">
-                      <a href="" data-wishlist-product="{{ w.id }}" class="delete-wishlist-product" ><i class="fa fa-close"></i></a>
-                    </div>
-                  </div>
-                {% endfor %}
+                </div>
+                <div class="col-xs-12 col-sm-5">
+                    <strong class="product-name">{{ w.product.name|truncatechars:30 }}</strong>
+                </div>
+                <div class="col-xs-12 col-sm-2">
+                    <strong class="product-name"><i class="fa fa-try"></i> {{ w.product.selling_price }}</strong>
+                </div>
+                <div class="col-xs-12 col-sm-2">
+                  <strong class="product-name"><a href="{% url 'products:product-detail-view' w.product.slug %}" style="margin-top: 15px;">Ürünü İncele</a></strong>
+                    
+                </div>
+                <div class="col-xs-12 col-sm-1">
+                    <a href="" data-wishlist-product="{{ w.id }}" class="delete-wishlist-product" ><i class="fa fa-close"></i></a>
+                </div>
+            </div>
+        {% endfor %}
+        
             {% else %}
             <div style="text-align: center;">
               <h1>Beğendiklerim sayfasında ürün bulunamadı.</h1>
