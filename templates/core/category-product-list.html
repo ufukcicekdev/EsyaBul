@@ -277,14 +277,17 @@ header .close:hover{
                                 {% endfor %}
                                 
                             </ul><!-- category list end here -->
+                            {% if tumrunler %}
                             <ul class="list-unstyled category-list">
-                                {% for category in main_categories1 %}
-                                <li>
-                                    <a href="{% url 'main:dynamic-category-product-list' category_slugs=category.slug %}"><span class="name">{{ category.name }}</span></a>
-                                    
-                                </li>
-                                {% endfor %}
-                            </ul>
+                              {% for category in main_categories4 %}
+                              <li>
+                                  <a href="{% url 'main:dynamic-category-product-list' category_slugs=category.slug %}"><span class="name">{{ category.name }}</span></a>
+                                  
+                              </li>
+                              {% endfor %}
+                          </ul>
+                            {% endif %}
+                            
                         </section><!-- shop-widget of the Page end here -->
                     </aside><!-- sidebar of the Page end here -->
                     <div class="col-xs-12 col-sm-8 col-md-9 wow fadeInRight" data-wow-delay="0.4s">
