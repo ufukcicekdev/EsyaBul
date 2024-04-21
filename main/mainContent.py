@@ -23,6 +23,7 @@ def mainContent(request):
         'main_categories':main_categories,
         "hcount":hcount,
         "main_categories2":main_categories,
+        "main_categories4":main_categories,
     }
         
     return context

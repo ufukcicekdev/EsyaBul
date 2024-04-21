@@ -166,6 +166,9 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     billing_document = models.FileField(upload_to='billing_documents/', blank=True, null=True) 
+    order_cancel_reason = models.TextField(blank=True, null=True)  # İptal nedeni
+    order_cancel_date = models.DateTimeField(blank=True, null=True)  # İptal tarihi
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='order_items' ,on_delete=models.CASCADE)

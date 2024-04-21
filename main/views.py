@@ -129,6 +129,7 @@ def dynamic_category_product_list_view(request, category_slugs):
         except EmptyPage:
             page_products = paginator.page(paginator.num_pages)
         context = {
+            "tumrunler":True,
             "products": page_products,
             "product_count":products.count(),
             "category_name": main_category,
