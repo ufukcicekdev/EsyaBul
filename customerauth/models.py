@@ -165,6 +165,7 @@ class Order(models.Model):
     shipping_status = models.CharField(max_length=20, choices=SHIPPING_STATUS_CHOICES, default='Preparing')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    billing_document = models.FileField(upload_to='billing_documents/', blank=True, null=True) 
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='order_items' ,on_delete=models.CASCADE)

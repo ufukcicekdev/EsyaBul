@@ -35,7 +35,7 @@ def register_view(request):
                 user_name = request.user.username 
                 context1 = {
                     'success_messages': f"Tanıştığımıza memnun oldum, {user_name}!",
-                    'target_url':"main:my_style_start",
+                    'target_url':"main:home",
                     "homesubbanners":homesubbanners
                 }
                 context1.update(mainContext)
@@ -71,7 +71,7 @@ def login_view(request):
         user_name = request.user.username 
         context1 = {
             'success_messages': f"Tekrar hoşgeldiniz, {user_name}!",
-            'target_url':"main:my_style_start",
+            'target_url':"main:home",
         }
         context1.update(mainContext)
         return render(request, "customerauth/thank-you.html", context1)
@@ -95,7 +95,7 @@ def login_view(request):
             
             context1 = {
                 'success_messages': f"Tekrar hoşgeldiniz, {user_name}!",
-                'target_url':"main:my_style_start",
+                'target_url':"main:home",
                 "homesubbanners":homesubbanners
             }
             context1.update(mainContext)
