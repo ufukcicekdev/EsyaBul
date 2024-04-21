@@ -24,14 +24,18 @@ from django.core.mail import send_mail,EmailMultiAlternatives,EmailMessage
 import os
 from django.contrib.auth import get_user_model
 from django.template.loader import render_to_string
-from django.utils.html import strip_tags
 from dotenv import load_dotenv
 from main.mainContent import mainContent
-
+from esyabul.settings import base
 load_dotenv()
 
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 
+
+if base.DEBUG:
+    CALLBACK_URL = os.getenv('DEV_CALLBACK_URL')
+else:
+    CALLBACK_URL = os.getenv('PROD_CALLBACK_URL')
 
 csrf_protect = decorator_from_middleware(CsrfViewMiddleware)
 
@@ -407,7 +411,7 @@ def payment(request):
         'currency': 'TRY',
         'basketId': card_id,
         'paymentGroup': 'PRODUCT',
-        "callbackUrl": "http://127.0.0.1:8000/result/",
+        "callbackUrl":  CALLBACK_URL + "/result/",
         "enabledInstallments": ['2', '3', '6', '9'],
         'buyer': buyer,
         'shippingAddress': order_address,

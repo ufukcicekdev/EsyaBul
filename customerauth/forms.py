@@ -169,5 +169,5 @@ class AddressForm(forms.ModelForm):
 
 
 
-
-
+class CancelOrderForm(forms.Form):
+    reason = forms.CharField(label="İptal Nedeni", widget=forms.Textarea(attrs={'required': True, 'class': 'form-control'}))

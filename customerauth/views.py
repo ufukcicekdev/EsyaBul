@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from customerauth.forms import UserRegisterForm, ProfileForm, AddressForm,CustomPasswordChangeForm, NotificationSettingsForm
+from customerauth.forms import UserRegisterForm, ProfileForm, AddressForm,CustomPasswordChangeForm, NotificationSettingsForm,CancelOrderForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.conf import settings
@@ -10,12 +10,16 @@ from products.models import RoomType, HomeType, HomeModel, SpaceDefinition, Time
 from django.core.mail import EmailMessage
 from actstream import action
 import json
+from django.utils import timezone
+
 from django.contrib.auth import update_session_auth_hash
 from django.core import serializers
 from django.template.loader import render_to_string
 from cities_light.models import Country, City, Region, SubRegion
 from main.models import SocialMedia,HomeSubBanner
 from .tcknrequest import TCKimlikNoSorgula
+import iyzipay
+from ipware import get_client_ip
 
 from main.mainContent import mainContent
 
@@ -133,18 +137,16 @@ def profile_update(request):
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
+            form.save()  # formu doğrulamadan önce kaydet
             tc_kimlik_no = form.cleaned_data['tckn']
             ad = form.cleaned_data['first_name']
             soyad = form.cleaned_data['last_name']
             dogum_yili = form.cleaned_data['birth_date'].year 
-            
             sorgu = TCKimlikNoSorgula(tc_kimlik_no, ad, soyad, dogum_yili)
             sonuc = sorgu.sorgula()
-            
             if sonuc:
-                form.save()
-                request.user.verified = True  
-                request.user.save() 
+                profile.verified = True  
+                profile.save() 
                 messages.success(request, "Profiliniz başarıyla güncellendi.")
                 return redirect("customerauth:profile")
             else:
@@ -163,6 +165,7 @@ def profile_update(request):
     context.update(mainContext)
 
     return render(request, "customerauth/profile-edit.html", context)
+
 
 @login_required(login_url='customerauth:sign-in')
 def thank_you_view(request):
@@ -647,19 +650,71 @@ def orders_List(request):
 
 @login_required(login_url='customerauth:sign-in')
 def orders_detail(request, order_number):
-    title ="Sipariş Detayları"
+    title = "Sipariş Detayları"
     mainContext = mainContent(request)
-    
-    # Sipariş detaylarını al
+    form = CancelOrderForm()
     orders_detail = get_object_or_404(Order, order_number=order_number, user=request.user)
-    
-    # Sipariş kalemlerini al
     order_items = orders_detail.order_items.all()
-
+    if request.method == 'POST':
+        form = CancelOrderForm(request.POST)
+        if form.is_valid():
+            reason = form.cleaned_data['reason']
+            orders_detail.status = 'Cancelled'
+            orders_detail.order_cancel_reason = reason
+            orders_detail.order_cancel_date = timezone.now()
+            cancel_response = cancel_payment(request, reason, order_number, orders_detail.id)
+            if cancel_response:
+                messages.success(request, f"{order_number} nolu siparişiniz iptal edilmiştir.")
+                orders_detail.save()
+                return redirect('customerauth:orders-detail', order_number=order_number)
+            else:
+                messages.warning(request, f"{order_number} nolu siparişiniz iptal edilirken hata oluştu.")
+                return redirect('customerauth:orders-detail', order_number=order_number)
+                
+    
     context = {
         'orders_detail': orders_detail,
         'order_items': order_items,
         'title': title,
+        "form": form
     }
     context.update(mainContext)
     return render(request, 'customerauth/order-detail.html', context)
+
+
+def cancel_payment(request, reason, order_number, id):
+    api_key = 'sandbox-etkBOaBAec7Zh6jLDL59Gng0xJV2o1tV'
+    secret_key = 'sandbox-uC9ysXfBn2syo7ZMOW2ywhYoc9z9hTHh'
+    base_url = 'sandbox-api.iyzipay.com'
+
+    client_ip = my_view(request)  # Burada request parametresi yok, bu yüzden hata alacaksınız. client_ip = ...
+    options = {
+        'api_key': api_key,
+        'secret_key': secret_key,
+        'base_url': base_url
+    }
+
+    request = {
+        'locale': 'tr',
+        'conversationId': order_number,
+        'paymentId': id,
+        'ip': client_ip,
+        'reason': 'other',
+        'description': reason
+    }
+
+    cancel = iyzipay.Cancel().create(request, options)
+    result = cancel.read().decode('utf-8')
+    sonuc = json.loads(result, object_pairs_hook=list)
+    print(sonuc)
+    # İptal işlemi başarılıysa True, değilse False döndür
+    return True if cancel.status == 'success' else False
+
+
+def my_view(request):
+    client_ip, is_routable = get_client_ip(request)
+    if client_ip is None:
+        messages.warning(request, "IP'niz alınırken bir sorunn oluştur. Daha sonra tekrar deneyin.")
+        return redirect('main:home')
+    else:
+        return client_ip
