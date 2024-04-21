@@ -263,14 +263,16 @@ table, td { color: #000000; } #u_body a { color: #161a39; text-decoration: under
     <tr>
       <td style="overflow-wrap:break-word;word-break:break-word;padding:40px 40px 30px;font-family:'Lato',sans-serif;" align="left">
         
-  <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-    <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Sayın {{ username }}</span></p>
-<p style="font-size: 14px; line-height: 140%;">&nbsp;</p>
-<p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">{{ cart_total }} tutarındaki {{ order_number }} nolu siparişiniz alınmıştır.</span></p>
-<p style="font-size: 14px; line-height: 140%;">&nbsp;</p>
-<p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Teşekkürler & Saygılar, Eşyala</span></p>
-
-  </div>
+        <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
+            <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Sayın {{ username }}</span></p>
+            <p style="font-size: 14px; line-height: 140%;">&nbsp;</p>
+            <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Sipariş numaranız: {{ order_number }}</span></p>
+            <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Sipariş durumu: {{ status_translation }}</span></p>
+            <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Kargo durumu: {{ shipping_status_translation }}</span></p>
+            <p style="font-size: 14px; line-height: 140%;">&nbsp;</p>
+            <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Teşekkürler & Saygılar, Eşyala</span></p>
+        </div>
+        
 
       </td>
     </tr>
