@@ -160,8 +160,16 @@
                                             <th>Fatura Adresi</th>
                                             <td>{{ orders_detail.billing_adress }}</td>
                                         </tr>
-                                        <!-- Diğer sipariş detayları buraya eklenebilir -->
+                                        {% if orders_detail.billing_document %}
+                                        <tr>
+                                            <th>Fatura Belgesi</th>
+                                            <td>
+                                                <a href="{{ orders_detail.billing_document.url }}" download> İndir </a>
+                                            </td>
+                                        </tr>
+                                        {% endif %}
                                     </table>
+                                    
                                 </div>
                                 
                                 <div class="order-items">
