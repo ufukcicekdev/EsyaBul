@@ -6,6 +6,45 @@
 {% block content %}
 
 
+<style>
+    /* Popup stilini gizleyin */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+/* Popup içeriği */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* Kapatma düğmesi */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+</style>
 
 <div id="wrapper">
     <!-- Page Loader -->
@@ -237,9 +276,20 @@
                                 <input type="checkbox" id="use-order-address"> Sipariş adresini fatura adresi olarak kullan
                             </div>
                             <div class="block-holder">
-                                <input type="checkbox" checked> I’ve read &amp; accept the <a href="#">terms &amp; conditions</a>
+                                <input type="checkbox" id="termsCheckbox" checked>
+                                <label for="termsCheckbox" onclick="openTermsPopup()">Şartları ve koşulları okudum ve kabul ediyorum.</label>
+                                <div id="termsMessage" style="color: red; font-size: smaller; font-style: italic; display: block;"></div>
+
                             </div>
-                            <button type="submit" class="btn-type3" id="submit-order-btn">Siparişi Tamamla</button>
+                            <div id="termsPopup" class="modal">
+                                <div class="modal-content">
+                                  <span class="close" onclick="closeTermsPopup()">&times;</span>
+                                  <h2>Şartlar ve Koşullar</h2>
+                                  <p>Şartlar ve koşullarınızı buraya yazın...</p>
+                                  
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-type3 process-btn" id="submit-order-btn">Siparişi Tamamla</button>
                             <div id="hidden-order-form" style="display: none;">
                                 <form id="order-form" action="{% url 'products:payment' %}" method="post">
                                     <!-- Diğer form alanları -->
@@ -417,6 +467,71 @@ function currentDate() {
     var year = now.getFullYear();
     return year + "-" + month + "-" + day;
 }
+
+
+// Popup'ı aç
+function openTermsPopup() {
+  var termsPopup = document.getElementById("termsPopup");
+  termsPopup.style.display = "block";
+}
+
+// Popup'ı kapat
+function closeTermsPopup() {
+  var termsPopup = document.getElementById("termsPopup");
+  termsPopup.style.display = "none";
+}
+
+window.onclick = function(event) {
+  var termsPopup = document.getElementById("termsPopup");
+  if (event.target == termsPopup) {
+    termsPopup.style.display = "none";
+  }
+}
+
+
+function toggleSubmitButton() {
+    var checkbox = document.querySelector('#termsCheckbox');
+    var submitButtons = document.querySelectorAll('.btn-type3.process-btn');
+    var termsMessage = document.getElementById('termsMessage');
+    var orderAddress = document.getElementById('order-address-select');
+    var billingAddress = document.getElementById('billing-address-select');
+    var useOrderAddressCheckbox = document.getElementById('use-order-address');
+
+    if (useOrderAddressCheckbox.checked && orderAddress.value && checkbox.checked) {
+        submitButtons.forEach(function(button) {
+            button.disabled = false; 
+        });
+        termsMessage.style.display = 'none'; 
+    } else {
+        submitButtons.forEach(function(button) {
+            button.disabled = true; 
+        });
+
+        // Tüm koşullar sağlanmadığında mesajı ayarla
+        if (!checkbox.checked) {
+            termsMessage.textContent = 'Şartları kabul etmelisiniz.'; // Şartlar kabul edilmediyse mesajı ayarla
+        } else if (!orderAddress.value || !billingAddress.value) {
+            termsMessage.textContent = 'Lütfen sipariş ve fatura adreslerini seçiniz.'; // Adresler seçilmediyse mesajı ayarla
+        } else {
+            termsMessage.style.display = 'block'; // Adres seçimi yapılmışsa termsMessage alanını göster
+        }
+    }
+}
+
+
+window.onload = function() {
+    toggleSubmitButton(); // Sayfa yüklendiğinde buton durumunu ayarla
+    var checkbox = document.querySelector('#termsCheckbox');
+    checkbox.addEventListener('change', toggleSubmitButton); // Checkbox durumu değiştiğinde buton durumunu güncelle
+    var orderAddress = document.getElementById('order-address-select');
+    orderAddress.addEventListener('change', toggleSubmitButton); // Sipariş adresi seçimi değiştiğinde buton durumunu güncelle
+    var billingAddress = document.getElementById('billing-address-select');
+    billingAddress.addEventListener('change', toggleSubmitButton); // Fatura adresi seçimi değiştiğinde buton durumunu güncelle
+    var useOrderAddressCheckbox = document.getElementById('use-order-address');
+    useOrderAddressCheckbox.addEventListener('change', toggleSubmitButton); // Kullan sipariş adresini seçimi değiştiğinde buton durumunu güncelle
+};
+
+
 
     </script>
     
