@@ -168,6 +168,7 @@ class Order(models.Model):
     billing_document = models.FileField(upload_to='billing_documents/', blank=True, null=True) 
     order_cancel_reason = models.TextField(blank=True, null=True)  # İptal nedeni
     order_cancel_date = models.DateTimeField(blank=True, null=True)  # İptal tarihi
+    order_pdf_document = models.FileField(upload_to='order_pdf_documents/', blank=True, null=True) 
 
 
 class OrderItem(models.Model):
@@ -180,6 +181,7 @@ class OrderItem(models.Model):
     rental_period = models.CharField(max_length=20, choices=ProductRentalPrice.RENTAL_MOUTHLY_CHOICES, null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
+    expired_date = models.DateField(null=True, blank=True)
     def subtotal(self):
         if self.is_rental:
             return self.rental_price * self.quantity
