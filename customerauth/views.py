@@ -11,7 +11,6 @@ from django.core.mail import EmailMessage
 from actstream import action
 import json
 from django.utils import timezone
-
 from django.contrib.auth import update_session_auth_hash
 from django.core import serializers
 from django.template.loader import render_to_string
@@ -702,7 +701,7 @@ def cancel_payment(request, reason, order_number, id):
         'reason': 'other',
         'description': reason
     }
-
+    action.send(request , verb='cancelOrder')
     cancel = iyzipay.Cancel().create(request, options)
     result = cancel.read().decode('utf-8')
     sonuc = json.loads(result, object_pairs_hook=list)

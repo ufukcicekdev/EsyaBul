@@ -12,7 +12,9 @@ from django.template.loader import render_to_string
 import os
 from esyabul.settings import base
 from dotenv import load_dotenv
-
+from django.utils import timezone
+from datetime import timedelta
+from customerauth.models import Order
 load_dotenv()
 
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
@@ -73,3 +75,30 @@ def send_wishlist_reminder_email(user, products):
     email.send()
 
     
+
+
+def notify_users_about_expiring_orders():
+    expiration_date_threshold = timezone.now() + timedelta(weeks=3)
+    expiring_orders = Order.objects.filter(expired_date__lte=expiration_date_threshold)
+    subject = "Kiralama Süresi"
+    recipients = []
+
+    superusers = User.objects.filter(is_superuser=True)
+    superuser_emails = [superuser.email for superuser in superusers]
+    recipients.extend(superuser_emails)
+
+    for order in expiring_orders:
+        user_email = order.user.email
+        ordered_products = [order_item.product.name for order_item in order.order_items.all()]
+        context = {
+            "subject": subject,
+            "ordered_products": ordered_products,
+            "username": order.user.username,
+            "order_number": order.order_number
+        }
+        email_content = render_to_string('email_templates/order_item_expire_date.html', context)
+        recipients.append(user_email)
+
+    email = EmailMessage(subject, email_content, EMAIL_HOST_USER, to=recipients)
+    email.content_subtype = 'html' 
+    email.send()
