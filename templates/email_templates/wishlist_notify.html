@@ -271,11 +271,11 @@ table, td { color: #000000; } #u_body a { color: #161a39; text-decoration: under
             {% for product in products %}
             <div style="margin-bottom: 20px;">
                 {% with first_image=product.related_products.first %}
-    {% if first_image %}
-        <a href="{{ BASE_URL }}{% url 'products:product-detail-view' product.slug %}"><img src="{{ first_image.image.url }}" style="width: 237px;height: 248px;" alt="{{ first_image.img_title }}"></a>
-    {% endif %}
-{% endwith %}
-                
+                {% if first_image %}
+                    <a href="{{ BASE_URL }}{% url 'products:product-detail-view' product.slug %}"><img src="{{ first_image.image.url }}" style="width: 237px;height: 248px;" alt="{{ first_image.img_title }}"></a>
+                {% endif %}
+            {% endwith %}
+                            
                 <p style="font-size: 14px; line-height: 140%;">- <a href="{{ product.link }}" style="text-decoration: none; color: #007bff;">{{ product.name }}</a></p>
             </div>
             {% endfor %}
