@@ -10,11 +10,17 @@ from customerauth.models import wishlist_model,User
 from collections import defaultdict
 from django.template.loader import render_to_string
 import os
+from esyabul.settings import base
 from dotenv import load_dotenv
 
 load_dotenv()
 
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+
+if base.DEBUG:
+    BASE_URL = "https://esyabul-development.up.railway.app"
+else:
+    BASE_URL = "https://esyala.com"
 
 def send_email_notifications():
     active_notifications = EmailNotification.objects.filter(is_active=True)
@@ -58,7 +64,7 @@ def send_wishlist_reminder_email(user, products):
         "subject": subject,
         "products": products,
         "username": user.username,
-        "BASE_URL":"https://web-production-68b0b.up.railway.app"
+        "BASE_URL": BASE_URL
     }
 
     email_content = render_to_string('email_templates/wishlist_notify.html', context)
