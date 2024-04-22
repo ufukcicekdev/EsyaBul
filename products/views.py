@@ -27,6 +27,11 @@ from django.template.loader import render_to_string
 from dotenv import load_dotenv
 from main.mainContent import mainContent
 from esyabul.settings import base
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+
 load_dotenv()
 
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
@@ -428,6 +433,7 @@ def payment(request):
     header = {'Content-Type': 'application/json'}
     content = checkout_form_initialize.read().decode('utf-8')
     json_content = json.loads(content)
+    print("json_content",json_content)
     sozlukToken.append(json_content["token"])
     return HttpResponse(json_content["checkoutFormContent"])
 
@@ -457,7 +463,7 @@ def result(request):
         if sonuc[0][1] == 'success':
             messages.success(request, "Ödeme işleminiz başarıyla gerçekleşti!")
             create_order_and_items(user, order_completed_order_address, order_completed_billing_address, basket_items, order_total, order_number, cart_items, card_id)
-
+            generate_and_upload_pdf(request, order_number)
             order = Order.objects.get(order_number=order_number)
             order.status = 'Pending'
             order.save()
@@ -499,6 +505,33 @@ def create_order_and_items(user, order_completed_order_address, order_completed_
         )
 
     return order
+
+
+
+
+def generate_and_upload_pdf(request, order_number):
+    order = get_object_or_404(Order, order_number=order_number)
+    order_items = order.order_items.all()
+    
+    pdf_content = render_to_string('pdfTemplates/order_pdf_template.html', {'order': order,'order_items':order_items})
+    
+    # PDF dosyasını bir ContentFile'a dönüştür
+    pdf_file = ContentFile(pdf_content.encode('utf-8'))
+    
+    # Dosyayı doğru depolama mekanizması kullanarak yükle
+    file_name = f'{order_number}.pdf'  # Dosya adı belirle
+    file_path = default_storage.save(f'order_pdf_documents/{file_name}', pdf_file)
+    
+    # Dosya yoluyla ilgili sipariş nesnesine eriş ve alanı güncelle
+    order.order_pdf_document = file_path
+    order.save()
+    
+    # Başarı mesajı veya başka bir işlem
+    return HttpResponse("Sipariş PDF'si başarıyla oluşturuldu ve yüklendi.")
+
+
+
+
 
 def order_create_mail(order_number):
     subject = "Yeni bir sipariş oluşturuldu"

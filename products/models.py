@@ -178,12 +178,19 @@ class ProductImage(models.Model):
 
 class ProductRentalPrice(models.Model):
     RENTAL_MOUTHLY_CHOICES = (
-        ('1-3', '1-3'),
-        ('4-6', '4-6'),
-        ('7-9', '7-9'),
-        ('10-12', '10-12'),
-        ('13-18', '13-18'),
-        ('19-24', '19-24'),
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+        ('4', '4'),
+        ('5', '5'),
+        ('6', '6'),
+        ('7', '7'),
+        ('8', '8'),
+        ('9', '9'),
+        ('10', '10'),
+        ('11', '11'),
+        ('12', '12'),
+
     )
     product = models.ForeignKey(Product, related_name='related_products_price', on_delete=models.CASCADE)
     
