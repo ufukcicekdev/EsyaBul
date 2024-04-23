@@ -169,6 +169,7 @@ class Order(models.Model):
     order_cancel_reason = models.TextField(blank=True, null=True)  # İptal nedeni
     order_cancel_date = models.DateTimeField(blank=True, null=True)  # İptal tarihi
     order_pdf_document = models.FileField(upload_to='order_pdf_documents/', blank=True, null=True) 
+    payment_id = models.CharField(max_length=20, blank=True, null=True)
 
 
 class OrderItem(models.Model):
@@ -193,3 +194,13 @@ class OrderItem(models.Model):
     
 
 
+
+class Payment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=50)
+
+    json_data = models.JSONField()
+
+    def __str__(self):
+        return f"Payment - {self.pk}"

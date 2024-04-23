@@ -636,7 +636,7 @@ def remove_wishlist(request):
 def orders_List(request):
     title ="Siparişlerim"
     mainContext = mainContent(request)
-    order_lists = Order.objects.filter(user=request.user)
+    order_lists = Order.objects.filter(user=request.user).order_by('-created_at')
 
     context = {
         'order_lists': order_lists, 
@@ -661,7 +661,7 @@ def orders_detail(request, order_number):
             orders_detail.status = 'Cancelled'
             orders_detail.order_cancel_reason = reason
             orders_detail.order_cancel_date = timezone.now()
-            cancel_response = cancel_payment(request, reason, order_number, orders_detail.id)
+            cancel_response = cancel_payment(request, reason, order_number, orders_detail.id, orders_detail)
             if cancel_response:
                 messages.success(request, f"{order_number} nolu siparişiniz iptal edilmiştir.")
                 orders_detail.save()
@@ -681,7 +681,8 @@ def orders_detail(request, order_number):
     return render(request, 'customerauth/order-detail.html', context)
 
 
-def cancel_payment(request, reason, order_number, id):
+def cancel_payment(request, reason, order_number, id, orders_detail):
+
     api_key = 'sandbox-etkBOaBAec7Zh6jLDL59Gng0xJV2o1tV'
     secret_key = 'sandbox-uC9ysXfBn2syo7ZMOW2ywhYoc9z9hTHh'
     base_url = 'sandbox-api.iyzipay.com'
@@ -692,21 +693,19 @@ def cancel_payment(request, reason, order_number, id):
         'secret_key': secret_key,
         'base_url': base_url
     }
-
     request = {
         'locale': 'tr',
         'conversationId': order_number,
-        'paymentId': id,
+        'paymentId': orders_detail.payment_id,
         'ip': client_ip,
         'reason': 'other',
         'description': reason
     }
-    action.send(request , verb='cancelOrder')
     cancel = iyzipay.Cancel().create(request, options)
     result = cancel.read().decode('utf-8')
     sonuc = json.loads(result, object_pairs_hook=list)
-    print(sonuc)
-    return True if cancel.status == 'success' else False
+    sonuc = dict(json.loads(result))
+    return True if sonuc.get('status') == 'success' else False
 
 
 def my_view(request):
