@@ -17,7 +17,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ('name', 'sku', 'created_at')
     list_display_links = ('slug',)
     search_fields = ('name', 'sku',)
-
+    list_per_page = 20
     def image_preview(self, obj):
         if obj.related_products.exists():
             first_image = obj.related_products.first()
