@@ -30,7 +30,7 @@ from esyabul.settings import base
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.http import HttpResponse
-from django.template.loader import render_to_string
+from xhtml2pdf import pisa
 
 load_dotenv()
 
@@ -507,29 +507,26 @@ def create_order_and_items(user, order_completed_order_address, order_completed_
     return order
 
 
-
-
 def generate_and_upload_pdf(request, order_number):
+    # Siparişi getir
     order = get_object_or_404(Order, order_number=order_number)
     order_items = order.order_items.all()
     
-    pdf_content = render_to_string('pdfTemplates/order_pdf_template.html', {'order': order,'order_items':order_items})
+    # HTML içeriğini oluştur
+    html_content = render_to_string('pdfTemplates/order_pdf_template.html', {'order': order, 'order_items': order_items})
+
+    # PDF dosyasını oluştur
+    pdf_file = ContentFile(b"")
+    pisa_status = pisa.CreatePDF(html_content, dest=pdf_file)
     
-    # PDF dosyasını bir ContentFile'a dönüştür
-    pdf_file = ContentFile(pdf_content.encode('utf-8'))
-    
-    # Dosyayı doğru depolama mekanizması kullanarak yükle
-    file_name = f'{order_number}.pdf'  # Dosya adı belirle
+
+    # PDF dosyasını kaydet
+    file_name = f'{order_number}.pdf'  
+
     file_path = default_storage.save(f'order_pdf_documents/{file_name}', pdf_file)
-    
-    # Dosya yoluyla ilgili sipariş nesnesine eriş ve alanı güncelle
+    # Sipariş modelinde PDF belgesinin yolunu kaydet
     order.order_pdf_document = file_path
     order.save()
-    
-    # Başarı mesajı veya başka bir işlem
-    return HttpResponse("Sipariş PDF'si başarıyla oluşturuldu ve yüklendi.")
-
-
 
 
 

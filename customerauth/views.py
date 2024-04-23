@@ -686,7 +686,7 @@ def cancel_payment(request, reason, order_number, id):
     secret_key = 'sandbox-uC9ysXfBn2syo7ZMOW2ywhYoc9z9hTHh'
     base_url = 'sandbox-api.iyzipay.com'
 
-    client_ip = my_view(request)  # Burada request parametresi yok, bu yüzden hata alacaksınız. client_ip = ...
+    client_ip = my_view(request) 
     options = {
         'api_key': api_key,
         'secret_key': secret_key,
@@ -706,14 +706,13 @@ def cancel_payment(request, reason, order_number, id):
     result = cancel.read().decode('utf-8')
     sonuc = json.loads(result, object_pairs_hook=list)
     print(sonuc)
-    # İptal işlemi başarılıysa True, değilse False döndür
     return True if cancel.status == 'success' else False
 
 
 def my_view(request):
     client_ip, is_routable = get_client_ip(request)
     if client_ip is None:
-        messages.warning(request, "IP'niz alınırken bir sorunn oluştur. Daha sonra tekrar deneyin.")
+        messages.warning(request, "IP'niz alınırken bir sorun oluştur. Daha sonra tekrar deneyin.")
         return redirect('main:home')
     else:
         return client_ip
