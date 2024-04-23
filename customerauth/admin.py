@@ -17,10 +17,10 @@ class OrderItemInline(admin.TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'order_number', 'status', 'created_at', 'order_pdf_document_url']
+    list_display = ['id', 'user', 'order_number', 'status', 'created_at','billing_document_url','order_pdf_document_url']
     list_filter = ['status', 'created_at', 'order_number']
     inlines = [OrderItemInline]
-
+    list_per_page = 20
 
     def save_model(self, request, obj, form, change):
         if change:
@@ -57,6 +57,16 @@ class OrderAdmin(admin.ModelAdmin):
         else:
             return "-"
     order_pdf_document_url.short_description = 'PDF Document URL'
+
+    def billing_document_url(self, obj):
+        if obj.billing_document:
+            # Gereksiz 'https://' kısmını kaldırarak URL'yi düzenle
+            url = obj.billing_document.url.replace('https://https://', 'https://')
+            print("url",url)
+            return format_html('<a href="{}" target="_blank">{}</a>', url, obj.billing_document.name)
+        else:
+            return "-"
+    billing_document_url.short_description = 'PDF Document URL'
     get_total_order_price.short_description = 'Total Price'
 
 @admin.register(OrderItem)
