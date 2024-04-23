@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from .models import Product, Category, ProductReview, Cart, CartItem, ProductRentalPrice
-from customerauth.models import wishlist_model, Address, User, Order, OrderItem
+from customerauth.models import wishlist_model, Address, User, Order, OrderItem,Payment
 from products.forms import ProductReviewForm,AddToCartForm
 from django.urls import reverse
 from django.db.models import Avg
@@ -464,9 +464,12 @@ def result(request):
             messages.success(request, "Ödeme işleminiz başarıyla gerçekleşti!")
             create_order_and_items(user, order_completed_order_address, order_completed_billing_address, basket_items, order_total, order_number, cart_items, card_id)
             generate_and_upload_pdf(request, order_number)
+            sonuc_dict = dict(sonuc) 
             order = Order.objects.get(order_number=order_number)
             order.status = 'Pending'
+            order.payment_id = sonuc_dict.get('paymentId')
             order.save()
+            create_payment_object(user, sonuc)
             return redirect('products:order_shopping_card')
         elif sonuc[0][1] == 'failure':
             messages.warning(request, sonuc[2][1])
@@ -474,6 +477,17 @@ def result(request):
         messages.warning(request, "Ödeme sırasında bir hata oluştu. Lütfen tekrar deneyin.")
 
     return redirect('products:order_checkout')
+
+
+
+
+def create_payment_object(user, sonuc):
+    sonuc_dict = dict(sonuc)
+    Payment.objects.create(
+        user=user,
+        status=sonuc_dict.get('status'), 
+        json_data=sonuc  
+    )
 
 
 

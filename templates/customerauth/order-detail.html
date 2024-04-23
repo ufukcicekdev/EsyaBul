@@ -162,8 +162,8 @@
                             <div id="addressPage" class="sc-bVHCgj bvQtLI">
                                 <div class="contentTitle heading">
                                     <strong class="d-block headline-bold-20-24">Siparişim: {{ orders_detail.order_number }}</strong>
-                                    <button class="btn-type3" id="cancelOrderButton">Siparişi İptal Et</button>
-
+                                    {% if orders_detail.status != 'Cancelled' %}
+                                    <button class="btn-type3" id="cancelOrderButton">Siparişi İptal Et</button>  
                                     <div id="cancelModal" class="modal">
                                         <div class="modal-content">
                                             <span class="closeModal">&times;</span>
@@ -175,7 +175,7 @@
                                             </form>
                                         </div>
                                     </div>
-                                    
+                                    {% endif %}
                                 </div>
                                 <div class="order-details">
                                     <h2>Sipariş Detayları</h2>
@@ -219,6 +219,17 @@
                                                 <a href="{{ orders_detail.billing_document.url }}" download> İndir </a>
                                             </td>
                                         </tr>
+                                        {% endif %}
+
+                                        {% if orders_detail.status == 'Cancelled' %}
+                                            <tr>
+                                                <th>Sipariş İptal Nedeni</th>
+                                                <td>{{ orders_detail.order_cancel_reason }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Sipariş İptal Tarihi</th>
+                                            <td>{{ orders_detail.order_cancel_date }}</td>
+                                            </tr>
                                         {% endif %}
                                     </table>
                                     
