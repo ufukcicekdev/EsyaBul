@@ -268,9 +268,9 @@ table, td { color: #000000; } #u_body a { color: #161a39; text-decoration: under
             <p style="font-size: 14px; line-height: 140%;">&nbsp;</p>
             <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;"> {{ order_number }} nolu siparişinize ait aşağıdaki ürünlerin süresi dolmak üzere:</span></p>
             <ul>
-                {% for product, expired_date in ordered_products.items %}
-                    <li>{{ product }} - {{ expired_date }}</li>
-                {% endfor %}
+              {% for product_info in ordered_products %}
+                  <li>{{ product_info }}</li>
+              {% endfor %}
             </ul>
             <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Lütfen gerekli önlemleri alın.</span></p>
             <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Teşekkürler & Saygılar, Eşyala</span></p>
