@@ -19,7 +19,7 @@ from main.models import SocialMedia,HomeSubBanner
 from .tcknrequest import TCKimlikNoSorgula
 import iyzipay
 from ipware import get_client_ip
-
+from payment.views import refund_payment_cancel_order
 from main.mainContent import mainContent
 
 
@@ -661,7 +661,7 @@ def orders_detail(request, order_number):
             orders_detail.status = 'Cancelled'
             orders_detail.order_cancel_reason = reason
             orders_detail.order_cancel_date = timezone.now()
-            cancel_response = cancel_payment(request, reason, order_number, orders_detail.id, orders_detail)
+            cancel_response = refund_payment_cancel_order(request, reason, order_number, orders_detail.id, orders_detail)
             if cancel_response:
                 messages.success(request, f"{order_number} nolu siparişiniz iptal edilmiştir.")
                 orders_detail.save()
@@ -680,38 +680,3 @@ def orders_detail(request, order_number):
     context.update(mainContext)
     return render(request, 'customerauth/order-detail.html', context)
 
-
-def cancel_payment(request, reason, order_number, id, orders_detail):
-
-    api_key = 'sandbox-etkBOaBAec7Zh6jLDL59Gng0xJV2o1tV'
-    secret_key = 'sandbox-uC9ysXfBn2syo7ZMOW2ywhYoc9z9hTHh'
-    base_url = 'sandbox-api.iyzipay.com'
-
-    client_ip = my_view(request) 
-    options = {
-        'api_key': api_key,
-        'secret_key': secret_key,
-        'base_url': base_url
-    }
-    request = {
-        'locale': 'tr',
-        'conversationId': order_number,
-        'paymentId': orders_detail.payment_id,
-        'ip': client_ip,
-        'reason': 'other',
-        'description': reason
-    }
-    cancel = iyzipay.Cancel().create(request, options)
-    result = cancel.read().decode('utf-8')
-    sonuc = json.loads(result, object_pairs_hook=list)
-    sonuc = dict(json.loads(result))
-    return True if sonuc.get('status') == 'success' else False
-
-
-def my_view(request):
-    client_ip, is_routable = get_client_ip(request)
-    if client_ip is None:
-        messages.warning(request, "IP'niz alınırken bir sorun oluştur. Daha sonra tekrar deneyin.")
-        return redirect('main:home')
-    else:
-        return client_ip

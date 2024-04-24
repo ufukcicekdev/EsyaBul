@@ -170,6 +170,7 @@ class Order(models.Model):
     order_cancel_date = models.DateTimeField(blank=True, null=True)  # İptal tarihi
     order_pdf_document = models.FileField(upload_to='order_pdf_documents/', blank=True, null=True) 
     payment_id = models.CharField(max_length=20, blank=True, null=True)
+    payment_transaction_id = models.CharField(max_length=50, blank=True, null=True)
 
 
 class OrderItem(models.Model):

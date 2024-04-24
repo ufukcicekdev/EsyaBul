@@ -291,7 +291,7 @@
                             </div>
                             <button type="submit" class="btn-type3 process-btn" id="submit-order-btn">Siparişi Tamamla</button>
                             <div id="hidden-order-form" style="display: none;">
-                                <form id="order-form" action="{% url 'products:payment' %}" method="post">
+                                <form id="order-form" action="{% url 'payment:payment_order' %}" method="post">
                                     <!-- Diğer form alanları -->
                                     <input type="hidden" id="selected-address-id" name="selected_address_id">
                                     <input type="hidden" id="selected-billing-address-id" name="selected_billing_address_id">
