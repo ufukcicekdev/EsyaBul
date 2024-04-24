@@ -6,7 +6,7 @@ from django.utils.html import strip_tags
 from django.contrib.auth import get_user_model
 from django.db.models import F
 from notification.models import EmailNotification
-from customerauth.models import wishlist_model,User
+from customerauth.models import OrderItem, wishlist_model,User
 from collections import defaultdict
 from django.template.loader import render_to_string
 import os
@@ -79,17 +79,21 @@ def send_wishlist_reminder_email(user, products):
 
 def notify_users_about_expiring_orders():
     expiration_date_threshold = timezone.now() + timedelta(weeks=3)
-    expiring_orders = Order.objects.filter(expired_date__lte=expiration_date_threshold)
+    expiring_orders = OrderItem.objects.filter(expired_date__lte=expiration_date_threshold)
     subject = "Kiralama Süresi"
     recipients = []
 
     superusers = User.objects.filter(is_superuser=True)
     superuser_emails = [superuser.email for superuser in superusers]
     recipients.extend(superuser_emails)
-
-    for order in expiring_orders:
+    for order_item in expiring_orders:
+        order = order_item.order
         user_email = order.user.email
-        ordered_products = [order_item.product.name for order_item in order.order_items.all()]
+        ordered_products = []
+        for item in order.order_items.all():
+            if hasattr(item.product, 'name'):
+                ordered_products.append(item.product.name)
+
         context = {
             "subject": subject,
             "ordered_products": ordered_products,
@@ -99,6 +103,6 @@ def notify_users_about_expiring_orders():
         email_content = render_to_string('email_templates/order_item_expire_date.html', context)
         recipients.append(user_email)
 
-    email = EmailMessage(subject, email_content, EMAIL_HOST_USER, to=recipients)
-    email.content_subtype = 'html' 
-    email.send()
+        email = EmailMessage(subject, email_content, EMAIL_HOST_USER, to=[user_email])
+        email.content_subtype = 'html' 
+        email.send()
