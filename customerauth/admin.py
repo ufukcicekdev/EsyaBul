@@ -50,8 +50,7 @@ class OrderAdmin(admin.ModelAdmin):
     def order_pdf_document_url(self, obj):
         if obj.order_pdf_document:
             print("obj.order_pdf_document.url",obj.order_pdf_document.url)
-            # Gereksiz 'https://' kısmını kaldırarak URL'yi düzenle
-            url = obj.order_pdf_document.url.replace('https://https://', 'https://')
+            url = obj.order_pdf_document.url
             print("url",url)
             return format_html('<a href="{}" target="_blank">{}</a>', url, obj.order_pdf_document.name)
         else:
@@ -60,8 +59,7 @@ class OrderAdmin(admin.ModelAdmin):
 
     def billing_document_url(self, obj):
         if obj.billing_document:
-            # Gereksiz 'https://' kısmını kaldırarak URL'yi düzenle
-            url = obj.billing_document.url.replace('https://https://', 'https://')
+            url = obj.billing_document.url
             print("url",url)
             return format_html('<a href="{}" target="_blank">{}</a>', url, obj.billing_document.name)
         else:
