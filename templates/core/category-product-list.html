@@ -244,14 +244,17 @@ header .close:hover{
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-12 text-center">
-                            <h1>{{ category_name.name }}</h1>
+                            <h1 style="color: #fff;" >{{ category_name.name }}</h1>
                             <!-- Breadcrumbs of the Page -->
                             <nav class="breadcrumbs">
-                                <ul class="list-unstyled">
-                                    <li><a href="{% url 'main:home' %}">AnaSayfa <i class="fa fa-angle-right"></i></a></li>
-                                    <li><a href="#">Ürünler <i class="fa fa-angle-right"></i></a></li>
-                                    <li>{{ category_name.name }}</li>
-                                </ul>
+                              <ul class="list-unstyled">
+                                <li><a style="color: #fff;" href="{% url 'main:home' %}">Anasayfa <i class="fa fa-angle-right"></i></a></li>
+                                <li><a style="color: #fff;" href="{% url 'main:dynamic-category-product-list' category_slugs=main_slug.slug %}">{{ main_slug.name }}<i class="fa fa-angle-right"></i></a></li>
+                                {% if main_slug.name != category_name.name %}
+                                    <li style="color: #fff;">{{ category_name.name }}</li>
+                                
+                                {% endif %}
+                            </ul>
                             </nav><!-- Breadcrumbs of the Page end -->
                         </div>
                     </div>
