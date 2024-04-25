@@ -1,4 +1,4 @@
-from email.message import EmailMessage
+from django.core.mail import EmailMessage
 import random
 import string
 from django.http import HttpResponse
@@ -12,6 +12,7 @@ from customerauth.models import Address, Order, OrderItem, Payment, User
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 import os
+
 from dotenv import load_dotenv
 from esyabul.settings import base
 from django.utils.decorators import decorator_from_middleware
@@ -34,9 +35,9 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 
 
 if base.DEBUG:
-    CALLBACK_URL = os.getenv('DEV_CALLBACK_URL')
+    callbackUrl = os.getenv('DEV_CALLBACK_URL')
 else:
-    CALLBACK_URL = os.getenv('PROD_CALLBACK_URL')
+    callbackUrl = os.getenv('PROD_CALLBACK_URL')
 
 csrf_protect = decorator_from_middleware(CsrfViewMiddleware)
 
@@ -72,7 +73,6 @@ def refund_payment_cancel_order(request, reason, order_number, id, orders_detail
     cancel = iyzipay.Refund().create(request, options)
     result = cancel.read().decode('utf-8')
     sonuc = json.loads(result, object_pairs_hook=list)
-    print("sonuc",sonuc)
     sonuc = dict(json.loads(result))
     return True if sonuc.get('status') == 'success' else False
 
@@ -222,7 +222,7 @@ def payment_order(request):
     }
 
 
-    request_data = create_request_data(order_number, order_total, card_id, CALLBACK_URL, buyer, order_address, billing_address, basket_items)
+    request_data = create_request_data(order_number, order_total, card_id, callbackUrl, buyer, order_address, billing_address, basket_items)
 
     try:
         checkout_form_initialize = iyzipay.CheckoutFormInitialize().create(request_data, options)
@@ -262,7 +262,9 @@ def create_order_items(request, card_id):
 
         basket_items.append(item)
 
-def create_request_data(order_number, order_total, card_id, CALLBACK_URL, buyer, order_address, billing_address, basket_items):
+    return basket_items
+
+def create_request_data(order_number, order_total, card_id, callbackUrl, buyer, order_address, billing_address, basket_items):
     request={
         'locale': 'tr',
         'conversationId': order_number,
@@ -271,7 +273,7 @@ def create_request_data(order_number, order_total, card_id, CALLBACK_URL, buyer,
         'currency': 'TRY',
         'basketId': card_id,
         'paymentGroup': 'PRODUCT',
-        "callbackUrl":  CALLBACK_URL + "/result/",
+        "callbackUrl":  callbackUrl + "/result/",
         "enabledInstallments": ['2', '3', '6', '9'],
         'buyer': buyer,
         'shippingAddress': order_address,
@@ -316,13 +318,13 @@ def result(request):
 
         if sonuc and sonuc['status'] == 'success':
             messages.success(request, "Ödeme işleminiz başarıyla gerçekleşti!")
-            create_order_and_items(user, order_completed_order_address, order_completed_billing_address, basket_items, order_total, order_number, cart_items, card_id)
+            payment_transaction_id = get_payment_transaction_id(sonuc)
+            create_order_and_items(user, order_completed_order_address, order_completed_billing_address, basket_items, order_total, order_number, cart_items, card_id, payment_transaction_id)
             generate_and_upload_pdf(order_number)
             order = Order.objects.get(order_number=order_number)
             order.status = 'Pending'
             order.payment_id = sonuc['paymentId']
-            order.payment_transaction_id = get_payment_transaction_id(sonuc)
-
+            order.payment_transaction_id = payment_transaction_id
             order.save()
             create_payment_object(user, sonuc)
             return redirect('products:order_shopping_card')
@@ -331,7 +333,6 @@ def result(request):
             messages.warning(request, sonuc['errorMessage'])
         else:
             messages.warning(request, "Ödeme sırasında bir hata oluştu. Lütfen tekrar deneyin.")
-
 
     except Exception as e:
         messages.error(request, "Ödeme sonucu alınırken bir hata oluştu: {}".format(e))
@@ -362,7 +363,7 @@ def create_payment_object(user, sonuc):
 
 
 
-def create_order_and_items(user, order_completed_order_address, order_completed_billing_address, basket_items, order_total, order_number, cart_items, card_id):
+def create_order_and_items(user, order_completed_order_address, order_completed_billing_address, basket_items, order_total, order_number, cart_items, card_id, payment_transaction_id):
     order = Order.objects.create(
         user=user,
         order_adress=order_completed_order_address,
@@ -372,13 +373,12 @@ def create_order_and_items(user, order_completed_order_address, order_completed_
         order_number=order_number,
         status='Pending',
         shipping_status='Preparing',
-        payment_transaction_id ="test"
+        payment_transaction_id = payment_transaction_id
     )
     order_create_mail(order_number)
     cart_order_completed(card_id)
     #order_user_mail(order_number, user, card_id)
     for cart_item in cart_items:
-        print("cart_item",cart_item)
         OrderItem.objects.create(
             order=order,
             product=cart_item.product,
@@ -408,12 +408,9 @@ def generate_and_upload_pdf(order_number):
 def order_create_mail(order_number):
     subject = "Yeni bir sipariş oluşturuldu"
     body = f"{order_number} sipariş numaralı yeni bir sipariş oluşturuldu."
-
     recipients = get_user_model().objects.filter(is_superuser=True).values_list('email', flat=True)
-
     email = EmailMessage(subject, body, EMAIL_HOST_USER, recipients)
     email.send()
-
 
 def cart_order_completed(card_id):
     cart = Cart.objects.get(order_completed=False, id=card_id)
