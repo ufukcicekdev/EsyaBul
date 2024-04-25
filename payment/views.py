@@ -34,9 +34,9 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 
 
 if base.DEBUG:
-    callbackUrl = os.getenv('PROD_CALLBACK_URL')
+    CALLBACK_URL = os.getenv('DEV_CALLBACK_URL')
 else:
-    callbackUrl = os.getenv('PROD_CALLBACK_URL')
+    CALLBACK_URL = os.getenv('PROD_CALLBACK_URL')
 
 csrf_protect = decorator_from_middleware(CsrfViewMiddleware)
 
@@ -222,7 +222,7 @@ def payment_order(request):
     }
 
 
-    request_data = create_request_data(order_number, order_total, card_id, callbackUrl, buyer, order_address, billing_address, basket_items)
+    request_data = create_request_data(order_number, order_total, card_id, CALLBACK_URL, buyer, order_address, billing_address, basket_items)
 
     try:
         checkout_form_initialize = iyzipay.CheckoutFormInitialize().create(request_data, options)
@@ -231,7 +231,7 @@ def payment_order(request):
         json_content = json.loads(content)
         sozlukToken.append(json_content["token"])
         return HttpResponse(json_content["checkoutFormContent"])
-    except iyzipay.IyzipayError as e:
+    except Exception as e:
         messages.error(request, "Ödeme başlatılırken bir hata oluştu: {}".format(e.message))
         return redirect('products:order_checkout')
 
@@ -262,7 +262,7 @@ def create_order_items(request, card_id):
 
         basket_items.append(item)
 
-def create_request_data(order_number, order_total, card_id, callbackUrl, buyer, order_address, billing_address, basket_items):
+def create_request_data(order_number, order_total, card_id, CALLBACK_URL, buyer, order_address, billing_address, basket_items):
     request={
         'locale': 'tr',
         'conversationId': order_number,
@@ -271,7 +271,7 @@ def create_request_data(order_number, order_total, card_id, callbackUrl, buyer, 
         'currency': 'TRY',
         'basketId': card_id,
         'paymentGroup': 'PRODUCT',
-        "callbackUrl":  callbackUrl + "/result/",
+        "callbackUrl":  CALLBACK_URL + "/result/",
         "enabledInstallments": ['2', '3', '6', '9'],
         'buyer': buyer,
         'shippingAddress': order_address,
@@ -333,7 +333,7 @@ def result(request):
             messages.warning(request, "Ödeme sırasında bir hata oluştu. Lütfen tekrar deneyin.")
 
 
-    except iyzipay.IyzipayError as e:
+    except Exception as e:
         messages.error(request, "Ödeme sonucu alınırken bir hata oluştu: {}".format(e.message))
 
     return redirect('products:order_checkout')
