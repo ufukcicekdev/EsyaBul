@@ -34,7 +34,7 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 
 
 if base.DEBUG:
-    callbackUrl = os.getenv('DEV_CALLBACK_URL')
+    callbackUrl = os.getenv('PROD_CALLBACK_URL')
 else:
     callbackUrl = os.getenv('PROD_CALLBACK_URL')
 
