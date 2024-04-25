@@ -34,9 +34,9 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 
 
 if base.DEBUG:
-    CALLBACK_URL = os.getenv('DEV_CALLBACK_URL')
+    callbackUrl = os.getenv('DEV_CALLBACK_URL')
 else:
-    CALLBACK_URL = os.getenv('PROD_CALLBACK_URL')
+    callbackUrl = os.getenv('PROD_CALLBACK_URL')
 
 csrf_protect = decorator_from_middleware(CsrfViewMiddleware)
 
@@ -222,7 +222,7 @@ def payment_order(request):
     }
 
 
-    request_data = create_request_data(order_number, order_total, card_id, CALLBACK_URL, buyer, order_address, billing_address, basket_items)
+    request_data = create_request_data(order_number, order_total, card_id, callbackUrl, buyer, order_address, billing_address, basket_items)
 
     try:
         checkout_form_initialize = iyzipay.CheckoutFormInitialize().create(request_data, options)
@@ -262,7 +262,7 @@ def create_order_items(request, card_id):
 
         basket_items.append(item)
 
-def create_request_data(order_number, order_total, card_id, CALLBACK_URL, buyer, order_address, billing_address, basket_items):
+def create_request_data(order_number, order_total, card_id, callbackUrl, buyer, order_address, billing_address, basket_items):
     request={
         'locale': 'tr',
         'conversationId': order_number,
@@ -271,7 +271,7 @@ def create_request_data(order_number, order_total, card_id, CALLBACK_URL, buyer,
         'currency': 'TRY',
         'basketId': card_id,
         'paymentGroup': 'PRODUCT',
-        "callbackUrl":  CALLBACK_URL + "/result/",
+        "callbackUrl":  callbackUrl + "/result/",
         "enabledInstallments": ['2', '3', '6', '9'],
         'buyer': buyer,
         'shippingAddress': order_address,

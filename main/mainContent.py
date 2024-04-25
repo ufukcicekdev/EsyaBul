@@ -5,7 +5,7 @@ from products.models import Cart, CartItem, Category
 
 def mainContent(request):
     social_media_links = SocialMedia.objects.all()
-    main_categories = Category.objects.filter(parent__isnull=True, is_active=True)
+    main_categories = Category.objects.filter(parent=None, is_active=True)
     wcount = 0
     hcount=0
 

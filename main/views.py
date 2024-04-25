@@ -110,11 +110,10 @@ def ajax_contact_form(request):
 
 
 
-################### Contact Close ################
+################ Contact Close ################
 
 def dynamic_category_product_list_view(request, category_slugs):
     category_slug_list = category_slugs.split('/')
-  
 
     mainContext = mainContent(request)
     if category_slugs == "tum-urunler":
@@ -140,6 +139,7 @@ def dynamic_category_product_list_view(request, category_slugs):
     
     # Eğer category_slugs bir kategoriye aitse, ilgili ürünleri getir
     main_category = get_object_or_404(Category, slug=category_slug_list[0])
+    main_slug=main_category
     subcategories = main_category.children.all()
     if len(category_slug_list) == 1:
         target_category = main_category
@@ -181,6 +181,7 @@ def dynamic_category_product_list_view(request, category_slugs):
         "category": main_category,
         "category_name": target_category,
         "subcategories": subcategories,
+        "main_slug":main_slug
     }
     context.update(mainContext)
     
