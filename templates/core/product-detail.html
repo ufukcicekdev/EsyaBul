@@ -283,9 +283,19 @@ header .close:hover{
                             <div class="detial-holder">
                                 <!-- Breadcrumbs of the Page -->
                                 <ul class="list-unstyled breadcrumbs">
-                                    <li><a href="#">Chairs <i class="fa fa-angle-right"></i></a></li>
-                                    <li>Products</li>
+                                    {% for crumb in product.get_category_breadcrumb %}
+                                        <li>
+                                            <a href="{% url 'main:dynamic-category-product-list' category_slugs=crumb.slug %}">
+                                                {{ crumb.name }}
+                                            </a>
+                                        </li>
+                                        {% if not forloop.last %}
+                                            <li class="separator">&rsaquo;</li>
+                                        {% endif %}
+                                    {% endfor %}
                                 </ul>
+                                
+                                
                                 <!-- Breadcrumbs of the Page end -->
                                 <h2>{{ product.name }}</h2>
                                 <!-- Rank Rating of the Page -->

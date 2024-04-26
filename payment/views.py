@@ -229,7 +229,6 @@ def payment_order(request):
         header = {'Content-Type': 'application/json'}
         content = checkout_form_initialize.read().decode('utf-8')
         json_content = json.loads(content)
-        print("json_content",json_content)
         sozlukToken.append(json_content["token"])
         return HttpResponse(json_content["checkoutFormContent"])
     except Exception as e:
@@ -316,7 +315,6 @@ def result(request):
         checkout_form_result = iyzipay.CheckoutForm().retrieve(request_data, options)
         result = checkout_form_result.read().decode('utf-8')
         sonuc = json.loads(result)
-        print("sonuc",sonuc)
         if sonuc and sonuc['status'] == 'success':
             messages.success(request, "Ödeme işleminiz başarıyla gerçekleşti!")
             payment_transaction_id = get_payment_transaction_id(sonuc)

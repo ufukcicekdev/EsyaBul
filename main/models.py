@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
 from PIL import Image
+from django.forms import ValidationError
 from django.utils.html import mark_safe
 
 # Create your models here.
