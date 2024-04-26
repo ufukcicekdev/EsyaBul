@@ -86,10 +86,20 @@ class Category(models.Model):
 
     def product_count(self):
         return Product.objects.filter(category=self).count()
+
+
+    def get_full_path_slug(self):
+        full_path = [self.slug]
+        k = self.parent
+        while k is not None:
+            full_path.insert(0, k.slug)
+            k = k.parent
+        return '/'.join(full_path)
     
     class Meta:
         unique_together = ('slug', 'parent',)
         verbose_name_plural = "categories"
+
 
     def __str__(self):
         full_path = [self.name]
@@ -146,9 +156,9 @@ class Product(models.Model):
         breadcrumbs = []
         category = self.category
         while category:
-            breadcrumbs.insert(0, category.name)
+            breadcrumbs.insert(0, {'name': category.name, 'slug': category.get_full_path_slug()})
             category = category.parent
-        return ' > '.join(breadcrumbs)
+        return breadcrumbs
 
 class ProductReview(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
