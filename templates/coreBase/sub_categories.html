@@ -1,0 +1,13 @@
+<!-- sub_categories.html -->
+{% if children %}
+    <ul>
+        {% for child in children %}
+            <li>
+                <strong><a href="{% url 'main:dynamic-category-product-list' category_slugs=child.get_full_path_slug %}">{{ child.name }}</a></strong>
+                {% if child.children.all %}
+                    {% include 'coreBase/sub_categories.html' with children=child.children.all %}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

@@ -218,7 +218,34 @@ header .close:hover{
 
 }
 
-/* Diğer sosyal medya platformları için aynı şekilde devam edebilirsiniz */
+
+.subcategory-list .name {
+  font-size: 16px;
+  line-height: 18px;
+  font-weight: 700;
+}
+
+.subcategory-list .num {
+  float: right;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 15px;
+  margin: 2px 0 0;
+}
+
+.sub-subcategory-list {
+    display: none; /* Alt kategorileri varsayılan olarak gizle */
+}
+
+.subcategory-list li {
+    list-style: none; /* Madde işaretlerini kaldır */
+    margin: 10px 0; /* Liste öğeleri arasındaki boşluğu ayarla */
+}
+
+.subcategory-list li:hover .sub-subcategory-list {
+    display: block; /* Üzerine gelindiğinde alt kategorileri göster */
+}
+
 
 </style>
 
@@ -269,19 +296,11 @@ header .close:hover{
                         <section class="shop-widget">
                             <h2>Kategoriler</h2>
                             <!-- category list start here -->
-                            <ul class="list-unstyled category-list">
-                                {% for subcategory in subcategories %}
-                                    <li>
-                                        <a href="{% url 'main:dynamic-category-product-list' category_slugs=category.slug|add:'/'|add:subcategory.slug %}">
-                                            <span class="name">{{ subcategory.name }}</span>
-                                            <span class="num">{{ subcategory.product_count }}</span>
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                                
-                            </ul><!-- category list end here -->
+                           
+                            {% include 'core/sub_categories.html' with subcategories=subcategories %}
+                            
                             {% if tumrunler %}
-                            <ul class="list-unstyled category-list">
+                            <ul class="list-unstyled subcategory-list">
                               {% for category in main_categories4 %}
                               <li>
                                   <a href="{% url 'main:dynamic-category-product-list' category_slugs=category.slug %}"><span class="name">{{ category.name }}</span></a>
@@ -479,6 +498,17 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
+// JavaScript ile alt kategorileri göstermek için bir fonksiyon
+function toggleSubcategories(element) {
+    var subcategories = element.querySelector('.sub-subcategory-list');
+    if (subcategories.style.display === 'block') {
+        subcategories.style.display = 'none';
+    } else {
+        subcategories.style.display = 'block';
+    }
+}
+
+// Tıklama etkinliği eklemek için HTML'de onclick özniteliğini kullanabiliriz
 
 
 </script>

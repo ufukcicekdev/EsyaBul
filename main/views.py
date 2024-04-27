@@ -114,12 +114,39 @@ def ajax_contact_form(request):
 
 def dynamic_category_product_list_view(request, category_slugs):
     category_slug_list = category_slugs.split('/')
-
     mainContext = mainContent(request)
     if category_slugs == "tum-urunler":
+        get_main_category_products(request, mainContext, category_slug_list)
+    else:
         main_category = get_object_or_404(Category, slug=category_slug_list[0])
-        products = Product.objects.all().order_by("id")
-        paginator = Paginator(products, 12)  
+        main_slug=main_category
+        subcategories = main_category.children.all()
+        if len(category_slug_list) == 1:
+            target_category = main_category
+        else:
+            target_category = get_object_or_404(Category, slug=category_slug_list[-1])
+        if len(category_slug_list) == 1: 
+            getMainCategoryList = main_category.children.all()
+            category_query = Q()
+
+            for category in getMainCategoryList:
+                category_query |= Q(category=category)
+
+            products = Product.objects.filter(category_query).order_by("id")
+
+        else:
+            products = Product.objects.filter(category=target_category).order_by("id")
+            
+        for subcategory in subcategories:
+            subcategory.product_count = Product.objects.filter(category=subcategory).count()
+        
+        
+        for product in products:
+            product.reviews.set(ProductReview.objects.filter(product=product))
+            product.wishes.set(wishlist_model.objects.filter(product=product))
+            product.average_rating = int(product.reviews.aggregate(Avg('rating'))['rating__avg'] or 0)
+
+        paginator = Paginator(products, 12)
         page_number = request.GET.get('page')
         try:
             page_products = paginator.page(page_number)
@@ -127,63 +154,17 @@ def dynamic_category_product_list_view(request, category_slugs):
             page_products = paginator.page(1)  
         except EmptyPage:
             page_products = paginator.page(paginator.num_pages)
+
         context = {
-            "tumrunler":True,
-            "products": page_products,
+            "tumrunler":False,
+            "products": page_products, 
             "product_count":products.count(),
-            "category_name": main_category,
-            "all_categories": Category.objects.all()  
+            "category": main_category,
+            "category_name": target_category,
+            "subcategories": subcategories,
+            "main_slug":main_slug
         }
         context.update(mainContext)
-        return render(request, "core/category-product-list.html", context)
-    
-    # Eğer category_slugs bir kategoriye aitse, ilgili ürünleri getir
-    main_category = get_object_or_404(Category, slug=category_slug_list[0])
-    main_slug=main_category
-    subcategories = main_category.children.all()
-    if len(category_slug_list) == 1:
-        target_category = main_category
-    else:
-        target_category = get_object_or_404(Category, slug=category_slug_list[-1])
-    if len(category_slug_list) == 1: 
-        getMainCategoryList = main_category.children.all()
-        category_query = Q()
-
-        for category in getMainCategoryList:
-            category_query |= Q(category=category)
-
-        products = Product.objects.filter(category_query).order_by("id")
-
-    else:
-        products = Product.objects.filter(category=target_category).order_by("id")
-        
-    for subcategory in subcategories:
-        subcategory.product_count = Product.objects.filter(category=subcategory).count()
-    
-    
-    for product in products:
-        product.reviews.set(ProductReview.objects.filter(product=product))
-        product.wishes.set(wishlist_model.objects.filter(product=product))
-        product.average_rating = int(product.reviews.aggregate(Avg('rating'))['rating__avg'] or 0)
-
-    paginator = Paginator(products, 12)
-    page_number = request.GET.get('page')
-    try:
-        page_products = paginator.page(page_number)
-    except PageNotAnInteger:
-        page_products = paginator.page(1)  
-    except EmptyPage:
-        page_products = paginator.page(paginator.num_pages)
-
-    context = {
-        "products": page_products, 
-        "product_count":products.count(),
-        "category": main_category,
-        "category_name": target_category,
-        "subcategories": subcategories,
-        "main_slug":main_slug
-    }
-    context.update(mainContext)
     
     return render(request, "core/category-product-list.html", context)
 
@@ -220,3 +201,29 @@ def search_view(request):
     context.update(mainContext)
     return render(request, 'core/search_results.html', context)
 
+
+
+
+
+def get_main_category_products(request, mainContext, category_slug_list):
+    main_category = get_object_or_404(Category, slug=category_slug_list[0])
+    main_slug=main_category
+    products = Product.objects.all().order_by("id")
+    paginator = Paginator(products, 12)  
+    page_number = request.GET.get('page')
+    try:
+        page_products = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_products = paginator.page(1)  
+    except EmptyPage:
+        page_products = paginator.page(paginator.num_pages)
+    context = {
+        "tumrunler":True,
+        "products": page_products,
+        "product_count":products.count(),
+        "category_name": main_category,
+        "all_categories": Category.objects.all(),
+        "main_slug":main_slug
+    }
+    context.update(mainContext)
+    return context

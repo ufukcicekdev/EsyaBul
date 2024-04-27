@@ -1,0 +1,15 @@
+<ul class="list-unstyled subcategory-list">
+    {% for subcategory in subcategories %}
+        <li>
+            <a href="{% url 'main:dynamic-category-product-list' category_slugs=subcategory.get_full_path_slug %}">
+                <span class="name">{{ subcategory.name }}</span>
+                <span class="num">{{ subcategory.product_count }}</span>
+            </a>
+            {% if subcategory.children.all %}
+                <ul class="list-unstyled sub-subcategory-list">
+                    {% include 'core/sub_categories.html' with subcategories=subcategory.children.all %}
+                </ul>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
