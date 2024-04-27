@@ -148,7 +148,7 @@ ROBOTS_TXT_PATH = os.path.join(BASE_DIR, 'robots.txt')
 JAZZMIN_SETTINGS = {
     'site_header': "",
     'site_brand': "",
-    'copyright': "esyabul.com",
+    'copyright': "esyala.com",
 }
 
 

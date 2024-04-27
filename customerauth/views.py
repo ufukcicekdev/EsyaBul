@@ -21,7 +21,7 @@ import iyzipay
 from ipware import get_client_ip
 from payment.views import refund_payment_cancel_order
 from main.mainContent import mainContent
-
+from main.decorators import log_request
 
 
 def register_view(request):
