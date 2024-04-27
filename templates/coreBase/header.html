@@ -150,22 +150,19 @@
                                         <!-- mt f box start here -->
                                         <div class="mt-f-box">
                                             {% if  main_categories.count > 0 %}
-                                            {% for category in main_categories %}
-                                                    <!-- mt col3 start here -->
+                                                {% for category in main_categories %}
                                                     <div class="mt-col-3">
                                                         <div class="sub-dropcont">
                                                             <strong class="title"><a href="{% url 'main:dynamic-category-product-list' category.slug %}" class="mt-subopener">{{ category.name }}</a></strong>
                                                             <div class="sub-drop">
-                                                                <ul>
-                                                                    {% for child in category.children.all %}
-                                                                        <li><a href="{% url 'main:dynamic-category-product-list' category_slugs=category.slug|add:'/'|add:child.slug %}">{{ child.name }}</a></li>
-                                                                    {% endfor %}
-                                                                </ul>
+                                                                {% if category.children.all %}
+                                                                    {% include 'coreBase/sub_categories.html' with children=category.children.all %}
+                                                                {% endif %}
                                                             </div>
                                                             <a href="{% url 'main:dynamic-category-product-list' category.slug %}" class=""><i class="fa fa-angle-right" aria-hidden="true">Tümünü Gör</i></a>
                                                         </div>
+                                                        
                                                     </div>
-                                                    <!-- mt col3 end here -->
                                                 {% endfor %}
                                         
                                            
