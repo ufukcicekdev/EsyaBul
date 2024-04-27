@@ -3,6 +3,8 @@ from django.core.validators import FileExtensionValidator
 from PIL import Image
 from django.forms import ValidationError
 from django.utils.html import mark_safe
+import json
+from customerauth.models import User
 
 # Create your models here.
 
@@ -118,3 +120,28 @@ class HomeSubBanner(models.Model):
     # Resim önizlemesi sağlayan metot
     def image_preview(self):
         return mark_safe('<img src="{}" width="150" height="150" />'.format(self.image.url))
+    
+
+
+class RequesAndResponseLog(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    request_path = models.CharField(max_length=255)
+    request_data = models.TextField()
+    response_data = models.TextField()
+    response_status_code = models.PositiveIntegerField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user} - {self.request_path} - {self.response_status_code}"
+
+    def set_request_data(self, data):
+        self.request_data = json.dumps(data)
+
+    def get_request_data(self):
+        return json.loads(self.request_data)
+
+    def set_response_data(self, data):
+        self.response_data = json.dumps(data)
+
+    def get_response_data(self):
+        return json.loads(self.response_data)

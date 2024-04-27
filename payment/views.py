@@ -12,7 +12,6 @@ from customerauth.models import Address, Order, OrderItem, Payment, User
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 import os
-
 from dotenv import load_dotenv
 from esyabul.settings import base
 from django.utils.decorators import decorator_from_middleware
@@ -24,8 +23,7 @@ from django.core.files.storage import default_storage
 from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
 from django.views.decorators.http import require_http_methods
-
-
+from main.decorators import log_request
 
 
 
@@ -98,6 +96,7 @@ order_number = generate_order_number()
 
 order_data = {}
 
+@log_request
 def payment_order(request):
     global order_data 
     if not request.user.is_authenticated:
@@ -232,6 +231,7 @@ def payment_order(request):
         sozlukToken.append(json_content["token"])
         return HttpResponse(json_content["checkoutFormContent"])
     except Exception as e:
+        print(e)
         messages.error(request, "Ödeme başlatılırken bir hata oluştu: {}".format(e))
         return redirect('products:order_checkout')
 
@@ -289,6 +289,7 @@ def create_request_data(order_number, order_total, card_id, callbackUrl, buyer, 
 
 @require_http_methods(["POST"])
 @csrf_exempt
+@log_request
 def result(request):
     global order_data 
     context = dict()
