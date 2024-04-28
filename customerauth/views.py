@@ -586,45 +586,80 @@ def wishlist_view(request):
     context.update(mainContext)
     return render(request, "customerauth/wishlist.html", context)
 
+
 @login_required(login_url='customerauth:sign-in')
 def add_to_wishlist(request):
-    product_id = request.GET['id']
-    product = Product.objects.get(id=product_id)
-    context = {}
-    wishlist_count = wishlist_model.objects.filter(product=product, user=request.user).count()
+    messages_List = []
+    
+    try:
+        product_id = request.GET['id']
+        product = Product.objects.get(id=product_id)
+        wishlist_item, created = wishlist_model.objects.get_or_create(product=product, user=request.user)
+        wishlist_count = wishlist_model.objects.filter(user=request.user).count()
 
-    if wishlist_count > 0:
-        wishlist_count = wishlist_model.objects.filter(user=request.user).count()
+        if created:
+            message = 'Ürün listenize eklendi!'
+            tags = "success"
+            messages_List.append({'message': message, 'tags': tags})
+        else:
+            message = 'Ürün zaten beğeni listenizde bulunuyor!'
+            tags = "warning"
+            messages_List.append({'message': message, 'tags': tags})
+
         context = {
-            "bool": True,
-            "wishlist_count":wishlist_count
+            "status": True,
+            "wishlist_count": wishlist_count,
+            'messages': messages_List
         }
-    else:
-        new_wishlist = wishlist_model.objects.create(
-            user=request.user,
-            product=product,
-        )
-        wishlist_count = wishlist_model.objects.filter(user=request.user).count()
+    except Exception as e:
+        message = 'Ürün eklenirken bir sorun oluştu!'
+        tags = "error"
+        messages_List.append({'message': message, 'tags': tags})
         context = {
-            "bool": True,
-            "wishlist_count":wishlist_count
+            "status": False,
+            "wishlist_count": 0, 
+            'messages': messages_List
         }
+
+    message_html = render_to_string('message.html', {'messages': messages_List})
+    context['message_html'] = message_html
+
     return JsonResponse(context)
+
+
+ 
+
+    # Hata durumunda
 
 @login_required(login_url='customerauth:sign-in')
 def remove_wishlist(request):
-    pid = request.GET['id']
+    pid = request.GET.get('id')
     wishlist = wishlist_model.objects.filter(user=request.user)
-    wishlist_d = wishlist_model.objects.get(id=pid)
-    delete_product = wishlist_d.delete()
+    
+    try:
+        wishlist_item = wishlist_model.objects.get(id=pid, user=request.user)
+        wishlist_item.delete()
+        message = 'Ürün listenizden başarıyla kaldırıldı!'
+        tags = "success"
+    except wishlist_model.DoesNotExist:
+        message = 'Ürün bulunamadı veya silinemedi!'
+        tags = "error"
+    
+    messages_List = [{'message': message, 'tags': tags}]
+    message_html = render_to_string('message.html', {'messages': messages_List})
+    
+    wishlist_json = serializers.serialize('json', wishlist)
+    wishlist_html = render_to_string('customerauth/wishlist-list.html', {'w': wishlist})
     
     context = {
-        "bool":True,
-        "w":wishlist
+        "status": True,
+        "messages": messages_List,
+        "message_html": message_html,
+        "data": wishlist_html,
+        "w": wishlist_json
     }
-    wishlist_json = serializers.serialize('json', wishlist)
-    t = render_to_string('customerauth/wishlist-list.html', context)
-    return JsonResponse({'data':t,'w':wishlist_json})
+    
+    return JsonResponse(context)
 
 
 ################### Wishlist Close ################
