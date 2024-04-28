@@ -2,20 +2,22 @@
 <div class="popup-message">
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-                <div class="popup-content">
-                    <div class="popup-image">
-                        {% if message.tags == 'success' %}
-                            <img src="{% static 'basestatic/images/check.png' %}" alt="Success">
-                        {% else %}
-                            <img src="{% static 'basestatic/images/cross.png' %}" alt="Error">
-                        {% endif %}
-                    </div>
-                    <div class="popup-text">
-                        <p>{{ message }}</p>
-                    </div>
+        <div class="alert alert-{{ message.tags }}">
+            <div class="popup-content">
+                <div class="popup-image">
+                    {% if message.tags == 'success' %}
+                        <img src="https://filestorages.fra1.digitaloceanspaces.com/message/check.png" alt="Success">
+                    {% elif message.tags == 'warning' %}
+                        <img src="https://filestorages.fra1.digitaloceanspaces.com/message/cross.png" alt="Warning">
+                    {% elif message.tags == 'error' %}
+                        <img src="https://filestorages.fra1.digitaloceanspaces.com/message/cross.png" alt="Error">
+                    {% endif %}
+                </div>
+                <div class="popup-text">
+                    <p>{{ message.message }}</p>
                 </div>
             </div>
+        </div>
         {% endfor %}
     {% endif %}
 </div>
@@ -25,7 +27,7 @@
 
 <style>
     .popup-message {
-        display: none;
+        display: block;
         position: fixed;
         top: 50%;
         left: 50%;

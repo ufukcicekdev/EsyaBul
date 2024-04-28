@@ -317,20 +317,23 @@ $(document).ready(function (){
             beforeSend: function(){
                 console.log("Adding to wishlist...")
             },
-            success: function(response){
-                const messageContainer = document.querySelector('.popup-message');
-                messageContainer.innerHTML = '<div class="alert alert-success">Başarılı bir şekilde eklendi!</div>';
-                messageContainer.style.display = 'block';
-
-                setTimeout(function () {
-                    messageContainer.style.display = 'none';
-                }, 5000); 
-                this_val.html("<i class='fa fa-heart text-danger'></i>")
-                var proCountElements = document.querySelectorAll('.wish-count');
-                proCountElements.forEach(function(element) {
-                    element.innerHTML = response.wishlist_count;
-                });
-            }
+            success: function(response) {
+                var messageContainer = $('.popup-message');
+                if (response.status === true) {
+                    messageContainer.show();
+                    $('.popup-message').html(response.message_html);
+                } else {
+                    messageContainer.show();
+                    $('.popup-message').html(response.message_html);
+                }
+                setTimeout(function() {
+                    $('.popup-message').hide();
+                }, 5000);
+                this_val.html("<i class='fa fa-heart text-danger'></i>");
+                $('.wish-count').html(response.wishlist_count);
+            },
+            
+            
         })
     })
 
@@ -339,8 +342,6 @@ $(document).ready(function (){
     $(document).on("click", ".delete-wishlist-product", function(){
         let wishlist_id = $(this).attr("data-wishlist-product")
         let this_val = $(this)
-
-        console.log("wishlist id is:", wishlist_id);
 
         $.ajax({
             url: "/remove-from-wishlist",
@@ -351,38 +352,34 @@ $(document).ready(function (){
             beforeSend: function(){
                 console.log("Deleting product from wishlist...");
             },
-            success: function(response){
-                const messageContainer = document.querySelector('.popup-message');
-                messageContainer.innerHTML = '<div class="alert alert-success">Başarılı bir şekilde silindi!</div>';
-                messageContainer.style.display = 'block';
-
-                setTimeout(function () {
-                    messageContainer.style.display = 'none';
-                }, 5000); 
+            success: function(response) {
+                var messageContainer = $('.popup-message');
+                console.log("response.status",response.status);
+                if (response.status === true) {
+                    messageContainer.show();
+                    $('.popup-message').html(response.message_html);
+                } else {
+                    messageContainer.show();
+                    $('.popup-message').html(response.message_html);
+                }
+                setTimeout(function() {
+                    $('.popup-message').hide();
+                }, 5000);
                 location.reload();
-            }
+            },
         })
     })
 
 
-    $(document).on("submit", "#contact-form-ajax", function(e){
-        e.preventDefault()
-        console.log("Submited...");
+    $(document).on("submit", "#contact-form-ajax", function(){
 
         let full_name = $("#full_name").val()
         let email = $("#email").val()
         let phone = $("#phone").val()
         let subject = $("#subject").val()
         let message = $("#message").val()
-
-        console.log("Name:", full_name);
-        console.log("Email:", email);
-        console.log("Phone:", phone);
-        console.log("Subject:", subject);
-        console.log("MEssage:", message);
-
         $.ajax({
-            url: "/ajax-contact-form",
+            url: "/contact-form",
             data: {
                 "full_name": full_name,
                 "email": email,
@@ -394,15 +391,18 @@ $(document).ready(function (){
             beforeSend: function(){
                 console.log("Sending Data to Server...");
             },
-            success: function(res){                
-                const messageContainer = document.querySelector('.popup-message');
-                messageContainer.innerHTML = '<div class="alert alert-success">Başarılı bir şekilde gönderildi!</div>';
-                messageContainer.style.display = 'block';
-
+            success: function(response){                
+                var messageContainer = $('.popup-message');
+                console.log("response.status",response.status);
+                if (response.status === true) {
+                    console.log("message",response.status);
+                    messageContainer.show();
+                    $('.popup-message').html(response.message_html);
+                }
                 setTimeout(function () {
                     messageContainer.style.display = 'none';
                 }, 5000); 
-            }
+            },
         })
     })
 

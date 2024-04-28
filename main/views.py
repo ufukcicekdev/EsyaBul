@@ -12,6 +12,8 @@ import random
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import ProductSearchForm
 from .mainContent import mainContent
+from django.template.loader import render_to_string
+
 
 
 def home(request):
@@ -101,12 +103,20 @@ def ajax_contact_form(request):
         message=message,
     )
 
-    data = {
-        "bool": True,
-        "message": "Message Sent Successfully"
+    messages_List = []
+    message = 'Başarılı bir şekilde gönderildi!'
+    tags = "success"
+    messages_List.append({'message': message, 'tags': tags})
+    message_html = render_to_string('message.html', {'messages': messages_List})
+
+    context = {
+        "status": True,
+       "messages": messages_List,
+        "message_html": message_html,
     }
 
-    return JsonResponse({"data":data})
+
+    return JsonResponse(context)
 
 
 
@@ -116,7 +126,7 @@ def dynamic_category_product_list_view(request, category_slugs):
     category_slug_list = category_slugs.split('/')
     mainContext = mainContent(request)
     if category_slugs == "tum-urunler":
-        get_main_category_products(request, mainContext, category_slug_list)
+        context = get_main_category_products(request, mainContext, category_slug_list)
     else:
         main_category = get_object_or_404(Category, slug=category_slug_list[0])
         main_slug=main_category
