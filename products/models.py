@@ -80,8 +80,8 @@ class Category(models.Model):
     image = models.ImageField(upload_to='category/', null=True, blank=True)
     mainImage = models.ImageField(upload_to='category/', null=True, blank=True)
     description = models.TextField(blank=True, null=True)
-    img_alt = models.CharField(max_length=255, unique=True)
-    img_title = models.CharField(max_length=255, unique=True)
+    img_alt = models.CharField(max_length=255)
+    img_title = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
 
     def product_count(self):
@@ -115,6 +115,12 @@ class Brand(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Supplier(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
 
 class Product(models.Model):
@@ -128,6 +134,8 @@ class Product(models.Model):
     is_active = models.BooleanField(default=True)
     sku = models.CharField(max_length=50, unique=True)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products', blank=True, null=True)
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, related_name='products', blank=True, null=True)
+
     is_featured = models.BooleanField(default=False)
     best_seller = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
