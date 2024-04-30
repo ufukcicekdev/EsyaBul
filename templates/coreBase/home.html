@@ -69,10 +69,10 @@
                                     <div class="banner-1 wow fadeInLeft" data-wow-delay="0.4s">
                                         <img alt="image description" src="{{ homesubbanner.image.url }}">
                                         <div class="holder">
-                                            <h2>{{ homesubbanner.title }}</h2>
+                                            <h2 style="color: {{ homesubbanner.text_color }};">{{ homesubbanner.title }}</h2>
                                             <div class="txts">
                                                 <a class="btn-shop" href="{{ homesubbanner.link }}">
-                                                    <span>Shop now</span>
+                                                    <span>Alışverişe Başla</span>
                                                     <i class="fa fa-angle-right"></i>
                                                 </a>
                                                 {% if homesubbanner.discount %}
@@ -88,16 +88,22 @@
                                         <div class="banner-2 wow fadeInUp" data-wow-delay="0.4s">
                                             <img alt="image description" src="{{ homesubbanner.image.url }}">
                                             <div class="holder">
-                                                <h2>{{ homesubbanner.title }}</h2>
-                                                <span class="price">{{ homesubbanner.price }}</span>
+                                                <h2 style="color: {{ homesubbanner.text_color }};" >{{ homesubbanner.title }}</h2>
+                                                <a class="btn-shop add" href="{{ homesubbanner.link }}">
+                                                    <span>Alışverişe Başla</span>
+                                                    <i class="fa fa-angle-right"></i>
+                                                </a>
                                             </div>
                                         </div>
                                 {% elif homesubbanner.choose == 'banner3' %}
                                         <div class="banner-3 right wow fadeInDown" data-wow-delay="0.4s">
                                             <img alt="image description" src="{{ homesubbanner.image.url }}">
                                             <div class="holder">
-                                                <h2>{{ homesubbanner.title }}</h2>
-                                                <a href="{{ homesubbanner.link }}" class="shop">SHOP NOW</a>
+                                                <h2 style="color: {{ homesubbanner.text_color }};" >{{ homesubbanner.title }}</h2>
+                                                <a class="btn-shop add" href="{{ homesubbanner.link }}">
+                                                    <span>Alışverişe Başla</span>
+                                                    <i class="fa fa-angle-right"></i>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -105,10 +111,10 @@
                                     <div class="banner-4 hidden-sm wow fadeInRight" data-wow-delay="0.4s">
                                         <img alt="image description" src="{{ homesubbanner.image.url }}">
                                         <div class="holder">
-                                            <h2>{{ homesubbanner.title }}</h2>
+                                            <h2 style="color: {{ homesubbanner.text_color }};" >{{ homesubbanner.title }}</h2>
                                             <span class="price">{{ homesubbanner.price }}</span>
                                             <a class="btn-shop add" href="{{ homesubbanner.link }}">
-                                                <span>shop now</span>
+                                                <span>Alışverişe Başla</span>
                                                 <i class="fa fa-angle-right"></i>
                                             </a>
                                         </div>

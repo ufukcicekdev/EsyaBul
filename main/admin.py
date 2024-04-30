@@ -1,5 +1,5 @@
 from django.contrib import admin
-from main.models import ContactUs,SocialMedia, HomeMainBanner,HomeSubBanner
+from main.models import ContactUs,SocialMedia, HomeMainBanner,HomeSubBanner,TeamMembers
 
 
 
@@ -42,3 +42,17 @@ class HomeSubBannerAdmin(admin.ModelAdmin):
     image_preview.allow_tags = True
 
 admin.site.register(HomeSubBanner, HomeSubBannerAdmin)
+
+
+
+class TeamMemberAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'position', 'level', 'created_at', 'updated_at',"image_preview")
+    list_filter = ('level', 'created_at', 'updated_at')
+    search_fields = ('full_name', 'position')
+    readonly_fields = ('created_at', 'updated_at')
+    def image_preview(self, obj):
+        return obj.image_preview()
+
+    image_preview.short_description = 'Image Preview'
+
+admin.site.register(TeamMembers, TeamMemberAdmin)

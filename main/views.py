@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from main.models import ContactUs,SocialMedia, HomeMainBanner, HomeSubBanner
+from main.models import ContactUs,SocialMedia, HomeMainBanner, HomeSubBanner, TeamMembers
 from django.http import JsonResponse
 from products.models import Category,Product, ProductReview,Cart,CartItem
 from customerauth.models import wishlist_model
@@ -81,7 +81,12 @@ def contact(request):
 
 def about(request):
     mainContext = mainContent(request)
-    return render(request, "mainBase/about.html", mainContext)
+    teamsMembers = TeamMembers.objects.filter(is_active=True).order_by("id")
+    context = {
+        "teamsMembers":teamsMembers,
+    }
+    context.update(mainContext)
+    return render(request, "mainBase/about.html", context)
 
 def faqs(request):
     mainContext = mainContent(request)
