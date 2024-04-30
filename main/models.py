@@ -55,10 +55,10 @@ def validate_image_dimensions(value):
 
 class HomeMainBanner(models.Model):
     title = models.CharField(max_length=1000)
-    subtitle = models.CharField(max_length=1000)
+    subtitle = models.CharField(max_length=1000, blank=True, null=True)
     image = models.ImageField(
         upload_to='banners/',
-        validators=[validate_image_dimensions, FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])],
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])],
         help_text="The image dimensions must be 1714x584 pixels."
     )
     
@@ -72,7 +72,7 @@ class HomeMainBanner(models.Model):
     ]
     text_color = models.CharField(max_length=1000, choices=TEXT_COLOR_CHOICES, default='black')
 
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
     title_position = models.CharField(
         max_length=1000,
         choices=[('centerize', 'Center'), ('right', 'Right'), ('left', 'Left')],
@@ -99,8 +99,8 @@ class HomeSubBanner(models.Model):
     ]
     choose = models.CharField(max_length=20, choices=CHOOSE_BANNER)
     title = models.CharField(max_length=1000)
-    subtitle = models.CharField(max_length=1000)
-    description = models.TextField()
+    subtitle = models.CharField(max_length=1000, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='banners/')
     link = models.CharField(max_length=2000, blank=True, null=True)
     is_active = models.BooleanField(default=True)
@@ -145,3 +145,51 @@ class RequesAndResponseLog(models.Model):
 
     def get_response_data(self):
         return json.loads(self.response_data)
+    
+
+
+class TeamMembers(models.Model):
+    LEVEL_CHOICES = (
+        (1, '1. Seviye'),
+        (2, '2. Seviye'),
+        (3, '3. Seviye'),
+        (4, '4. Seviye'),
+        (5, '5. Seviye'),
+        (5, '5. Seviye'),
+
+        # Diğer seviyeleri buraya ekleyebilirsiniz
+    )
+
+    SOCIAL_MEDIA_CHOICES = (
+        ('facebook', 'Facebook'),
+        ('twitter', 'Twitter'),
+        ('instagram', 'Instagram'),
+        ('linkedin', 'Linkedin'),
+    )
+
+    image = models.ImageField(upload_to='teamMembers/')
+    full_name = models.CharField(max_length=200)
+    position = models.CharField(max_length=200)
+    level = models.IntegerField(choices=LEVEL_CHOICES, default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    facebook_link = models.URLField(blank=True, null=True)
+    twitter_link = models.URLField(blank=True, null=True)
+    instagram_link = models.URLField(blank=True, null=True)
+    linkedin_link = models.URLField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.full_name} - {self.position}"
+    
+    def image_preview(self):
+        return mark_safe('<img src="{}" width="150" height="150" />'.format(self.image.url))
+    
+    def get_social_media_links(self):
+        links = {}
+        for platform, _ in self.SOCIAL_MEDIA_CHOICES:
+            link = getattr(self, f"{platform}_link", None)
+            if link:
+                links[platform] = link
+        return links
