@@ -7,6 +7,11 @@
 
 {% block content %}
 
+<style>
+  .mt-producttabs:after {
+    content: none;
+}
+</style>
 <!-- main container of all the page elements -->
 <div id="wrapper">
     <!-- Page Loader -->
@@ -58,96 +63,785 @@
             <div class="container faq-section mt-about-sec">
                 <div class="row txt">
                   <div class="col-xs-12">
-                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                      <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingOne">
-                          <h4 class="panel-title">
-                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed">
-                              Adipisicing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua?
-                            </a>
-                          </h4>
-                        </div>
-                        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;">
-                          <div class="panel-body">
-                            <img src="images/img-05.jpg" alt="image description" class="img-responsive pull-left" style="max-width: 320px; margin: 0 5% 20px 0;">
-                            <p>Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</p>
-                            <p>Consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam.</p>
-                            <img src="images/img-03.jpg" alt="image description" class="img-responsive pull-right" style="max-width: 320px; margin: 0 0 20px 5%;">
-                            <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+                    <div class="mt-producttabs wow fadeInUp" data-wow-delay="0.4s">
+                      <ul class="producttabs">
+                          <li><a href="#tab1" class="active">Genel Bakış</a></li>
+                          <li><a href="#tab2">Abonelik</a></li>
+                          <li><a href="#tab3">Ürün</a></li>
+                          <li><a href="#tab4">Teslimat</a></li>
+                          <li><a href="#tab5">Kiralama</a></li>
+                          <li><a href="#tab6">Satın Alma</a></li>
+
+                      </ul>
+                      <div class="tab-content">
+                          <div id="tab1">
+                              <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                  <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingOne">
+                                      <h4 class="panel-title">
+                                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed">
+                                          Eşyala Nedir?
+                                        </a>
+                                      </h4>
+                                    </div>
+                                    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;">
+                                      <div class="panel-body">
+                                        Eşyala, eviniz için ihtiyacınız olan mobilya ve elektronik tüm ürünleri (ve dekoru!) ihtiyaç duyduğunuz süre boyunca kolayca almanızı sağlayan aylık bir abonelik hizmetidir. 
+                                        Size uygun düşük bir aylık ücret karşılığında evinizin ihtiyacı olan parçalara abone olabilir veya satın alabilirsiniz.
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingTwo">
+                                      <h4 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                          Eşyala.com abone olmanın faydaları nelerdir?
+                                        </a>
+                                      </h4>
+                                    </div>
+                                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
+                                      <div class="panel-body">
+                                        Evinizi taşımak ve döşemek bunaltıcı, zaman alıcı ve stresli olabilir. 
+                                        Eviniz için satın alma taahhüdü olmadan, zevkinize uygun doğru parçaları bulmanızı ve keyfini çıkarmanızı kolaylaştırıyoruz. 
+                                        Kolay bir alışveriş deneyiminden, kolay ev içi teslimat ve montaja kadar, evinizde yaşamaya odaklanabilmeniz için uygun fiyatlı, kaliteli ürünleri kendinizi anında evinizde hissetmenize yardımcı oluyoruz. 
+                                        Stil yenilemeye mi ihtiyacınız var? 
+                                        Seni satın alma konusunda koruyoruz ! 
+                                        Eşyalarınızı değiştirebilir, satın alabilir veya bize teslim ettirebilirsiniz!
+                                        
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingThree">
+                                      <h4 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                          Hangi şehirleri tüylendiriyorsunuz?
+                                        </a>
+                                      </h4>
+                                    </div>
+                                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree" aria-expanded="false" style="height: 0px;">
+                                      <div class="panel-body">
+                                        Şu anda aşağıdaki alanlarda evler sağlıyoruz:
+                                        <ul>
+                                          <li>İstanbul</li>
+                                          <li>Ankara</li>
+                                          <li>İzmir</li>
+                                          <li>Eskişehir</li>
+                              
+                                        </ul>
+                                        Mahallenize teslimat yapıp yapmadığımızdan emin değilseniz, lütfen bizimle iletişime geçin, biz de sizin için kontrol edelim!
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="heading4">
+                                      <h4 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse4" aria-expanded="false" aria-controls="collapse4">
+                                          Eşyala taşınma deneyimimi kolaylaştırmaya nasıl yardımcı olur?
+                                        </a>
+                                      </h4>
+                                    </div>
+                                    <div id="collapse4" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading4" aria-expanded="false" style="height: 0px;">
+                                      <div class="panel-body">
+                                        Kelimenin tam anlamıyla ürün taşıma ve kurulum konusunda endişelenmeyin 
+                                        Siz istediğinizi seçin, biz onu yeni yerinize getirelim, kurulumunu yapıp istediğiniz yere koyalım. 
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="heading5">
+                                      <h4 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse5" aria-expanded="false" aria-controls="collapse5">
+                                          Eşyala kredi kontrolü yapıyor mu?
+                                        </a>
+                                      </h4>
+                                    </div>
+                                    <div id="collapse5" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading5" aria-expanded="false">
+                                      <div class="panel-body">
+                                        Eşyala müşterilerimizin mümkün olan en iyi deneyimi yaşamasını sağlamak için kredi puanınızı etkilemeyen yumuşak bir kredi kontrolü gerçekleştirir. 
+                                        Kredi puanınızın uygun olmaması durumunda size bilgi verilecek ve tamamı iade edilecektir. Kredi puanınız kriterleri karşılamıyorsa, ürünleri her zaman doğrudan satın alabilirsiniz.
+                              
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="heading6">
+                                      <h4 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse6" aria-expanded="false" aria-controls="collapse6">
+                                          Dekor, mutfak eşyaları, klima üniteleri ve elektronik ürünlerine abone olabilir miyim?
+                                        </a>
+                                      </h4>
+                                    </div>
+                                    <div id="collapse6" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading6" aria-expanded="false">
+                                      <div class="panel-body">
+                                        Şu anda yalnızca mobilya, televizyon ve seçkin dekor  ürünlerinde hizmet sunuyoruz.
+                                        Hijyen ürünlerinde hesap oluşturup satın alma yapabilirsiniz . 
+                                        Gelecekte ek öğelerden haberdar olmak için bir hesap oluşturun.
+                              
+                                      </div>
+                                    </div>
+                                  </div>
+                              
+                                  <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="heading7">
+                                      <h4 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse7" aria-expanded="false" aria-controls="collapse7">
+                                          Eşyala'ın işletmelere özel programları veya teklifleri var mı?
+                                        </a>
+                                      </h4>
+                                    </div>
+                                    <div id="collapse7" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading7" aria-expanded="false">
+                                      <div class="panel-body">
+                                        Evet, Eşyalan'ın e-ticaret hizmet sağlayıcılarına, emlakçılara ,iç mimarlara ,ticari ofis ve iş verenlere  sosyal haklar ve yer değiştirme hizmetleri için özel teklifleri vardır.
+                              
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
                           </div>
-                        </div>
-                      </div>
-                      <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingTwo">
-                          <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                              Ut enim ad minim veniam, quis nostrud exercitation ullamco?
-                            </a>
-                          </h4>
-                        </div>
-                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
-                          <div class="panel-body">
-                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                          <div id="tab2">
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+   
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading8">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse8" aria-expanded="false" aria-controls="collapse8">
+                                      Esyala Aboneliği nasıl çalışır?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse8" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading8" aria-expanded="false" style="height: 0px;">
+                                  <div class="panel-body">
+                                    İstediğiniz ürünlere abone olmak çok basit!
+                                    <ol>
+                                      <li>Ürünü seçin </li>
+                                      <li>E-posta ve şifre oluşturma işleminizle bir hesap oluşturun (e-posta onayıyla doğrulayın)</li>
+                                      <li>Siteye göz atın ve beğendiğiniz ürünleri veya odaları sepetinize ekleyerek seçin. (Not: Tüm aboneliklerde aylık minimum üceretlendirme için iletişime geçebilirsiniz)</li>
+                                      <li>Ürün aboneliğinizi süresini 3 ila 12 ay arasında seçin.</li>
+                                      <li>Teslimat adresinizi ve ödeme bilgilerinizi ekleyerek ödeme yapın.</li>
+                                    </ol>
+                                    Tercih ettiğiniz teslimat tarihini, sipariş tarihinizden itibaren bir hafta kadar erken bir sürede seçebilirsiniz. 
+                                    Teslimatınızdan birkaç gün önce tarih ve varış saati penceresini onaylamak için sizinle iletişime geçeceğiz. 
+                                    Aboneliğinizi değiştirmeniz gerekiyorsa bizimle iletişime geçmeniz yeterli !
+
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headin9">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse9" aria-expanded="false" aria-controls="collapse9">
+                                      Abonelik için minimum tutarlar ve koşullar nelerdir?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse9" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headin9" aria-expanded="false" style="height: 0px;">
+                                  <div class="panel-body">
+                                    Eşyala abonelikleri ayda minimum tutar seçmiş olduğunuz ürüne göre değişiklik göstermektedir en az 3 ay sürelidir. 
+                                    Ürünlerimize 3 aydan kısa bir süre için ihtiyacınız varsa onları daha erken alabiliriz ancak yine de ödemeyi en az 3 ay boyunca işleme koymamız gerekir.
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headin10">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse10" aria-expanded="false" aria-controls="collapse10">
+                                      Fatura bilgilerimi nasıl güncellerim?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse10" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headin10" aria-expanded="false" style="height: 0px;">
+                                  <div class="panel-body">
+                                    Üyelik bilgilerinizden faturalarınıza ulaşabilirsiniz
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headin11">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse11" aria-expanded="false" aria-controls="collapse11">
+                                      Ne zaman ücretlendirileceğim? Aboneliğim resmi olarak ne zaman başlıyor?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse11" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headin11" aria-expanded="false" style="height: 0px;">
+                                  <div class="panel-body">
+                                    Ödeme işleminiz sırasında ilk ayın abonelik ödemesini tahsil edeceğiz. 
+                                    Sonrasında aylık abonelik ücretiniz, teslim tarihinizden bir ay sonra başlamak üzere, ürünlerinizi teslim edildiği ayın aynı günü tahsil edilecektir.
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headin12">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse12" aria-expanded="false" aria-controls="collapse12">
+                                      Aboneliğimi orijinal bitiş tarihinden önce iptal etmem gerekirse ne olur?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse12" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headin12" aria-expanded="false" style="height: 0px;">
+                                  <div class="panel-body">
+                                    Sorun değil. Koşullarınız değişirse ve aboneliğinizi beklenenden daha erken iptal etmeniz gerekirse bizimle iletişime geçmeniz yeterlidir.
+                                    Son ödemenizi, sözleşmenizin kalan ödemelerinin %75'ini yansıtacak şekilde ayarlayacağız.
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headin13">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse13" aria-expanded="false" aria-controls="collapse13">
+                                      Abonelik süremin sonunda ne olur?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse13" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headin13" aria-expanded="false" style="height: 0px;">
+                                  <div class="panel-body">
+                                    Bundan sonra olacaklar ilk kaydolduğunuz zamanki kadar kolay olmalı! İlk sözleşmenizin sonunda birkaç seçeneğiniz olacak:
+                                    <ul>
+                                      <li>Eşyalarınızı satın alabilirsiniz. Her şeyi sonsuza kadar saklamaya hazırsanız, aboneliğinizi perakende satış fiyatından, belirli bir ürün için abonelik ücretlerinde ödemiş olduğunuz tutar düşüldükten sonra satın alabilirsiniz.</li>
+                                      <li>Eşyalarınızı iade etmek istiyorsanız sorun değil. . Zamanı geldiyse aboneliğinizi sonlandırmanıza yardımcı olacağız. Ekibimiz eşyalarınızı söküp kaldıracaktır (en az 7 gün önceden bildirimde bulunulması kaydıyla). İade servis ücretimiz tarafınızda bildirilecektir.</li>
+
+                                    </ul>
+                                    Ürünlerimiz için  abonelik süresi tamamen bittiyse, teslim almak için sizinle ortak bir tarih belirleyeceğiz.
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headin14">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse14" aria-expanded="false" aria-controls="collapse14">
+                                      Aboneliğimin ortasında ürünlerimi değiştirebilir miyim?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse14" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headin14" aria-expanded="false" style="height: 0px;">
+                                  <div class="panel-body">
+                                    Evet! 
+                                    Tarafınıza bildirmiş olduğumuz değişim ücreti karşılığında istediğiniz kadar ürünü kolayca yenileyebilir ve değiştirebilirsiniz.
+                                    Aylık yinelenen abonelik maliyetiniz yeni ürün fiyatlandırmasına göre ayarlanacaktır.
+                                    
+                                  </div>
+                                </div>
+                              </div>
+
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headin15">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse15" aria-expanded="false" aria-controls="collapse15">
+                                      Aboneliğimin sonunda ürünleri satın alabilir miyim ve maliyeti ne kadar olur?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse15" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headin15" aria-expanded="false" style="height: 0px;">
+                                  <div class="panel-body">
+                                    Evet! 
+                                    İistediğiniz eşyaları satın almanızı kolaylaştırıyoruz. 
+                                    Aboneliğinizin sonuna doğru, herhangi bir öğenizi orijinal perakende fiyatından, ilk aboneliğiniz sırasında söz konusu öğe için zaten ödemiş olduğunuz tutar düşülerek satın almayı seçebilirsiniz.
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headin16">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse16" aria-expanded="false" aria-controls="collapse16">
+                                      Eşyala hangi ödeme türlerini kabul ediyor?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse16" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headin16" aria-expanded="false" style="height: 0px;">
+                                  <div class="panel-body">
+                                    Tüm önemli kredi ve banka kartlarını kabul ediyoruz. 
+                                    Güvenliğiniz bizim bir numaralı endişemizdir ve esyala, gizlilik ve güvenlikle ilgili tüm bankacılık ve mali düzenlemelere tamamen uygundur.
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headin17">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse17" aria-expanded="false" aria-controls="collapse17">
+                                      Eşyala boneliğimin ortasında taşınırsam ne olur?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse17" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headin17" aria-expanded="false" style="height: 0px;">
+                                  <div class="panel-body">
+                                    Yardım etmek için buradayız. 
+                                    Esyala eşyalarınızı (hizmet alanlarımız içerisinde kaldığınız sürece) diğer eşyalarınızla birlikte kendiniz de taşıyabilirsiniz, ancak taşıma sırasında meydana gelebilecek hasarlardan siz sorumlu tutulacaksınız.
+                                  </div>
+                                </div>
+                              </div>
+
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headin18">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse18" aria-expanded="false" aria-controls="collapse18">
+                                      Aboneliğime teslim edilmeden önce ürün ekleyebilir miyim?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse18" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headin18" aria-expanded="false" style="height: 0px;">
+                                  <div class="panel-body">
+                                    Müşteri deneyim ekibimizden <a href="mailto:info@esyala.com">info@esyala.com</a> adresine e-posta göndererek, planlanan teslimat tarihinden 48 saat öncesine kadar kesinlikle ürün ekleyebilirsiniz.
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headin19">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse19" aria-expanded="false" aria-controls="collapse19">
+                                      Promosyon kodunu nasıl uygularım?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse19" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headin19" aria-expanded="false" style="height: 0px;">
+                                  <div class="panel-body">
+                                    Ödeme işlemi sırasında promosyon kodları eklenebilir! 
+                                    Masaüstü bilgisayarda “Promosyon kodu ekle” bağlantısını göreceksiniz. Mobil cihazda kodu girmek için "Sipariş Özeti" kutusunu genişletin. Siparişinizi zaten verdiyseniz ve geriye dönük olarak bir promosyon kodu eklemeniz gerekiyorsa lütfen <a href="mailto:info@esyala.com">info@esyala.com</a> adresinden müşteri hizmetlerine ulaşın .
+                                  </div>
+                                </div>
+                              </div>
+                            
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                      <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingThree">
-                          <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                              Laboris nisi ut aliquip ex ea commodo consequat aute irure dolor?
-                            </a>
-                          </h4>
-                        </div>
-                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree" aria-expanded="false" style="height: 0px;">
-                          <div class="panel-body">
-                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                          <div id="tab3">
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading20">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse20" aria-expanded="false" aria-controls="collapse20">
+                                      Ürünlerim nereden?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse20" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading20" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Yüksek kaliteli ve şık mobilyalar sunmak için seçilmiş bir tedarikçi listesiyle çalışıyoruz. Bu sayede mobilyalarınız size hissettirdiği kadar güzel görünür! 
+                                    İş ortaklarımız arasında  zaten tanıdığınız ve sevdiğiniz markalar yer alıyor .
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading21">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse21" aria-expanded="false" aria-controls="collapse21">
+                                      Ürünlerim her zaman yeni mi?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse21" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading21" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Tüm ürünler yeni veya yeni gibi teslim edilecektir. 
+                                    Herhangi bir ürün evinize teslim edilmeden önce uzman ekibimiz tarafından çeşitli tamir, temizlik ve kalite kontrollerinden geçer. "Yeni gibi", ahşapta küçük bir çentik veya deride aşınma çizikleri olabileceği anlamına gelir.
+                                    Beyaz Eşya ve Elektronik ürünlerde yetkili servisler tarafından bakım yapılmaktadır.
+                                  </div>
+                                </div>
+                              </div>
+
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading22">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse22" aria-expanded="false" aria-controls="collapse22">
+                                      Ürünlerimiz çöplüklere mi gidiyor?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse22" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading22" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Hayır, eşyala'ın kurulma nedenlerinden biri de bu! 
+                                    Sürdürülebilirlik bizim için çok önemlidir, bu nedenle yalnızca uzun süre dayanacak şekilde üretilmiş kaliteli ürünler sunuyoruz. 
+                                    Denetim, temizlik ve yenileme sürecimiz sonrasında bize geri gelen  "yeni gibi" standartlarımızı karşılamayan her türlü mobilya, sayıları giderek artan hayır kurumlarına bağışlanıyor. 
+                                    Sunduğumuz öğelerin güvenli bir şekilde yeniden kullanılamayan küçük bir kısmı için mümkün olduğunca geri dönüşüm veya diğer yeniden kullanım tesisleriyle çalışıyoruz.
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading23">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse23" aria-expanded="false" aria-controls="collapse23">
+                                      Abone olduğum ürünlere ne kadar dikkat etmeliyim?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse23" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading23" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Ürünlerimiz kendinizinmiş gibi davranın! 
+                                    Üzerinde yiyin, üzerinde uyuyun ve tüylü arkadaşlarınızın kullanmasına izin verin. 
+                                    Ona saygı duyduğunuzu takdir ediyoruz (tıpkı ona sahip olsaydınız yapacağınız gibi), ancak normal aşınma ve yıpranma konusunda endişelenmeyin.
+
+                                  </div>
+                                </div>
+                              </div>
+
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading24">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse24" aria-expanded="false" aria-controls="collapse24">
+                                      Bir eşyayı yanlışlıkla kırarsam ya da lekelersem ne olur?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse24" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading24" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Stres yapmayın, hayatın gerçekleştiğini biliyoruz! 
+                                    Ürünlerimizde ticari sınıf ve yaşamak için yapılmış ürünler .
+                                    Aboneliğinizin sonunda ürünlerimiz geri aldığımızda, mobilyaların yeni kadar iyi görünmesini sağlamak için genellikle lekelerin çoğunu çıkarabiliriz. 
+                                    Kapsamlı lekeler veya hasarlar için lütfen bizimle iletişime geçin ,böylece sonraki adımı değerlendirebiliriz.
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading25">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse25" aria-expanded="false" aria-controls="collapse25">
+                                      Ürünlerimiz evcil hayvan dostu mu?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse25" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading25" aria-expanded="false">
+                                  <div class="panel-body">
+                                    İki ve dört ayaklı arkadaşlarınız da dahil olmak üzere tüm ailenizin yeni döşenmiş evinizden keyif almasını istiyoruz.
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                      <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="heading4">
-                          <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse4" aria-expanded="false" aria-controls="collapse4">
-                              Nemo enim ipsam voluptatem quia voluptas sit?
-                            </a>
-                          </h4>
-                        </div>
-                        <div id="collapse4" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading4" aria-expanded="false" style="height: 0px;">
-                          <div class="panel-body">
-                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                          <div id="tab4">
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading26">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse26" aria-expanded="false" aria-controls="collapse26">
+                                      Teslim maliyeti ne kadar?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse26" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading26" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Ürünlerinizin ilk teslimatı ücretsizdir ve seçtiğiniz odaya/odalara montajı ve ambalajının çıkarılmasını içerir.
+                          
+                                  </div>
+                                </div>
+                              </div>
+                              
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading27">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse27" aria-expanded="false" aria-controls="collapse27">
+                                      Teslimat deneyimi nasıl?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse27" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading27" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Teslimat sürecini mümkün olduğunca sorunsuz hale getirmek istiyoruz. 
+                                    Ödeme sırasında ideal teslimat tarihinizi seçmeniz yeterlidir. 
+                                    Tarihi ve varış penceresini onaylamak için teslimatınızdan birkaç gün önce sizinle iletişime geçeceğiz. 
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading28">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse28" aria-expanded="false" aria-controls="collapse28">
+                                      Ürünlerimi ne kadar sürede teslim alırım?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse28" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading28" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Hızlı çalışıyoruz! 
+                                    Teslimat yaklaşık 7 gün sürer ve pazartesiden cumartesiye teslimat yapıyoruz. 
+                                    Coğrafi olarak rota çizerken, planlama ekibimiz teslimatınızdan 3 gün önce sizinle iletişime geçerek bir zaman aralığını onaylayacak ve böylece gününüzü buna göre planlayabilirsiniz.
+                                    
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading29">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse29" aria-expanded="false" aria-controls="collapse29">
+                                      Teslimata hazırlanmak için ne yapmam gerekiyor?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse29" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading29" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Hızlı ve güvenli bir şekilde girip çıkabileceğimizden emin olmak istiyoruz.
+                                    Lütfen evinizdeki bir yürüyüş yolunu temizleyin ve ekibin ürünlerin montajı üzerinde çalışması için yer olduğundan emin olun.
+                                    Binanız için bir yükleme iskelesi veya yük asansörü varsa, Esyala teslimat ekibinin ihtiyaç halinde erişim sağlayabilmesi için mülk yöneticinizle düzenlemeler yaptığınızdan emin olun.
+                                    Lütfen öğeleri monte edilmemiş halde bırakamayacağımızı unutmayın.
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading30">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse30" aria-expanded="false" aria-controls="collapse30">
+                                      Teslimat için evde olmam gerekiyor mu?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse30" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading30" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Teslimatı kabul etmek ve seçtiğiniz ürünlerden memnun olduğunuzdan emin olmak için evde olmanız gerekir. 
+                                    Ekip, evinize teslim edilenlerin listesini içeren bir onay belgesi imzalamanızı isteyecektir.
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading31">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse31" aria-expanded="false" aria-controls="collapse31">
+                                      Eşyala eski ürünlerimi alıyor mu?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse31" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading31" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Yalnızca sizin onayınız ve evrak karşılığında vermiş olduğunuz sürdürülebilir ürünleri alabiliyoruz; ancak almış olduğumuz ürünlerde önceliğimiz bağış için yerel hayır kurumlarına ürünlerin ulaştırılması.
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading32">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse32" aria-expanded="false" aria-controls="collapse32">
+                                      Ürünlerimin bir kısmını veya tamamını elime ulaştığında beğenmezsem ne olur?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse32" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading32" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Evinizi sevmenizi istiyoruz; bu nedenle, ihtiyaçlarınıza uygun olmayan bir şey varsa, 3 günlük ödemesiz süreniz içinde (teslimatın hemen ardından) müşteri deneyim ekibimizde iletmeniz yeterli olacaktır . 
+                                    Daha iyi çalışabileceğini düşündüğünüz bir şey varsa, o öğeyi mümkün olan en kısa sürede sizin için değiştirmekten memnuniyet duyarız.
+                                  </div>
+                                </div>
+                              </div>
+
+
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                      <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="heading5">
-                          <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse5" aria-expanded="false" aria-controls="collapse5">
-                              Duis aute irure dolor in reprehenderit in voluptate?
-                            </a>
-                          </h4>
-                        </div>
-                        <div id="collapse5" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading5" aria-expanded="false">
-                          <div class="panel-body">
-                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                          <div id="tab5">
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                              
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading33">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse33" aria-expanded="false" aria-controls="collapse33">
+                                      Aboneliğimin sonunda mobilyaları satın alabilir miyim?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse33" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading33" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Evet! 
+                                    İstediğiniz eşyaları satın almanızı kolaylaştırıyoruz. 
+                                    Aboneliğinizin sonuna doğru, herhangi bir öğenizi orijinal perakende fiyatından, ilk aboneliğiniz sırasında söz konusu öğe için zaten ödemiş olduğunuz tutar düşülerek satın almayı seçebilirsiniz.                      
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading34">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse34" aria-expanded="false" aria-controls="collapse34">
+                                      Ürünlerin sahibi olmadan önce ne kadar ödeme yapmam gerekecek?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse34" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading34" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Genel olarak, en düşük aylık ödeme oranıyla perakende satış değerine ulaşmak 24 ay sürecektir (promosyon indirimleri ve tavsiye kredileri perakende satın alma maliyetine uygulanmaz). 
+                                    Ancak ürün bedelinin tamamını ödemek için beklemeniz gerekmez. 
+                                    Aboneliğinizin sonuna doğru, herhangi bir öğenizi mevcut perakende satış fiyatından aboneliğiniz boyunca ödediğiniz tutar düşülerek satın almayı seçebilirsiniz.
+                                    Abonelik öğelerinizden herhangi birini elinizde tutmayı seçerseniz, öğenin tamamı ödenene kadar her aylık ödeme perakende fiyatına uygulanır. 
+                                    Abonelik ne kadar kısa olursa (aylık ödeme ne kadar yüksek olursa), ürün o kadar hızlı satın alınabilir. 
+                                    Abonelik ne kadar uzun olursa (aylık ödeme ne kadar düşük olursa), ürünün satın alınması da o kadar uzun sürer.
+                                    Bu otomatik olarak gerçekleşmediğinden parçaları satın almak için Müşteri Desteği ile iletişime geçmeniz gerektiğini lütfen unutmayın. 
+                                    Ürün satın alındıktan sonra artık teslim alma, takas veya taşıma dahil abonelik hizmetlerimiz için uygun değildir. 
+                                    Satın alınan tüm satışlar nihaidir.
+                   
+                                  </div>
+                                </div>
+                              </div>
+
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading35">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse35" aria-expanded="false" aria-controls="collapse35">
+                                      Satın alma fiyatı nasıl hesaplanır?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse35" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading35" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Satın alma maliyetiniz, geçerli perakende satış fiyatından aboneliğiniz boyunca söz konusu ürün için ödediğiniz tutarın çıkarılmasıyla elde edilen tutardır (promosyon indirimleri ve tavsiye kredileri perakende satın alma maliyetine uygulanmaz).
+                                  </div>
+                                </div>
+                              </div>
+                              
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading36">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse36" aria-expanded="false" aria-controls="collapse36">
+                                      Satın alma abonelik süresi tamamlandıktan sonra ürünlerimin otomatik olarak sahibi olacak mıyım?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse36" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading36" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Hayır. 
+                                    Öncelikle bir kiralama şirketi olduğumuz göz önüne alındığında, bu otomatik olarak gerçekleşmediğinden parçaları satın almak için Müşteri Desteği ile iletişime geçmelisiniz. 
+                                    Ürün satın alındıktan sonra artık teslim alma, takas veya taşıma dahil abonelik hizmetlerimiz için uygun değildir. 
+                                    Satın alınan tüm satışlar nihaidir.
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading37">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse37" aria-expanded="false" aria-controls="collapse37">
+                                      Ürünleri aldıktan sonra fikrimi değiştirirsem gelip alır mısın?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse37" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading37" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Hayır. 
+                                    Ürün satın alındıktan sonra artık teslim alma, takas veya taşıma dahil abonelik hizmetlerimiz için uygun değildir. 
+                                    Satın alınan tüm satışlar nihaidir.
+                                  </div>
+                                </div>
+                              </div>
+
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                      <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="heading6">
-                          <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse6" aria-expanded="false" aria-controls="collapse6">
-                              Velit esse cillum dolore eu fugiat nulla pariatur?
-                            </a>
-                          </h4>
-                        </div>
-                        <div id="collapse6" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading6" aria-expanded="false">
-                          <div class="panel-body">
-                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                          <div id="tab6">
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                             
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading38">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse38" aria-expanded="false" aria-controls="collapse38">
+                                      Satın aldığım ürünleri değiştirebilir miyim?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse38" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading38" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Herhangi bir nedenle ürünlerinizi Esyala'dan farklı bir parçayla değiştirmek isterseniz, orijinal teslimattan itibaren 30 gün içinde bunu yapabilirsiniz. 
+                                    Ödemiş olduğunuz  tutarında bir ücret olsa da, Esyala orijinal ödemenizi ürünün maliyet farkına göre ayarlayacaktır ve biz de geri gelip parçayı sizin için değiştireceğiz.
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading39">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse39" aria-expanded="false" aria-controls="collapse39">
+                                      Ürünlerimi peşin alırsam iade politikası nedir?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse39" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading39" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Ürün satın almanın sıkıcı bir süreç olabileceğini biliyoruz ve sonsuza kadar kendinizi rahat hissetmenizi istiyoruz! 
+                                    Herhangi bir nedenle ürünlerinizden memnun kalmazsanız, satın alma işleminiz için tam bir geri ödeme sunuyoruz. İadenin planlanması sırasında kayıtlı karta işlenecek …. tutarında bir iade ücreti vardır. 
+                                    Bazı sınırlamalar geçerli olabilir. Daha fazla bilgi için lütfen info@esyala.com adresinden bize ulaşın.
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading40">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse40" aria-expanded="false" aria-controls="collapse40">
+                                      Bir ürünü peşin olarak alırsam yeni mi yoksa kullanılmış mı olacak?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse40" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading40" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Sürdürülebilir misyonumuzun bir parçası olarak tüm ürünlerimiz yeni veya yeni gibi durumda! 
+                                    Ekibimiz, yeni gibi olan tüm eşyaların yenilenmesi, temizlenmesi ve rötuşlanması gibi ayrıntılı bir süreçten geçer. 
+                                    Senin için yeni olacaklar!
+
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading41">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse41" aria-expanded="false" aria-controls="collapse41">
+                                      Kiralamak ve sahip olmak arasındaki fark nedir?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse41" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading41" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Uzun vadeli "sonsuza kadar" ürün arıyorsanız ancak tarzınızın ne olduğundan emin değilseniz veya mevcut evinizde uzun vadeli kalacaksanız kiralama, sevdiğiniz eşyalara uzun süre beklemeden sahip olmanın harika bir yoludur. Vadeli taahhüt. Aboneliğinizin sonunda ürünlerinizi satın alma seçeneğimiz var! 
+                                    Uzun vadede bu işin içinde olduklarını bilen ve hayallerindeki ürünlere bağlanmaya hazır olan kişiler için satın alma olanağı mevcuttur.
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading42">
+                                  <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse42" aria-expanded="false" aria-controls="collapse42">
+                                      Bilmeniz gereken başka ayrıntılar var mı?
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse42" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading42" aria-expanded="false">
+                                  <div class="panel-body">
+                                    Doğrudan satın alınan ürünler, teslimat tarihinden itibaren 14 gün önceden bildirimde bulunularak tam para iadesi almaya hak kazanır. 
+                                    Doğrudan satın alınan ürünler, (teslimat tarihinden itibaren) 14 gün önceden bildirimde bulunarak başka bir doğrudan satın alınan ürünüyle değiştirilebilir. 
+                                    Değişim durumunda ücret farkı kayıtlı karta göre ayarlanacaktır. 
+                                    İade edilen ürün(ler) orijinal durumda olmalıdır ve esyala'ın hatası olmaksızın ürün(ler)de hasar meydana gelmişse, geri ödemede indirime tabi olmalıdır. 
+                                    Son satış olarak işaretlenen ürünler iade veya değişime uygun değildir. 
+                                    Geri ödemelerin işleme koyulması 2 hafta kadar sürebilir. 
+                                    Ürününüzün teslimat sırasında hasar görmesi ihtimaline karşı esyala, en iyi çözümü bulmak için sizinle birlikte ayrı ayrı çalışacaktır.
+
+                                  </div>
+                                </div>
+                              </div>
+
+
                           </div>
+                          
+
+
                         </div>
+                          
                       </div>
-                    </div>
+                  </div>
                   </div>
                 </div>
             </div>
