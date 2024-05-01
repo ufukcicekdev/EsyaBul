@@ -1,5 +1,5 @@
 from django.contrib import admin
-from products.models import Product, ProductImage, ProductRentalPrice, RoomType, HomeType, HomeModel, SpaceDefinition, TimeRange, Category
+from products.models import Product, ProductImage, ProductRentalPrice, RoomType, HomeType, HomeModel, SpaceDefinition, TimeRange, Category, Brand, Supplier
 
 from django.utils.html import format_html
 
@@ -60,7 +60,15 @@ class TimeRangeAdmin(admin.ModelAdmin):
 
 # Category için admin kaydı
     
+@admin.register(Brand)
+class BrandAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    list_display_links =   ('name',)  
 
+@admin.register(Supplier)
+class SupplierAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    list_display_links =   ('name',)  
 
 admin.site.register(Category)
 
