@@ -13,9 +13,10 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import ProductSearchForm
 from .mainContent import mainContent
 from django.template.loader import render_to_string
+from django.views.decorators.cache import cache_page
 
 
-
+@cache_page(60 * 60)
 def home(request):
     homemainbanners = HomeMainBanner.objects.filter(is_active=True)
     homesubbanners = HomeSubBanner.objects.filter(is_active=True)
@@ -93,6 +94,13 @@ def faqs(request):
     return render(request, "mainBase/faq.html", mainContext)
 
 
+def does_it_work(request):
+    mainContext = mainContent(request)
+    return render(request, "mainBase/doesitwork.html", mainContext)
+
+
+
+
 def ajax_contact_form(request):
     full_name = request.GET['full_name']
     email = request.GET['email']
@@ -116,7 +124,7 @@ def ajax_contact_form(request):
 
     context = {
         "status": True,
-       "messages": messages_List,
+        "messages": messages_List,
         "message_html": message_html,
     }
 
@@ -127,6 +135,7 @@ def ajax_contact_form(request):
 
 ################ Contact Close ################
 
+@cache_page(60 * 60)
 def dynamic_category_product_list_view(request, category_slugs):
     category_slug_list = category_slugs.split('/')
     mainContext = mainContent(request)

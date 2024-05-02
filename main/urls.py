@@ -21,6 +21,7 @@ urlpatterns = [
     path('contact/', contact, name='contact'),
     path('about/', about, name='about'),
     path('faqs/', faqs, name='faqs'),
+    path('how-does-it-work/', does_it_work, name='itwork'),
     path("contact-form/", ajax_contact_form, name="ajax-contact-form"),
     path("category/<path:category_slugs>/", dynamic_category_product_list_view, name="dynamic-category-product-list"),
     path('search/', search_view, name='search_results'),
