@@ -21,11 +21,17 @@
         <main id="mt-main">
   
           <!-- Mt Map Descrp of the Page -->
-          <section class="mt-map-descrp wow fadeInUp" data-wow-delay="0.4s">
+          <section class="mt-contact-banner wow fadeInUp" data-wow-delay="0.4s" style="background-image: url({% static 'basestatic/images/img43.jpg' %}); background-size: cover; background-position: center;">
             <div class="container">
               <div class="row">
                 <div class="col-xs-12 text-center">
                   <h1>İletişim</h1>
+                  <nav class="breadcrumbs">
+                    <ul class="list-unstyled">
+                      <li><a href="{% url 'main:home' %}">Ana Sayfa <i class="fa fa-angle-right"></i></a></li>
+                      <li>İletişim</li>
+                    </ul>
+                  </nav>
                 </div>
               </div>
             </div>

@@ -2,6 +2,50 @@
 {% block content %}
 
 
+<style>
+  /* Modal stilleri */
+.modal {
+    display: none; /* Modal başlangıçta görünmez */
+    position: fixed; /* Sabit bir konumda olacak */
+    z-index: 500; /* Diğer içeriklerin üstünde */
+    left: 0;
+    top: 0;
+    width: 100%; /* Ekran genişliğinin tamamı */
+    height: 100%; /* Ekran yüksekliğinin tamamı */
+    overflow: auto; /* Küçük ekranlarda kaydırma çubuğunu etkinleştir */
+    background-color: rgba(0,0,0,0.4); /* Arka plana bir opaklık ekler */
+}
+
+/* Modal içeriği */
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; /* Modalı dikey olarak ortalar ve yukarıda biraz daha az boşluk bırakır */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 60%; /* Modalın genişliğini küçültür */
+    max-height: 80%; /* Modalın maksimum yüksekliğini sınırlar */
+    overflow-y: auto; /* Modal içeriğinde scroll etkinleştirir */
+}
+
+/* Kapatma butonu */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+/* Modal stilleri */
+
+
+</style>
+
 <footer id="mt-footer" class="style7 wow fadeInUp" data-wow-delay="0.4s">
 
   <aside class="f-promo-box dark">
@@ -94,10 +138,47 @@
                 <li><a href="{% url 'main:home' %}">Ana Sayfa</a></li>
                 <li><a href="{% url 'main:about' %}">Hakkımızda</a></li>
                 <li><a href="{% url 'main:contact' %}"> İletişim</a></li>
-                <li><a href="#">Hizmet Politikamız</a></li>
+                <li><a href="{% url 'main:itwork' %}">Nasıl Çalışır</a></li>
                 <li><a href="{% url 'main:faqs' %}">SSS</a></li>
+                <li><a href="#" onclick="openModal1()">Üyelik Sözleşmesi</a></li>
+                <li><a href="#" onclick="openModal2()">Aydınlatma Metni</a></li>
+                <li><a href="#" onclick="openModal3()">Cayma,Fesih ve İade Koşulları</a></li>
+                <li><a href="#" onclick="openModal4()">Çerez (Cookie) Politikası</a></li>
+
+
               </ul>
             </div>
+
+            
+
+            <div id="myModal1" class="modal">
+              <div class="modal-content">
+                  <span class="close1 close">&times;</span>
+                  {% include 'coreBase/terms.html' %}
+              </div>
+            </div>
+
+            <div id="myModal2" class="modal">
+              <div class="modal-content">
+                  <span class="close2 close">&times;</span>
+                  {% include 'coreBase/illumination.html' %}
+              </div>
+            </div>
+
+            <div id="myModal3" class="modal">
+              <div class="modal-content">
+                  <span class="close3 close">&times;</span>
+                  {% include 'coreBase/refund.html' %}
+              </div>
+            </div>
+            <div id="myModal4" class="modal">
+              <div class="modal-content">
+                  <span class="close4 close">&times;</span>
+                  {% include 'coreBase/cookie.html' %}
+              </div>
+            </div>
+            
+
             <!-- Footer Nav of the Page end -->
             <!-- Footer Nav of the Page -->
             <div class="nav-widget-1">
@@ -159,6 +240,81 @@
     </div>
     <!-- Footer Area of the Page end -->
   </footer>
+
+
+  <script>
+    // Birinci Modalı açma işlevi
+    function openModal1() {
+        document.getElementById("myModal1").style.display = "block";
+    }
+    
+    // Birinci Modalı kapama işlevi
+    function closeModal1() {
+        document.getElementById("myModal1").style.display = "none";
+    }
+    
+    // İkinci Modalı açma işlevi
+    function openModal2() {
+        document.getElementById("myModal2").style.display = "block";
+    }
+    
+    // İkinci Modalı kapama işlevi
+    function closeModal2() {
+        document.getElementById("myModal2").style.display = "none";
+    }
+
+    // İkinci Modalı açma işlevi
+    function openModal3() {
+        document.getElementById("myModal3").style.display = "block";
+    }
+    
+    // İkinci Modalı kapama işlevi
+    function closeModal3() {
+        document.getElementById("myModal3").style.display = "none";
+    }
+
+    function openModal4() {
+        document.getElementById("myModal4").style.display = "block";
+    }
+    
+    // İkinci Modalı kapama işlevi
+    function closeModal4() {
+        document.getElementById("myModal4").style.display = "none";
+    }
+    
+    // Kapatma butonlarına tıklanınca modalları kapat
+    document.getElementsByClassName("close1")[0].onclick = function() {
+        closeModal1();
+    }
+    
+    document.getElementsByClassName("close2")[0].onclick = function() {
+        closeModal2();
+    }
+
+    document.getElementsByClassName("close3")[0].onclick = function() {
+        closeModal3();
+    }
+    document.getElementsByClassName("close4")[0].onclick = function() {
+        closeModal4();
+    }
+    
+    // Modalların dışına tıklanınca modalları kapat
+    window.onclick = function(event) {
+        if (event.target == document.getElementById("myModal1")) {
+            closeModal1();
+        }
+        if (event.target == document.getElementById("myModal2")) {
+            closeModal2();
+        }
+        if (event.target == document.getElementById("myModal3")) {
+            closeModal3();
+        }
+        if (event.target == document.getElementById("myModal4")) {
+            closeModal4();
+        }
+    }
+    </script>
+    
 
 {% endblock %}
 

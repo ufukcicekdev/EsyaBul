@@ -1,0 +1,150 @@
+{% extends 'partialsBase/base.html' %}
+
+{% load static %}
+
+{% block title %} Nasıl Çalışır - Esyala {% endblock title %}
+
+{% block content %}
+
+<style>
+  .container {
+  margin-bottom: 20px;
+}
+
+.step {
+  border-radius: 5px;
+  overflow: hidden; 
+  background-color: #f9f9f9; /* Adım kutucuğunun arka plan rengi */
+}
+
+.step-number {
+  display: block;
+  width: 30px;
+  height: 30px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  line-height: 30px;
+  font-weight: bold;
+  float: left; 
+}
+
+.step-content {
+  padding: 20px;
+  overflow: hidden; 
+}
+
+.step h2 {
+  margin-top: 0; /* Başlığın üstündeki boşluğu kaldırır */
+}
+
+.step p {
+  margin-bottom: 10px; /* Paragraflar arasında boşluk bırakır */
+}
+
+.step ul, .step ol {
+  margin-top: 0; /* Listelerin üstündeki boşluğu kaldırır */
+  padding-left: 20px; /* Liste içeriklerini biraz sağa kaydırır */
+}
+
+.step li {
+  margin-bottom: 5px; /* Listenin elemanları arasında boşluk bırakır */
+}
+
+
+</style>
+
+
+<!-- main container of all the page elements -->
+<div id="wrapper">
+    <!-- Page Loader -->
+    <div id="pre-loader" class="loader-container">
+        <div class="loader">
+            <img src="{% static 'basestatic/images/svg/rings.svg' %}" alt="loader">
+        </div>
+    </div>
+    <!-- W1 start here -->
+    <div class="w1">
+        <!-- mt header style4 start here -->
+        {% include 'coreBase/header.html' %}
+        <main id="mt-main">
+  
+          <!-- Mt Map Descrp of the Page -->
+          <section class="mt-contact-banner wow fadeInUp" data-wow-delay="0.4s" style="background-image: url({% static 'basestatic/images/img43.jpg' %}); background-size: cover; background-position: center;">
+            <div class="container">
+              <div class="row">
+                <div class="col-xs-12 text-center">
+                  <h1>Nasıl Çalışır</h1>
+                  <nav class="breadcrumbs">
+                    <ul class="list-unstyled">
+                      <li><a href="{% url 'main:home' %}">Ana Sayfa <i class="fa fa-angle-right"></i></a></li>
+                      <li>Nasıl Çalışır</li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+          <div class="container">
+            <div class="step">
+              <span class="step-number">1</span>
+              <div class="step-content">
+                <h2>Nasıl Çalışır?</h2>
+                <p>Web sitemizdeki kiralama işlemi adımları:</p>
+                <ol>
+                  <li>Yüzlerce ürün arasından istediğin ürünü seç.</li>
+                  <li>Kiralamak istediğin süreyi belirle.</li>
+                  <li>Siparişini oluşturduğunda ilk ay kira ücreti alınır.</li>
+                  <li>Otomatik kimlik teyidi ve findeks raporu onayının ardından kiralama işlemi onaylanır ve ürünün ücretsiz kargo ile sana gönderilir.</li>
+                  <li>Kiralama talebi onaylanmazsa alınan ilk ay kira ücreti iade edilir.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          
+          <div class="container">
+            <div class="step">
+              <span class="step-number">2</span>
+              <div class="step-content">
+                <h2>Kullanım Detayları</h2>
+                <p>Kullanım detayları:</p>
+                <ul>
+                  <li>İlk ay kira ücreti kiralama yapıldığı gün alınır.</li>
+                  <li>Kira süresi ürünü teslim aldığın gün başlar. Sonraki ayların kira ücretleri de siparişini oluşturduğun günlerde kartından otomatik olarak alınır. Kargoda geçen süre kira süresine eklenir.</li>
+                  <li>Ürünü kullanırken hasar oluşursa, hasar onarım süreçlerini biz üstleniriz ve hasar onarım masraflarının %70’ini karşılarız.</li>
+                  <li>Kiraladığın ürünü daha uzun süre kullanmak istersen, istediğin zaman kira süresini uzatabilir ya da kiraladığın ürünü satın alabilirsin.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div class="container">
+            <div class="step">
+              <span class="step-number">3</span>
+              <div class="step-content">
+                <h2>İade İşlemleri</h2>
+                <p>İade işlemi:</p>
+                <ul>
+                  <li>Kira süresi bittiğinde ürünü orijinal kutusu ve aksesuarlarıyla ücretsiz kargo ile geri gönder.</li>
+                  <li>Her iade edilen ürünün teknik kalite kontrol işlemleri yapılır.</li>
+                  <li>Kalite kontrol işlemleri onaylandığında kartından çekilen bir sonraki ayın kira ücreti iade edilir.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          
+          
+        </main>
+      
+
+
+        {% include 'coreBase/footer.html' %}
+        <!-- footer of the Page end -->
+    </div><!-- W1 end here -->
+    <span id="back-top" class="fa fa-arrow-up"></span>
+</div>
+
+
+{%  endblock %}
