@@ -6,4 +6,6 @@ Disallow: /admin/
 User-Agent: Googlebot
 Disallow: /admin/
 
+Sitemap: https://esyala.com/sitemap.xml
+
 

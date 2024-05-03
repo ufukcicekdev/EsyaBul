@@ -144,12 +144,12 @@
                 <li><a href="#" onclick="openModal2()">Aydınlatma Metni</a></li>
                 <li><a href="#" onclick="openModal3()">Cayma,Fesih ve İade Koşulları</a></li>
                 <li><a href="#" onclick="openModal4()">Çerez (Cookie) Politikası</a></li>
+                <li><a href="#" onclick="openModal5()">Kimlik ve Findeks Raporu</a></li>
+                <li><a href="#" onclick="openModal6()">Ödeme ve Teslimat Bilgileri</a></li>
 
 
               </ul>
             </div>
-
-            
 
             <div id="myModal1" class="modal">
               <div class="modal-content">
@@ -175,6 +175,20 @@
               <div class="modal-content">
                   <span class="close4 close">&times;</span>
                   {% include 'coreBase/cookie.html' %}
+              </div>
+            </div>
+
+            <div id="myModal5" class="modal">
+              <div class="modal-content">
+                  <span class="close5 close">&times;</span>
+                  {% include 'coreBase/identifier.html' %}
+              </div>
+            </div>
+
+            <div id="myModal6" class="modal">
+              <div class="modal-content">
+                  <span class="close6 close">&times;</span>
+                  {% include 'coreBase/paying.html' %}
               </div>
             </div>
             
@@ -282,6 +296,24 @@
         document.getElementById("myModal4").style.display = "none";
     }
     
+    function openModal5() {
+        document.getElementById("myModal5").style.display = "block";
+    }
+    
+    // İkinci Modalı kapama işlevi
+    function closeModal5() {
+        document.getElementById("myModal5").style.display = "none";
+    }
+
+    function openModal6() {
+        document.getElementById("myModal6").style.display = "block";
+    }
+    
+    // İkinci Modalı kapama işlevi
+    function closeModal6() {
+        document.getElementById("myModal6").style.display = "none";
+    }
+    
     // Kapatma butonlarına tıklanınca modalları kapat
     document.getElementsByClassName("close1")[0].onclick = function() {
         closeModal1();
@@ -297,6 +329,13 @@
     document.getElementsByClassName("close4")[0].onclick = function() {
         closeModal4();
     }
+    document.getElementsByClassName("close5")[0].onclick = function() {
+        closeModal5();
+    }
+
+    document.getElementsByClassName("close6")[0].onclick = function() {
+        closeModal6();
+    }
     
     // Modalların dışına tıklanınca modalları kapat
     window.onclick = function(event) {
@@ -311,6 +350,13 @@
         }
         if (event.target == document.getElementById("myModal4")) {
             closeModal4();
+        }
+        if (event.target == document.getElementById("myModal5")) {
+            closeModal5();
+        }
+
+        if (event.target == document.getElementById("myModal6")) {
+            closeModal6();
         }
     }
     </script>

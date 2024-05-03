@@ -40,6 +40,7 @@
                 </div>
               </section>
             <!-- Mt Process Section of the Page -->
+            {% if cart_items.count > 0 %}
             <div class="mt-process-sec">
               <div class="container">
                 <div class="row">
@@ -59,7 +60,7 @@
               </div>
             </div><!-- Mt Process Section of the Page end -->
             <!-- Mt Product Table of the Page -->
-            {% if cart_items.count > 0 %}
+            
             <div class="mt-product-table">
                 <div class="container">
                     
