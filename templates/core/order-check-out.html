@@ -80,6 +80,7 @@
                 </div>
               </section>
             <!-- Mt Process Section of the Page -->
+            {% if cart_items.count > 0 %}
             <div class="mt-process-sec">
               <div class="container">
                 <div class="row">
@@ -101,8 +102,10 @@
               </div>
             </div><!-- Mt Process Section of the Page end -->
             <!-- Mt Detail Section of the Page -->
+            
             <section class="mt-detail-sec toppadding-zero">
                 <div class="container">
+                    
                     <div class="row">
                         {% if user_addresses.count > 0 %}
                         <div class="col-xs-12 col-sm-6">
@@ -285,7 +288,8 @@
                                 <div class="modal-content">
                                   <span class="close" onclick="closeTermsPopup()">&times;</span>
                                   <h2>Şartlar ve Koşullar</h2>
-                                  <p>Şartlar ve koşullarınızı buraya yazın...</p>
+                                  {% include 'coreBase/paying.html' %}
+                                  {% include 'coreBase/refund.html' %}
                                   
                                 </div>
                             </div>
@@ -307,8 +311,19 @@
                             </div>
                         </div>
                     </div>
+                    
                 </div>
             </section>
+            {% else %}
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12">
+                    <h3 class="title">Sepetinizde ürün bulunmamaktadır</h3>
+                    <button class="btn-type3" onclick="handleArrowClick()" type="submit">Anasayfa</button> 
+                    </div>
+                </div>
+                </div>
+            {% endif %}
             <!-- Mt Detail Section of the Page end -->
           </main>
         <!-- footer of the Page -->
@@ -532,6 +547,10 @@ window.onload = function() {
 };
 
 
+function handleArrowClick() {
+    var redirectURL = "{% url 'main:home' %}";
+    window.location.href = redirectURL;
+}
 
     </script>
     
