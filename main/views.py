@@ -16,7 +16,7 @@ from django.template.loader import render_to_string
 from django.views.decorators.cache import cache_page
 
 
-@cache_page(60 * 60)
+#@cache_page(60 * 60)
 def home(request):
     homemainbanners = HomeMainBanner.objects.filter(is_active=True)
     homesubbanners = HomeSubBanner.objects.filter(is_active=True)
