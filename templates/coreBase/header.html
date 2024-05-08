@@ -59,58 +59,53 @@
                             <span class="mt-mdropover"></span>
                         </li>
                         <li class="drop">
-                     
-                            {% if request.user.is_authenticated %}
-                            <a href="{% url 'products:order_shopping_card' %}" class="icon-handbag cart-opener"><span style="margin-bottom: -3px;" class="num">{{ hcount }}</span></a>
-                            {% else %}
-                            <a href="{% url 'products:order_shopping_card' %}" class="icon-handbag cart-opener"><span style="margin-bottom: -3px;" class="num">{{ hcount }}</span></a>
-                            {% endif %}
+                            <a href="#" class="cart-opener1">
+                                <span class="icon-handbag"></span>
+                                <span class="num">{{ hcount }}</span>
+                            </a>
                             <!-- mt drop start here -->
                             <div class="mt-drop">
                                 <!-- mt drop sub start here -->
                                 <div class="mt-drop-sub">
                                     <!-- mt side widget start here -->
                                     <div class="mt-side-widget">
-                                        <!-- cart row start here -->
-                                        <div class="cart-row">
-                                            <a href="#" class="img"><img src="{% static 'basestatic/images/img03.jpg' %}" alt="image" class="img-responsive"></a>
-                                            <div class="mt-h">
-                                                <span class="mt-h-title"><a href="#">Marvelous Modern 3 Seater</a></span>
-                                                <span class="price"><i class="fa fa-eur" aria-hidden="true"></i> 599,00</span>
-                                                <span class="mt-h-title">Qty: 1</span>
+                                        {% if cart_items.count > 0 %}
+                                            {% for cart_item in cart_items %}
+                                                <div class="cart-row">
+                                                    {% with first_image=cart_item.product.related_products.first %}
+                                                    {% if first_image %}
+                                                    <a href="{% url 'products:product-detail-view' cart_item.product.slug %}" class="img"><img class="img-responsive" src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}"></a>
+                                                    {% endif %}
+                                                    {% endwith %}
+                                                    <div class="mt-h">
+                                                        <span class="mt-h-title"><a href="#">{{cart_item.product.name}}</a></span>
+                                                        {% if cart_item.is_rental %}
+                                                        <strong class="price"><i class="fa fa-try"></i> {{ cart_item.rental_price }}</strong>
+                                                        {% else %}
+                                                        <strong class="price"><i class="fa fa-try"></i> {{ cart_item.selling_price }}</strong>
+                                                        {% endif %}
+                                                        <span class="mt-h-title">Adet: {{ cart_item.quantity }}</span>
+                                                    </div>
+                                                    <a href="{% url 'products:remove_from_cart' cart_item_id=cart_item.id %}" class="close fa fa-times"></a>
+                                                </div>
+                                            {% endfor %}
+
+                                            
+                                            
+                                            <div class="cart-row-total">
+                                                <span class="mt-total">Toplam Tutar</span>
+                                                <span class="mt-total-txt"><i class="fa fa-try" aria-hidden="true"></i>{{ cart_total }}</span>
                                             </div>
-                                            <a href="#" class="close fa fa-times"></a>
-                                        </div><!-- cart row end here -->
-                                        <!-- cart row start here -->
-                                        <div class="cart-row">
-                                            <a href="#" class="img"><img src="{% static 'basestatic/images/img03.jpg' %}" alt="image" class="img-responsive"></a>
-                                            <div class="mt-h">
-                                                <span class="mt-h-title"><a href="#">Marvelous Modern 3 Seater</a></span>
-                                                <span class="price"><i class="fa fa-eur" aria-hidden="true"></i> 599,00</span>
-                                                <span class="mt-h-title">Qty: 1</span>
+                                            <!-- cart row total end here -->
+                                            <div class="cart-btn-row">
+                                                <a href="{% url 'products:order_shopping_card' %}" class="btn-type2">Sepetim</a>
                                             </div>
-                                            <a href="#" class="close fa fa-times"></a>
-                                        </div><!-- cart row end here -->
-                                        <!-- cart row start here -->
-                                        <div class="cart-row">
-                                            <a href="#" class="img"><img src="{% static 'basestatic/images/img03.jpg' %}" alt="image" class="img-responsive"></a>
-                                            <div class="mt-h">
-                                                <span class="mt-h-title"><a href="#">Marvelous Modern 3 Seater</a></span>
-                                                <span class="price"><i class="fa fa-eur" aria-hidden="true"></i> 599,00</span>
-                                                <span class="mt-h-title">Qty: 1</span>
-                                            </div>
-                                            <a href="#" class="close fa fa-times"></a>
-                                        </div><!-- cart row end here -->
-                                        <!-- cart row total start here -->
-                                        <div class="cart-row-total">
-                                            <span class="mt-total">Sub Total</span>
-                                            <span class="mt-total-txt"><i class="fa fa-eur" aria-hidden="true"></i> 799,00</span>
+                                        {% else %}
+                                        <div class="cart-row text-center">
+                                            <h4>Sepetinizde Ürün Bulunmamaktadır</h4>
                                         </div>
-                                        <!-- cart row total end here -->
-                                        <div class="cart-btn-row">
-                                            <a href="#" class="btn-type2">VIEW CART</a>
-                                            <a href="#" class="btn-type3">CHECKOUT</a>
-                                        </div>
+                                        {% endif %}
+
                                     </div><!-- mt side widget end here -->
                                 </div>
                                 <!-- mt drop sub end here -->

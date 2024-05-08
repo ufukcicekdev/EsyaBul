@@ -381,6 +381,9 @@ a:hover {
 #mt-header.style6 .cart-opener .num {
   background: #7e7e7e;
 }
+#mt-header.style6 .cart-opener1 .num {
+  background: #7e7e7e;
+}
 
 #mt-header.style6 .bar-opener {
   border-color: #a1a1a1;
@@ -467,6 +470,9 @@ a:hover {
 }
 
 #mt-header.style8 .cart-opener .num {
+  background: #7e7e7e;
+}
+#mt-header.style8 .cart-opener1 .num {
   background: #7e7e7e;
 }
 
@@ -1076,6 +1082,9 @@ a:hover {
 #mt-header.style18 .cart-opener .num {
   background: #7e7e7e;
 }
+#mt-header.style18 .cart-opener1 .num {
+  background: #7e7e7e;
+}
 
 #mt-header.style18 .bar-opener {
   border-color: #7e7e7e;
@@ -1133,6 +1142,9 @@ a:hover {
 }
 
 #mt-header.style19 .cart-opener .num {
+  background: #7e7e7e;
+}
+#mt-header.style19 .cart-opener1 .num {
   background: #7e7e7e;
 }
 
@@ -1508,8 +1520,26 @@ a:hover {
   display: block;
   position: relative;
 }
+.mt-bottom-bar .cart-opener1 {
+  display: block;
+  position: relative;
+}
 
 .mt-bottom-bar .cart-opener .num {
+  width: 22px;
+  right: -12px;
+  bottom: -2px;
+  height: 22px;
+  color: #fff;
+  text-align: center;
+  background: #2e2e2e;
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  font: 11px/15px "Montserrat", sans-serif;
+}
+
+.mt-bottom-bar .cart-opener1 .num {
   width: 22px;
   right: -12px;
   bottom: -2px;

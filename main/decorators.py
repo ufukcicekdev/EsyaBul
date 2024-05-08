@@ -2,6 +2,7 @@
 
 from functools import wraps
 from .models import RequesAndResponseLog
+from products.models import Cart
 import json
 
 def log_request(view_func):
@@ -26,3 +27,5 @@ def log_request(view_func):
 
         return response
     return wrapped_view
+
+
