@@ -15,7 +15,6 @@ from dotenv import load_dotenv
 from main.mainContent import mainContent
 from esyabul.settings import base
 
-
 load_dotenv()
 
 
@@ -72,7 +71,6 @@ def add_product_review(request, product_id):
     return redirect('main:home')
 
 
-@login_required(login_url='customerauth:sign-in')
 def add_to_cart(request, product_id):
     if request.method == 'POST':
         add_to_cart_form = AddToCartForm(request.POST, product_id=product_id)
@@ -82,9 +80,17 @@ def add_to_cart(request, product_id):
             quantity = add_to_cart_form.cleaned_data['quantity']
             rental_period_id = add_to_cart_form.cleaned_data.get('rental_period')
 
-            active_cart = Cart.objects.filter(user=request.user, order_completed=False).first()
-            if not active_cart:
-                active_cart = Cart.objects.create(user=request.user, order_completed=False)
+            request.session['temporary_session_key'] = request.session.session_key
+
+            if request.user.is_authenticated:                
+                active_cart = Cart.objects.filter(user=request.user, order_completed=False).first()
+                if not active_cart:
+                    active_cart = Cart.objects.create(user=request.user, order_completed=False)
+            else:
+                session_key = request.session.session_key
+                active_cart = Cart.objects.filter(session_key=session_key, order_completed=False).first()
+                if not active_cart:
+                    active_cart = Cart.objects.create(session_key=session_key, order_completed=False)
 
             cart_item = CartItem(cart=active_cart, product=product, quantity=quantity)
             if price_type == 'rental':
@@ -102,8 +108,10 @@ def add_to_cart(request, product_id):
         else:            
             messages.warning(request, "Ürünü sepete eklerken bir sorun oluştu!")
             return redirect('products:product-detail-view', product_slug=product.slug)
+    else:
+        # Eğer istek POST metoduyla değilse, ana sayfaya yönlendir
+        return redirect('main:home')
 
-    return redirect('main:home')
 
 
 
@@ -201,4 +209,5 @@ def order_checkout(request):
     }
 
     return render(request, 'core/order-check-out.html', context)
+
 
