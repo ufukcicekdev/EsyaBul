@@ -32,19 +32,20 @@ def mainContent(request):
                     cart_total += cart_item.selling_price * cart_item.quantity
     else:
         try:
-            temporary_cart = Cart.objects.get(session_key=session_key, order_completed=False)
-            cart_items = temporary_cart.cartitem_set.all()
-            for cart_item in cart_items:
-                if cart_item.is_rental:
-                    cart_total += cart_item.rental_price * cart_item.quantity
-                else:
-                    cart_total += cart_item.selling_price * cart_item.quantity
-
-            try:
-                handbag = Cart.objects.get(session_key=session_key, order_completed=False)
-                hcount = CartItem.objects.filter(cart=handbag).count()
-            except Cart.DoesNotExist:
-                pass
+            if session_key is not None:
+                temporary_cart = Cart.objects.filter(session_key=session_key, order_completed=False).first()
+                if temporary_cart:
+                    cart_items = temporary_cart.cartitem_set.all()
+                    for cart_item in cart_items:
+                        if cart_item.is_rental:
+                            cart_total += cart_item.rental_price * cart_item.quantity
+                        else:
+                            cart_total += cart_item.selling_price * cart_item.quantity
+                    try:
+                        handbag = Cart.objects.get(session_key=session_key, order_completed=False)
+                        hcount = CartItem.objects.filter(cart=handbag).count()
+                    except Cart.DoesNotExist:
+                        pass
         except Cart.DoesNotExist:
             pass
 
