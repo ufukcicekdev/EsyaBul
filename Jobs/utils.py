@@ -15,6 +15,9 @@ from dotenv import load_dotenv
 from django.utils import timezone
 from datetime import timedelta
 from customerauth.models import Order
+from products.models import Cart
+from django.db.models import Q
+
 load_dotenv()
 
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
@@ -106,3 +109,9 @@ def notify_users_about_expiring_orders():
         email = EmailMessage(subject, email_content, EMAIL_HOST_USER, to=[user_email])
         email.content_subtype = 'html' 
         email.send()
+
+
+def delete_cards_not_users():
+    empty_user_session_cards = Cart.objects.filter(Q(user_id=None) & Q(session_key=None))
+
+    empty_user_session_cards.delete()

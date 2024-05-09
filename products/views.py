@@ -80,6 +80,7 @@ def add_to_cart(request, product_id):
             quantity = add_to_cart_form.cleaned_data['quantity']
             rental_period_id = add_to_cart_form.cleaned_data.get('rental_period')
 
+            
             request.session['temporary_session_key'] = request.session.session_key
 
             if request.user.is_authenticated:                
