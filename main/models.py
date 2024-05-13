@@ -199,5 +199,8 @@ class TeamMembers(models.Model):
 
 
 class Request_Log_Table(models.Model):
-    request_data = models.TextField()
-    text = models.TextField()
+    request_data = models.TextField( blank=True, null=True)
+    response_data = models.TextField( blank=True, null=True)
+    text = models.TextField( blank=True, null=True)
+    order_number = models.TextField( blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
