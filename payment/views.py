@@ -34,15 +34,25 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 
 if base.DEBUG:
     callbackUrl = os.getenv('DEV_CALLBACK_URL')
+    iyzco_api_key = os.getenv('DEV_API_KEY')
+    iyzco_secret_key = os.getenv('DEV_SECRET_KEY')
+
 else:
     callbackUrl = os.getenv('PROD_CALLBACK_URL')
+    iyzco_api_key = os.getenv('PROD_API_KEY')
+    iyzco_secret_key = os.getenv('PROD_SECRET_KEY')
+
+iyzco_base_url = os.getenv('IYZCO_BASE_URL')
 
 csrf_protect = decorator_from_middleware(CsrfViewMiddleware)
 
 
-api_key = 'sandbox-etkBOaBAec7Zh6jLDL59Gng0xJV2o1tV'
-secret_key = 'sandbox-uC9ysXfBn2syo7ZMOW2ywhYoc9z9hTHh'
-base_url = 'sandbox-api.iyzipay.com'
+
+
+
+api_key = iyzco_api_key
+secret_key = iyzco_secret_key
+base_url = iyzco_base_url
 
 
 options = {
@@ -222,7 +232,6 @@ def payment_order(request):
 
 
     request_data = create_request_data(order_number, order_total, card_id, callbackUrl, buyer, order_address, billing_address, basket_items)
-
     try:
         checkout_form_initialize = iyzipay.CheckoutFormInitialize().create(request_data, options)
         header = {'Content-Type': 'application/json'}
@@ -250,12 +259,16 @@ def create_order_items(request, card_id):
             selling_price = cart_item.rental_price
         else:
             selling_price = cart_item.selling_price
+        
+
+        breadcrumb_names = [item['name'] for item in product.get_category_breadcrumb()]
+        breadcrumb_string = ','.join(breadcrumb_names)  
 
         item = {
             'id': product.id,
             'name': product.name,
-            'category1': product.get_category_breadcrumb(), 
-            'category2':    product.get_category_breadcrumb(),
+            'category1': breadcrumb_string,
+            'category2': breadcrumb_string,
             'itemType': 'PHYSICAL',
             'price': str(selling_price)
         }
