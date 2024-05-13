@@ -184,12 +184,10 @@ def payment_order(request):
         ]
         order_completed_billing_address = ' '.join(filter(None, address_parts))
 
-    
 
     cart = Cart.objects.get(user=request.user, order_completed=False, id=card_id)
     cart_items = cart.cartitem_set.all()
-    
-  
+
     context = dict()
 
     buyer={
@@ -216,7 +214,6 @@ def payment_order(request):
         'zipCode': user_order_addresses.postal_code,
     }
 
-
     basket_items = create_order_items(request, card_id)
 
     order_data = {
@@ -237,8 +234,10 @@ def payment_order(request):
         content = checkout_form_initialize.read().decode('utf-8')
         json_content = json.loads(content)
         Request_Log_Table.objects.create(
-            request_data = json_content,
-            text = "json_content"
+            request_data = request_data,
+            response_data=json_content,
+            text = "checkout_form_initialize",
+            order_number = order_number
         )
         sozlukToken.append(json_content["token"])
         return HttpResponse(json_content["checkoutFormContent"])
@@ -333,8 +332,10 @@ def result(request):
         result = checkout_form_result.read().decode('utf-8')
         sonuc = json.loads(result)
         Request_Log_Table.objects.create(
-            request_data = sonuc,
-            text = "checkout_form_result"
+            request_data = request_data,
+            response_data=sonuc,
+            text = "checkout_form_result",
+            order_number = order_number
         )
         if sonuc and sonuc['status'] == 'success':
             messages.success(request, "Ödeme işleminiz başarıyla gerçekleşti!")
