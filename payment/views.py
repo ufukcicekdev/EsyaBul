@@ -293,8 +293,8 @@ def create_request_data(order_number, order_total, card_id, callbackUrl, buyer, 
         'billingAddress': billing_address,
         'basketItems': basket_items,
     }
-    if base.DEBUG == False:
-        request.update({'debitCardAllowed': True})
+    # if base.DEBUG == False:
+    #     request.update({'debitCardAllowed': True})
 
     return request
 
