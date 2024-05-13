@@ -25,6 +25,8 @@ from django.core.files.base import ContentFile
 from django.views.decorators.http import require_http_methods
 from main.decorators import log_request
 from main.models import Request_Log_Table
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 load_dotenv()
 
@@ -35,18 +37,14 @@ if base.DEBUG:
     callbackUrl = os.getenv('DEV_CALLBACK_URL')
     iyzco_api_key = os.getenv('DEV_API_KEY')
     iyzco_secret_key = os.getenv('DEV_SECRET_KEY')
-
+    iyzco_base_url = os.getenv('DEV_IYZCO_BASE_URL')
 else:
     callbackUrl = os.getenv('PROD_CALLBACK_URL')
     iyzco_api_key = os.getenv('PROD_API_KEY')
     iyzco_secret_key = os.getenv('PROD_SECRET_KEY')
-
-iyzco_base_url = os.getenv('IYZCO_BASE_URL')
+    iyzco_base_url = os.getenv('PROD_IYZCO_BASE_URL')
 
 csrf_protect = decorator_from_middleware(CsrfViewMiddleware)
-
-
-
 
 
 api_key = iyzco_api_key
@@ -60,8 +58,6 @@ options = {
     'base_url': base_url
 }
 sozlukToken = list()
-
-
 
 
 def refund_payment_cancel_order(request, reason, order_number, id, orders_detail):
@@ -348,7 +344,7 @@ def result(request):
             order.payment_transaction_id = payment_transaction_id
             order.save()
             create_payment_object(user, sonuc)
-            return redirect('products:order_shopping_card')
+            return HttpResponseRedirect(reverse('products:order_shopping_card'))
 
         elif sonuc and sonuc['status'] == 'failure':
             messages.warning(request, sonuc['errorMessage'])
@@ -358,7 +354,7 @@ def result(request):
     except Exception as e:
         messages.error(request, "Ödeme sonucu alınırken bir hata oluştu: {}".format(e))
 
-    return redirect('products:order_checkout')
+    return HttpResponseRedirect(reverse('products:order_checkout'))
 
 
 
