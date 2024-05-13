@@ -130,6 +130,8 @@ class RequesAndResponseLog(models.Model):
     response_data = models.TextField()
     response_status_code = models.PositiveIntegerField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    order_number = models.CharField(max_length=20, blank=True, null=True)
+
 
     def __str__(self):
         return f"{self.user} - {self.request_path} - {self.response_status_code}"
@@ -193,3 +195,9 @@ class TeamMembers(models.Model):
             if link:
                 links[platform] = link
         return links
+    
+
+
+class Request_Log_Table(models.Model):
+    request_data = models.TextField()
+    text = models.TextField()

@@ -24,8 +24,7 @@ from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
 from django.views.decorators.http import require_http_methods
 from main.decorators import log_request
-
-
+from main.models import Request_Log_Table
 
 load_dotenv()
 
@@ -237,6 +236,10 @@ def payment_order(request):
         header = {'Content-Type': 'application/json'}
         content = checkout_form_initialize.read().decode('utf-8')
         json_content = json.loads(content)
+        Request_Log_Table.objects.create(
+            request_data = json_content,
+            text = "json_content"
+        )
         sozlukToken.append(json_content["token"])
         return HttpResponse(json_content["checkoutFormContent"])
     except Exception as e:
@@ -329,6 +332,10 @@ def result(request):
         checkout_form_result = iyzipay.CheckoutForm().retrieve(request_data, options)
         result = checkout_form_result.read().decode('utf-8')
         sonuc = json.loads(result)
+        Request_Log_Table.objects.create(
+            request_data = sonuc,
+            text = "checkout_form_result"
+        )
         if sonuc and sonuc['status'] == 'success':
             messages.success(request, "Ödeme işleminiz başarıyla gerçekleşti!")
             payment_transaction_id = get_payment_transaction_id(sonuc)
