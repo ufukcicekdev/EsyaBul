@@ -18,8 +18,8 @@ class ContactUs(models.Model):
     is_read = models.BooleanField(default=False)
 
     class Meta:
-        verbose_name = "Contact Us"
-        verbose_name_plural = "Contact Us"
+        verbose_name = "İteşim"
+        verbose_name_plural = "İteşim"
 
     def __str__(self):
         return self.full_name
@@ -35,8 +35,12 @@ class SocialMedia(models.Model):
         # Diğer sosyal medya platformları ekleyebilirsiniz
     )
 
-    name = models.CharField(max_length=20, choices=SOCIAL_MEDIA_CHOICES, unique=True)
-    link = models.URLField()
+    name = models.CharField(max_length=20, choices=SOCIAL_MEDIA_CHOICES, unique=True, verbose_name="Adı")
+    link = models.URLField(verbose_name="Bağlantı")
+
+    class Meta:
+        verbose_name = "Sosyal Medya"
+        verbose_name_plural = "Sosyal Medya"
 
     def __str__(self):
         return self.get_name_display()
@@ -54,33 +58,38 @@ def validate_image_dimensions(value):
         )
 
 class HomeMainBanner(models.Model):
-    title = models.CharField(max_length=1000)
-    subtitle = models.CharField(max_length=1000, blank=True, null=True)
+    title = models.CharField(max_length=1000, verbose_name="Başlık")
+    subtitle = models.CharField(max_length=1000, blank=True, null=True, verbose_name="Alt Başlık")
     image = models.ImageField(
         upload_to='banners/',
         validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])],
-        help_text="The image dimensions must be 1714x584 pixels."
+        help_text="Resim boyutları 1714x584 piksel olmalıdır."
     )
     
     TEXT_COLOR_CHOICES = [
-        ('red', 'Red'),
-        ('blue', 'Blue'),
-        ('green', 'Green'),
-        ('yellow', 'Yellow'),
-        ('white', 'White'),
-        ('black', 'Black'),
+        ('red', 'Kırmızı'),
+        ('blue', 'Mavi'),
+        ('green', 'Yeşil'),
+        ('yellow', 'Sarı'),
+        ('white', 'Beyaz'),
+        ('black', 'Siyah'),
     ]
-    text_color = models.CharField(max_length=1000, choices=TEXT_COLOR_CHOICES, default='black')
+    text_color = models.CharField(max_length=1000, choices=TEXT_COLOR_CHOICES, default='black', verbose_name="Metin Rengi")
 
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True, verbose_name="Açıklama")
     title_position = models.CharField(
         max_length=1000,
-        choices=[('centerize', 'Center'), ('right', 'Right'), ('left', 'Left')],
-        default='center'
+        choices=[('centerize', 'Orta'), ('right', 'Sağ'), ('left', 'Sol')],
+        default='center',
+        verbose_name="Başlık Pozisyonu"
     )
 
-    link = models.CharField(max_length=2000, blank=True, null=True)
-    is_active = models.BooleanField(default=True)
+    link = models.CharField(max_length=2000, blank=True, null=True, verbose_name="Bağlantı")
+    is_active = models.BooleanField(default=True, verbose_name="Aktif mi")
+
+    class Meta:
+        verbose_name = "Ana Banner"
+        verbose_name_plural = "Ana Banner"
 
     def __str__(self):
         return self.title
@@ -97,22 +106,28 @@ class HomeSubBanner(models.Model):
         ('banner3', 'Banner 3'),
         ('banner4', 'Banner 4'),
     ]
-    choose = models.CharField(max_length=20, choices=CHOOSE_BANNER)
-    title = models.CharField(max_length=1000)
-    subtitle = models.CharField(max_length=1000, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='banners/')
-    link = models.CharField(max_length=2000, blank=True, null=True)
-    is_active = models.BooleanField(default=True)
+    choose = models.CharField(max_length=20, choices=CHOOSE_BANNER, verbose_name="Seçim")
+    title = models.CharField(max_length=1000, verbose_name="Başlık")
+    subtitle = models.CharField(max_length=1000, blank=True, null=True, verbose_name="Alt Başlık")
+    description = models.TextField(blank=True, null=True, verbose_name="Açıklama")
+    image = models.ImageField(upload_to='banners/', verbose_name="Resim")
+    link = models.CharField(max_length=2000, blank=True, null=True, verbose_name="Bağlantı")
+    is_active = models.BooleanField(default=True, verbose_name="Aktif mi")
     TEXT_COLOR_CHOICES = [
-        ('red', 'Red'),
-        ('blue', 'Blue'),
-        ('green', 'Green'),
-        ('yellow', 'Yellow'),
-        ('white', 'White'),
-        ('black', 'Black'),
+        ('red', 'Kırmızı'),
+        ('blue', 'Mavi'),
+        ('green', 'Yeşil'),
+        ('yellow', 'Sarı'),
+        ('white', 'Beyaz'),
+        ('black', 'Siyah'),
     ]
-    text_color = models.CharField(max_length=1000, choices=TEXT_COLOR_CHOICES, default='black')
+    text_color = models.CharField(max_length=1000, choices=TEXT_COLOR_CHOICES, default='black', verbose_name="Metin Rengi")
+
+
+
+    class Meta:
+        verbose_name = "Alt Banner"
+        verbose_name_plural = "Alt Banner"
 
     def __str__(self):
         return self.title
@@ -149,7 +164,6 @@ class RequesAndResponseLog(models.Model):
         return json.loads(self.response_data)
     
 
-
 class TeamMembers(models.Model):
     LEVEL_CHOICES = (
         (1, '1. Seviye'),
@@ -181,6 +195,10 @@ class TeamMembers(models.Model):
     instagram_link = models.URLField(blank=True, null=True)
     linkedin_link = models.URLField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Takım"
+        verbose_name_plural = "Takım"
 
     def __str__(self):
         return f"{self.full_name} - {self.position}"
