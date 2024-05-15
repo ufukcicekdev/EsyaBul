@@ -139,7 +139,6 @@ class wishlist_model(models.Model):
     
 
 
-
 class Order(models.Model):
     ORDER_STATUS_CHOICES = [
         ('Pending', 'Pending'),
@@ -155,35 +154,45 @@ class Order(models.Model):
         ('Lost', 'Lost'),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    order_adress = models.TextField()
-    billing_adress = models.TextField()
-    order_details = models.TextField()
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    order_number = models.CharField(max_length=20, unique=True)
-    status = models.CharField(max_length=20, choices=ORDER_STATUS_CHOICES, default='Pending')
-    shipping_status = models.CharField(max_length=20, choices=SHIPPING_STATUS_CHOICES, default='Preparing')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    billing_document = models.FileField(upload_to='billing_documents/', blank=True, null=True) 
-    order_cancel_reason = models.TextField(blank=True, null=True)  # İptal nedeni
-    order_cancel_date = models.DateTimeField(blank=True, null=True)  # İptal tarihi
-    order_pdf_document = models.FileField(upload_to='order_pdf_documents/', blank=True, null=True) 
-    payment_id = models.CharField(max_length=20, blank=True, null=True)
-    payment_transaction_id = models.CharField(max_length=50, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Kullanıcı")
+    order_adress = models.TextField(verbose_name="Sipariş Adresi")
+    billing_adress = models.TextField(verbose_name="Fatura Adresi")
+    order_details = models.TextField(verbose_name="Sipariş Detayları")
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Toplam Miktar")
+    order_number = models.CharField(max_length=20, unique=True, verbose_name="Sipariş Numarası")
+    status = models.CharField(max_length=20, choices=ORDER_STATUS_CHOICES, default='Pending', verbose_name="Durum")
+    shipping_status = models.CharField(max_length=20, choices=SHIPPING_STATUS_CHOICES, default='Preparing', verbose_name="Nakliye Durumu")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Oluşturulma Tarihi")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Güncelleme Tarihi")
+    billing_document = models.FileField(upload_to='billing_documents/', blank=True, null=True, verbose_name="Fatura Belgesi") 
+    order_cancel_reason = models.TextField(blank=True, null=True, verbose_name="Sipariş İptal Nedeni")
+    order_cancel_date = models.DateTimeField(blank=True, null=True, verbose_name="Sipariş İptal Tarihi")
+    order_pdf_document = models.FileField(upload_to='order_pdf_documents/', blank=True, null=True, verbose_name="Sipariş PDF Belgesi") 
+    payment_id = models.CharField(max_length=20, blank=True, null=True, verbose_name="Ödeme ID")
+    payment_transaction_id = models.CharField(max_length=50, blank=True, null=True, verbose_name="Ödeme İşlem ID")
+
+    class Meta:
+        verbose_name ="Siparişler"
+        verbose_name_plural = "Siparişler"
+
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, related_name='order_items' ,on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
-    rental_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    selling_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    is_rental = models.BooleanField(default=False)
-    rental_period = models.CharField(max_length=20, choices=ProductRentalPrice.RENTAL_MOUTHLY_CHOICES, null=True, blank=True)
-    created_at = models.DateTimeField(default=timezone.now)
-    updated_at = models.DateTimeField(auto_now=True)
-    expired_date = models.DateField(null=True, blank=True)
+    order = models.ForeignKey(Order, related_name='order_items', on_delete=models.CASCADE, verbose_name="Sipariş")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="Ürün")
+    quantity = models.PositiveIntegerField(verbose_name="Miktar")
+    rental_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Kiralama Fiyatı")
+    selling_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Satış Fiyatı")
+    is_rental = models.BooleanField(default=False, verbose_name="Kiralık mı")
+    rental_period = models.CharField(max_length=20, choices=ProductRentalPrice.RENTAL_MOUTHLY_CHOICES, null=True, blank=True, verbose_name="Kiralama Dönemi")
+    created_at = models.DateTimeField(default=timezone.now, verbose_name="Oluşturulma Tarihi")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Güncelleme Tarihi")
+    expired_date = models.DateField(null=True, blank=True, verbose_name="Son Kullanma Tarihi")
+
+    class Meta:
+        verbose_name ="Sipariş Kalemleri"
+        verbose_name_plural = "Sipariş Kalemleri"
+
     def subtotal(self):
         if self.is_rental:
             return self.rental_price * self.quantity
