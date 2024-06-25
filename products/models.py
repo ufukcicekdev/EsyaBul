@@ -232,7 +232,7 @@ class ProductRentalPrice(models.Model):
     )
     product = models.ForeignKey(Product, related_name='related_products_price', on_delete=models.CASCADE, verbose_name="Ürün")
     
-    name = models.CharField(max_length=20, choices=RENTAL_MOUTHLY_CHOICES, null=True, verbose_name="Ad")
+    name = models.CharField(max_length=20, choices=RENTAL_MOUTHLY_CHOICES, null=True, verbose_name="Ay")
     rental_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Kiralama Fiyatı")
     rental_old_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Eski Kiralama Fiyatı")
 
@@ -241,7 +241,7 @@ class ProductRentalPrice(models.Model):
         verbose_name_plural = "Ürün Kiralama Fiyatı"
 
     def clean(self):
-        if self.rental_old_price < self.rental_price:
+        if self.rental_price < self.rental_old_price:
             raise ValidationError("Eski kiralama fiyatı yeni fiyattan küçük olamaz.")
     def __str__(self):
         return self.get_name_display()
