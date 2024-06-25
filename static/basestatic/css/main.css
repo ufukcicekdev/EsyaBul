@@ -7294,6 +7294,16 @@ a:hover {
   color: #000;
 }
 
+.mt-product-detial h4 {
+  font-size: 24px; /* 24px, 20-32px aralığında iyi bir ortalamadır */
+  line-height: 26px; /* Line-height, genellikle font-size'dan 2-4px daha büyük olur */
+  font-weight: 300;
+  letter-spacing: 2px; /* Daha dengeli bir boşluk için azaltıldı */
+  word-spacing: -2px; /* Daha dengeli bir boşluk için azaltıldı */
+  margin: 0 0 15px;
+  color: #000;
+}
+
 .mt-product-detial .breadcrumbs {
   overflow: hidden;
   margin: 0 0 8px;

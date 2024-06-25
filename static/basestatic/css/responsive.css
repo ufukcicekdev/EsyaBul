@@ -1054,6 +1054,11 @@
 		word-spacing: -1px;
 	}
 
+	.mt-product-detial h4 {
+		letter-spacing: 2px;
+		word-spacing: -1px;
+	}
+
 	.lightbox .mt-product-detial .pagg-slider {
 		max-width: 280px;
 	}
@@ -2009,6 +2014,11 @@
 	.mt-product-detial h2 {
 		font-size: 29px;
 		line-height: 35px;
+	}
+
+	.mt-product-detial h4 {
+		letter-spacing: 2px;
+		word-spacing: -1px;
 	}
 
 	.mt-product-detial .list li {
