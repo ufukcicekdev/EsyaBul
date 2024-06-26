@@ -48,8 +48,7 @@ INSTALLED_APPS = [
     "easyaudit",
     "django_social_share",
     "ipware",   
-    'debug_toolbar', 
-]
+    ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -64,12 +63,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "social_django.middleware.SocialAuthExceptionMiddleware",
     "products.middleware.MergeCartMiddleware",
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
-INTERNAL_IPS = [
-    '127.0.0.1',
-]
 
 ROOT_URLCONF = "esyabul.urls"
 
