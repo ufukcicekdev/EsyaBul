@@ -228,7 +228,18 @@ class ProductRentalPrice(models.Model):
         ('10', '10'),
         ('11', '11'),
         ('12', '12'),
-
+        ('13', '13'),
+        ('14', '14'),
+        ('15', '15'),
+        ('16', '16'),
+        ('17', '17'),
+        ('18', '18'),
+        ('19', '19'),
+        ('20', '20'),
+        ('21', '21'),
+        ('22', '22'),
+        ('23', '23'),
+        ('24', '24'),
     )
     product = models.ForeignKey(Product, related_name='related_products_price', on_delete=models.CASCADE, verbose_name="Ürün")
     
