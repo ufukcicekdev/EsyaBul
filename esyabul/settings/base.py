@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     "storages",
     "easyaudit",
     "django_social_share",
-    "ipware",    
+    "ipware",   
+    'debug_toolbar', 
 ]
 
 MIDDLEWARE = [
@@ -63,6 +64,11 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "social_django.middleware.SocialAuthExceptionMiddleware",
     "products.middleware.MergeCartMiddleware",
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+
+INTERNAL_IPS = [
+    '127.0.0.1',
 ]
 
 ROOT_URLCONF = "esyabul.urls"
@@ -133,7 +139,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
