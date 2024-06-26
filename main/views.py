@@ -15,9 +15,10 @@ from .mainContent import mainContent
 from django.template.loader import render_to_string
 from django.views.decorators.cache import cache_page
 import random
+from django.views.decorators.vary import vary_on_cookie
 
-
-
+@cache_page(60 * 60 * 6)  # 6 saatlik cache
+@vary_on_cookie
 def home(request):
     homemainbanners = HomeMainBanner.objects.filter(is_active=True)
     homesubbanners = HomeSubBanner.objects.filter(is_active=True)
@@ -76,11 +77,13 @@ def custom_500_page(request):
 
 ################### Contact Open ################
 
-
+@cache_page(60 * 60 * 6)  # 6 saatlik cache
+@vary_on_cookie
 def contact(request):
     mainContext = mainContent(request)
     return render(request, "mainBase/contact.html", mainContext)
-
+@cache_page(60 * 60 * 6)  # 6 saatlik cache
+@vary_on_cookie
 def about(request):
     mainContext = mainContent(request)
     teamsMembers = TeamMembers.objects.filter(is_active=True).order_by("id")
@@ -89,11 +92,13 @@ def about(request):
     }
     context.update(mainContext)
     return render(request, "mainBase/about.html", context)
-
+@cache_page(60 * 60 * 6)  # 6 saatlik cache
+@vary_on_cookie
 def faqs(request):
     mainContext = mainContent(request)
     return render(request, "mainBase/faq.html", mainContext)
-
+@cache_page(60 * 60 * 6)  # 6 saatlik cache
+@vary_on_cookie
 def does_it_work(request):
     mainContext = mainContent(request)
     return render(request, "mainBase/doesitwork.html", mainContext)
@@ -134,7 +139,8 @@ def ajax_contact_form(request):
 
 
 ################ Contact Close ################
-
+@cache_page(60 * 60 * 6)  # 6 saatlik cache
+@vary_on_cookie
 def dynamic_category_product_list_view(request, category_slugs):
     category_slug_list = category_slugs.split('/')
     mainContext = mainContent(request)
@@ -218,7 +224,8 @@ def search_view(request):
 
 
 
-
+@cache_page(60 * 60 * 6)  # 6 saatlik cache
+@vary_on_cookie
 def get_main_category_products(request, mainContext, category_slug_list):
     main_category = get_object_or_404(Category, slug=category_slug_list[0])
     main_slug=main_category
