@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from products.models import Category,Product, ProductReview,Cart,CartItem
 from customerauth.models import wishlist_model
 from django.http import Http404
-from django.db.models import Q,Avg
+from django.db.models import Q,Avg,Prefetch
 from products.forms import AddToCartForm
 import random
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -14,31 +14,32 @@ from .forms import ProductSearchForm
 from .mainContent import mainContent
 from django.template.loader import render_to_string
 from django.views.decorators.cache import cache_page
+import random
 
 
-#@cache_page(60 * 60)
+@cache_page(60 * 60 * 6)
 def home(request):
     homemainbanners = HomeMainBanner.objects.filter(is_active=True)
     homesubbanners = HomeSubBanner.objects.filter(is_active=True)
-    best_seller_products = Product.objects.filter(is_active=True, best_seller=True).order_by('?')[:16]
-    featured_products = Product.objects.filter(is_active=True, is_featured=True).order_by('?')[:16]
-    latest_products = list(Product.objects.filter(is_active=True).order_by('-created_at')[:30])
-    best_products = Product.objects.filter(is_active=True, best_seller=True).order_by('?')[:16]
+    products_queryset = Product.objects.filter(is_active=True)
+    best_seller_products = products_queryset.filter(best_seller=True).order_by('?')[:16]
+    featured_products = products_queryset.filter(is_featured=True).order_by('?')[:16]
+    latest_products = list(products_queryset.order_by('-created_at')[:30])
     random.shuffle(latest_products)
     latest_products = latest_products[:16]
-
+    
     mainContext = mainContent(request)
     context = {
-        "homemainbanners":homemainbanners,
-        "best_seller_products":best_seller_products,
-        "featured_products":featured_products,
-        "latest_products":latest_products,
-        "best_products":best_products,
-        "homesubbanners":homesubbanners,
+        "homemainbanners": homemainbanners,
+        "best_seller_products": best_seller_products,
+        "featured_products": featured_products,
+        "latest_products": latest_products,
+        "best_products": best_seller_products, 
+        "homesubbanners": homesubbanners,
     }
 
     context.update(mainContext)
-        
+    
     return render(request, 'coreBase/home.html', context)
 
 
@@ -75,11 +76,12 @@ def custom_500_page(request):
 
 ################### Contact Open ################
 
-
+@cache_page(60 * 60 * 6)
 def contact(request):
     mainContext = mainContent(request)
     return render(request, "mainBase/contact.html", mainContext)
 
+@cache_page(60 * 60 * 6)
 def about(request):
     mainContext = mainContent(request)
     teamsMembers = TeamMembers.objects.filter(is_active=True).order_by("id")
@@ -89,11 +91,12 @@ def about(request):
     context.update(mainContext)
     return render(request, "mainBase/about.html", context)
 
+@cache_page(60 * 60 * 6)
 def faqs(request):
     mainContext = mainContent(request)
     return render(request, "mainBase/faq.html", mainContext)
 
-
+@cache_page(60 * 60 * 6)
 def does_it_work(request):
     mainContext = mainContent(request)
     return render(request, "mainBase/doesitwork.html", mainContext)
@@ -135,63 +138,55 @@ def ajax_contact_form(request):
 
 ################ Contact Close ################
 
-@cache_page(60 * 60)
+@cache_page(60 * 60 * 6)  # 6 saatlik cache
 def dynamic_category_product_list_view(request, category_slugs):
     category_slug_list = category_slugs.split('/')
     mainContext = mainContent(request)
+
     if category_slugs == "tum-urunler":
         context = get_main_category_products(request, mainContext, category_slug_list)
     else:
         main_category = get_object_or_404(Category, slug=category_slug_list[0])
-        main_slug=main_category
         subcategories = main_category.children.all()
+
         if len(category_slug_list) == 1:
             target_category = main_category
+            category_query = Q(category__in=main_category.children.all())
         else:
             target_category = get_object_or_404(Category, slug=category_slug_list[-1])
-        if len(category_slug_list) == 1: 
-            getMainCategoryList = main_category.children.all()
-            category_query = Q()
+            category_query = Q(category=target_category)
 
-            for category in getMainCategoryList:
-                category_query |= Q(category=category)
+        # Ürünleri ve ilişkili verileri daha verimli getirin
+        products = Product.objects.filter(category_query).select_related('category').prefetch_related(
+            Prefetch('reviews', queryset=ProductReview.objects.all()),
+            Prefetch('wishes', queryset=wishlist_model.objects.all())
+        ).annotate(average_rating=Avg('reviews__rating')).order_by('id')
 
-            products = Product.objects.filter(category_query).order_by("id")
-
-        else:
-            products = Product.objects.filter(category=target_category).order_by("id")
-            
         for subcategory in subcategories:
             subcategory.product_count = Product.objects.filter(category=subcategory).count()
-        
-        
-        for product in products:
-            product.reviews.set(ProductReview.objects.filter(product=product))
-            product.wishes.set(wishlist_model.objects.filter(product=product))
-            product.average_rating = int(product.reviews.aggregate(Avg('rating'))['rating__avg'] or 0)
 
         paginator = Paginator(products, 12)
         page_number = request.GET.get('page')
+
         try:
             page_products = paginator.page(page_number)
         except PageNotAnInteger:
-            page_products = paginator.page(1)  
+            page_products = paginator.page(1)
         except EmptyPage:
             page_products = paginator.page(paginator.num_pages)
 
         context = {
-            "tumrunler":False,
-            "products": page_products, 
-            "product_count":products.count(),
+            "tumrunler": False,
+            "products": page_products,
+            "product_count": products.count(),
             "category": main_category,
             "category_name": target_category,
             "subcategories": subcategories,
-            "main_slug":main_slug
+            "main_slug": main_category,
         }
         context.update(mainContext)
-    
-    return render(request, "core/category-product-list.html", context)
 
+    return render(request, "core/category-product-list.html", context)
 
 
 def search_view(request):
@@ -228,7 +223,7 @@ def search_view(request):
 
 
 
-
+@cache_page(60 * 60)
 def get_main_category_products(request, mainContext, category_slug_list):
     main_category = get_object_or_404(Category, slug=category_slug_list[0])
     main_slug=main_category
