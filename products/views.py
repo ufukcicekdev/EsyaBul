@@ -14,12 +14,11 @@ import os
 from dotenv import load_dotenv
 from main.mainContent import mainContent
 from esyabul.settings import base
-
+from django.views.decorators.cache import cache_page
 load_dotenv()
 
 
 csrf_protect = decorator_from_middleware(CsrfViewMiddleware)
-
 
 
 def product_detail_view(request, product_slug):
