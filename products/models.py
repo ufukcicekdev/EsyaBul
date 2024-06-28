@@ -142,6 +142,8 @@ class Product(models.Model):
     information = models.TextField(blank=True, null=True, verbose_name="Bilgi")
     selling_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Satış Fiyatı")
     selling_old_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Eski Satış Fiyatı")
+    purchase_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Alış Fiyatı")
+
     in_stock = models.IntegerField(default=10, verbose_name="Stokta Var")
     is_active = models.BooleanField(default=True, verbose_name="Aktif mi")
     sku = models.CharField(max_length=50, unique=True, verbose_name="SKU")
