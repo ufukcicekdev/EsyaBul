@@ -5,10 +5,8 @@ import sys
 from esyabul.settings import base
 
 def main():
-    if base.DEBUG:
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "esyabul.settings.development")
-    else:
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "esyabul.settings.production")
+    
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "esyabul.settings.production")
     
     try:
         from django.core.management import execute_from_command_line
