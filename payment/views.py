@@ -27,13 +27,13 @@ from main.decorators import log_request
 from main.models import Request_Log_Table
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-
+from distutils.util import strtobool 
 load_dotenv()
 
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+DEBUGAPP=bool(strtobool(os.getenv('DEBUG_VALUE')))
 
-
-if base.DEBUG:
+if DEBUGAPP:
     callbackUrl = os.getenv('DEV_CALLBACK_URL')
     iyzco_api_key = os.getenv('DEV_API_KEY')
     iyzco_secret_key = os.getenv('DEV_SECRET_KEY')

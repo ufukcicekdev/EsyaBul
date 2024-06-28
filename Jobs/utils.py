@@ -17,12 +17,15 @@ from datetime import timedelta
 from customerauth.models import Order
 from products.models import Cart
 from django.db.models import Q
+from distutils.util import strtobool 
 
 load_dotenv()
 
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 
-if base.DEBUG:
+DEBUGAPP=bool(strtobool(os.getenv('DEBUG_VALUE')))
+
+if DEBUGAPP:
     BASE_URL = "https://esyabul-development.up.railway.app"
 else:
     BASE_URL = "https://esyala.com"
