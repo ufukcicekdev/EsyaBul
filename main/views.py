@@ -16,18 +16,66 @@ from django.template.loader import render_to_string
 from django.views.decorators.cache import cache_page
 import random
 from django.views.decorators.vary import vary_on_cookie
+from django.core.cache import cache
+from django.core.cache.utils import make_template_fragment_key
+
+
+
+
+def get_home_main_banners():
+    key = 'home_main_banners'
+    banners = cache.get(key)
+    if not banners:
+        banners = list(HomeMainBanner.objects.filter(is_active=True))
+        cache.set(key, banners, 60 * 60 * 6)  # 6 saat cache
+    return banners
+
+def get_home_sub_banners():
+    key = 'home_sub_banners'
+    banners = cache.get(key)
+    if not banners:
+        banners = list(HomeSubBanner.objects.filter(is_active=True))
+        cache.set(key, banners, 60 * 60 * 6)  # 6 saat cache
+    return banners
+
+def get_best_seller_products():
+    key = 'best_seller_products'
+    products = cache.get(key)
+    if not products:
+        products_queryset = Product.objects.filter(is_active=True)
+        products = list(products_queryset.filter(best_seller=True).order_by('?')[:16])
+        cache.set(key, products, 60 * 60 * 6)  # 6 saat cache
+    return products
+
+def get_featured_products():
+    key = 'featured_products'
+    products = cache.get(key)
+    if not products:
+        products_queryset = Product.objects.filter(is_active=True)
+        products = list(products_queryset.filter(is_featured=True).order_by('?')[:16])
+        cache.set(key, products, 60 * 60 * 6)  # 6 saat cache
+    return products
+
+def get_latest_products():
+    key = 'latest_products'
+    products = cache.get(key)
+    if not products:
+        products_queryset = Product.objects.filter(is_active=True)
+        latest_products = list(products_queryset.order_by('-created_at')[:30])
+        random.shuffle(latest_products)
+        products = latest_products[:16]
+        cache.set(key, products, 60 * 60 * 6)  # 6 saat cache
+    return products
+
 
 @cache_page(60 * 60 * 6)  # 6 saatlik cache
 @vary_on_cookie
 def home(request):
-    homemainbanners = HomeMainBanner.objects.filter(is_active=True)
-    homesubbanners = HomeSubBanner.objects.filter(is_active=True)
-    products_queryset = Product.objects.filter(is_active=True)
-    best_seller_products = products_queryset.filter(best_seller=True).order_by('?')[:16]
-    featured_products = products_queryset.filter(is_featured=True).order_by('?')[:16]
-    latest_products = list(products_queryset.order_by('-created_at')[:30])
-    random.shuffle(latest_products)
-    latest_products = latest_products[:16]
+    homemainbanners = get_home_main_banners()
+    homesubbanners = get_home_sub_banners()
+    best_seller_products = get_best_seller_products()
+    featured_products = get_featured_products()
+    latest_products = get_latest_products()
     
     mainContext = mainContent(request)
     context = {
