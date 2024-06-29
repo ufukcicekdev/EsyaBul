@@ -2,13 +2,11 @@ from django.contrib import admin
 from django.urls import path, include
 from esyabul.settings import base
 from django.conf.urls.static import static
-from distutils.util import strtobool 
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-DEBUGAPP=bool(strtobool(os.getenv('DEBUG_VALUE')))
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', include('customerauth.urls')),
@@ -23,7 +21,7 @@ urlpatterns = [
 
 
 
-if DEBUGAPP:
+if base.DEBUG:
     urlpatterns += static(base.STATIC_URL, document_root=base.STATIC_ROOT)
     urlpatterns += static(base.MEDIA_URL, document_root=base.MEDIA_ROOT)
 
