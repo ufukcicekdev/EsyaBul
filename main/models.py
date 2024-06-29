@@ -5,7 +5,9 @@ from django.forms import ValidationError
 from django.utils.html import mark_safe
 import json
 from customerauth.models import User
-
+from PIL import Image
+import io
+from django.core.files.uploadedfile import InMemoryUploadedFile
 # Create your models here.
 
 
@@ -97,6 +99,22 @@ class HomeMainBanner(models.Model):
     # Resim önizlemesi sağlayan metot
     def image_preview(self):
         return mark_safe('<img src="{}" width="150" height="150" />'.format(self.image.url))
+    
+    def save(self, *args, **kwargs):
+
+        image = Image.open(self.image)
+        output = io.BytesIO()
+        image.save(output, format='WEBP')
+        output.seek(0)
+
+        # Yeni içerik nesnesi oluştur
+        webp_image = InMemoryUploadedFile(output, 'ImageField', f"{self.image.name.split('.')[0]}.webp", 'image/webp', output.tell(), None)
+
+        # Yeni resim dosyasını ayarla
+        self.image = webp_image
+
+        super().save(*args, **kwargs)
+    
 
 
 class HomeSubBanner(models.Model):
