@@ -108,7 +108,7 @@ class AddressForm(forms.ModelForm):
 
 
     city = forms.ModelChoiceField(
-        queryset=Region.objects.all().order_by('name'),
+        queryset=Region.objects.filter(name='Istanbul').order_by('name'),
         widget=forms.Select(attrs={'class': 'form-control'}),
         label='İl', required=True
     )

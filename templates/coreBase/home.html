@@ -62,65 +62,77 @@
             <div class="container">
                 <div class="row">
                     <div class="col-xs-12">
-                        <!-- banner frame start here -->
-                        <div class="banner-frame">
-                            {% for homesubbanner in homesubbanners %}
-                                {% if homesubbanner.choose == 'banner1' %}
-                                    <div class="banner-1 wow fadeInLeft" data-wow-delay="0.4s">
-                                        <img alt="image description" src="{{ homesubbanner.image.url }}">
-                                        <div class="holder">
-                                            <h2 style="color: {{ homesubbanner.text_color }};">{{ homesubbanner.title }}</h2>
-                                            <div class="txts">
-                                                <a class="btn-shop" href="{{ homesubbanner.link }}">
-                                                    <span>Alışverişe Başla</span>
-                                                    <i class="fa fa-angle-right"></i>
-                                                </a>
-                                                {% if homesubbanner.discount %}
-                                                    <div class="discount">
-                                                        <span>{{ homesubbanner.discount }}</span>
-                                                    </div>
+                        
+                        <div class="banner-frame mt-paddingsmzero">
+                            {% for banner in banners %}
+                                {% if banner.position == 'left' %}
+                                    <div class="banner-box third wow fadeInLeft" data-wow-delay="0.6s">
+                                        <div class="banner-12 right white wow fadeInUp" data-wow-delay="0.6s">
+                                            <img src="{{ banner.image.url }}" alt="image description">
+                                            <div class="holder">
+                                                <h2>
+                                                    {% if banner.subtitle %}
+                                                        <span>{{ banner.subtitle }}</span>
+                                                    {% endif %}
+                                                    <strong>{{ banner.title }}</strong>
+                                                </h2>
+                                                {% if banner.link %}
+                                                    <a class="btn-shop" href="{{ banner.link }}">
+                                                        <span>Alışverişe Başla</span>
+                                                        <i class="fa fa-angle-right"></i>
+                                                    </a>
                                                 {% endif %}
                                             </div>
                                         </div>
-                                    </div>
-                                {% elif homesubbanner.choose == 'banner2' %}
-                                    <div class="banner-box first">
-                                        <div class="banner-2 wow fadeInUp" data-wow-delay="0.4s">
-                                            <img alt="image description" src="{{ homesubbanner.image.url }}">
-                                            <div class="holder">
-                                                <h2 style="color: {{ homesubbanner.text_color }};" >{{ homesubbanner.title }}</h2>
-                                                <a class="btn-shop add" href="{{ homesubbanner.link }}">
-                                                    <span>Alışverişe Başla</span>
-                                                    <i class="fa fa-angle-right"></i>
-                                                </a>
+                                        {% elif banner.position == 'right' %}
+                                            <div class="banner-13 right wow fadeInDown" data-wow-delay="0.6s">
+                                                <img src="{{ banner.image.url }}" alt="image description">
+                                                <div class="holder">
+                                                    <h2>
+                                                        {% if banner.subtitle %}
+                                                            <span>{{ banner.subtitle }}</span>
+                                                        {% endif %}
+                                                        <strong>{{ banner.title }}</strong>
+                                                    </h2>
+                                                    {% if banner.link %}
+                                                        <a class="btn-shop" href="{{ banner.link }}">
+                                                            <span>Alışverişe Başla</span>
+                                                            <i class="fa fa-angle-right"></i>
+                                                        </a>
+                                                    {% endif %}
+                                                </div>
                                             </div>
-                                        </div>
-                                {% elif homesubbanner.choose == 'banner3' %}
-                                        <div class="banner-3 right wow fadeInDown" data-wow-delay="0.4s">
-                                            <img alt="image description" src="{{ homesubbanner.image.url }}">
-                                            <div class="holder">
-                                                <h2 style="color: {{ homesubbanner.text_color }};" >{{ homesubbanner.title }}</h2>
-                                                <a class="btn-shop add" href="{{ homesubbanner.link }}">
-                                                    <span>Alışverişe Başla</span>
-                                                    <i class="fa fa-angle-right"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% elif homesubbanner.choose == 'banner4' %}
-                                    <div class="banner-4 hidden-sm wow fadeInRight" data-wow-delay="0.4s">
-                                        <img alt="image description" src="{{ homesubbanner.image.url }}">
-                                        <div class="holder">
-                                            <h2 style="color: {{ homesubbanner.text_color }};" >{{ homesubbanner.title }}</h2>
-                                            <span class="price">{{ homesubbanner.price }}</span>
-                                            <a class="btn-shop add" href="{{ homesubbanner.link }}">
-                                                <span>Alışverişe Başla</span>
-                                                <i class="fa fa-angle-right"></i>
-                                            </a>
-                                        </div>
                                     </div>
                                 {% endif %}
+
+                                
                             {% endfor %}
+                        
+                            <div class="slider-7 wow fadeInRight" data-wow-delay="0.6s">
+                                <div class="slider banner-slider">
+                                    {% for slider in sliders %}
+                                        <div class="s-holder">
+                                            <img src="{{ slider.image.url }}" alt="image description">
+                                            <div class="s-box">
+                                                <strong class="s-title">{{ slider.title }}</strong>
+                                                {% if slider.subtitle %}
+                                                    <span class="heading">{{ slider.subtitle }}</span>
+                                                {% endif %}
+                                                <div class="s-txt">
+                                                    <p>{{ slider.description }}</p>
+                                                </div>
+                                                {% if slider.link %}
+                                                    <a class="btn-shop" href="{{ slider.link }}">
+                                                        <span>Alışverişe Başla</span>
+                                                        <i class="fa fa-angle-right"></i>
+                                                    </a>
+                                                {% endif %}
+                                              
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
                         </div>
                         
                         
@@ -173,7 +185,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="txt">
-                                                    <strong class="title"><a href="{% url 'products:product-detail-view' featured_product.slug %}">{{ featured_product.name }}</a></strong>
+                                                    <strong class="title"><a href="{% url 'products:product-detail-view' featured_product.slug %}" title="{{ featured_product.name }}">{{ featured_product.name|truncatechars:30 }}</a></strong>
                                                     <strong class="title">Satış Fiyatı</strong>
                                                     {% if featured_product.selling_old_price != 0 %}
                                                     <del class="off"><i class="fa fa-try"></i> <span>{{ featured_product.selling_old_price }}</span></del>
@@ -223,7 +235,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="txt">
-                                                    <strong class="title"><a href="{% url 'products:product-detail-view' latest_product.slug %}">{{ latest_product.name }}</a></strong>
+                                                    <strong class="title"><a href="{% url 'products:product-detail-view' latest_product.slug %}" title="{{ latest_product.name }}">{{ latest_product.name|truncatechars:30 }}</a></strong>
                                                     <strong class="title">Satış Fiyatı</strong>
                                                     {% if latest_product.selling_old_price != 0 %}
                                                     <del class="off"><i class="fa fa-try"></i> <span>{{ latest_product.selling_old_price }}</span></del>
@@ -272,7 +284,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="txt">
-                                                    <strong class="title"><a href="{% url 'products:product-detail-view' best_product.slug %}">{{ best_product.name }}</a></strong>
+                                                    <strong class="title"><a href="{% url 'products:product-detail-view' best_product.slug %}" title="{{ best_product.name }}">{{ best_product.name|truncatechars:30 }}</a></strong>
                                                     <strong class="title">Satış Fiyatı</strong>
                                                     {% if best_product.selling_old_price != 0 %}
                                                     <del class="off"><i class="fa fa-try"></i> <span>{{ best_product.selling_old_price }}</span></del>
@@ -328,7 +340,7 @@
                                             </div>
                                         </div>
                                         <div class="txt">
-                                            <strong class="title"><a href="{% url 'products:product-detail-view' best_seller_product.slug %}">{{ best_seller_product.name }}</a></strong>
+                                            <strong class="title"><a href="{% url 'products:product-detail-view' best_seller_product.slug %}" title="{{ best_seller_product.name }}">{{ best_seller_product.name|truncatechars:30 }}</a></strong>
                                             <strong class="title">Satış Fiyatı</strong>
                                             {% if best_seller_product.selling_old_price != 0 %}
                                             <del class="off"><i class="fa fa-try"></i> <span>{{ best_seller_product.selling_old_price }}</span></del>

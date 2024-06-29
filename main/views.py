@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from main.models import ContactUs,SocialMedia, HomeMainBanner, HomeSubBanner, TeamMembers
+from main.models import ContactUs,SocialMedia, HomeMainBanner, HomeSubBanner, TeamMembers, HomePageBannerItem
 from django.http import JsonResponse
 from products.models import Category,Product, ProductReview,Cart,CartItem
 from customerauth.models import wishlist_model
@@ -76,6 +76,9 @@ def home(request):
     best_seller_products = get_best_seller_products()
     featured_products = get_featured_products()
     latest_products = get_latest_products()
+
+    banners = HomePageBannerItem.objects.filter(position__in=['left', 'right']).order_by('order')
+    sliders = HomePageBannerItem.objects.filter(position='slider').order_by('order')
     
     mainContext = mainContent(request)
     context = {
@@ -85,6 +88,8 @@ def home(request):
         "latest_products": latest_products,
         "best_products": best_seller_products, 
         "homesubbanners": homesubbanners,
+        "banners":banners,
+        "sliders":sliders
     }
 
     context.update(mainContext)
