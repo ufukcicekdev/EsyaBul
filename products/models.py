@@ -4,7 +4,9 @@ from django_ckeditor_5.fields import CKEditor5Field
 from django.utils import timezone
 from esyabul.settings.base import AUTH_USER_MODEL
 from django.core.exceptions import ValidationError
-
+from PIL import Image
+import io
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 # Oda Tipleri (Living Room, Bedroom, Kitchen vb.)
 class RoomType(models.Model):
@@ -209,10 +211,24 @@ class ProductImage(models.Model):
         return f"Image of {self.product.name}"
 
     def save(self, *args, **kwargs):
+        # Alt ve title metinlerini ayarla
         if not self.img_alt:
             self.img_alt = self.product.name
         if not self.img_title:
             self.img_title = self.product.name
+
+        # Resmi WebP formatına dönüştür
+        image = Image.open(self.image)
+        output = io.BytesIO()
+        image.save(output, format='WEBP')
+        output.seek(0)
+
+        # Yeni içerik nesnesi oluştur
+        webp_image = InMemoryUploadedFile(output, 'ImageField', f"{self.image.name.split('.')[0]}.webp", 'image/webp', output.tell(), None)
+
+        # Yeni resim dosyasını ayarla
+        self.image = webp_image
+
         super().save(*args, **kwargs)
 
 
