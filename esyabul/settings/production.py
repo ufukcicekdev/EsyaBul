@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-ALLOWED_HOSTS = ["esyala.com","www.esyala.com"]
+ALLOWED_HOSTS = ["esyala.com","www.esyala.com","web-production-8e47.up.railway.app"]
 CSRF_TRUSTED_ORIGINS = ["https://*."]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True
