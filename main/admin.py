@@ -1,5 +1,5 @@
 from django.contrib import admin
-from main.models import ContactUs,SocialMedia, HomeMainBanner,HomeSubBanner,TeamMembers
+from main.models import ContactUs,SocialMedia, HomeMainBanner,HomeSubBanner,TeamMembers,HomePageBannerItem
 
 
 
@@ -55,3 +55,19 @@ class TeamMemberAdmin(admin.ModelAdmin):
     image_preview.short_description = 'Image Preview'
 
 admin.site.register(TeamMembers, TeamMemberAdmin)
+
+
+
+@admin.register(HomePageBannerItem)
+class BannerItemAdmin(admin.ModelAdmin):
+    list_display = ('title', 'position', 'order')
+    list_filter = ('position',)
+    search_fields = ('title', 'subtitle')
+    list_editable = ('order',)
+    ordering = ('order',)
+    
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'subtitle', 'image', 'link', 'position', 'description', 'order')
+        }),
+    )

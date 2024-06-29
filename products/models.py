@@ -8,6 +8,7 @@ from PIL import Image
 import io
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
+
 # Oda Tipleri (Living Room, Bedroom, Kitchen vb.)
 class RoomType(models.Model):
     name = models.CharField(max_length=100)

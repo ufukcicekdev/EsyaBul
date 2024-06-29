@@ -144,8 +144,8 @@ class HomeSubBanner(models.Model):
 
 
     class Meta:
-        verbose_name = "Alt Banner"
-        verbose_name_plural = "Alt Banner"
+        verbose_name = "ÜrünDetay Banner"
+        verbose_name_plural = "ÜrünDetay Banner"
 
     def __str__(self):
         return self.title
@@ -154,6 +154,58 @@ class HomeSubBanner(models.Model):
     def image_preview(self):
         return mark_safe('<img src="{}" width="150" height="150" />'.format(self.image.url))
     
+    def save(self, *args, **kwargs):
+
+        image = Image.open(self.image)
+        output = io.BytesIO()
+        image.save(output, format='WEBP')
+        output.seek(0)
+
+        # Yeni içerik nesnesi oluştur
+        webp_image = InMemoryUploadedFile(output, 'ImageField', f"{self.image.name.split('.')[0]}.webp", 'image/webp', output.tell(), None)
+
+        # Yeni resim dosyasını ayarla
+        self.image = webp_image
+
+        super().save(*args, **kwargs)
+    
+
+
+class HomePageBannerItem(models.Model):
+    POSITION_CHOICES = [
+        ('left', 'Left'),
+        ('right', 'Right'),
+        ('slider', 'Slider'),
+    ]
+
+    title = models.CharField(max_length=200)
+    subtitle = models.CharField(max_length=200, blank=True, null=True)
+    image = models.ImageField(upload_to='banner_images/')
+    link = models.URLField(blank=True, null=True)
+    position = models.CharField(max_length=10, choices=POSITION_CHOICES, default='slider')
+    description = models.TextField(blank=True, null=True)
+    order = models.PositiveIntegerField(default=0)
+    class Meta:
+        verbose_name = "Ana Sayfa Banner2"
+        verbose_name_plural = "Ana Sayfa Banner2"
+
+    def __str__(self):
+        return self.title
+    
+    def save(self, *args, **kwargs):
+
+        image = Image.open(self.image)
+        output = io.BytesIO()
+        image.save(output, format='WEBP')
+        output.seek(0)
+
+        # Yeni içerik nesnesi oluştur
+        webp_image = InMemoryUploadedFile(output, 'ImageField', f"{self.image.name.split('.')[0]}.webp", 'image/webp', output.tell(), None)
+
+        # Yeni resim dosyasını ayarla
+        self.image = webp_image
+
+        super().save(*args, **kwargs)
 
 
 class RequesAndResponseLog(models.Model):
