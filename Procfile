@@ -1,1 +1,1 @@
-web: gunicorn esyabul.wsgi
+web: gunicorn esyabul.wsgi. --workers 5
