@@ -5,7 +5,7 @@
     },
     "deploy": {
       "numReplicas": 1,
-      "startCommand": "gunicorn esyabul.wsgi",
+      "startCommand": "gunicorn esyabul.wsgi --workers 5",
       "sleepApplication": false,
       "restartPolicyType": "ON_FAILURE",
       "restartPolicyMaxRetries": 10
