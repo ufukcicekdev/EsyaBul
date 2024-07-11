@@ -266,7 +266,7 @@ header .close:hover{
                             <h2>Kategoriler</h2>
                             
                             <ul class="list-unstyled category-list">
-                                {% for category in main_categories4 %}
+                                {% for category in main_categories %}
                                 <li>
                                     <a href="{% url 'main:dynamic-category-product-list' category_slugs=category.slug %}"><span class="name">{{ category.name }}</span></a>
                                     

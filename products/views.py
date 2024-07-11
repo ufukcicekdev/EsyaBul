@@ -198,7 +198,6 @@ def order_checkout(request):
 
     context = {
         'main_categories': main_categories,
-         "main_categories2":main_categories,
         'wcount': wcount,
         'hcount': hcount,
         'cart_items': cart_items,

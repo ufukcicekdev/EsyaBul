@@ -301,7 +301,7 @@ header .close:hover{
                             
                             {% if tumrunler %}
                             <ul class="list-unstyled subcategory-list">
-                              {% for category in main_categories4 %}
+                              {% for category in main_categories %}
                               <li>
                                   <a href="{% url 'main:dynamic-category-product-list' category_slugs=category.slug %}"><span class="name">{{ category.name }}</span></a>
                                   
@@ -337,7 +337,7 @@ header .close:hover{
                                     <div class="mt-product2 large bg-grey">
                                         <!-- box start here -->
                                         <div class="box">
-                                            {% with first_image=product.related_products.first %}
+                                            {% with first_image=product.related_products.all.0 %}
                                                     {% if first_image %}
                                                     <a href="{% url 'products:product-detail-view' product.slug %}"><img src="{{ first_image.image.url }}" style="width: 237px;height: 248px;" alt="{{ first_image.img_title }}"></a>
                                                     {% endif %}
@@ -395,7 +395,7 @@ header .close:hover{
                         <div class="product-post">
                             <!-- img holder start here -->
                             <div class="img-holder">
-                                {% with first_image=product.related_products.first %}
+                                {% with first_image=product.related_products.all.0 %}
                                     {% if first_image %}
                                     <a href="{% url 'products:product-detail-view' product.slug %}"><img src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}"></a>
                                     {% endif %}

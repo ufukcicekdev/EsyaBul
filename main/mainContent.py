@@ -2,19 +2,26 @@ from customerauth.models import wishlist_model
 from main.models import SocialMedia
 from products.models import Cart, CartItem, Category
 from django.core.cache import cache
-
+from django.template.loader import render_to_string
 
 
 
 
 def get_category():
-    key = 'category'
-    category = cache.get(key)
-    if not category:
-        category = list(Category.objects.filter(parent=None, is_active=True))
-        cache.set(key, category, 60 * 60 * 6)  # 6 saat cache
-    return category
+    key = 'main_categories_html'
+    main_categories_html = cache.get(key)
+    
+    if not main_categories_html:
+        main_categories = Category.objects.filter(parent=None, is_active=True).prefetch_related('children')
+        
+        main_categories_html = ""
+        for category in main_categories:
+            category_html = render_to_string('coreBase/category_block.html', {'category': category})
+            main_categories_html += category_html
 
+        cache.set(key, main_categories_html, 60 * 60 * 6)  
+        
+    return main_categories_html
 
 def get_social_links():
     key = 'social_links'
@@ -26,9 +33,21 @@ def get_social_links():
 
 
 
+def get_footer_category():
+    key = 'category'
+    category = cache.get(key)
+    if not category:
+        category = list(Category.objects.filter(parent=None, is_active=True))
+        cache.set(key, category, 60 * 60 * 6)  # 6 saat cache
+    return category
+
+
+
+
 def mainContent(request):
-    social_media_links = get_social_links()
     main_categories = get_category()
+    footer_category = get_footer_category()
+    social_media_links = get_social_links()
     wcount = 0
     hcount = 0
     cart_items = []
@@ -76,9 +95,8 @@ def mainContent(request):
         'social_media_links': social_media_links, 
         "wcount": wcount, 
         'main_categories': main_categories,
+        "footer_category":footer_category,
         "hcount": hcount,
-        "main_categories2": main_categories,
-        "main_categories4": main_categories,
         'cart_items': cart_items,
         'cart_total': cart_total, 
     }
