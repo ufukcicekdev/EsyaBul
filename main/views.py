@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from main.models import ContactUs,SocialMedia, HomeMainBanner, HomeSubBanner, TeamMembers, HomePageBannerItem
 from django.http import JsonResponse
-from products.models import Category,Product, ProductReview,Cart,CartItem
+from products.models import Category,Product, ProductReview,Cart,CartItem,ProductImage
 from customerauth.models import wishlist_model
 from django.http import Http404
 from django.db.models import Q,Avg,Prefetch
@@ -38,28 +38,31 @@ def get_home_sub_banners():
     return banners
 
 
+
 def get_homepage_products():
     key = 'homepage_products'
     products = cache.get(key)
+    
     if not products:
-        all_products = Product.objects.filter(is_active=True).order_by('-created_at')[:48]  # 48 ürün al
-        best_seller_products = [p for p in all_products if p.best_seller][:16]
-        featured_products = [p for p in all_products if p.is_featured][:16]
-        latest_products = list(all_products[:16])  # En son eklenen 16 ürünü al
+        # Tüm ürünleri ve ilgili ürün görsellerini prefetch_related ile önceden çekiyoruz
+        best_seller_products = Product.objects.filter(is_active=True, best_seller=True).prefetch_related('related_products')[:16]
+        featured_products = Product.objects.filter(is_active=True, is_featured=True).prefetch_related('related_products')[:16]
+        latest_products = Product.objects.filter(is_active=True).order_by('-created_at').prefetch_related('related_products')[:16]
         
         products = {
-            'best_seller_products': best_seller_products,
-            'featured_products': featured_products,
-            'latest_products': latest_products,
+            'best_seller_products': list(best_seller_products),
+            'featured_products': list(featured_products),
+            'latest_products': list(latest_products),
         }
         
-        cache.set(key, products, 60 * 60 * 6)  # 6 saat cache
+        cache.set(key, products, 60 * 60 * 6)  # 6 saat cache süresi
     
     return products
 
 @cache_page(60 * 60 * 6)  # 6 saatlik cache
 @vary_on_cookie
 def home(request):
+    mainContext = mainContent(request)
     homemainbanners = get_home_main_banners()
     homesubbanners = get_home_sub_banners()
     product_data = get_homepage_products()
@@ -67,7 +70,7 @@ def home(request):
     banners = HomePageBannerItem.objects.filter(position__in=['left', 'right']).order_by('order')
     sliders = HomePageBannerItem.objects.filter(position='slider').order_by('order')
     
-    mainContext = mainContent(request)
+    
     context = {
         "homemainbanners": homemainbanners,
         "homesubbanners": homesubbanners,
@@ -198,9 +201,10 @@ def dynamic_category_product_list_view(request, category_slugs):
 
         # Ürünleri ve ilişkili verileri daha verimli getirin
         products = Product.objects.filter(category_query).select_related('category').prefetch_related(
-            Prefetch('reviews', queryset=ProductReview.objects.all()),
-            Prefetch('wishes', queryset=wishlist_model.objects.all())
-        ).annotate(average_rating=Avg('reviews__rating')).order_by('id')
+        Prefetch('related_products', queryset=ProductImage.objects.all()),
+        Prefetch('reviews', queryset=ProductReview.objects.all()),
+        Prefetch('wishes', queryset=wishlist_model.objects.all())
+    ).annotate(average_rating=Avg('reviews__rating')).order_by('id')
 
         for subcategory in subcategories:
             subcategory.product_count = Product.objects.filter(category=subcategory).count()

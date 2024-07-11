@@ -66,8 +66,8 @@
                         <div class="banner-frame mt-paddingsmzero">
                             {% for banner in banners %}
                                 {% if banner.position == 'left' %}
-                                    <div class="banner-box third wow fadeInLeft" data-wow-delay="0.6s">
-                                        <div class="banner-12 right white wow fadeInUp" data-wow-delay="0.6s">
+                                    <div class="banner-box third wow fadeInLeft" >
+                                        <div class="banner-12 right white wow fadeInUp" >
                                             <img src="{{ banner.image.url }}" alt="image description">
                                             <div class="holder">
                                                 <h2>
@@ -85,7 +85,7 @@
                                             </div>
                                         </div>
                                         {% elif banner.position == 'right' %}
-                                            <div class="banner-13 right wow fadeInDown" data-wow-delay="0.6s">
+                                            <div class="banner-13 right wow fadeInDown" >
                                                 <img src="{{ banner.image.url }}" alt="image description">
                                                 <div class="holder">
                                                     <h2>
@@ -108,7 +108,7 @@
                                 
                             {% endfor %}
                         
-                            <div class="slider-7 wow fadeInRight" data-wow-delay="0.6s">
+                            <div class="slider-7 wow fadeInRight" >
                                 <div class="slider banner-slider">
                                     {% for slider in sliders %}
                                         <div class="s-holder">
@@ -134,18 +134,14 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        
-                        
-                        
+
                         <!-- banner frame end here -->
                         <!-- mt producttabs start here -->
-                        <div class="mt-producttabs wow fadeInUp" data-wow-delay="0.4s">
+                        <div class="mt-producttabs wow fadeInUp" >
                             <!-- producttabs start here -->
                             <ul class="producttabs">
                                 <li><a href="#tab1" class="active">Öne Çıkanlar</a></li>
                                 <li><a href="#tab2">Son Yüklenenler</a></li>
-                                <li><a href="#tab3">Çok Satanlar</a></li>
                             </ul>
                             <!-- producttabs end here -->
                             <div class="tab-content text-center">
@@ -158,9 +154,11 @@
                                                 <div class="box">
                                                     <div class="b1">
                                                         <div class="b2">
-                                                            {% with first_image=featured_product.related_products.first %}
+                                                            {% with first_image=featured_product.related_products.all.0 %}
                                                             {% if first_image %}
-                                                            <a href="{% url 'products:product-detail-view' featured_product.slug %}"><img src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}"></a>
+                                                            <a href="{% url 'products:product-detail-view' featured_product.slug %}">
+                                                                <img src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}">
+                                                            </a>
                                                             {% endif %}
                                                             {% endwith %}
                                                             {% if featured_product.get_percentage %}
@@ -208,7 +206,7 @@
                                                 <div class="box">
                                                     <div class="b1">
                                                         <div class="b2">
-                                                            {% with first_image=latest_product.related_products.first %}
+                                                            {% with first_image=latest_product.related_products.all.0 %}
                                                             {% if first_image %}
                                                             <a href="{% url 'products:product-detail-view' latest_product.slug %}"><img src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}"></a>
                                                             {% endif %}
@@ -248,55 +246,7 @@
                                     </div>
                                     <!-- tabs slider end here -->
                                 </div>
-                                <div id="tab3">
-                                    <!-- tabs slider start here -->
-                                    <div class="tabs-slider">
-                                        {% for best_product in best_products %}
-                                        {% if forloop.counter0|divisibleby:2 %}<div class="slide">{% endif %}
-                                            <div class="mt-product1 mt-paddingbottom20">
-                                                <div class="box">
-                                                    <div class="b1">
-                                                        <div class="b2">
-                                                            {% with first_image=best_product.related_products.first %}
-                                                            {% if first_image %}
-                                                            <a href="{% url 'products:product-detail-view' best_product.slug %}"><img src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}"></a>
-                                                            {% endif %}
-                                                            {% endwith %}
-                                                            {% if best_product.get_percentage %}
-                                                                <span class="caption">
-                                                                    <span class="off">{{ best_product.get_percentage|floatformat:0 }}%</span>
-                                                                    <span class="best-price">En İyi Fiyat</span>
-                                                                </span>
-                                                            {% endif %}
-                                                            <ul class="mt-stars">
-                                                                {% if best_product.average_rating %}
-                                                                {% for star in best_product.average_rating|make_star_list %}
-                                                                <li><i class="fa fa-star{% if not star %}-o{% endif %}"></i></li>
-                                                                {% endfor %}
-                                                                {% endif %}
-                                                            </ul>
-                                                            <ul class="links">
-                                                                {% if request.user.is_authenticated %}
-                                                                <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{best_product.id}}" href="#"><i class="icon-heart"></i></a></li>
-                                                                {% endif %}
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="txt">
-                                                    <strong class="title"><a href="{% url 'products:product-detail-view' best_product.slug %}" title="{{ best_product.name }}">{{ best_product.name|truncatechars:30 }}</a></strong>
-                                                    <strong class="title">Satış Fiyatı</strong>
-                                                    {% if best_product.selling_old_price != 0 %}
-                                                    <del class="off"><i class="fa fa-try"></i> <span>{{ best_product.selling_old_price }}</span></del>
-                                                    {% endif %}
-                                                    <span class="price"><i class="fa fa-try"></i> <span>{{ best_product.selling_price }}</span></span>
-                                                </div>
-                                            </div><!-- mt product1 center end here -->
-                                        {% if forloop.last or forloop.counter|divisibleby:2 %}</div>{% endif %}
-                                        {% endfor %}
-                                    </div>
-                                    <!-- tabs slider end here -->
-                                </div>
+                            
                             </div>
                         </div>
                         <!-- mt producttabs end here -->
@@ -304,7 +254,7 @@
                 </div>
             </div>
             <!-- mt bestseller start here -->
-            <div class="mt-bestseller bg-grey text-center wow fadeInUp" data-wow-delay="0.4s">
+            <div class="mt-bestseller bg-grey text-center wow fadeInUp" >
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-12 mt-heading text-uppercase">
@@ -321,7 +271,7 @@
                                         <div class="box">
                                             <div class="b1">
                                                 <div class="b2">
-                                                    {% with first_image=best_seller_product.related_products.first %}
+                                                    {% with first_image=best_seller_product.related_products.all.0 %}
                                                         {% if first_image %}
                                                         <a href="{% url 'products:product-detail-view' best_seller_product.slug %}"><img src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}"></a>
                                                         {% endif %}

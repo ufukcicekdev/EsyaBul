@@ -124,10 +124,11 @@
 
               
               <ul class="list-unstyled f-widget-nav">
-                {% for category in main_categories2 %}
+                {% for category in footer_category %}
                   <li><a href="{% url 'main:dynamic-category-product-list' category_slugs=category.slug %}">{{ category.name }}</a></li>
                     
                 {% endfor %}
+               
               </ul>
             </div>
             <!-- Footer Nav of the Page end -->
