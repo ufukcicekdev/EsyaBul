@@ -1,11 +1,34 @@
 from customerauth.models import wishlist_model
 from main.models import SocialMedia
 from products.models import Cart, CartItem, Category
+from django.core.cache import cache
+
+
+
+
+
+def get_category():
+    key = 'category'
+    category = cache.get(key)
+    if not category:
+        category = list(Category.objects.filter(parent=None, is_active=True))
+        cache.set(key, category, 60 * 60 * 6)  # 6 saat cache
+    return category
+
+
+def get_social_links():
+    key = 'social_links'
+    social_links = cache.get(key)
+    if not social_links:
+        social_links = SocialMedia.objects.all()
+        cache.set(key, social_links, 60 * 60 * 6)  # 6 saat cache
+    return social_links
+
 
 
 def mainContent(request):
-    social_media_links = SocialMedia.objects.all()
-    main_categories = Category.objects.filter(parent=None, is_active=True)
+    social_media_links = get_social_links()
+    main_categories = get_category()
     wcount = 0
     hcount = 0
     cart_items = []

@@ -17,7 +17,6 @@ from django.views.decorators.cache import cache_page
 import random
 from django.views.decorators.vary import vary_on_cookie
 from django.core.cache import cache
-from django.core.cache.utils import make_template_fragment_key
 
 
 
@@ -38,64 +37,50 @@ def get_home_sub_banners():
         cache.set(key, banners, 60 * 60 * 6)  # 6 saat cache
     return banners
 
-def get_best_seller_products():
-    key = 'best_seller_products'
+
+def get_homepage_products():
+    key = 'homepage_products'
     products = cache.get(key)
     if not products:
-        products_queryset = Product.objects.filter(is_active=True)
-        products = list(products_queryset.filter(best_seller=True).order_by('?')[:16])
+        all_products = Product.objects.filter(is_active=True).order_by('-created_at')[:48]  # 48 ürün al
+        best_seller_products = [p for p in all_products if p.best_seller][:16]
+        featured_products = [p for p in all_products if p.is_featured][:16]
+        latest_products = list(all_products[:16])  # En son eklenen 16 ürünü al
+        
+        products = {
+            'best_seller_products': best_seller_products,
+            'featured_products': featured_products,
+            'latest_products': latest_products,
+        }
+        
         cache.set(key, products, 60 * 60 * 6)  # 6 saat cache
+    
     return products
-
-def get_featured_products():
-    key = 'featured_products'
-    products = cache.get(key)
-    if not products:
-        products_queryset = Product.objects.filter(is_active=True)
-        products = list(products_queryset.filter(is_featured=True).order_by('?')[:16])
-        cache.set(key, products, 60 * 60 * 6)  # 6 saat cache
-    return products
-
-def get_latest_products():
-    key = 'latest_products'
-    products = cache.get(key)
-    if not products:
-        products_queryset = Product.objects.filter(is_active=True)
-        latest_products = list(products_queryset.order_by('-created_at')[:30])
-        random.shuffle(latest_products)
-        products = latest_products[:16]
-        cache.set(key, products, 60 * 60 * 6)  # 6 saat cache
-    return products
-
 
 @cache_page(60 * 60 * 6)  # 6 saatlik cache
 @vary_on_cookie
 def home(request):
     homemainbanners = get_home_main_banners()
     homesubbanners = get_home_sub_banners()
-    best_seller_products = get_best_seller_products()
-    featured_products = get_featured_products()
-    latest_products = get_latest_products()
-
+    product_data = get_homepage_products()
+    
     banners = HomePageBannerItem.objects.filter(position__in=['left', 'right']).order_by('order')
     sliders = HomePageBannerItem.objects.filter(position='slider').order_by('order')
     
     mainContext = mainContent(request)
     context = {
         "homemainbanners": homemainbanners,
-        "best_seller_products": best_seller_products,
-        "featured_products": featured_products,
-        "latest_products": latest_products,
-        "best_products": best_seller_products, 
         "homesubbanners": homesubbanners,
-        "banners":banners,
-        "sliders":sliders
+        "best_seller_products": product_data['best_seller_products'],
+        "featured_products": product_data['featured_products'],
+        "latest_products": product_data['latest_products'],
+        "banners": banners,
+        "sliders": sliders,
     }
 
     context.update(mainContext)
     
     return render(request, 'coreBase/home.html', context)
-
 
 
 
