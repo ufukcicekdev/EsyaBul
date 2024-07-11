@@ -233,9 +233,20 @@ def dynamic_category_product_list_view(request, category_slugs):
     return render(request, "core/category-product-list.html", context)
 
 
+def get_search_category():
+    key = 'category'
+    category = cache.get(key)
+    if not category:
+        category = list(Category.objects.filter(parent=None, is_active=True))
+        cache.set(key, category, 60 * 60 * 6)  # 6 saat cache
+    return category
+
+
+
+
 def search_view(request):
     mainContext = mainContent(request)
-
+    search_category = get_search_category()
     search_form = ProductSearchForm(request.GET)
     products = []
 
@@ -260,6 +271,7 @@ def search_view(request):
         'search_form': search_form, 
         'products': page_products,
         "product_count": products.count(),
+        "search_category":search_category
     }
     context.update(mainContext)
     return render(request, 'core/search_results.html', context)
