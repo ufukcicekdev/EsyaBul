@@ -1,11 +1,4 @@
 User-Agent: *
-Disallow: /admin/
-
-
-
-User-Agent: Googlebot
-Disallow: /admin/
-
+Allow: /
 Sitemap: https://esyala.com/sitemap.xml
-
-
+Disallow: /admin/
