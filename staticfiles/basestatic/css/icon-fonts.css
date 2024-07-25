@@ -1,14 +1,13 @@
 @font-face {
 	font-family: 'Simple-Line-Icons';
-	src:url('../fonts/Simple-Line-Icons.eot');
-	src:url('../fonts/Simple-Line-Iconsd41d.eot?#iefix') format('embedded-opentype'),
-		url('../fonts/Simple-Line-Icons.woff') format('woff'),
-		url('../fonts/Simple-Line-Icons.ttf') format('truetype'),
-		url('../fonts/Simple-Line-Icons.svg#Simple-Line-Icons') format('svg');
+	src:url('https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/fonts/Simple-Line-Icons.eot');
+	src:url('https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/fonts/fontawesome-webfontd41d.eot?#iefix') format('embedded-opentype'),
+		url('https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/fonts/Simple-Line-Icons.woff') format('woff'),
+		url('https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/fonts/Simple-Line-Icons.ttf') format('truetype'),
+		url('https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/fonts/Simple-Line-Icons.svg') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
-
 /* Use the following CSS code if you want to use data attributes for inserting your icons */
 [data-icon]:before {
 	font-family: 'Simple-Line-Icons';
