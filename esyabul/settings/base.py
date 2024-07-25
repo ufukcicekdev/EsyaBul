@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     "storages",
     "easyaudit",
     "django_social_share",
-    "ipware",   
+    "ipware",  
     ]
 
 MIDDLEWARE = [
@@ -129,7 +129,7 @@ USE_TZ = True
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-STATIC_URL = '/static/'
+STATIC_URL = 'https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -208,12 +208,6 @@ LOGIN_REDIRECT_URL="main:home"
 LOGOUT_REDIRECT_URL="main:home"
 
 PHONENUMBER_DEFAULT_REGION = 'TR'
-
-
-
-
-
-
 
 SESSION_COOKIE_AGE = 3600
 SESSION_SAVE_EVERY_REQUEST = True
@@ -410,3 +404,4 @@ CACHES = {
         'LOCATION': 'my_unique_cache_key',
     }
 }
+
