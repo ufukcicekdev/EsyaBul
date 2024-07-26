@@ -1,9 +1,6 @@
 from django.contrib import admin
 from main.models import ContactUs,SocialMedia, HomeMainBanner,HomeSubBanner,TeamMembers,HomePageBannerItem
 
-
-
-
 @admin.register(ContactUs)
 class ContactUsAdmin(admin.ModelAdmin):
     list_display = ('full_name', 'email', 'phone', 'subject', 'is_read')

@@ -3,6 +3,36 @@ from .models import AddressType, Order,OrderItem
 from datetime import timedelta
 from django.utils.html import format_html
 
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import Group, Permission
+from .models import User
+
+
+
+@admin.register(User)
+class CustomUserAdmin(UserAdmin):
+    list_display = ('username', 'email', 'is_staff', 'is_active')
+    search_fields = ('username', 'email')
+    ordering = ('username',)
+    filter_horizontal = ('groups', 'user_permissions',)
+
+    fieldsets = (
+        (None, {'fields': ('username', 'email', 'password')}),
+        ('Personal Info', {'fields': ('first_name', 'last_name', 'phone', 'my_style', 'tckn', 'birth_date')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'username', 'password1', 'password2', 'is_staff', 'is_active', 'groups', 'user_permissions')}
+        ),
+    )
+
+admin.site.register(Permission)
+
+
+
 
 @admin.register(AddressType)
 class AddressTypeAdmin(admin.ModelAdmin):
@@ -78,3 +108,5 @@ class OrderItemAdmin(admin.ModelAdmin):
     get_total_item_price.short_description = 'Total Price'
 
  
+
+
