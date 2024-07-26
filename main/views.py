@@ -66,7 +66,7 @@ def home(request):
     homemainbanners = get_home_main_banners()
     homesubbanners = get_home_sub_banners()
     product_data = get_homepage_products()
-    
+    description = "Esyala.com, mobilya, ev dekorasyonu, elektronik ve daha fazlasını kapsayan geniş ürün yelpazesiyle online alışveriş platformudur. Kiralama ve satın alma seçenekleriyle evinizi yenilemek artık çok daha kolay!"
     banners = HomePageBannerItem.objects.filter(position__in=['left', 'right']).order_by('order')
     sliders = HomePageBannerItem.objects.filter(position='slider').order_by('order')
     
@@ -79,6 +79,7 @@ def home(request):
         "latest_products": product_data['latest_products'],
         "banners": banners,
         "sliders": sliders,
+        "description":description
     }
 
     context.update(mainContext)
@@ -122,6 +123,8 @@ def custom_500_page(request):
 @vary_on_cookie
 def contact(request):
     mainContext = mainContent(request)
+    description = "Eşyala.com ile iletişime geçin! Sorularınız, geri bildirimleriniz veya destek talepleriniz için bize ulaşın. Müşteri memnuniyeti ve çözüm odaklı hizmet anlayışımızla, sizlere en iyi deneyimi sunmak için buradayız."
+    mainContext["description"] = description
     return render(request, "mainBase/contact.html", mainContext)
 @cache_page(60 * 60 * 6)  # 6 saatlik cache
 @vary_on_cookie
@@ -132,16 +135,22 @@ def about(request):
         "teamsMembers":teamsMembers,
     }
     context.update(mainContext)
+    description = "Eşyala.com hakkında daha fazla bilgi edinin. Biz kimiz, ne yapıyoruz ve neden bu kadar tutkuluyuz? Eşyala.com, size kaliteli hizmet sunmak ve ihtiyaçlarınıza en iyi şekilde cevap vermek için burada. Misyonumuz, vizyonumuz ve değerlerimizle ilgili detaylar için sayfamızı ziyaret edin."
+    mainContext["description"] = description
     return render(request, "mainBase/about.html", context)
 @cache_page(60 * 60 * 6)  # 6 saatlik cache
 @vary_on_cookie
 def faqs(request):
     mainContext = mainContent(request)
+    description = "Eşyala.com Sık Sorulan Sorular (SSS) sayfası, kullanıcılarımızın en çok merak ettiği soruları yanıtlamaktadır. Hizmetlerimiz, kullanımı, hesap yönetimi ve diğer konularla ilgili kapsamlı cevaplar bulabilirsiniz. Sorularınıza hızlı ve etkili çözümler arıyorsanız, doğru yerdesiniz."
+    mainContext["description"] = description
     return render(request, "mainBase/faq.html", mainContext)
 @cache_page(60 * 60 * 6)  # 6 saatlik cache
 @vary_on_cookie
 def does_it_work(request):
     mainContext = mainContent(request)
+    description = "Eşyala.com'un nasıl çalıştığını öğrenin. Kullanıcı dostu ara yüzümüzle işlerinizi kolaylaştırın ve etkili sonuçlar elde edin."
+    mainContext["description"] = description
     return render(request, "mainBase/doesitwork.html", mainContext)
 
 
@@ -271,7 +280,8 @@ def search_view(request):
         'search_form': search_form, 
         'products': page_products,
         "product_count": products.count(),
-        "search_category":search_category
+        "search_category":search_category,
+        "description" : "Esyala.com, mobilya, ev dekorasyonu, elektronik ve daha fazlasını kapsayan geniş ürün yelpazesiyle online alışveriş platformudur. Kiralama ve satın alma seçenekleriyle evinizi yenilemek artık çok daha kolay!"
     }
     context.update(mainContext)
     return render(request, 'core/search_results.html', context)

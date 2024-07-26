@@ -8,7 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1">
 	<title>{% block title %}Eşyala{% endblock %}</title>
-    <meta name="description" content="Esyala.com, mobilya, ev dekorasyonu, elektronik ve daha fazlasını kapsayan geniş ürün yelpazesiyle online alışveriş platformudur. Kiralama ve satın alma seçenekleriyle evinizi yenilemek artık çok daha kolay!">
+    <meta name="description" content="{% block description %}Esyala.com, mobilya, ev dekorasyonu, elektronik ve daha fazlasını kapsayan geniş ürün yelpazesiyle online alışveriş platformudur. Kiralama ve satın alma seçenekleriyle evinizi yenilemek artık çok daha kolay!{% endblock description %}">
+
     <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
     <meta name="author" content="esyala.com">
@@ -22,7 +23,15 @@
 	<link rel="stylesheet" type="text/css" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/custom.css">
     <link rel="stylesheet" type="text/css" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/bcf16bd37f5afe2e.css" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="canonical" href="https://www.esyala.com/">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var canonicalLink = document.createElement('link');
+            canonicalLink.rel = 'canonical';
+            canonicalLink.href = window.location.href;
+
+            document.head.appendChild(canonicalLink);
+        });
+    </script>
 
     
     <link rel="stylesheet" type="text/css" href="https://unicons.iconscout.com/release/v3.0.6/css/line.css">

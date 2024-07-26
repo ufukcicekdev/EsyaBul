@@ -1,6 +1,8 @@
 {% extends 'partialsBase/base.html' %}
 {% load custom_filters %}
-{% load static %} {% block title %} Esyala {% endblock title %}
+{% load static %} 
+{% block title %} {{ product.name }} - Eşyala {% endblock title %}
+{% block description %} {{ product.description|truncatechars:100 }} {% endblock description %}
 {% load social_share %}
 
 {% block content %}
