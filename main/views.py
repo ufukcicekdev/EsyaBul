@@ -136,7 +136,7 @@ def about(request):
     }
     context.update(mainContext)
     description = "Eşyala.com hakkında daha fazla bilgi edinin. Biz kimiz, ne yapıyoruz ve neden bu kadar tutkuluyuz? Eşyala.com, size kaliteli hizmet sunmak ve ihtiyaçlarınıza en iyi şekilde cevap vermek için burada. Misyonumuz, vizyonumuz ve değerlerimizle ilgili detaylar için sayfamızı ziyaret edin."
-    mainContext["description"] = description
+    context["description"] = description
     return render(request, "mainBase/about.html", context)
 @cache_page(60 * 60 * 6)  # 6 saatlik cache
 @vary_on_cookie
