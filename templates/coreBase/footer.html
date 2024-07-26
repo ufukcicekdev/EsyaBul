@@ -226,15 +226,15 @@
                             <ul class="list-unstyled social-network">
                             {% for social_media in social_media_links %}
                                     {% if social_media.name == 'facebook' %}
-                                    <li><a target="_blank" href="{{ social_media.link }}"><i class="fa fa-facebook"></i></a></li>
+                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}"><i class="fa fa-facebook"></i></a></li>
                                     {% elif social_media.name == 'twitter' %}
-                                    <li><a target="_blank" href="{{ social_media.link }}"><i class="fa fa-twitter"></i></a></li>
+                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}"><i class="fa fa-twitter"></i></a></li>
                                     {% elif social_media.name == 'instagram' %}
-                                    <li><a target="_blank" href="{{ social_media.link }}"><i class="fa fa-instagram"></i></a></li>
+                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}"><i class="fa fa-instagram"></i></a></li>
                                     {% elif social_media.name == 'linkedin' %}
-                                    <li><a target="_blank" href="{{ social_media.link }}"><i class="fa fa-linkedin"></i></a></li>
+                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}"><i class="fa fa-linkedin"></i></a></li>
                                     {% elif social_media.name == 'youtube' %}
-                                    <li><a target="_blank" href="{{ social_media.link }}"><i class="fa fa-youtube"></i></a></li>
+                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}"><i class="fa fa-youtube"></i></a></li>
                                     {% endif %}
                             {% endfor %}
                             </ul>
