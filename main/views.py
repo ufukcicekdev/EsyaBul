@@ -195,49 +195,50 @@ def dynamic_category_product_list_view(request, category_slugs):
     category_slug_list = category_slugs.split('/')
     mainContext = mainContent(request)
 
-    if category_slugs == "tum-urunler":
-        context = get_main_category_products(request, mainContext, category_slug_list)
+    # if category_slugs == "tum-urunler":
+    #     context = get_main_category_products(request, mainContext, category_slug_list)
+    #     print(context)
+    # else:
+    main_category = get_object_or_404(Category, slug=category_slug_list[0])
+    subcategories = main_category.children.all()
+
+    if len(category_slug_list) == 1:
+        target_category = main_category
+        category_query = Q(category__in=main_category.children.all())
     else:
-        main_category = get_object_or_404(Category, slug=category_slug_list[0])
-        subcategories = main_category.children.all()
+        target_category = get_object_or_404(Category, slug=category_slug_list[-1])
+        category_query = Q(category=target_category)
 
-        if len(category_slug_list) == 1:
-            target_category = main_category
-            category_query = Q(category__in=main_category.children.all())
-        else:
-            target_category = get_object_or_404(Category, slug=category_slug_list[-1])
-            category_query = Q(category=target_category)
+    # Ürünleri ve ilişkili verileri daha verimli getirin
+    products = Product.objects.filter(category_query).select_related('category').prefetch_related(
+    Prefetch('related_products', queryset=ProductImage.objects.all()),
+    Prefetch('reviews', queryset=ProductReview.objects.all()),
+    Prefetch('wishes', queryset=wishlist_model.objects.all())
+).annotate(average_rating=Avg('reviews__rating')).order_by('id')
 
-        # Ürünleri ve ilişkili verileri daha verimli getirin
-        products = Product.objects.filter(category_query).select_related('category').prefetch_related(
-        Prefetch('related_products', queryset=ProductImage.objects.all()),
-        Prefetch('reviews', queryset=ProductReview.objects.all()),
-        Prefetch('wishes', queryset=wishlist_model.objects.all())
-    ).annotate(average_rating=Avg('reviews__rating')).order_by('id')
+    for subcategory in subcategories:
+        subcategory.product_count = Product.objects.filter(category=subcategory).count()
 
-        for subcategory in subcategories:
-            subcategory.product_count = Product.objects.filter(category=subcategory).count()
+    paginator = Paginator(products, 12)
+    page_number = request.GET.get('page')
 
-        paginator = Paginator(products, 12)
-        page_number = request.GET.get('page')
+    try:
+        page_products = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_products = paginator.page(1)
+    except EmptyPage:
+        page_products = paginator.page(paginator.num_pages)
 
-        try:
-            page_products = paginator.page(page_number)
-        except PageNotAnInteger:
-            page_products = paginator.page(1)
-        except EmptyPage:
-            page_products = paginator.page(paginator.num_pages)
-
-        context = {
-            "tumrunler": False,
-            "products": page_products,
-            "product_count": products.count(),
-            "category": main_category,
-            "category_name": target_category,
-            "subcategories": subcategories,
-            "main_slug": main_category,
-        }
-        context.update(mainContext)
+    context = {
+        "tumrunler": False,
+        "products": page_products,
+        "product_count": products.count(),
+        "category": main_category,
+        "category_name": target_category,
+        "subcategories": subcategories,
+        "main_slug": main_category,
+    }
+    context.update(mainContext)
 
     return render(request, "core/category-product-list.html", context)
 
@@ -288,8 +289,6 @@ def search_view(request):
 
 
 
-@cache_page(60 * 60 * 6)  # 6 saatlik cache
-@vary_on_cookie
 def get_main_category_products(request, mainContext, category_slug_list):
     main_category = get_object_or_404(Category, slug=category_slug_list[0])
     main_slug=main_category
