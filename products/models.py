@@ -8,6 +8,8 @@ from PIL import Image
 import io
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import uuid
+import random
+import string
 
 
 # Oda Tipleri (Living Room, Bedroom, Kitchen vb.)
@@ -177,7 +179,7 @@ class Product(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.sku:
-            self.sku = uuid.uuid4().hex[:50]
+            self.sku = ''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase, k=16))
         super(Product, self).save(*args, **kwargs)
     
     def get_percentage(self):
