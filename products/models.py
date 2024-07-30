@@ -11,6 +11,7 @@ import uuid
 import random
 import string
 from django_ckeditor_5.fields import CKEditor5Field
+from django.urls import reverse
 
 
 # Oda Tipleri (Living Room, Bedroom, Kitchen vb.)
@@ -191,6 +192,9 @@ class Product(models.Model):
             return discount_percentage
         else:
             return 0
+        
+    def get_absolute_url(self):
+        return reverse('products:product-detail-view', kwargs={'product_slug': self.slug})
         
     def get_category_breadcrumb(self):
         breadcrumbs = []
