@@ -15,6 +15,25 @@
 }
 
 
+@media (max-width: 1024px) {
+    .logo-img {
+        width: 120px;
+    }
+}
+
+/* Daha küçük ekranlar için logo genişliğini daha da küçültme */
+@media (max-width: 768px) {
+    .logo-img {
+        width: 100px;
+    }
+}
+
+/* En küçük ekranlar için */
+@media (max-width: 480px) {
+    .logo-img {
+        width: 80px;
+    }
+}
 
 </style>
 
@@ -25,7 +44,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <!-- mt logo start here -->
-                    <div class="mt-logo"><a href="{% url 'main:home' %}"><img style="height:50px;" src="{% static 'images/esyala_syh_noktalı.png' %}" alt="Esyala"></a></div>
+                    <div class="mt-logo"><a href="{% url 'main:home' %}"><img class="logo-img" style="height:50px;" src="{% static 'images/esyala_syh_noktalı.png' %}" alt="Esyala"></a></div>
                     <!-- mt icon list start here -->
                     <ul class="mt-icon-list">
                         <li class="hidden-lg hidden-md">
