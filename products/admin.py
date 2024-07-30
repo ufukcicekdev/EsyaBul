@@ -13,7 +13,7 @@ class ProductRentalPriceAdmin(admin.TabularInline):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductImagesAdmin, ProductRentalPriceAdmin]
-    list_display = ('name', 'sku', 'slug', 'selling_price', 'image_preview')
+    list_display = ('name', 'sku', 'slug', 'selling_price','view_on_site', 'image_preview')
     list_filter = ('name', 'sku', 'created_at')
     list_display_links = ('slug',)
     search_fields = ('name', 'sku',)
@@ -25,6 +25,11 @@ class ProductAdmin(admin.ModelAdmin):
         else:
             return "(No image)"
     image_preview.short_description = 'Image Preview'
+
+    def view_on_site(self, obj):
+        return format_html('<a class="button" href="{}" target="_blank">Görüntüle</a>', obj.get_absolute_url())
+    view_on_site.short_description = 'Site üzerinde görüntüle'
+    view_on_site.allow_tags = True
 
 
 # RoomType için admin kaydı
