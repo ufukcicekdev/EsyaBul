@@ -150,7 +150,7 @@ class Product(models.Model):
 
     in_stock = models.IntegerField(default=10, verbose_name="Stokta Var")
     is_active = models.BooleanField(default=True, verbose_name="Aktif mi")
-    sku = models.CharField(max_length=50, unique=True, verbose_name="SKU")
+    sku = models.CharField(max_length=50, unique=True, verbose_name="SKU", null=True, blank=True)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products', blank=True, null=True, verbose_name="Marka")
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, related_name='products', blank=True, null=True, verbose_name="Tedarikçi")
 
