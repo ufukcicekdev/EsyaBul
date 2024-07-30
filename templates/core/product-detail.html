@@ -319,7 +319,7 @@ header .close:hover{
                                     {% endif %}
                                 </ul>
                                 <div class="txt-wrap">
-                                    <p>{{ product.description }}</p>
+                                    <p>{{ product.description|safe }}</p>
                                 </div>
                                 <div class="price-options">
                                     <table class="table">
@@ -410,10 +410,10 @@ header .close:hover{
                             </ul>
                             <div class="tab-content">
                                 <div id="tab1">
-                                    <p>{{ product.information }}</p>
+                                    {{ product.information|safe }}
                                 </div>
                                 <div id="tab2">
-                                    <p>{{ product.description }}</p>
+                                    {{ product.description|safe }}
                                     
                                 </div>
                                 <div id="tab3">

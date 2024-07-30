@@ -10,6 +10,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 import uuid
 import random
 import string
+from django_ckeditor_5.fields import CKEditor5Field
 
 
 # Oda Tipleri (Living Room, Bedroom, Kitchen vb.)
@@ -144,8 +145,10 @@ class Supplier(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=1000, verbose_name="Ad")
     slug = AutoSlugField(populate_from='name', unique=True, verbose_name="Slug")
-    description = models.TextField(blank=True, null=True, verbose_name="Açıklama")
-    information = models.TextField(blank=True, null=True, verbose_name="Bilgi")
+    description = CKEditor5Field(config_name='extends', null=True, blank=True,verbose_name="Açıklama")
+    information = CKEditor5Field(config_name='extends', null=True, blank=True,verbose_name="Bilgi")
+
+
     selling_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Satış Fiyatı")
     selling_old_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Eski Satış Fiyatı")
     purchase_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Alış Fiyatı")
