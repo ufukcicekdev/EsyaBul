@@ -149,9 +149,27 @@ ROBOTS_TXT_PATH = os.path.join(BASE_DIR, 'robots.txt')
 
 
 JAZZMIN_SETTINGS = {
+    "site_title": "Esyala Admin",
     'site_header': "",
     'site_brand': "",
     'copyright': "esyala.com",
+    "hide_apps": ['cities_light','background_task','social_django'],
+  
+
+    "show_sidebar": True,
+    "navigation_expanded": True,
+
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+
+    "topmenu_links": [
+
+        # Url that gets reversed (Permissions can be added)
+        {"name": "AnaSayfa",  "url": "admin:index", "permissions": ["auth.view_user"]},
+
+        {"name": "Ürünler", "model": "products.product"},
+
+    ],
 }
 
 
