@@ -404,16 +404,17 @@ header .close:hover{
                     <div class="row">
                         <div class="col-xs-12">
                             <ul class="mt-tabs text-center text-uppercase">
-                                <li><a href="#tab1" class="active">Ürün Açıklaması</a></li>
-                                <li><a href="#tab2">Ürün Bilgisi</a></li>
+                                <li><a href="#tab1" class="active">Ürün Bilgisi</a></li>
+                                <li><a href="#tab2">Ürün Açıklaması</a></li>
                                 <li><a href="#tab3">Yorumlar ({{ reviews.count }})</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="tab1">
-                                    <p>{{ product.description }}</p>
+                                    <p>{{ product.information }}</p>
                                 </div>
                                 <div id="tab2">
-                                    <p>{{ product.information }}</p>
+                                    <p>{{ product.description }}</p>
+                                    
                                 </div>
                                 <div id="tab3">
                                     <div class="product-comment">
