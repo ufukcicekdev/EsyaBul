@@ -12,6 +12,7 @@ import random
 import string
 from django_ckeditor_5.fields import CKEditor5Field
 from django.urls import reverse
+from bs4 import BeautifulSoup
 
 
 # Oda Tipleri (Living Room, Bedroom, Kitchen vb.)
@@ -203,6 +204,12 @@ class Product(models.Model):
             breadcrumbs.insert(0, {'name': category.name, 'slug': category.get_full_path_slug()})
             category = category.parent
         return breadcrumbs
+    
+    def truncated_description(self, length=100):
+        # HTML içeriğini düzgün bir şekilde dilimlemek için BeautifulSoup kullanıyoruz
+        soup = BeautifulSoup(self.description, "html.parser")
+        truncated_text = soup.get_text()[:length]
+        return truncated_text
 
 class ProductReview(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)

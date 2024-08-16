@@ -336,7 +336,8 @@ header .close:hover{
     
                                         <div class="txt">
                                             <strong class="title"><a href="{% url 'products:product-detail-view' product.slug %}">{{ product.name }}</a></strong>
-                                            <p>{{ product.description|slice:":100" }}</p>
+                                            <p>{{ product.description|slice:":100"|safe }}</p>
+
                                             {% if product.related_products_price.count > 0 %}
                                             <a href="{% url 'products:product-detail-view' product.slug %}">Kiralama fiyatları için ürünü incele</a>
                                             {% endif %}
