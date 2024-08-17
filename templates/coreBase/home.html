@@ -17,6 +17,114 @@
 
 </style>
 
+<style>
+
+  .product-3 {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      height: 500px; /* Sabit yükseklik */
+      overflow: hidden; /* İçeriğin dışarı taşmasını önler */
+      position: relative;
+      text-align: center;
+      background-color: #fff; /* Arka plan rengi */
+  }
+  
+  .img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 233px; /* Sabit yükseklik */
+      overflow: hidden; /* Taşmaları önler */
+      position: relative; /* Caption ve yıldızlar için gerekli */
+  }
+  
+  .img img {
+      max-width: 100%;
+      max-height: 100%;
+  }
+  
+  .caption {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      color: #fff;
+      padding: 5px;
+  }
+  
+  .caption .off {
+      font-size: 17px;
+      color: #fff;
+      display: inline-block;
+      padding: 3px 8px;
+      margin-bottom: 5px;
+      background-color: #b2cc29;
+      font-weight: 700;
+      font-family: "Montserrat", sans-serif;
+      line-height: 1.2;
+      border-radius: 3px;
+  }
+  
+  .caption .best-price {
+      font-size: 17px;
+      color: #fff;
+      padding: 5px 10px;
+      background-color: #fed062;
+      font-weight: 700;
+      font-family: "Montserrat", sans-serif;
+      line-height: 1.2;
+      border-radius: 3px;
+      display: inline-block;
+  }
+  
+  .mt-stars-container {
+      margin-top: 10px;
+  }
+  
+  .mt-stars {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+  }
+  
+  .mt-stars li {
+      margin: 0 2px;
+  }
+  
+  .mt-stars i {
+      color: #FFD700;
+  }
+  
+  .title a {
+      color: #000;
+      text-decoration: none;
+  }
+  
+  .price, .off {
+      display: block;
+  }
+  
+  .links {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+      display: flex;
+      justify-content: center;
+  }
+  
+  .links li {
+      margin: 0 5px;
+  }
+  
+  .slick-slide{
+    padding: 15px;
+  }
+  
+  </style>
+
 <!-- main container of all the page elements -->
 <div id="wrapper">
     <!-- Page Loader -->
@@ -266,39 +374,58 @@
                         <div class="col-xs-12">
                             <div class="bestseller-slider">
                                 {% for best_seller_product in best_seller_products  %}
-                                <div class="slide">
+                                <div class="slide" >
                                     <!-- mt product1 center start here -->
-                                    <div class="mt-product1 large">
-                                        <div class="box">
-                                            <div class="b1">
-                                                <div class="b2">
-                                                    {% with first_image=best_seller_product.related_products.all.0 %}
-                                                        {% if first_image %}
-                                                        <a href="{% url 'products:product-detail-view' best_seller_product.slug %}"><img src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}"></a>
-                                                        {% endif %}
-                                                    {% endwith %}
-                                                    {% if best_seller_product.get_percentage %}
-                                                        <span class="caption">
-                                                            <span class="off">{{ best_seller_product.get_percentage|floatformat:0 }}%</span>
-                                                            <span class="best-price">En İyi Fiyat</span>
-                                                        </span>
-                                                    {% endif %}
-                                                    <ul class="links">
-                                                        {% if request.user.is_authenticated %}
-                                                        <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{best_seller_product.id}}" href="#"><i class="icon-heart"></i></a></li>
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="txt">
-                                            <strong class="title"><a href="{% url 'products:product-detail-view' best_seller_product.slug %}" title="{{ best_seller_product.name }}">{{ best_seller_product.name|truncatechars:30 }}</a></strong>
-                                            <strong class="title">Satış Fiyatı</strong>
-                                            {% if best_seller_product.selling_old_price != 0 %}
-                                            <del class="off"><i class="fa fa-try"></i> <span>{{ best_seller_product.selling_old_price }}</span></del>
+                                    <div class="product-3 marginzero">
+                                        <!-- img start here -->
+                                        <div class="img">
+                                            {% if best_seller_product.related_products.count %}
+                                                {% with first_image=best_seller_product.related_products.first %}
+                                                    <a href="{% url 'products:product-detail-view' best_seller_product.slug %}">
+                                                        <img src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}">
+                                                    </a>
+                                                {% endwith %}
                                             {% endif %}
-                                            <span class="price"><i class="fa fa-try"></i> <span>{{ best_seller_product.selling_price }}</span></span>
+                            
+                                            {% if best_seller_product.get_percentage %}
+                                            <span class="caption">
+                                                <span class="off">{{ best_seller_product.get_percentage|floatformat:0 }}%</span>
+                                                <span class="best-price">En İyi Fiyat</span>
+                                            </span>
+                                            {% endif %}
                                         </div>
-                                    </div><!-- mt product1 center end here -->
+                            
+                                        <!-- stars start here -->
+                                        {% if best_seller_product.get_star_list %}
+                                        <div class="mt-stars-container">
+                                            <ul class="mt-stars">
+                                                {% for star in best_seller_product.get_star_list %}
+                                                <li><i class="fa fa-star{% if not star %}-o{% endif %}"></i></li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                        {% endif %}
+                            
+                                        <!-- txt start here -->
+                                        <div class="txt">
+                                            <strong class="title">
+                                                <a href="{% url 'products:product-detail-view' best_seller_product.slug %}">{{ best_seller_product.name }}</a>
+                                            </strong>
+                                            {% if best_seller_product.selling_old_price != 0 %}
+                                            <del class="off"><i class="fa fa-try"></i> <span>{{best_seller_product.selling_old_price}}</span></del>
+                                            {% endif %}
+                                            <span class="price"><i class="fa fa-try"></i> <span>{{best_seller_product.selling_price}}</span></span>
+                                            <p>{{ best_seller_product.truncated_description }}</p>
+                                        </div>
+                            
+                                        <!-- links start here -->
+                                        <ul class="links">
+                                            {% if request.user.is_authenticated %}
+                                            <li><a aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{product.id}}" href="#"><i class="icon-heart"></i></a></li>
+                                            {% endif %}
+                                            <li><a href="{% url 'products:product-detail-view' best_seller_product.slug %}" class="lightbox"><i class="icon-eye"></i></a></li>
+                                        </ul>
+                                    </div>
                                 </div>
                                 {% endfor %}
                             </div>
