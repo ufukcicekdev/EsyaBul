@@ -364,7 +364,7 @@ header .close:hover{
                             {% include 'core/sub_categories.html' with subcategories=subcategories %}
                             
                             {% if tumrunler %}
-                            <ul class="list-unstyled subcategory-list">
+                            <ul class="list-unstyled category-list">
                               {% for category in main_categories %}
                               <li>
                                   <a href="{% url 'main:dynamic-category-product-list' category_slugs=category.slug %}"><span class="name">{{ category.name }}</span></a>
@@ -381,11 +381,7 @@ header .close:hover{
                         <header class="mt-shoplist-header">
                             <!-- btn-box start here -->
                             <div class="btn-box">
-                                <ul class="list-inline">
-                                   
-                                    <li><a class="mt-viewswitcher" href="#" id="card-view-btn"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
-                                    <li><a class="mt-viewswitcher" href="#" id="list-view-btn"><i class="fa fa-th-list" aria-hidden="true"></i></a></li>
-                                </ul>
+                                
                             </div>
                             <!-- mt-textbox start here -->
                             <div class="mt-textbox">
@@ -453,47 +449,7 @@ header .close:hover{
                             {% endfor %}
                         </ul>
                         
-                        <div id="list-view" style="display: none;">
-                            {% for product in products %}
-                        <div class="product-post">
-                            <!-- img holder start here -->
-                            <div class="img-holder">
-                                {% with first_image=product.related_products.all.0 %}
-                                    {% if first_image %}
-                                    <a href="{% url 'products:product-detail-view' product.slug %}"><img src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}"></a>
-                                    {% endif %}
-                                {% endwith %}
-                            </div><!-- img holder end here -->
-                            <!-- txt holder start here -->
-                            <div class="txt-holder">
-                                <!-- align left start here -->
-                                <div class="align-left">
-                                    <strong class="title"><a href="{% url 'products:product-detail-view' product.slug %}">{{ product.name }}</a></strong>
-                                        {% if product.selling_old_price != 0 %}
-                                        <del class="off"><i class="fa fa-try"></i> <span>{{product.selling_old_price}}</span></del>
-                                        {% endif %}
-                                        <span class="price"><i class="fa fa-try"></i> <span>{{product.selling_price}}</span></span>
-
-                                </div><!-- align left end here -->
-                                <!-- align right start here -->
-                                <div class="align-right">
-                                  <ul class="mt-stars">
-                                      {% for star in product.get_star_list %}
-                                          <li><i class="fa fa-star{% if not star %}-o{% endif %}"></i></li>
-                                      {% endfor %}
-                                  </ul>
-                                    
-                                  <ul class="list-unstyled nav">
-                                      {% if request.user.is_authenticated %}
-                                          <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{product.id}}" href="#"><i class="icon-heart">Beğen</i></a></li>
-                                      {% endif %}
-                                      <a href="{% url 'products:product-detail-view' product.slug %}">Kiralama fiyatları için ürünü incele</a>
-                                  </ul>
-                                </div><!-- align right end here -->
-                            </div><!-- txt holder end here -->
-                        </div>
-                        {% endfor %}
-                        </div>
+                        
                         
 
                         <nav aria-label="Page navigation">
