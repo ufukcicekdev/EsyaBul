@@ -13,6 +13,8 @@ import string
 from django_ckeditor_5.fields import CKEditor5Field
 from django.urls import reverse
 from bs4 import BeautifulSoup
+import math
+from django.db.models import Avg
 
 
 # Oda Tipleri (Living Room, Bedroom, Kitchen vb.)
@@ -207,9 +209,25 @@ class Product(models.Model):
     
     def truncated_description(self, length=100):
         # HTML içeriğini düzgün bir şekilde dilimlemek için BeautifulSoup kullanıyoruz
-        soup = BeautifulSoup(self.description, "html.parser")
+        soup = BeautifulSoup(self.information, "html.parser")
         truncated_text = soup.get_text()[:length]
         return truncated_text
+    
+    def get_star_list(self):
+        """
+        Ortalama puanı yıldızlara dönüştürür. Örneğin, 3.5 ortalama için [True, True, True, False, False] döner.
+        """
+        # average_rating alanını hesapla
+        average_rating = self.reviews.aggregate(average=Avg('rating'))['average']
+        
+        if average_rating is not None:
+            full_stars = math.floor(average_rating)
+            half_star = (average_rating - full_stars) >= 0.5
+            star_list = [True] * full_stars + [False] * (5 - full_stars)
+            if half_star and full_stars < 5:
+                star_list[full_stars] = False  # Yarım yıldız ekleyin
+            return star_list
+        return [False] * 5
 
 class ProductReview(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
