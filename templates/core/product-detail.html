@@ -206,7 +206,31 @@ header .close:hover{
 }
 
 
-/* Diğer sosyal medya platformları için aynı şekilde devam edebilirsiniz */
+.product-slider {
+    position: relative;
+    overflow: hidden;
+}
+
+.product-slider .slick-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff; /* Beyaz arka plan rengi */
+    aspect-ratio: 16 / 9; /* Oranı belirler (örneğin, 16:9) */
+}
+
+.product-slider img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Görüntüyü bozmadan sığdırır */
+}
+
+
+
+
+
+
+
 
 </style>
 
@@ -298,7 +322,7 @@ header .close:hover{
                                 
                                 
                                 <!-- Breadcrumbs of the Page end -->
-                                <h4>{{ product.name | title }}</h4>
+                                <h4>{{ product.name }}</h4>
                                 <!-- Rank Rating of the Page -->
                                 <div class="rank-rating">
                                     <ul class="list-unstyled rating-list">
