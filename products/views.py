@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from .models import Product, Category, ProductReview, Cart, CartItem, ProductRentalPrice
-from customerauth.models import wishlist_model, Address, User
+from customerauth.models import wishlist_model, Address, User, UserProductView
 from products.forms import ProductReviewForm,AddToCartForm
 from django.urls import reverse
 from django.db.models import Avg
@@ -15,6 +15,8 @@ from dotenv import load_dotenv
 from main.mainContent import mainContent
 from esyabul.settings import base
 from django.views.decorators.cache import cache_page
+from django.utils import timezone
+
 load_dotenv()
 
 
@@ -34,6 +36,13 @@ def product_detail_view(request, product_slug):
         wish_count = 0
 
     average_rating = int(reviews.aggregate(Avg('rating'))['rating__avg'] or 0)
+
+
+    if request.user.is_authenticated:
+        user_product_view, created = UserProductView.objects.get_or_create(user=request.user, product=product)
+        if not created:
+            user_product_view.created_date = timezone.now()
+            user_product_view.save()
 
     context = {
         'product': product,

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from main.models import ContactUs,SocialMedia, HomeMainBanner,HomeSubBanner,TeamMembers,HomePageBannerItem
+from main.models import SocialMedia, HomeMainBanner,HomeSubBanner,TeamMembers,HomePageBannerItem,ContactUs
 
 @admin.register(ContactUs)
 class ContactUsAdmin(admin.ModelAdmin):
