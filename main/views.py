@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from main.models import ContactUs,SocialMedia, HomeMainBanner, HomeSubBanner, TeamMembers, HomePageBannerItem
+from main.models import SocialMedia, HomeMainBanner, HomeSubBanner, TeamMembers, HomePageBannerItem,ContactUs
 from django.http import JsonResponse
 from products.models import Category,Product, ProductReview,Cart,CartItem,ProductImage
-from customerauth.models import wishlist_model
+from customerauth.models import wishlist_model,UserProductView
 from django.http import Http404
 from django.db.models import Q,Avg,Prefetch
 from products.forms import AddToCartForm
@@ -69,8 +69,7 @@ def home(request):
     description = "Esyala.com, mobilya, ev dekorasyonu, elektronik ve daha fazlasını kapsayan geniş ürün yelpazesiyle online alışveriş platformudur. Kiralama ve satın alma seçenekleriyle evinizi yenilemek artık çok daha kolay!"
     banners = HomePageBannerItem.objects.filter(position__in=['left', 'right']).order_by('order')
     sliders = HomePageBannerItem.objects.filter(position='slider').order_by('order')
-    
-    
+
     context = {
         "homemainbanners": homemainbanners,
         "homesubbanners": homesubbanners,
@@ -82,7 +81,12 @@ def home(request):
         "description":description
     }
 
+    if request.user.is_authenticated:
+        user_product_view = UserProductView.objects.filter(user=request.user).order_by('-created_at')[:10]
+        context.update({'user_product_view': user_product_view})
+
     context.update(mainContext)
+
     
     return render(request, 'coreBase/home.html', context)
 

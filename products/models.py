@@ -16,7 +16,6 @@ from bs4 import BeautifulSoup
 import math
 from django.db.models import Avg
 
-
 # Oda Tipleri (Living Room, Bedroom, Kitchen vb.)
 class RoomType(models.Model):
     name = models.CharField(max_length=100)
@@ -349,3 +348,5 @@ class CartItem(models.Model):
         else:
             return self.selling_price * self.quantity
         
+
+
