@@ -253,15 +253,19 @@ def get_search_category():
 
 
 
-
 def search_view(request):
     mainContext = mainContent(request)
     search_category = get_search_category()
     search_form = ProductSearchForm(request.GET)
-    products = []
+    products = Product.objects.none()  # Başlangıçta boş bir QuerySet
 
     if search_form.is_valid():
         query = search_form.cleaned_data.get('query')
+        request.session['search_query'] = query  # Sorguyu oturumda saklayın
+    else:
+        query = request.session.get('search_query', '')  # Oturumdan sorguyu alın
+
+    if query:
         products = Product.objects.filter(
             Q(name__icontains=query) | 
             Q(description__icontains=query) | 
@@ -269,7 +273,7 @@ def search_view(request):
         ).order_by('id')
 
     paginator = Paginator(products, 12)  
-    page_number = request.GET.get('page')
+    page_number = request.GET.get('page', 1)  # Varsayılan olarak 1. sayfa
     try:
         page_products = paginator.page(page_number)
     except PageNotAnInteger:
@@ -281,11 +285,13 @@ def search_view(request):
         'search_form': search_form, 
         'products': page_products,
         "product_count": products.count(),
-        "search_category":search_category,
-        "description" : "Esyala.com, mobilya, ev dekorasyonu, elektronik ve daha fazlasını kapsayan geniş ürün yelpazesiyle online alışveriş platformudur. Kiralama ve satın alma seçenekleriyle evinizi yenilemek artık çok daha kolay!"
+        "search_category": search_category,
+        "description": "Esyala.com, mobilya, ev dekorasyonu, elektronik ve daha fazlasını kapsayan geniş ürün yelpazesiyle online alışveriş platformudur. Kiralama ve satın alma seçenekleriyle evinizi yenilemek artık çok daha kolay!"
     }
     context.update(mainContext)
     return render(request, 'core/search_results.html', context)
+
+
 
 
 
