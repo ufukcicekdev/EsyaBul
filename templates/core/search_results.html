@@ -219,6 +219,63 @@ header .close:hover{
 
 }
 
+
+.mt-productlisthold .product-3 .mt-stars {
+    left: 20px;
+}
+
+.product-3 .mt-stars {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  font-size: 12px;
+  list-style: none;
+}
+
+.product-3 .mt-stars li {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.product-3 .mt-stars .fa {
+  color: #c8a760;
+}
+
+.product-3 .mt-stars .fa-star-o {
+  color: #d6d6d6;
+}
+
+.product-3 .caption {
+    top: 68px;
+    left: 0;
+    text-align: left;
+    width: 100%; /* Caption'un tam genişliği kaplamasını sağlamak için */
+}
+
+.product-3 .caption .off {
+    font-size: 17px;
+    color: #fff;
+    display: inline-block;
+    padding: 3px 8px; /* Padding biraz genişletildi, metni daha okunabilir kılmak için */
+    margin-bottom: 5px; /* Alt boşluk biraz artırıldı */
+    background-color: #b2cc29; /* Renk adlandırılması daha anlamlı hale getirildi */
+    font-weight: 700; /* Kalın yazı tipi */
+    font-family: "Montserrat", sans-serif;
+    line-height: 1.2; /* Line-height değeri optimize edildi */
+    border-radius: 3px; /* Köşeleri hafifçe yuvarlamak için */
+}
+
+.product-3 .caption .best-price {
+    font-size: 17px; /* Font boyutu, off etiketi ile uyumlu hale getirildi */
+    color: #fff;
+    padding: 5px 10px; /* Padding genişletildi */
+    background-color: #fed062; /* Renk adlandırılması daha anlamlı hale getirildi */
+    font-weight: 700; /* Kalın yazı tipi */
+    font-family: "Montserrat", sans-serif;
+    line-height: 1.2; /* Line-height değeri optimize edildi */
+    border-radius: 3px; /* Köşeleri hafifçe yuvarlamak için */
+    display: inline-block;
+}
 /* Diğer sosyal medya platformları için aynı şekilde devam edebilirsiniz */
 
 </style>
@@ -281,11 +338,7 @@ header .close:hover{
                         <header class="mt-shoplist-header">
                             <!-- btn-box start here -->
                             <div class="btn-box">
-                                <ul class="list-inline">
-                                   
-                                    <li><a class="mt-viewswitcher" href="#" id="card-view-btn"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
-                                    <li><a class="mt-viewswitcher" href="#" id="list-view-btn"><i class="fa fa-th-list" aria-hidden="true"></i></a></li>
-                                </ul>
+                                
                             </div>
                             <!-- mt-textbox start here -->
                             <div class="mt-textbox">
@@ -297,109 +350,63 @@ header .close:hover{
                             <ul class="mt-productlisthold list-inline">
                                 {% for product in products %}
                                 <li>
-                                    <!-- mt product2 start here -->
-                                    <div class="mt-product2 large bg-grey">
-                                        <!-- box start here -->
-                                        <div class="box">
-                                            {% with first_image=product.related_products.first %}
-                                                    {% if first_image %}
-                                                    <a href="{% url 'products:product-detail-view' product.slug %}"><img src="{{ first_image.image.url }}" style="width: 237px;height: 248px;" alt="{{ first_image.img_title }}"></a>
-                                                    {% endif %}
-                                            {% endwith %}
-                                            
+                                  <div class="product-3 marginzero">
+                                    <!-- img start here -->
+                                    <div class="img">
+                                      
+                                      {% if product.related_products.count == 1 %}
+                                          {% with first_image=product.related_products.first %}
+                                              <a href="{% url 'products:product-detail-view' product.slug %}"><img src="{{ first_image.image.url }}" style="width: 237px;height: 248px;" alt="{{ first_image.img_title }}"></a>
+                                          {% endwith %}
+                                      {% elif product.related_products.count > 1 %}
+                                          {% with first_image=product.related_products.all.0 %}
+                                              <a href="{% url 'products:product-detail-view' product.slug %}"><img src="{{ first_image.image.url }}" style="width: 237px;height: 248px;" alt="{{ first_image.img_title }}"></a>
+                                          {% endwith %}
+                                      {% endif %}
     
-                                            {% if product.get_percentage %}
-                                                <span class="caption">
-                                                    <span class="off">{{ product.get_percentage|floatformat:0 }}%</span>
-                                                    <span class="best-price">En İyi Fiyat</span>
-                                                </span>
-                                            {% endif %}
-
     
-                                            <ul class="mt-stars">
-                                                {% if product.average_rating %}
-                                                {% for star in product.average_rating|make_star_list %}
-                                                <li><i class="fa fa-star{% if not star %}-o{% endif %}"></i></li>
-                                                {% endfor %}
-                                                {% endif %}
-                                            </ul>
-                                            <ul class="links">
-                                            
-                                                {% if request.user.is_authenticated %}
-                                                    <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{product.id}}" href="#"><i class="icon-heart"></i></a></li>
-                                                {% endif %}
-                                                <!-- <li><a href="#popup{{product.id}}" class="lightbox" ><i class="icomoon icon-eye"></i></a></li> -->
+                                      {% if product.get_percentage %}
+                                        <span class="caption">
+                                            <span class="off">{{ product.get_percentage|floatformat:0 }}%</span>
+                                            <span class="best-price">En İyi Fiyat</span>
+                                        </span>
+                                    {% endif %}
+                                      
     
-                                            </ul>
-                                        </div><!-- box end here -->
-                                        <!-- txt end here -->
+                                      <ul class="mt-stars">
+                                        {% for star in product.get_star_list %}
+                                            <li><i class="fa fa-star{% if not star %}-o{% endif %}"></i></li>
+                                        {% endfor %}
+                                      </ul>
+                                    </div>
+                                    
+                                    
     
-                                        <div class="txt">
-                                            <strong class="title"><a href="{% url 'products:product-detail-view' product.slug %}">{{ product.name }}</a></strong>
-                                            <p>{{ product.description|slice:":100"|safe }}</p>
-
-                                            {% if product.related_products_price.count > 0 %}
-                                            <a href="{% url 'products:product-detail-view' product.slug %}">Kiralama fiyatları için ürünü incele</a>
-                                            {% endif %}
-                                        </div><!-- txt end here -->
-                                        <div class="txt">
-                                            <strong class="title">Satış Fiyatı</strong>
+                                    
+                                    <!-- txt start here -->
+                                    <strong class="title"><a href="{% url 'products:product-detail-view' product.slug %}">{{ product.name }}</a></strong>
                                             {% if product.selling_old_price != 0 %}
                                             <del class="off"><i class="fa fa-try"></i> <span>{{product.selling_old_price}}</span></del>
                                             {% endif %}
-                                            <span class="price"><i class="fa fa-try"></i> <span>{{ product.selling_price }}</span></span>
-                                          </div>
-                                    </div><!-- mt product2 end here -->
+                                            <span class="price"><i class="fa fa-try"></i> <span>{{product.selling_price}}</span></span>
+                                    <!-- color start here -->
+    
+                                    
+                                   
+                                    <p>{{ product.truncated_description }}</p>
+                                    <!-- links start here -->
+                                    <ul class="links">
+                                      {% if request.user.is_authenticated %}
+                                          <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{product.id}}" href="#"><i class="icon-heart"></i></a></li>
+                                      {% endif %}
+                                      <li><a href="{% url 'products:product-detail-view' product.slug %}" class="lightbox"><i class="icon-eye"></i></a></li>
+                                    </ul>
+                                  </div>
                                 </li>
                                 {% endfor %}
                             </ul>
                         </div>
-                        
-                        <div id="list-view" style="display: none;">
-                            {% for product in products %}
-                        <div class="product-post">
-                            <!-- img holder start here -->
-                            <div class="img-holder">
-                                {% with first_image=product.related_products.first %}
-                                    {% if first_image %}
-                                    <a href="{% url 'products:product-detail-view' product.slug %}"><img src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}"></a>
-                                    {% endif %}
-                                {% endwith %}
-                            </div><!-- img holder end here -->
-                            <!-- txt holder start here -->
-                            <div class="txt-holder">
-                                <!-- align left start here -->
-                                <div class="align-left">
-                                    <strong class="title"><a href="{% url 'products:product-detail-view' product.slug %}">{{ product.name }}</a></strong>
-                                        {% if product.selling_old_price != 0 %}
-                                        <del class="off"><i class="fa fa-try"></i> <span>{{product.selling_old_price}}</span></del>
-                                        {% endif %}
-                                        <span class="price"><i class="fa fa-try"></i> <span>{{product.selling_price}}</span></span>
-                                        <p>{{ product.description|slice:":100" }}</p>
-
-                                </div><!-- align left end here -->
-                                <!-- align right start here -->
-                                <div class="align-right">
-                                    <ul class="list-unstyled rating-list mt-stars">
-                                        {% if product.average_rating %}
-                                            {% for star in product.average_rating|make_star_list %}
-                                            <li><i class="fa fa-star{% if not star %}-o{% endif %}"></i></li>
-                                            {% endfor %}
-                                            {% endif %}
-                                        <li>{{ product.reviews.count }}</li>
-                                    </ul>
-                                    
-                                    <ul class="list-unstyled nav">
-                                        {% if request.user.is_authenticated %}
-                                            <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{product.id}}" href="#"><i class="icon-heart">Beğen</i></a></li>
-                                        {% endif %}
-                                        <a href="{% url 'products:product-detail-view' product.slug %}">Kiralama fiyatları için ürünü incele</a>
-                                    </ul>
-                                </div><!-- align right end here -->
-                            </div><!-- txt holder end here -->
-                        </div>
-                        {% endfor %}
-                        </div>
+                    
                         
 
                         <nav aria-label="Page navigation">
