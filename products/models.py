@@ -175,6 +175,8 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="Kategori")
 
     view_count = models.PositiveIntegerField(default=0, verbose_name="Görüntülenme Sayısı")
+
+    related = models.ManyToManyField('self', blank=True, related_name='related_product_set', symmetrical=False)
     
     class Meta:
         verbose_name = "Ürün"
@@ -348,5 +350,6 @@ class CartItem(models.Model):
         else:
             return self.selling_price * self.quantity
         
+
 
 

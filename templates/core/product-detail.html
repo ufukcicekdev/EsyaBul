@@ -393,9 +393,33 @@ header .close:hover{
                                         </div>
                                     </div>
                                 </div>
-
-                              
+                            
+                                {% if related_products_with_images %}
+                                
                                 <div class="product-slider">
+                                    {% for related_product_data in related_products_with_images %}
+                                        {% for image in related_product_data.images %}
+                                            <div class="slide">
+                                                <img src="{{ image.image.url }}" alt="{{ image.img_alt }}" title="{{ image.img_title }}">
+                                            </div>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </div>
+                                
+                                <div class="list-unstyled slick-slider pagg-slider">
+                                    {% for related_product_data in related_products_with_images %}
+                                        {% for image in related_product_data.images %}
+                                            <li>
+                                                <div class="img">
+                                                    <img src="{{ image.image.url }}" alt="{{ image.img_alt }}" title="{{ image.img_title }}">
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                 </div>
+                                
+                                 {% else %}
+                                 <div class="product-slider">
                                     {% for image in product.related_products.all %}
                                         <div class="slide">
                                             <img src="{{ image.image.url }}" alt="{{ image.img_alt }}" title="{{ image.title }}">
@@ -408,6 +432,10 @@ header .close:hover{
                                     <li><div class="img"><img src="{{ image.image.url }}" alt="{{ image.alt }}" title="{{ image.title }}"></div></li>
                                     {% endfor %}
                                 </div>
+                                    
+                                {% endif %}
+
+                                
 
                             </div>
                             <!-- Slider of the Page end -->
@@ -449,6 +477,16 @@ header .close:hover{
                                     {% endif %}
                                 </ul>
                                 <div class="txt-wrap">
+                                    {% if related_products_list %}
+                                        <h3>Sete Dahil ürünler</h3>
+                                        <ul>
+                                            {% for related_product1 in related_products_list %}
+                                                <li><a href="{% url 'products:product-detail-view' related_product1.slug %}">{{ related_product1.name }}</a></li>
+                                            {% empty %}
+                                                <li>İlgili ürün bulunamadı.</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
                                     <p>{{ product.description|safe }}</p>
                                 </div>
                                 <div class="price-options">

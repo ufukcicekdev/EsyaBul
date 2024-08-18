@@ -30,32 +30,41 @@ def product_detail_view(request, product_slug):
     reviews = ProductReview.objects.filter(product=product)
     wishCount = wishlist_model.objects.filter(product=product)
     mainContext = mainContent(request)
-    if wishCount.exists():
-        wish_count = wishCount.count()
-    else:
-        wish_count = 0
+
+    wish_count = wishCount.count() if wishCount.exists() else 0
 
     average_rating = int(reviews.aggregate(Avg('rating'))['rating__avg'] or 0)
-
-
+    
     if request.user.is_authenticated:
         user_product_view, created = UserProductView.objects.get_or_create(user=request.user, product=product)
         if not created:
             user_product_view.created_date = timezone.now()
             user_product_view.save()
 
+    # İlgili ürünlerin görselleriyle birlikte alınması
+    related_products_list = product.related.all()
+    related_products_with_images = []
+    for related_product in related_products_list:
+        images = related_product.related_products.all()  # Burada `related_products` ile görselleri alıyoruz
+        related_products_with_images.append({
+            'product': related_product,
+            'images': images
+        })
+
     context = {
         'product': product,
-        'reviews':reviews,
-        'average_rating':average_rating,
+        'reviews': reviews,
+        'average_rating': average_rating,
         'wishCount': wish_count,
-        "add_to_cart_form":add_to_cart_form,
-        "related_products":related_products
+        'add_to_cart_form': add_to_cart_form,
+        'related_products': related_products,
+        'related_products_list': related_products_list,
+        'related_products_with_images': related_products_with_images,
     }
-
     context.update(mainContext)
     
     return render(request, 'core/product-detail.html', context)
+
 
 
 
