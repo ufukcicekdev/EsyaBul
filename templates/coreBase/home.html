@@ -285,7 +285,7 @@
                                                             </ul>
                                                             <ul class="links">
                                                                 {% if request.user.is_authenticated %}
-                                                                <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{featured_product.id}}" href="#"><i class="icon-heart"></i></a></li>
+                                                                <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{featured_product.id}}" ><i class="icon-heart"></i></a></li>
                                                                 {% endif %}
                                                             </ul>
                                                         </div>
@@ -335,7 +335,7 @@
                                                             </ul>
                                                             <ul class="links">
                                                                 {% if request.user.is_authenticated %}
-                                                                <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{latest_product.id}}" href="#"><i class="icon-heart"></i></a></li>
+                                                                <li><a  aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{latest_product.id}}" ><i class="icon-heart"></i></a></li>
                                                                 {% endif %}
                                                             </ul>
                                                         </div>
@@ -416,7 +416,7 @@
 
                                         <ul class="links">
                                             {% if request.user.is_authenticated %}
-                                            <li><a aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{user_product.product.id}}" href="#"><i class="icon-heart"></i></a></li>
+                                            <li><a aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{user_product.product.id}}" ><i class="icon-heart"></i></a></li>
                                             {% endif %}
                                             <li><a href="{% url 'products:product-detail-view' user_product.product.slug %}" class="lightbox"><i class="icon-eye"></i></a></li>
                                         </ul>
@@ -488,7 +488,7 @@
                                         <!-- links start here -->
                                         <ul class="links">
                                             {% if request.user.is_authenticated %}
-                                            <li><a aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{product.id}}" href="#"><i class="icon-heart"></i></a></li>
+                                            <li><a aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{product.id}}" ><i class="icon-heart"></i></a></li>
                                             {% endif %}
                                             <li><a href="{% url 'products:product-detail-view' best_seller_product.slug %}" class="lightbox"><i class="icon-eye"></i></a></li>
                                         </ul>

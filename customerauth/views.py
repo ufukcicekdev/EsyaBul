@@ -627,39 +627,21 @@ def add_to_wishlist(request):
     return JsonResponse(context)
 
 
- 
 
-    # Hata durumunda
 
 @login_required(login_url='customerauth:sign-in')
 def remove_wishlist(request):
-    pid = request.GET.get('id')
-    wishlist = wishlist_model.objects.filter(user=request.user)
-    
-    try:
-        wishlist_item = wishlist_model.objects.get(id=pid, user=request.user)
-        wishlist_item.delete()
-        message = 'Ürün listenizden başarıyla kaldırıldı!'
-        tags = "success"
-    except wishlist_model.DoesNotExist:
-        message = 'Ürün bulunamadı veya silinemedi!'
-        tags = "error"
-    
-    messages_List = [{'message': message, 'tags': tags}]
-    message_html = render_to_string('message.html', {'messages': messages_List})
-    
-    wishlist_json = serializers.serialize('json', wishlist)
-    wishlist_html = render_to_string('customerauth/wishlist-list.html', {'w': wishlist})
-    
-    context = {
-        "status": True,
-        "messages": messages_List,
-        "message_html": message_html,
-        "data": wishlist_html,
-        "w": wishlist_json
-    }
-    
-    return JsonResponse(context)
+    if request.method == "POST":
+        pid = request.POST.get('id')
+        
+        try:
+            wishlist_item = wishlist_model.objects.get(id=pid, user=request.user)
+            wishlist_item.delete()
+            messages.success(request, 'Ürün listenizden başarıyla kaldırıldı!')
+        except wishlist_model.DoesNotExist:
+            messages.error(request, 'Ürün bulunamadı veya silinemedi!')
+
+    return redirect('customerauth:wishlist') 
 
 
 ################### Wishlist Close ################
