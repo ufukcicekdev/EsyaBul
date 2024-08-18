@@ -10,9 +10,11 @@ class ProductImagesAdmin(admin.TabularInline):
 class ProductRentalPriceAdmin(admin.TabularInline):
     model = ProductRentalPrice
 
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductImagesAdmin, ProductRentalPriceAdmin]
+    filter_horizontal = ('related',) 
     list_display = ('name', 'sku', 'slug', 'selling_price','view_on_site', 'image_preview')
     list_filter = ('name', 'sku', 'created_at')
     list_display_links = ('slug',)
