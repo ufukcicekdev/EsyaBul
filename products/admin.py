@@ -69,8 +69,15 @@ class TimeRangeAdmin(admin.ModelAdmin):
     
 @admin.register(Brand)
 class BrandAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    list_display_links =   ('name',)  
+    list_display = ('name', 'image_tag')  # 'image_tag' metodunu ekliyoruz
+    list_display_links = ('name', 'image_tag')  # 'image_tag' metodunu da link yapıyoruz
+    
+    def image_tag(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" width="50" height="50" />', obj.image.url)
+        return '-'
+    
+    image_tag.short_description = 'Resim'
 
 @admin.register(Supplier)
 class SupplierAdmin(admin.ModelAdmin):

@@ -252,10 +252,8 @@
                                 <li><a href="#tab1" class="active">Öne Çıkanlar</a></li>
                                 <li><a href="#tab2">Son Yüklenenler</a></li>
                             </ul>
-                            <!-- producttabs end here -->
                             <div class="tab-content text-center">
                                 <div id="tab1">
-                                    <!-- tabs slider start here -->
                                     <div class="tabs-slider">
                                         {% for featured_product in featured_products %}
                                         {% if forloop.counter0|divisibleby:2 %}<div class="slide">{% endif %}
@@ -292,7 +290,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="txt">
-                                                    <strong class="title"><a href="{% url 'products:product-detail-view' featured_product.slug %}" title="{{ featured_product.name }}">{{ featured_product.name|truncatechars:30 }}</a></strong>
+                                                    <strong class="title"><a href="{% url 'products:product-detail-view' featured_product.slug %}" title="{{ featured_product.name }}">{{ featured_product.name|truncatechars:20 }}</a></strong>
                                                     <strong class="title">Satış Fiyatı</strong>
                                                     {% if featured_product.selling_old_price != 0 %}
                                                     <del class="off"><i class="fa fa-try"></i> <span>{{ featured_product.selling_old_price }}</span></del>
@@ -304,7 +302,6 @@
                                         {% endfor %}
                                     </div>
                                     
-                                    <!-- tabs slider end here -->
                                 </div>
                                 <div id="tab2">
                                     <!-- tabs slider start here -->
@@ -342,7 +339,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="txt">
-                                                    <strong class="title"><a href="{% url 'products:product-detail-view' latest_product.slug %}" title="{{ latest_product.name }}">{{ latest_product.name|truncatechars:30 }}</a></strong>
+                                                    <strong class="title"><a href="{% url 'products:product-detail-view' latest_product.slug %}" title="{{ latest_product.name }}">{{ latest_product.name|truncatechars:20 }}</a></strong>
                                                     <strong class="title">Satış Fiyatı</strong>
                                                     {% if latest_product.selling_old_price != 0 %}
                                                     <del class="off"><i class="fa fa-try"></i> <span>{{ latest_product.selling_old_price }}</span></del>
@@ -358,149 +355,167 @@
                             
                             </div>
                         </div>
-                        <!-- mt producttabs end here -->
-                    </div>
-                </div>
-            </div>
-            {% if request.user.is_authenticated %}
-            <div class="mt-bestseller bg-grey text-center wow fadeInUp" >
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xs-12 mt-heading text-uppercase">
-                            <h2 class="heading">Son Gezdiğin Ürünler</h2>
+
+                        {% if request.user.is_authenticated %}
+                        <div class="mt-bestseller  text-center wow fadeInUp" >
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-xs-12 mt-heading text-uppercase">
+                                        <h2 class="heading">Son Gezdiğin Ürünler</h2>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="bestseller-slider">
+                                            {% for user_product in user_product_view %}
+                                            <div class="slide">
+                                                <div class="product-3 marginzero">
+                                                    <div class="img">
+                                                        {% if user_product.product.related_products.count %}
+                                                            {% with first_image=user_product.product.related_products.first %}
+                                                                <a href="{% url 'products:product-detail-view' user_product.product.slug %}">
+                                                                    <img src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}">
+                                                                </a>
+                                                            {% endwith %}
+                                                        {% endif %}
+
+                                                        {% if user_product.product.get_percentage %}
+                                                        <span class="caption">
+                                                            <span class="off">{{ user_product.product.get_percentage|floatformat:0 }}%</span>
+                                                            <span class="best-price">En İyi Fiyat</span>
+                                                        </span>
+                                                        {% endif %}
+                                                    </div>
+
+                                                    {% if user_product.product.get_star_list %}
+                                                    <div class="mt-stars-container">
+                                                        <ul class="mt-stars">
+                                                            {% for star in user_product.product.get_star_list %}
+                                                            <li><i class="fa fa-star{% if not star %}-o{% endif %}"></i></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                    {% endif %}
+
+                                                    <div class="txt">
+                                                        <strong class="title">
+                                                            <a href="{% url 'products:product-detail-view' user_product.product.slug %}">{{ user_product.product.name }}</a>
+                                                        </strong>
+                                                        {% if user_product.product.selling_old_price != 0 %}
+                                                        <del class="off"><i class="fa fa-try"></i> <span>{{user_product.product.selling_old_price}}</span></del>
+                                                        {% endif %}
+                                                        <span class="price"><i class="fa fa-try"></i> <span>{{user_product.product.selling_price}}</span></span>
+                                                        <p>{{ user_product.product.truncated_description }}</p>
+                                                    </div>
+
+                                                    <ul class="links">
+                                                        {% if request.user.is_authenticated %}
+                                                        <li><a aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{user_product.product.id}}" ><i class="icon-heart"></i></a></li>
+                                                        {% endif %}
+                                                        <li><a href="{% url 'products:product-detail-view' user_product.product.slug %}" class="lightbox"><i class="icon-eye"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="bestseller-slider">
-                                {% for user_product in user_product_view %}
+                        {% endif %}
+                        <div class="mt-bestseller  text-center wow fadeInUp" >
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-xs-12 mt-heading text-uppercase">
+                                        <h2 class="heading">Çok Satanlar</h2>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="bestseller-slider">
+                                            {% for best_seller_product in best_seller_products  %}
+                                            <div class="slide" >
+                                                <!-- mt product1 center start here -->
+                                                <div class="product-3 marginzero">
+                                                    <!-- img start here -->
+                                                    <div class="img">
+                                                        {% if best_seller_product.related_products.count %}
+                                                            {% with first_image=best_seller_product.related_products.first %}
+                                                                <a href="{% url 'products:product-detail-view' best_seller_product.slug %}">
+                                                                    <img src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}">
+                                                                </a>
+                                                            {% endwith %}
+                                                        {% endif %}
+                                        
+                                                        {% if best_seller_product.get_percentage %}
+                                                        <span class="caption">
+                                                            <span class="off">{{ best_seller_product.get_percentage|floatformat:0 }}%</span>
+                                                            <span class="best-price">En İyi Fiyat</span>
+                                                        </span>
+                                                        {% endif %}
+                                                    </div>
+                                        
+                                                    <!-- stars start here -->
+                                                    {% if best_seller_product.get_star_list %}
+                                                    <div class="mt-stars-container">
+                                                        <ul class="mt-stars">
+                                                            {% for star in best_seller_product.get_star_list %}
+                                                            <li><i class="fa fa-star{% if not star %}-o{% endif %}"></i></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                    {% endif %}
+                                        
+                                                    <!-- txt start here -->
+                                                    <div class="txt">
+                                                        <strong class="title">
+                                                            <a href="{% url 'products:product-detail-view' best_seller_product.slug %}">{{ best_seller_product.name }}</a>
+                                                        </strong>
+                                                        {% if best_seller_product.selling_old_price != 0 %}
+                                                        <del class="off"><i class="fa fa-try"></i> <span>{{best_seller_product.selling_old_price}}</span></del>
+                                                        {% endif %}
+                                                        <span class="price"><i class="fa fa-try"></i> <span>{{best_seller_product.selling_price}}</span></span>
+                                                        <p>{{ best_seller_product.truncated_description }}</p>
+                                                    </div>
+                                        
+                                                    <!-- links start here -->
+                                                    <ul class="links">
+                                                        {% if request.user.is_authenticated %}
+                                                        <li><a aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{product.id}}" ><i class="icon-heart"></i></a></li>
+                                                        {% endif %}
+                                                        <li><a href="{% url 'products:product-detail-view' best_seller_product.slug %}" class="lightbox"><i class="icon-eye"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if brand_data %}
+                        <div class="mt-patners wow fadeInUp" data-wow-delay="0.6s">
+                            <h2 class="heading">Markalar</h2>
+                            <div class="patner-slider">
+                                {% for brand in brand_data %}
                                 <div class="slide">
-                                    <div class="product-3 marginzero">
-                                        <div class="img">
-                                            {% if user_product.product.related_products.count %}
-                                                {% with first_image=user_product.product.related_products.first %}
-                                                    <a href="{% url 'products:product-detail-view' user_product.product.slug %}">
-                                                        <img src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}">
-                                                    </a>
-                                                {% endwith %}
-                                            {% endif %}
-
-                                            {% if user_product.product.get_percentage %}
-                                            <span class="caption">
-                                                <span class="off">{{ user_product.product.get_percentage|floatformat:0 }}%</span>
-                                                <span class="best-price">En İyi Fiyat</span>
-                                            </span>
-                                            {% endif %}
-                                        </div>
-
-                                        {% if user_product.product.get_star_list %}
-                                        <div class="mt-stars-container">
-                                            <ul class="mt-stars">
-                                                {% for star in user_product.product.get_star_list %}
-                                                <li><i class="fa fa-star{% if not star %}-o{% endif %}"></i></li>
-                                                {% endfor %}
-                                            </ul>
-                                        </div>
-                                        {% endif %}
-
-                                        <div class="txt">
-                                            <strong class="title">
-                                                <a href="{% url 'products:product-detail-view' user_product.product.slug %}">{{ user_product.product.name }}</a>
-                                            </strong>
-                                            {% if user_product.product.selling_old_price != 0 %}
-                                            <del class="off"><i class="fa fa-try"></i> <span>{{user_product.product.selling_old_price}}</span></del>
-                                            {% endif %}
-                                            <span class="price"><i class="fa fa-try"></i> <span>{{user_product.product.selling_price}}</span></span>
-                                            <p>{{ user_product.product.truncated_description }}</p>
-                                        </div>
-
-                                        <ul class="links">
-                                            {% if request.user.is_authenticated %}
-                                            <li><a aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{user_product.product.id}}" ><i class="icon-heart"></i></a></li>
-                                            {% endif %}
-                                            <li><a href="{% url 'products:product-detail-view' user_product.product.slug %}" class="lightbox"><i class="icon-eye"></i></a></li>
-                                        </ul>
+                                    {% if brand.image %}
+                                    <div class="box1">
+                                        <div class="box2"><a><img src="{{ brand.image.url }}" title="{{ brand.img_title }}" alt="{{ brand.img_alt }}" style="width: 200px;"></a></div>
                                     </div>
+                                    {% endif %}
                                 </div>
                                 {% endfor %}
 
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
-            {% endif %}
-            <div class="mt-bestseller bg-grey text-center wow fadeInUp" >
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xs-12 mt-heading text-uppercase">
-                            <h2 class="heading">Çok Satanlar</h2>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="bestseller-slider">
-                                {% for best_seller_product in best_seller_products  %}
-                                <div class="slide" >
-                                    <!-- mt product1 center start here -->
-                                    <div class="product-3 marginzero">
-                                        <!-- img start here -->
-                                        <div class="img">
-                                            {% if best_seller_product.related_products.count %}
-                                                {% with first_image=best_seller_product.related_products.first %}
-                                                    <a href="{% url 'products:product-detail-view' best_seller_product.slug %}">
-                                                        <img src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}">
-                                                    </a>
-                                                {% endwith %}
-                                            {% endif %}
-                            
-                                            {% if best_seller_product.get_percentage %}
-                                            <span class="caption">
-                                                <span class="off">{{ best_seller_product.get_percentage|floatformat:0 }}%</span>
-                                                <span class="best-price">En İyi Fiyat</span>
-                                            </span>
-                                            {% endif %}
-                                        </div>
-                            
-                                        <!-- stars start here -->
-                                        {% if best_seller_product.get_star_list %}
-                                        <div class="mt-stars-container">
-                                            <ul class="mt-stars">
-                                                {% for star in best_seller_product.get_star_list %}
-                                                <li><i class="fa fa-star{% if not star %}-o{% endif %}"></i></li>
-                                                {% endfor %}
-                                            </ul>
-                                        </div>
-                                        {% endif %}
-                            
-                                        <!-- txt start here -->
-                                        <div class="txt">
-                                            <strong class="title">
-                                                <a href="{% url 'products:product-detail-view' best_seller_product.slug %}">{{ best_seller_product.name }}</a>
-                                            </strong>
-                                            {% if best_seller_product.selling_old_price != 0 %}
-                                            <del class="off"><i class="fa fa-try"></i> <span>{{best_seller_product.selling_old_price}}</span></del>
-                                            {% endif %}
-                                            <span class="price"><i class="fa fa-try"></i> <span>{{best_seller_product.selling_price}}</span></span>
-                                            <p>{{ best_seller_product.truncated_description }}</p>
-                                        </div>
-                            
-                                        <!-- links start here -->
-                                        <ul class="links">
-                                            {% if request.user.is_authenticated %}
-                                            <li><a aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{product.id}}" ><i class="icon-heart"></i></a></li>
-                                            {% endif %}
-                                            <li><a href="{% url 'products:product-detail-view' best_seller_product.slug %}" class="lightbox"><i class="icon-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-         
+
         </main>
 
     

@@ -122,17 +122,27 @@ class Category(models.Model):
         return ' -> '.join(full_path[::-1])
     
     
-    
 
 class Brand(models.Model):
     name = models.CharField(max_length=100,verbose_name="Ad")
-
+    image = models.ImageField(upload_to='Brand/', null=True, blank=True, verbose_name="Resim")
+    img_alt = models.CharField(max_length=255, null=True, blank=True, verbose_name="Resim Alt Metni")
+    img_title = models.CharField(max_length=255, null=True, blank=True, verbose_name="Resim Başlığı")
+    is_active = models.BooleanField(default=True, verbose_name="Aktif mi")
     class Meta:
         verbose_name = "Marka"
         verbose_name_plural = "Marka"
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        # Alt ve title metinlerini ayarla
+        if not self.img_alt:
+            self.img_alt = self.name
+        if not self.img_title:
+            self.img_title = self.name
+        super().save(*args, **kwargs)
     
 class Supplier(models.Model):
     name = models.CharField(max_length=100, verbose_name="Ad")
