@@ -5,6 +5,7 @@ from main.models import SocialMedia, HomeMainBanner, HomeSubBanner, TeamMembers,
 from django.http import JsonResponse
 from products.models import Category,Product, ProductReview,Cart,CartItem,ProductImage
 from customerauth.models import wishlist_model,UserProductView
+from products.models import Brand
 from django.http import Http404
 from django.db.models import Q,Avg,Prefetch
 from products.forms import AddToCartForm
@@ -59,6 +60,15 @@ def get_homepage_products():
     
     return products
 
+
+def get_homepage_brand():
+    key = 'homepage_brand'
+    brands = cache.get(key)  # Burada 'brands' olarak güncelledik
+    if not brands:  # Eğer cache'te yoksa, DB'den al ve cache'e kaydet
+        brands = list(Brand.objects.filter(is_active=True))
+        cache.set(key, brands, 60 * 60 * 6) 
+    return brands
+
 @cache_page(60 * 60 * 6)  # 6 saatlik cache
 @vary_on_cookie
 def home(request):
@@ -66,6 +76,8 @@ def home(request):
     homemainbanners = get_home_main_banners()
     homesubbanners = get_home_sub_banners()
     product_data = get_homepage_products()
+    brand_data = get_homepage_brand()
+
     description = "Esyala.com, mobilya, ev dekorasyonu, elektronik ve daha fazlasını kapsayan geniş ürün yelpazesiyle online alışveriş platformudur. Kiralama ve satın alma seçenekleriyle evinizi yenilemek artık çok daha kolay!"
     banners = HomePageBannerItem.objects.filter(position__in=['left', 'right']).order_by('order')
     sliders = HomePageBannerItem.objects.filter(position='slider').order_by('order')
@@ -78,7 +90,8 @@ def home(request):
         "latest_products": product_data['latest_products'],
         "banners": banners,
         "sliders": sliders,
-        "description":description
+        "description":description,
+        "brand_data":brand_data
     }
 
     if request.user.is_authenticated:
