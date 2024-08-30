@@ -3,7 +3,7 @@ from django.conf.urls import handler404, handler500
 from django.views.generic import TemplateView
 from .views import *
 from django.contrib.sitemaps.views import sitemap
-from main.sitemap import ProductLinkSiteMap,StaticViewSitemap,CategoryLinkSiteMap
+from main.sitemap import ProductLinkSiteMap,StaticViewSitemap,CategoryLinkSiteMap,BlogLinkSiteMap
 
 app_name = "main"
 
@@ -12,6 +12,7 @@ sitemaps = {
     'static': StaticViewSitemap,
     'CategoryLinkSiteMap':CategoryLinkSiteMap, 
     'ProductLinkSiteMap':ProductLinkSiteMap, 
+    "BlogLinkSiteMap":BlogLinkSiteMap,
 }
 
 
