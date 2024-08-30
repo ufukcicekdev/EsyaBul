@@ -13,6 +13,7 @@ enddate = startdate + relativedelta(years=10)
 
 
 class StaticViewSitemap(Sitemap):
+    protocol = 'https'
     def items(self):
         return ['home','contact', 'about', 'faqs','blog']  
 
