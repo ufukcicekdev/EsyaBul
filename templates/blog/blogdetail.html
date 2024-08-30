@@ -1,0 +1,557 @@
+{% extends 'partialsBase/base.html' %}
+{% load custom_filters %}
+{% load static %}
+
+{% block title %} Blog - Eşyala {% endblock title %}
+{% block description %} {{ description }} {% endblock description %}
+{% block content %}
+<style>
+    .address-list li {
+    display: flex;
+    align-items: center;
+}
+
+.address-list li i {
+    margin-right: 0px; /* İkon ile metin arasındaki sağ boşluğu ayarlayın */
+}
+
+</style>
+
+<style>
+
+  .product-3 {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      height: 500px; /* Sabit yükseklik */
+      overflow: hidden; /* İçeriğin dışarı taşmasını önler */
+      position: relative;
+      text-align: center;
+      background-color: #fff; /* Arka plan rengi */
+  }
+  
+  .img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 233px; /* Sabit yükseklik */
+      overflow: hidden; /* Taşmaları önler */
+      position: relative; /* Caption ve yıldızlar için gerekli */
+  }
+  
+  .img img {
+      max-width: 100%;
+      max-height: 100%;
+  }
+  
+  .caption {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      color: #fff;
+      padding: 5px;
+  }
+  
+  .caption .off {
+      font-size: 17px;
+      color: #fff;
+      display: inline-block;
+      padding: 3px 8px;
+      margin-bottom: 5px;
+      background-color: #b2cc29;
+      font-weight: 700;
+      font-family: "Montserrat", sans-serif;
+      line-height: 1.2;
+      border-radius: 3px;
+  }
+  
+  .caption .best-price {
+      font-size: 17px;
+      color: #fff;
+      padding: 5px 10px;
+      background-color: #fed062;
+      font-weight: 700;
+      font-family: "Montserrat", sans-serif;
+      line-height: 1.2;
+      border-radius: 3px;
+      display: inline-block;
+  }
+  
+  .mt-stars-container {
+      margin-top: 10px;
+  }
+  
+  .mt-stars {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+  }
+  
+  .mt-stars li {
+      margin: 0 2px;
+  }
+  
+  .mt-stars i {
+      color: #FFD700;
+  }
+  
+  .title a {
+      color: #000;
+      text-decoration: none;
+  }
+  
+  .price, .off {
+      display: block;
+  }
+  
+  .links {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+      display: flex;
+      justify-content: center;
+  }
+  
+  .links li {
+      margin: 0 5px;
+  }
+  
+  .slick-slide{
+    padding: 15px;
+  }
+  
+  </style>
+
+<style>
+    .time {
+        display: inline-block;
+        font-size: 14px; /* Yazı boyutunu ayarlayın */
+        line-height: 1.2; /* Satır yüksekliği */
+        text-align: center; /* Yazıyı ortalamak */
+        padding: 5px; /* İç boşluk eklemek */
+        background-color: #f8f8f8; /* Arka plan rengi */
+        border-radius: 4px; /* Köşeleri yuvarlatmak */
+        border: 1px solid #ddd; /* Kenarlık rengi */
+    }
+
+    .time strong {
+        display: block; /* Günün numarasını blok olarak göstermek */
+        font-size: 24px; /* Günün numarasının yazı boyutu */
+    }
+
+    .time small {
+        display: block; /* Küçük tarih bilgisini blok olarak göstermek */
+        font-size: 12px; /* Küçük tarih bilgisinin yazı boyutu */
+    }
+</style>
+
+
+<style>
+
+
+::selection{
+  color: #fff;
+  background: #7d2ae8;
+}
+.view-modal, .popupSocial{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 5;
+}
+
+.view-modal{
+  top: 10%;
+  left: 90%;
+  color: #e8e4ee;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 10px 25px;
+  background: rgb(113, 5, 156);
+  transform: translate(-50%, -50%);
+}
+.popupSocial{
+  background: rgb(255, 254, 254);
+  padding: 25px;
+  border-radius: 15px;
+  top: 10%;
+  max-width: 380px;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0px 10px 15px rgba(0,0,0,0.1);
+  transform: translate(-50%, -50%) scale(1.2);
+  transition: top 0s 0.2s ease-in-out,
+              opacity 0.2s 0s ease-in-out,
+              transform 0.2s 0s ease-in-out;
+}
+.popupSocial.show{
+  top: 50%;
+  left: 50%;
+  opacity: 1;
+  pointer-events: auto;
+  transform:translate(-50%, -50%) scale(1);
+  transition: top 0s 0s ease-in-out,
+              opacity 0.2s 0s ease-in-out,
+              transform 0.2s 0s ease-in-out;
+
+}
+.popupSocial :is(header, .icons, .field){
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.popupSocial header{
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ebedf9;
+}
+header span{
+  font-size: 21px;
+  font-weight: 600;
+}
+header .close, .icons a{
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  justify-content: center;
+  transition: all 0.3s ease-in-out;
+} 
+header .close{
+  color: #878787;
+  font-size: 17px;
+  background: #f3f3f3;
+  height: 33px;
+  width: 33px;
+  cursor: pointer;
+}
+header .close:hover{
+  background: #ebedf9;
+}
+.popup .content{
+  margin: 20px 0;
+}
+.popup .icons{
+  margin: 15px 0 20px 0;
+}
+.content p{
+  font-size: 16px;
+}
+.content .icons a{
+  height: 50px;
+  width: 50px;
+  font-size: 20px;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+.icons a i{
+  transition: transform 0.3s ease-in-out;
+}
+.icons a:nth-child(1){
+  color: #1877F2;
+  border-color: #b7d4fb;
+}
+.icons a:nth-child(1):hover{
+  background: #1877F2;
+}
+.icons a:nth-child(2){
+  color: #46C1F6;
+  border-color: #b6e7fc;
+}
+.icons a:nth-child(2):hover{
+  background: #46C1F6;
+}
+.icons a:nth-child(3){
+  color: #e1306c;
+  border-color: #f5bccf;
+}
+.icons a:nth-child(3):hover{
+  background: #e1306c;
+}
+.icons a:nth-child(4){
+  color: #25D366;
+  border-color: #bef4d2;
+}
+.icons a:nth-child(4):hover{
+  background: #25D366;
+}
+.icons a:nth-child(5){
+  color: #0088cc;
+  border-color: #b3e6ff;
+}
+.icons a:nth-child(5):hover{
+  background: #0088cc;
+}
+.icons a:hover{
+  color: #fff;
+  border-color: transparent;
+}
+.icons a:hover i{
+  transform: scale(1.2);
+}
+.content .field{
+  margin: 12px 0 -5px 0;
+  height: 45px;
+  border-radius: 4px;
+  padding: 0 5px;
+  border: 1px solid #757171;
+}
+.field.active{
+  border-color: #7d2ae8;
+}
+.field i{
+  width: 50px;
+  font-size: 18px;
+  text-align: center;
+}
+.field.active i{
+  color: #7d2ae8;
+}
+
+
+.field input{
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 15px;
+}
+.field button{
+  color: #fff;
+  padding: 5px 18px;
+  background: #7d2ae8;
+}
+.field button:hover{
+  background: #8d39fa;
+}
+</style>
+  
+
+<div id="wrapper">
+    <div id="pre-loader" class="loader-container">
+        <div class="loader">
+            <img src="{% static 'images/svg/rings.svg' %}" alt="loader">
+        </div>
+    </div>
+    <div class="w1">
+        {% include 'coreBase/header.html' %}
+
+        <main id="mt-main">
+            <!-- Mt Contact Banner of the Page -->
+            <section class="mt-contact-banner style4 wow fadeInUp" data-wow-delay="0.4s" style="background-image: url({% static 'images/img43.jpg' %});">
+              <div class="container">
+                <div class="row">
+                  <div class="col-xs-12 text-center">
+                    <h1>Blog</h1>
+                    <!-- Breadcrumbs of the Page -->
+                    <nav class="breadcrumbs">
+                      <ul class="list-unstyled">
+                        <li><a href="/">AnaSayfa <i class="fa fa-angle-right"></i></a></li>
+                        <li><a href="{% url 'blog:blog_home' %}">Blog<i class="fa fa-angle-right"></i></a></li>
+                        <li><a >{{ blog.title }}</a></li>
+
+                      </ul>
+                    </nav>
+                    <!-- Breadcrumbs of the Page end -->
+                  </div>
+                </div>
+                
+              </div>
+            </section>
+            <!-- Mt Contact Banner of the Page end -->
+            <!-- Mt Blog Detail of the Page -->
+            <div class="mt-blog-detail style1">
+              <div class="container">
+                <div class="row">
+
+                  <div class="col-xs-12 col-sm-8" data-wow-delay="0.4s">
+                    <article class="blog-post detail wow fadeInUp" data-wow-delay="0.4s">
+                        <div class="img-holder">
+                          <img src="{{ blog.banner.url }}" alt="image description">
+                        </div>
+                        <time class="time" datetime="{{ blog.created_at|date:'Y-m-d H:i' }}">
+                            <strong>{{ blog.created_at|date:'d' }}</strong>
+                            <small>{{ blog.created_at|date:'F' }}</small> 
+                        </time>
+                        <div class="blog-txt">
+                          <h2><a >{{ blog.title }}</a></h2>
+                          <ul class="list-unstyled blog-nav">
+                            <li> <a href="#"><i class="fa fa-clock-o"></i>{{ blog.created_at | date }}</a></li>
+                            <li> <a href="{% url 'blog:category_detail_blog' blog.category.slug %}"><i class="fa fa-list"></i>{{ blog.category }}</a></li>
+                            <li> <a ><i class="fa fa-eye"></i>{{ blog.views }}</a></li>
+                            <li><a href="#" class="share-modal"><i class="fa fa-share-alt"></i> Paylaş</a></li>
+                          </ul>
+
+                          <div class="popupSocial">
+                            <header>
+                                <span>Paylaşım Penceresi</span>
+                                <div class="close"><i class="uil uil-times"></i></div>
+                            </header>
+                            <div class="content">
+                                <p>Bu linki paylaşın:</p>
+                                <ul class="icons">
+                                    <li><a href="#" id="facebookShareBtn"><i class="fa fa-facebook-f"></i></a></li>
+                                    <li><a href="#" id="twitterShareBtn"><i class="fa fa-twitter"></i></a></li>
+                                    <li><a href="#" id="linkedinShareBtn"><i class="fa fa-linkedin"></i></a></li>
+                                    <li><a href="#" id="whatsappShareBtn"><i class="fa fa-whatsapp"></i></a></li>
+                                    <!-- Diğer sosyal medya platformları için benzer bağlantılar ekleyebilirsiniz -->
+                                </ul>
+                                <p>Veya linki kopyalayın:</p>
+                                <div class="field">
+                                    <i class="url-icon uil uil-link"></i>
+                                    <input type="text" readonly value="{{ request.build_absolute_uri }}">
+                                    <button>Kopyala</button>
+                                </div>
+                            </div>
+                        </div>
+
+                          {{ blog.description | safe }}
+
+                         
+                        </div>
+                      </article>
+                
+                      <article class="mt-author-box">
+                        <div class="author-img">
+                          <a href="#"><img src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/esyala_syh_noktal%C4%B1.png" alt="image description"></a>
+                        </div>
+                        <div class="author-txt">
+                          <h3><a href="#">Eşyala</a></h3>
+                          <p>Esyala.com, mobilya, ev dekorasyonu, elektronik ve daha fazlasını kapsayan geniş ürün yelpazesiyle online alışveriş platformudur. Kiralama ve satın alma seçenekleriyle evinizi yenilemek artık çok daha kolay!</p>
+                          {% if social_media_links.count > 0 %}
+                            <ul class="list-unstyled social-network">
+                            {% for social_media in social_media_links %}
+                                    {% if social_media.name == 'facebook' %}
+                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}"><i class="fa fa-facebook"></i></a></li>
+                                    {% elif social_media.name == 'twitter' %}
+                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}"><i class="fa fa-twitter"></i></a></li>
+                                    {% elif social_media.name == 'instagram' %}
+                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}"><i class="fa fa-instagram"></i></a></li>
+                                    {% elif social_media.name == 'linkedin' %}
+                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}"><i class="fa fa-linkedin"></i></a></li>
+                                    {% elif social_media.name == 'youtube' %}
+                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}"><i class="fa fa-youtube"></i></a></li>
+                                    {% endif %}
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+                        </div>
+                      </article>
+                        
+                    <!-- Btn Holder of the Page end -->
+                  </div>
+                  <div class="col-xs-12 col-sm-4 text-right sidebar wow fadeInUp" data-wow-delay="0.4s">
+                    <section class="widget category-widget">
+                      <h3>Kategoriler</h3>
+                      <ul class="list-unstyled widget-nav">
+                        {% for category in categories %}
+
+                        <li><a href="{% url 'blog:category_detail_blog' category.slug %}">{{ category.name }}</a></li>
+
+                        {% endfor %}
+                        
+                      </ul>
+                    </section>
+                  
+                     {% if popular_posts %}
+                    <section class="widget popular-widget">
+                      <h3>Popüler Gönderiler</h3>
+                      <ul class="list-unstyled text-right popular-post">
+                        {% for populer in popular_posts %}
+                        <li>
+                          <div class="img-post">
+                            <a href="{% url 'blog:blog_detail' slug=populer.slug %}"><img src="{{ populer.banner.url }}" alt="{{ populer.title }}" title="{{ populer.title }}"></a>
+                          </div>
+                          <div class="info-dscrp">
+                            <p>{{ populer.title }}</p>
+                            <time datetime="{{ populer.created_at | date }}">{{ populer.created_at | date }}</time>
+                          </div>
+                        </li>
+                        {% endfor %}
+                        
+                      </ul>
+                    </section>
+                    {% endif  %}
+
+                    <!-- Popular Widget of the Page end -->
+                  
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <!-- Mt Blog Detail of the Page end -->
+          </main>
+
+    
+        {% include 'coreBase/footer.html' %}
+    </div>
+    <span id="back-top" class="fa fa-arrow-up"></span>
+</div>
+
+
+<script>
+
+const viewBtn = document.querySelector(".share-modal");
+const popup = document.querySelector(".popupSocial");
+const close = popup.querySelector(".close");
+const field = popup.querySelector(".field");
+const input = field.querySelector("input");
+const copy = field.querySelector("button");
+
+viewBtn.addEventListener("click", function(event) {
+    event.preventDefault();
+    popup.classList.toggle("show");
+});
+
+close.addEventListener("click", function(event) {
+    event.preventDefault();
+    popup.classList.remove("show");
+});
+
+copy.addEventListener("click", function(event) {
+    event.preventDefault();
+    input.select(); // Select the input value
+    if (document.execCommand("copy")) { // If the selected text is copied
+        field.classList.add("active");
+        copy.innerText = "Kopyalandı";
+        setTimeout(function() {
+            window.getSelection().removeAllRanges(); // Remove selection from page
+            field.classList.remove("active");
+            copy.innerText = "Kopyala";
+        }, 3000);
+    }
+});
+
+
+document.getElementById("facebookShareBtn").addEventListener("click", function() {
+    var url = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(window.location.href);
+    window.open(url, "_blank", "width=600,height=400");
+});
+
+document.getElementById("twitterShareBtn").addEventListener("click", function() {
+    var url = "https://twitter.com/intent/tweet?url=" + encodeURIComponent(window.location.href);
+    window.open(url, "_blank", "width=600,height=400");
+});
+
+document.getElementById("linkedinShareBtn").addEventListener("click", function() {
+    var url = "https://www.linkedin.com/sharing/share-offsite/?url=" + encodeURIComponent(window.location.href);
+    window.open(url, "_blank", "width=600,height=400");
+});
+
+document.getElementById("whatsappShareBtn").addEventListener("click", function() {
+    var url = "https://api.whatsapp.com/send?text=" + encodeURIComponent(window.location.href);
+    window.open(url, "_blank", "width=600,height=400");
+});
+
+document.getElementById("telegramShareBtn").addEventListener("click", function() {
+    var url = "https://t.me/share/url?url=" + encodeURIComponent(window.location.href);
+    window.open(url, "_blank", "width=600,height=400");
+});
+
+</script>
+
+
+{%  endblock %}

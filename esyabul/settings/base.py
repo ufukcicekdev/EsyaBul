@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "easyaudit",
     "django_social_share",
     "ipware",  
+    "blog",
     ]
 
 MIDDLEWARE = [

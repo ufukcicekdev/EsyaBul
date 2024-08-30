@@ -1,0 +1,285 @@
+{% extends 'partialsBase/base.html' %}
+{% load custom_filters %}
+{% load static %}
+
+{% block title %} Blog - Eşyala {% endblock title %}
+{% block description %} {{ description }} {% endblock description %}
+{% block content %}
+<style>
+    .address-list li {
+    display: flex;
+    align-items: center;
+}
+
+.address-list li i {
+    margin-right: 0px; /* İkon ile metin arasındaki sağ boşluğu ayarlayın */
+}
+
+</style>
+
+<style>
+
+  .product-3 {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      height: 500px; /* Sabit yükseklik */
+      overflow: hidden; /* İçeriğin dışarı taşmasını önler */
+      position: relative;
+      text-align: center;
+      background-color: #fff; /* Arka plan rengi */
+  }
+  
+  .img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 233px; /* Sabit yükseklik */
+      overflow: hidden; /* Taşmaları önler */
+      position: relative; /* Caption ve yıldızlar için gerekli */
+  }
+  
+  .img img {
+      max-width: 100%;
+      max-height: 100%;
+  }
+  
+  .caption {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      color: #fff;
+      padding: 5px;
+  }
+  
+  .caption .off {
+      font-size: 17px;
+      color: #fff;
+      display: inline-block;
+      padding: 3px 8px;
+      margin-bottom: 5px;
+      background-color: #b2cc29;
+      font-weight: 700;
+      font-family: "Montserrat", sans-serif;
+      line-height: 1.2;
+      border-radius: 3px;
+  }
+  
+  .caption .best-price {
+      font-size: 17px;
+      color: #fff;
+      padding: 5px 10px;
+      background-color: #fed062;
+      font-weight: 700;
+      font-family: "Montserrat", sans-serif;
+      line-height: 1.2;
+      border-radius: 3px;
+      display: inline-block;
+  }
+  
+  .mt-stars-container {
+      margin-top: 10px;
+  }
+  
+  .mt-stars {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+  }
+  
+  .mt-stars li {
+      margin: 0 2px;
+  }
+  
+  .mt-stars i {
+      color: #FFD700;
+  }
+  
+  .title a {
+      color: #000;
+      text-decoration: none;
+  }
+  
+  .price, .off {
+      display: block;
+  }
+  
+  .links {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+      display: flex;
+      justify-content: center;
+  }
+  
+  .links li {
+      margin: 0 5px;
+  }
+  
+  .slick-slide{
+    padding: 15px;
+  }
+  
+  </style>
+
+<div id="wrapper">
+    <div id="pre-loader" class="loader-container">
+        <div class="loader">
+            <img src="{% static 'images/svg/rings.svg' %}" alt="loader">
+        </div>
+    </div>
+    <div class="w1">
+        {% include 'coreBase/header.html' %}
+
+        <main id="mt-main">
+            <!-- Mt Contact Banner of the Page -->
+            <section class="mt-contact-banner style4 wow fadeInUp" data-wow-delay="0.4s" style="background-image: url({% static 'images/img43.jpg' %});">
+              <div class="container">
+                <div class="row">
+                  <div class="col-xs-12 text-center">
+                    <h1>Blog</h1>
+                    <!-- Breadcrumbs of the Page -->
+                    <nav class="breadcrumbs">
+                      <ul class="list-unstyled">
+                        <li><a href="/">AnaSayfa <i class="fa fa-angle-right"></i></a></li>
+                        <li><a href="{% url 'blog:blog_home' %}">Blog</a></li>
+                      </ul>
+                    </nav>
+                    <!-- Breadcrumbs of the Page end -->
+                  </div>
+                </div>
+                
+              </div>
+            </section>
+            <!-- Mt Contact Banner of the Page end -->
+            <!-- Mt Blog Detail of the Page -->
+            <div class="mt-blog-detail style1">
+              <div class="container">
+                <div class="row">
+                {% if blogs %}
+
+                  <div class="col-xs-12 col-sm-8 wow fadeInUp" data-wow-delay="0.4s">
+                        {% for blog in blogs %}
+
+                        <article class="blog-post style2">
+                            <div class="img-holder">
+                            <a href="{% url 'blog:blog_detail' slug=blog.slug %}"><img src="{{ blog.banner.url }}" alt="{{ blog.title }}" title="{{ blog.title }}" ></a>
+                            <ul class="list-unstyled comment-nav">
+                                <li><a href="#"><i class="fa fa-eye"></i>{{ blog.views }}</a></li>
+                            </ul>
+                            </div>
+                            <div class="blog-txt">
+                            <h2><a href="{% url 'blog:blog_detail' slug=blog.slug %}">{{ blog.title }}</a></h2>
+                            <ul class="list-unstyled blog-nav">
+                                <li> <a href="#"><i class="fa fa-clock-o"></i>{{ blog.created_at | date }}</a></li>
+                                <li> <a href="{% url 'blog:category_detail_blog' slug=blog.category.slug %}"><i class="fa fa-list"></i>{{ blog.category }}</a></li>
+                            </ul>
+                            <p>{{ blog.short_description }}</p>
+                            <a href="{% url 'blog:blog_detail' slug=blog.slug %}" class="btn-more">Daha Fazla Oku</a>
+                            </div>
+                        </article>
+
+                        {% endfor %}
+
+                        <div class="btn-holder">
+                            <ul class="list-unstyled pagination">
+                                {% if blogs.has_previous %}
+                                    <li><a href="?page=1">&laquo; İlk</a></li>
+                                    <li><a href="?page={{ blogs.previous_page_number }}">Önceki</a></li>
+                                {% else %}
+                                    <li class="disabled"><a href="#">&laquo; İlk</a></li>
+                                    <li class="disabled"><a href="#">Önceki</a></li>
+                                {% endif %}
+                        
+                                {% for num in blogs.paginator.page_range %}
+                                    {% if blogs.number == num %}
+                                        <li class="active"><a href="#">{{ num }}</a></li>
+                                    {% else %}
+                                        <li><a href="?page={{ num }}">{{ num }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                        
+                                {% if blogs.has_next %}
+                                    <li><a href="?page={{ blogs.next_page_number }}">Sonraki</a></li>
+                                    <li><a href="?page={{ blogs.paginator.num_pages }}">Son &raquo;</a></li>
+                                {% else %}
+                                    <li class="disabled"><a href="#">Sonraki</a></li>
+                                    <li class="disabled"><a href="#">Son &raquo;</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        
+                    <!-- Btn Holder of the Page end -->
+                  </div>
+                  <div class="col-xs-12 col-sm-4 text-right sidebar wow fadeInUp" data-wow-delay="0.4s">
+                    <section class="widget category-widget">
+                      <h3>Kategoriler</h3>
+                      <ul class="list-unstyled widget-nav">
+                        {% for category in categories %}
+
+                        <li><a href="{% url 'blog:category_detail_blog' category.slug %}">{{ category.name }}</a></li>
+
+                        {% endfor %}
+                        
+                      </ul>
+                    </section>
+                  
+                     {% if popular_posts %}
+                    <section class="widget popular-widget">
+                      <h3>Popüler Gönderiler</h3>
+                      <ul class="list-unstyled text-right popular-post">
+                        {% for populer in popular_posts %}
+                        <li>
+                          <div class="img-post">
+                            <a href="{% url 'blog:blog_detail' slug=populer.slug %}"><img src="{{ populer.banner.url }}" alt="{{ populer.title }}" title="{{ populer.title }}"></a>
+                          </div>
+                          <div class="info-dscrp">
+                            <p>{{ populer.title }}</p>
+                            <time datetime="{{ populer.created_at | date }}">{{ populer.created_at | date }}</time>
+                          </div>
+                        </li>
+                        {% endfor %}
+                        
+                      </ul>
+                    </section>
+                    {% endif  %}
+
+                    <!-- Popular Widget of the Page end -->
+                  
+                  </div>
+                </div>
+                {% else %}
+                <div style="text-align: center;">
+                    <h1> Henüz hiç yazı bulunmamaktadır.</h1>
+                    <p>Ürünlerimize göz atabilirsiniz.</p>
+                <button class="btn-type3" onclick="handleArrowClick()" type="submit">AnaSayfa</button> 
+                </div>
+                {% endif %}
+
+
+
+              </div>
+            </div>
+            <!-- Mt Blog Detail of the Page end -->
+          </main>
+
+    
+        {% include 'coreBase/footer.html' %}
+    </div>
+    <span id="back-top" class="fa fa-arrow-up"></span>
+</div>
+
+
+<script>
+
+    function handleArrowClick() {
+        var redirectURL = "{% url 'main:home' %}";
+        window.location.href = redirectURL;
+    }
+</script>
+
+
+{%  endblock %}
