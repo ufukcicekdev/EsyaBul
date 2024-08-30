@@ -1,4 +1,4 @@
 User-Agent: *
 Allow: /
-Sitemap: https://esyala.com/sitemap.xml
 Disallow: /admin/
+Sitemap: https://esyala.com/sitemap.xml
