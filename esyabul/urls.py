@@ -15,7 +15,6 @@ urlpatterns = [
     path('', include('notification.urls')),
     path('', include('payment.urls')),
     path('', include('blog.urls')),
-
     path("social-auth/", include('social_django.urls', namespace='social')),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
 ]
@@ -23,9 +22,9 @@ urlpatterns = [
 
 
 
-if base.DEBUG:
-    urlpatterns += static(base.STATIC_URL, document_root=base.STATIC_ROOT)
-    urlpatterns += static(base.MEDIA_URL, document_root=base.MEDIA_ROOT)
+
+urlpatterns += static(base.STATIC_URL, document_root=base.STATIC_ROOT)
+urlpatterns += static(base.MEDIA_URL, document_root=base.MEDIA_ROOT)
 
 
 
