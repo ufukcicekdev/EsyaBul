@@ -26,7 +26,7 @@ urlpatterns = [
     path("contact-form/", ajax_contact_form, name="ajax-contact-form"),
     path("category/<path:category_slugs>/", dynamic_category_product_list_view, name="dynamic-category-product-list"),
     path('search/', search_view, name='search_results'),
-    path('sitemap.xml/', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('sitemap.xml/', sitemap, {'sitemaps': sitemaps, "template_name": "custom_sitemap.html"}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt',TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
 ]
 
