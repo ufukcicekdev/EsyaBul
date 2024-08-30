@@ -145,13 +145,24 @@ class Brand(models.Model):
         super().save(*args, **kwargs)
     
 class Supplier(models.Model):
-    name = models.CharField(max_length=100, verbose_name="Ad")
+    name = models.CharField(max_length=100, null=True)  # Kişi Adı
+    company_name = models.CharField(max_length=100, verbose_name="Şirket Adı", blank=True, null=True) 
+    address = models.TextField(verbose_name="Adres", blank=True, null=True) 
+    tax_number = models.CharField(max_length=20, verbose_name="Vergi Kimlik Numarası (VKN)", blank=True, null=True) 
+    iban = models.CharField(max_length=34, verbose_name="IBAN Numarası", blank=True, null=True)  
+    phone = models.CharField(max_length=20, verbose_name="Telefon Numarası", blank=True, null=True) 
+    email = models.EmailField(verbose_name="E-Posta Adresi", blank=True, null=True)  
+    contact_person = models.CharField(max_length=100, verbose_name="Yetkili Kişi", blank=True, null=True)  
+    tax_office = models.TextField(verbose_name="Vergi Dairesi", blank=True, null=True)  
+    website = models.URLField(verbose_name="Web Sitesi", blank=True, null=True)  
+    invoice_notes = models.TextField(verbose_name="Fatura Notları", blank=True, null=True) 
 
     class Meta:
         verbose_name = "Tedarikçi"
-        verbose_name_plural = "Tedarikçi"
+        verbose_name_plural = "Tedarikçiler"
 
     def __str__(self):
+        # Tedarikçi adını ve şirket adını göster, biri yoksa diğerini kullan
         return self.name
 
 

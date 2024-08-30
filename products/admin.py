@@ -64,13 +64,11 @@ class SpaceDefinitionAdmin(admin.ModelAdmin):
 class TimeRangeAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'min_value', 'max_value', 'description')
     list_display_links =   ('slug',)  
-
-# Category için admin kaydı
     
 @admin.register(Brand)
 class BrandAdmin(admin.ModelAdmin):
-    list_display = ('name', 'image_tag')  # 'image_tag' metodunu ekliyoruz
-    list_display_links = ('name', 'image_tag')  # 'image_tag' metodunu da link yapıyoruz
+    list_display = ('name', 'image_tag') 
+    list_display_links = ('name', 'image_tag') 
     
     def image_tag(self, obj):
         if obj.image:
@@ -81,8 +79,11 @@ class BrandAdmin(admin.ModelAdmin):
 
 @admin.register(Supplier)
 class SupplierAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    list_display_links =   ('name',)  
+    list_display = ('name', 'company_name', 'tax_number', 'phone', 'email')
+    list_display_links = ('name', 'company_name')  
+
+    search_fields = ('name', 'company_name', 'tax_number') 
+    list_filter = ('tax_office',) 
 
 admin.site.register(Category)
 
