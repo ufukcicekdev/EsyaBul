@@ -1,4 +1,4 @@
-from django.core.mail import EmailMessage
+from notification.smtp2gomailsender import send_email_via_smtp2go
 import random
 import string
 from django.http import HttpResponse
@@ -425,8 +425,8 @@ def order_create_mail(order_number):
     subject = "Yeni bir sipariş oluşturuldu"
     body = f"{order_number} sipariş numaralı yeni bir sipariş oluşturuldu."
     recipients = get_user_model().objects.filter(is_superuser=True).values_list('email', flat=True)
-    email = EmailMessage(subject, body, EMAIL_HOST_USER, recipients)
-    email.send()
+
+    send_email_via_smtp2go(recipients, subject, body)
 
 def cart_order_completed(card_id):
     cart = Cart.objects.get(order_completed=False, id=card_id)
@@ -465,6 +465,4 @@ def order_user_mail(order_number, user, card_id):
 
 
     email_content = render_to_string('email_templates/order_checkout.html', context)
-    email = EmailMessage(subject, email_content,EMAIL_HOST_USER, to=[user.email])
-    email.content_subtype = 'html' 
-    email.send()
+    send_email_via_smtp2go([user.email], subject, email_content)

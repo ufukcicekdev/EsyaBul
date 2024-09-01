@@ -7,8 +7,8 @@ from customerauth.models import User, Address, MyStyles, wishlist_model,Order,Or
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from products.models import RoomType, HomeType, HomeModel, SpaceDefinition, TimeRange, Product, Category,Cart,CartItem
-from django.core.mail import EmailMessage
 from actstream import action
+from notification.smtp2gomailsender import send_email_via_smtp2go
 import json
 from django.utils import timezone
 from django.contrib.auth import update_session_auth_hash
@@ -558,9 +558,9 @@ def reset_password(request):
         }
         email_content = render_to_string('email_templates/reset_password_email.html', context)
         try:
-            email = EmailMessage("Hesap Doğrulama", email_content, to=[user.email])
-            email.content_subtype = 'html' 
-            email.send()
+            
+            send_email_via_smtp2go([user.email], "Hesap Doğrulama", email_content)
+
             return JsonResponse({"status": "sent", "email": user.email, "rotp": otp})
         except:
             return JsonResponse({"status": "error", "email": user.email})
