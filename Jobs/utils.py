@@ -1,10 +1,5 @@
 # signals.py
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.core.mail import EmailMessage
-from django.utils.html import strip_tags
 from django.contrib.auth import get_user_model
-from django.db.models import F
 from notification.models import EmailNotification
 from customerauth.models import OrderItem, wishlist_model,User
 from collections import defaultdict
@@ -17,6 +12,8 @@ from datetime import timedelta
 from customerauth.models import Order
 from products.models import Cart
 from django.db.models import Q
+import time
+from notification.smtp2gomailsender import send_email_via_smtp2go
 
 load_dotenv()
 
@@ -31,19 +28,24 @@ else:
 
 def send_email_notifications():
     active_notifications = EmailNotification.objects.filter(is_active=True)
-    
     for notification in active_notifications:
-        subject = notification.subject
-        body = notification.body
+        context = {
+            "body_content": notification.body
+        }
 
-        recipients = get_user_model().objects.filter(receive_email_notifications=True).values_list('email', flat=True)
+        recipients = get_user_model().objects.filter(receive_email_notifications=True, is_active=True).values('username', 'email')
 
-        email = EmailMessage(subject, body, EMAIL_HOST_USER , recipients)
-        email.content_subtype = "html"
-        email.send()
-        
+        for recipient in recipients:
+            context["subject"] = notification.subject
+            context["username"] = recipient['username']
+            email_content = render_to_string('email_templates/other_notify.html', context)
+            send_email_via_smtp2go([recipient['email']], notification.subject, email_content)
+
+            time.sleep(1)
+
         notification.is_active = False
-        notification.save()
+        notification.save()      
+            
 
 
 
@@ -75,9 +77,8 @@ def send_wishlist_reminder_email(user, products):
     }
 
     email_content = render_to_string('email_templates/wishlist_notify.html', context)
-    email = EmailMessage(subject, email_content, EMAIL_HOST_USER, to=[user.email])  
-    email.content_subtype = 'html' 
-    email.send()
+
+    send_email_via_smtp2go([user.email], subject, email_content)
 
     
 
@@ -108,9 +109,8 @@ def notify_users_about_expiring_orders():
         email_content = render_to_string('email_templates/order_item_expire_date.html', context)
         recipients.append(user_email)
 
-        email = EmailMessage(subject, email_content, EMAIL_HOST_USER, to=[user_email])
-        email.content_subtype = 'html' 
-        email.send()
+
+        send_email_via_smtp2go([user_email], subject, email_content)
 
 
 def delete_cards_not_users():
