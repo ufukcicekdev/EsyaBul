@@ -2,7 +2,7 @@
 <div class="mt-col-3">
     <div class="sub-dropcont">
         <strong class="title">
-            <a href="{% url 'main:dynamic-category-product-list' category.slug %}" class="mt-subopener">{{ category.name }}</a>
+            <a href="{% url 'main:dynamic-category-product-list' category.slug %}" title="{{ category.name }}" class="mt-subopener">{{ category.name }}</a>
         </strong>
         <div class="sub-drop">
             {% if category.children.all %}
@@ -10,7 +10,7 @@
                     {% for child in category.children.all %}
                         <li>
                             <strong>
-                                <a href="{% url 'main:dynamic-category-product-list' category_slugs=child.get_full_path_slug %}">
+                                <a href="{% url 'main:dynamic-category-product-list' category_slugs=child.get_full_path_slug %}" title="{{ child.name }}">
                                     {{ child.name }}
                                 </a>
                             </strong>
@@ -19,7 +19,7 @@
                                     {% for sub_child in child.children.all %}
                                         <li>
                                             <strong>
-                                                <a href="{% url 'main:dynamic-category-product-list' category_slugs=sub_child.get_full_path_slug %}">
+                                                <a href="{% url 'main:dynamic-category-product-list' category_slugs=sub_child.get_full_path_slug %}" title="{{ sub_child.name }}">
                                                     {{ sub_child.name }}
                                                 </a>
                                             </strong>
@@ -32,7 +32,7 @@
                 </ul>
             {% endif %}
         </div>
-        <a href="{% url 'main:dynamic-category-product-list' category.slug %}" class="">
+        <a href="{% url 'main:dynamic-category-product-list' category.slug %}" title="Tümünü Gör" class="">
             <i class="fa fa-angle-right" aria-hidden="true">Tümünü Gör</i>
         </a>
     </div>
