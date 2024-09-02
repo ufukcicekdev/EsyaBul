@@ -102,7 +102,7 @@
             <!-- F Widget About of the Page -->
             <div class="f-widget-about">
               <div class="logo">
-                <a href="{% url 'main:home' %}"><img src="{% static 'images/esyala_syh_noktalı.png' %}" alt="Esyala"></a>
+                <a href="{% url 'main:home' %}" title="Eşyala"><img src="{% static 'images/esyala_syh_noktalı.png' %}" alt="Esyala"></a>
               </div>
               <ul class="list-unstyled address-list">
                 <li>
@@ -111,8 +111,8 @@
                   </i>
                   <address>Veysel Karani, Çolakoğlu Sokağı No: 10<br></address>
                   <address>34885 Rings Rezidans Kat :5 Daire :87  <br>Sancaktepe/İstanbul</address></li>
-                <li><i class="fa fa-phone"></i><a href="tel:905305820455">0530 582 04 55</a></li>
-                <li><i class="fa fa-envelope-o"></i><a href="mailto:info@esyala.com">info@esyala.com</a></li>
+                <li><i class="fa fa-phone"></i><a href="tel:905305820455" title="0530 582 04 55">0530 582 04 55</a></li>
+                <li><i class="fa fa-envelope-o"></i><a href="mailto:info@esyala.com" title="info@esyala.com">info@esyala.com</a></li>
               </ul>
             </div>
             <!-- F Widget About of the Page end -->
@@ -125,7 +125,7 @@
               
               <ul class="list-unstyled f-widget-nav">
                 {% for category in footer_category %}
-                  <li><a href="{% url 'main:dynamic-category-product-list' category_slugs=category.slug %}">{{ category.name }}</a></li>
+                  <li><a href="{% url 'main:dynamic-category-product-list' category_slugs=category.slug %}" title="{{ category.name }}">{{ category.name }}</a></li>
                     
                 {% endfor %}
                
@@ -136,18 +136,18 @@
             <div class="nav-widget-1">
               <h3 class="f-widget-heading">Bilgilendirme</h3>
               <ul class="list-unstyled f-widget-nav">
-                <li><a href="{% url 'main:home' %}">Ana Sayfa</a></li>
-                <li><a href="{% url 'main:about' %}">Hakkımızda</a></li>
-                <li><a href="{% url 'main:contact' %}"> İletişim</a></li>
-                <li><a href="{% url 'main:itwork' %}">Nasıl Çalışır</a></li>
-                <li><a href="{% url 'main:faqs' %}">SSS</a></li>
-                <li><a href="#" onclick="openModal1()">Üyelik Sözleşmesi</a></li>
-                <li><a href="#" onclick="openModal2()">Aydınlatma Metni</a></li>
-                <li><a href="#" onclick="openModal3()">Cayma,Fesih ve İade Koşulları</a></li>
-                <li><a href="#" onclick="openModal4()">Çerez (Cookie) Politikası</a></li>
-                <li><a href="#" onclick="openModal5()">Kimlik ve Findeks Raporu</a></li>
-                <li><a href="#" onclick="openModal6()">Ödeme ve Teslimat Bilgileri</a></li>
-                <li><a href="#" onclick="openModal7()">Mesafeli Satış Sözleşmesi</a></li>
+                <li><a href="{% url 'main:home' %}" title="Ana Sayfa">Ana Sayfa</a></li>
+                <li><a href="{% url 'main:about' %}" title="Hakkımızda">Hakkımızda</a></li>
+                <li><a href="{% url 'main:contact' %}" title="İletişim"> İletişim</a></li>
+                <li><a href="{% url 'main:itwork' %}" title="Nasıl Çalışır">Nasıl Çalışır</a></li>
+                <li><a href="{% url 'main:faqs' %}" title="SSS">SSS</a></li>
+                <li><a href="#" onclick="openModal1()" title="Üyelik Sözleşmesi">Üyelik Sözleşmesi</a></li>
+                <li><a href="#" onclick="openModal2()" title="Aydınlatma Metni">Aydınlatma Metni</a></li>
+                <li><a href="#" onclick="openModal3()" title="Cayma,Fesih ve İade Koşulları">Cayma,Fesih ve İade Koşulları</a></li>
+                <li><a href="#" onclick="openModal4()" title="Çerez (Cookie) Politikası">Çerez (Cookie) Politikası</a></li>
+                <li><a href="#" onclick="openModal5()" title="Kimlik ve Findeks Raporu">Kimlik ve Findeks Raporu</a></li>
+                <li><a href="#" onclick="openModal6()" title="Ödeme ve Teslimat Bilgileri">Ödeme ve Teslimat Bilgileri</a></li>
+                <li><a href="#" onclick="openModal7()" title="Mesafeli Satış Sözleşmesi">Mesafeli Satış Sözleşmesi</a></li>
 
 
 
@@ -207,10 +207,10 @@
             <div class="nav-widget-1">
               <h3 class="f-widget-heading">Hesap</h3>
               <ul class="list-unstyled f-widget-nav">
-                <li><a href="{% url 'customerauth:dashboard' %}">Hesabım</a></li>
-                <li><a href="{% url 'customerauth:orders-list' %}">Siparişlerim</a></li>
-                <li><a href="{% url 'customerauth:wishlist' %}">Beğendiklerim</a></li>
-                <li><a href="{% url 'products:order_shopping_card' %}">Sepetim</a></li>
+                <li><a href="{% url 'customerauth:dashboard' %}" title="Hesabım">Hesabım</a></li>
+                <li><a href="{% url 'customerauth:orders-list' %}" title="Siparişlerim">Siparişlerim</a></li>
+                <li><a href="{% url 'customerauth:wishlist' %}" title="Beğendiklerim">Beğendiklerim</a></li>
+                <li><a href="{% url 'products:order_shopping_card' %}" title="Sepetim">Sepetim</a></li>
 
               </ul>
             </div>
@@ -226,15 +226,15 @@
                             <ul class="list-unstyled social-network">
                             {% for social_media in social_media_links %}
                                     {% if social_media.name == 'facebook' %}
-                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}"><i class="fa fa-facebook"></i></a></li>
+                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}" title="facebook"><i class="fa fa-facebook"></i></a></li>
                                     {% elif social_media.name == 'twitter' %}
-                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}"><i class="fa fa-twitter"></i></a></li>
+                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}" title="twitter"><i class="fa fa-twitter"></i></a></li>
                                     {% elif social_media.name == 'instagram' %}
-                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}"><i class="fa fa-instagram"></i></a></li>
+                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}" title="instagram"><i class="fa fa-instagram"></i></a></li>
                                     {% elif social_media.name == 'linkedin' %}
-                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}"><i class="fa fa-linkedin"></i></a></li>
+                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}" title="linkedin"><i class="fa fa-linkedin"></i></a></li>
                                     {% elif social_media.name == 'youtube' %}
-                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}"><i class="fa fa-youtube"></i></a></li>
+                                    <li><a target="_blank" rel="nofollow" href="{{ social_media.link }}" title="youtube"><i class="fa fa-youtube"></i></a></li>
                                     {% endif %}
                             {% endfor %}
                             </ul>
@@ -251,7 +251,7 @@
       <div class="container">
         <div class="row">
           <div class="col-xs-12 text-center">
-            <p>© <a href="{% url 'main:home' %}">esyala.</a> - Her Hakkı Saklıdır</p>
+            <p>© <a href="{% url 'main:home' %}" title="Eşyala">esyala.</a> - Her Hakkı Saklıdır</p>
           </div>
           <div class="col-xs-12">
             <div class="bank-card align-center">
