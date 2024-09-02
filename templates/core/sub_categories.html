@@ -1,7 +1,7 @@
 <ul class="list-unstyled category-list">
     {% for subcategory in subcategories %}
         <li>
-            <a href="{% url 'main:dynamic-category-product-list' category_slugs=subcategory.get_full_path_slug %}">
+            <a href="{% url 'main:dynamic-category-product-list' category_slugs=subcategory.get_full_path_slug %}" title="{{ subcategory.name }}">
                 <span class="name">{{ subcategory.name }}</span>
                 <span class="num">{{ subcategory.product_count }}</span>
             </a>
