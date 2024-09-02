@@ -154,7 +154,7 @@
                                         <div class="txt">
                                             <p style="color: {{ banner.text_color }};"  >{{ banner.description }}</p>
                                         </div>
-                                        <a href="{{ banner.link }}" class="shop">Alışverişe Başla</a>
+                                        <a href="{{ banner.link }}" title="Alışverişe Başla" class="shop">Alışverişe Başla</a>
                                     </div>
                                 </div>
                             </div>
@@ -186,7 +186,7 @@
                                                     <strong>{{ banner.title }}</strong>
                                                 </h2>
                                                 {% if banner.link %}
-                                                    <a class="btn-shop" href="{{ banner.link }}">
+                                                    <a class="btn-shop" title="Alışverişe Başla" href="{{ banner.link }}">
                                                         <span>Alışverişe Başla</span>
                                                         <i class="fa fa-angle-right"></i>
                                                     </a>
@@ -204,7 +204,7 @@
                                                         <strong>{{ banner.title }}</strong>
                                                     </h2>
                                                     {% if banner.link %}
-                                                        <a class="btn-shop" href="{{ banner.link }}">
+                                                        <a class="btn-shop" title="Alışverişe Başla" href="{{ banner.link }}">
                                                             <span>Alışverişe Başla</span>
                                                             <i class="fa fa-angle-right"></i>
                                                         </a>
@@ -231,7 +231,7 @@
                                                     <p>{{ slider.description }}</p>
                                                 </div>
                                                 {% if slider.link %}
-                                                    <a class="btn-shop" href="{{ slider.link }}">
+                                                    <a class="btn-shop" title="Alışverişe Başla" href="{{ slider.link }}">
                                                         <span>Alışverişe Başla</span>
                                                         <i class="fa fa-angle-right"></i>
                                                     </a>
@@ -249,8 +249,8 @@
                         <div class="mt-producttabs wow fadeInUp" >
                             <!-- producttabs start here -->
                             <ul class="producttabs">
-                                <li><a href="#tab1" class="active">Öne Çıkanlar</a></li>
-                                <li><a href="#tab2">Son Yüklenenler</a></li>
+                                <li><a href="#tab1" title="Öne Çıkanlar" class="active">Öne Çıkanlar</a></li>
+                                <li><a href="#tab2" title="Son Yüklenenler">Son Yüklenenler</a></li>
                             </ul>
                             <div class="tab-content text-center">
                                 <div id="tab1">
@@ -263,7 +263,7 @@
                                                         <div class="b2">
                                                             {% with first_image=featured_product.related_products.all.0 %}
                                                             {% if first_image %}
-                                                            <a href="{% url 'products:product-detail-view' featured_product.slug %}">
+                                                            <a href="{% url 'products:product-detail-view' featured_product.slug %}" title="{{ first_image.img_title }}">
                                                                 <img src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}">
                                                             </a>
                                                             {% endif %}
@@ -314,7 +314,7 @@
                                                         <div class="b2">
                                                             {% with first_image=latest_product.related_products.all.0 %}
                                                             {% if first_image %}
-                                                            <a href="{% url 'products:product-detail-view' latest_product.slug %}"><img src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}"></a>
+                                                            <a href="{% url 'products:product-detail-view' latest_product.slug %}" title="{{ first_image.img_title }}"><img src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}"></a>
                                                             {% endif %}
                                                             {% endwith %}
                                                             {% if latest_product.get_percentage %}
@@ -373,7 +373,7 @@
                                                     <div class="img">
                                                         {% if user_product.product.related_products.count %}
                                                             {% with first_image=user_product.product.related_products.first %}
-                                                                <a href="{% url 'products:product-detail-view' user_product.product.slug %}">
+                                                                <a href="{% url 'products:product-detail-view' user_product.product.slug %}" title="{{ first_image.img_title }}">
                                                                     <img src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}">
                                                                 </a>
                                                             {% endwith %}
@@ -399,7 +399,7 @@
 
                                                     <div class="txt">
                                                         <strong class="title">
-                                                            <a href="{% url 'products:product-detail-view' user_product.product.slug %}">{{ user_product.product.name }}</a>
+                                                            <a href="{% url 'products:product-detail-view' user_product.product.slug %}" title="{{ user_product.product.name }}">{{ user_product.product.name }}</a>
                                                         </strong>
                                                         {% if user_product.product.selling_old_price != 0 %}
                                                         <del class="off"><i class="fa fa-try"></i> <span>{{user_product.product.selling_old_price}}</span></del>
@@ -412,7 +412,7 @@
                                                         {% if request.user.is_authenticated %}
                                                         <li><a aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{user_product.product.id}}" ><i class="icon-heart"></i></a></li>
                                                         {% endif %}
-                                                        <li><a href="{% url 'products:product-detail-view' user_product.product.slug %}" class="lightbox"><i class="icon-eye"></i></a></li>
+                                                        <li><a href="{% url 'products:product-detail-view' user_product.product.slug %}" title="" class="lightbox"><i class="icon-eye"></i></a></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -442,7 +442,7 @@
                                                     <div class="img">
                                                         {% if best_seller_product.related_products.count %}
                                                             {% with first_image=best_seller_product.related_products.first %}
-                                                                <a href="{% url 'products:product-detail-view' best_seller_product.slug %}">
+                                                                <a href="{% url 'products:product-detail-view' best_seller_product.slug %}" title="{{ first_image.img_title }}">
                                                                     <img src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}">
                                                                 </a>
                                                             {% endwith %}
@@ -470,7 +470,7 @@
                                                     <!-- txt start here -->
                                                     <div class="txt">
                                                         <strong class="title">
-                                                            <a href="{% url 'products:product-detail-view' best_seller_product.slug %}">{{ best_seller_product.name }}</a>
+                                                            <a href="{% url 'products:product-detail-view' best_seller_product.slug %}" title="{{ best_seller_product.name }}">{{ best_seller_product.name }}</a>
                                                         </strong>
                                                         {% if best_seller_product.selling_old_price != 0 %}
                                                         <del class="off"><i class="fa fa-try"></i> <span>{{best_seller_product.selling_old_price}}</span></del>
@@ -484,7 +484,7 @@
                                                         {% if request.user.is_authenticated %}
                                                         <li><a aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{product.id}}" ><i class="icon-heart"></i></a></li>
                                                         {% endif %}
-                                                        <li><a href="{% url 'products:product-detail-view' best_seller_product.slug %}" class="lightbox"><i class="icon-eye"></i></a></li>
+                                                        <li><a href="{% url 'products:product-detail-view' best_seller_product.slug %}" title="" class="lightbox"><i class="icon-eye"></i></a></li>
                                                     </ul>
                                                 </div>
                                             </div>

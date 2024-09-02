@@ -44,22 +44,22 @@
             <div class="row">
                 <div class="col-xs-12">
                     <!-- mt logo start here -->
-                    <div class="mt-logo"><a href="{% url 'main:home' %}"><img class="logo-img" style="height:50px;" src="{% static 'images/esyala_syh_noktalı.png' %}" alt="Esyala"></a></div>
+                    <div class="mt-logo"><a href="{% url 'main:home' %}" title="Eşyala"><img class="logo-img" style="height:50px;" src="{% static 'images/esyala_syh_noktalı.png' %}" alt="Esyala"></a></div>
                     <!-- mt icon list start here -->
                     <ul class="mt-icon-list">
                         <li class="hidden-lg hidden-md">
-                            <a href="#" class="bar-opener mobile-toggle">
+                            <a class="bar-opener mobile-toggle">
                                 <span class="bar"></span>
                                 <span class="bar small"></span>
                                 <span class="bar"></span>
                             </a>
                         </li>
-                        <li><a href="#" class="icon-magnifier"></a></li>
+                        <li><a  class="icon-magnifier"></a></li>
                         <li class="">
                             {% if request.user.is_authenticated %}
-                            <a href="{% url 'customerauth:wishlist' %}" class="icon-heart cart-opener"><span style="margin-bottom: -3px;" class="num wish-count">{{ wcount }}</span></a>
+                            <a href="{% url 'customerauth:wishlist' %}" title="{{ wcount }}" class="icon-heart cart-opener"><span style="margin-bottom: -3px;" class="num wish-count">{{ wcount }}</span></a>
                             {% else %}
-                            <a href="{% url 'customerauth:wishlist' %}" class="icon-heart cart-opener"><span style="margin-bottom: -3px;" class="num wish-count">{{ wcount }}</span></a>
+                            <a href="{% url 'customerauth:wishlist' %}" title="{{ wcount }}" class="icon-heart cart-opener"><span style="margin-bottom: -3px;" class="num wish-count">{{ wcount }}</span></a>
                             {% endif %}
                             
                             <!-- mt drop start here -->
@@ -71,7 +71,7 @@
                                     
                                         
                                         <div class="cart-row-total">
-                                            <a href="{% url 'customerauth:wishlist' %}" class="btn-type2">Beğendiklerim</a>
+                                            <a href="{% url 'customerauth:wishlist' %}" title="Beğendiklerim" class="btn-type2">Beğendiklerim</a>
                                         </div>
                                         <!-- cart row total end here -->
                                     </div><!-- mt side widget end here -->
@@ -81,7 +81,7 @@
                             <span class="mt-mdropover"></span>
                         </li>
                         <li class="drop">
-                            <a href="#" class="cart-opener1">
+                            <a class="cart-opener1">
                                 <span class="icon-handbag"></span>
                                 <span class="num">{{ hcount }}</span>
                             </a>
@@ -96,11 +96,11 @@
                                                 <div class="cart-row">
                                                     {% with first_image=cart_item.product.related_products.first %}
                                                     {% if first_image %}
-                                                    <a href="{% url 'products:product-detail-view' cart_item.product.slug %}" class="img"><img class="img-responsive" src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}"></a>
+                                                    <a href="{% url 'products:product-detail-view' cart_item.product.slug %}" title="{{ first_image.img_title }}" class="img"><img class="img-responsive" src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}"></a>
                                                     {% endif %}
                                                     {% endwith %}
                                                     <div class="mt-h">
-                                                        <span class="mt-h-title"><a href="#">{{cart_item.product.name}}</a></span>
+                                                        <span class="mt-h-title"><a >{{cart_item.product.name}}</a></span>
                                                         {% if cart_item.is_rental %}
                                                         <strong class="price"><i class="fa fa-try"></i> {{ cart_item.rental_price }}</strong>
                                                         {% else %}
@@ -108,7 +108,7 @@
                                                         {% endif %}
                                                         <span class="mt-h-title">Adet: {{ cart_item.quantity }}</span>
                                                     </div>
-                                                    <a href="{% url 'products:remove_from_cart' cart_item_id=cart_item.id %}" class="close fa fa-times"></a>
+                                                    <a href="{% url 'products:remove_from_cart' cart_item_id=cart_item.id %}" title="" class="close fa fa-times"></a>
                                                 </div>
                                             {% endfor %}
 
@@ -120,7 +120,7 @@
                                             </div>
                                             <!-- cart row total end here -->
                                             <div class="cart-btn-row">
-                                                <a href="{% url 'products:order_shopping_card' %}" class="btn-type2">Sepetim</a>
+                                                <a href="{% url 'products:order_shopping_card' %}" title="Sepetim" class="btn-type2">Sepetim</a>
                                             </div>
                                         {% else %}
                                         <div class="cart-row text-center">
@@ -136,11 +136,11 @@
                         </li>
                         <li id="user-icon">
                             {% if request.user.is_authenticated %}
-                                <a href="{% url 'customerauth:address-list' %}">
+                                <a href="{% url 'customerauth:address-list' %}" title="{{ request.user.username }}">
                                     <div class="user-icon" id="dropdownIcon">{{ request.user.username|first|upper }}</div>
                                 </a>
                             {% else %}
-                                <a href="{% url 'customerauth:sign-in' %}">
+                                <a href="{% url 'customerauth:sign-in' %}" title="">
                                     <div class="icon-user" id="dropdownIcon"></div>
                                 </a>
                             {% endif %}
@@ -152,15 +152,15 @@
                     <nav id="nav">
                         <ul>
                             <li>
-                                <a href="{% url 'main:home' %}">Anasayfa</a>
+                                <a href="{% url 'main:home' %}" title="Anasayfa">Anasayfa</a>
                                 
                             </li>
-                            <li><a href="{% url 'blog:blog_home' %}">Blog</a> </li>
+                            <li><a href="{% url 'blog:blog_home' %}" title="Blog">Blog</a> </li>
                             
                             
                             <!-- category_menu.html -->
                             <li class="drop">
-                                <a href="#">Kategoriler <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                <a title="Kategoriler">Kategoriler <i class="fa fa-angle-down" aria-hidden="true"></i></a>
                                 <!-- mt dropmenu start here -->
                                 <div class="mt-dropmenu text-left">
                                     <!-- mt frame start here -->
@@ -177,8 +177,8 @@
                                 <!-- mt dropmenu end here -->
                                 <span class="mt-mdropover"></span>
                             </li>
-                            <li><a href="{% url 'main:about' %}">Hakkımızda</a></li>
-                            <li><a href="{% url 'main:contact' %}">İletişim</a> </li>
+                            <li><a href="{% url 'main:about' %}" title="Hakkımızda">Hakkımızda</a></li>
+                            <li><a href="{% url 'main:contact' %}" title="İletişim">İletişim</a> </li>
                         </ul>
                     </nav>
                     <!-- mt icon list end here -->
