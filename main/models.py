@@ -293,3 +293,15 @@ class Request_Log_Table(models.Model):
     text = models.TextField( blank=True, null=True)
     order_number = models.TextField( blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
+
+
+class Subscription(models.Model):
+    email = models.EmailField(verbose_name="E-Posta Adresi", unique=True, blank=True, null=True) 
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Kayıt Tarihi", blank=True, null=True) 
+    is_active = models.BooleanField(default=True, verbose_name="Aktif mi?", blank=True, null=True) 
+    def __str__(self):
+        return self.email
+
+    class Meta:
+        verbose_name = "Abonelik"
+        verbose_name_plural = "Abonelikler"
