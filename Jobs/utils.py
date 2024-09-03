@@ -2,6 +2,7 @@
 from django.contrib.auth import get_user_model
 from notification.models import EmailNotification
 from customerauth.models import OrderItem, wishlist_model,User
+from main.models import Subscription
 from collections import defaultdict
 from django.template.loader import render_to_string
 import os
@@ -28,23 +29,39 @@ else:
 
 def send_email_notifications():
     active_notifications = EmailNotification.objects.filter(is_active=True)
+
     for notification in active_notifications:
         context = {
-            "body_content": notification.body
+            "body_content": notification.body,
+            "subject": notification.subject,
         }
 
-        recipients = get_user_model().objects.filter(receive_email_notifications=True, is_active=True).values('username', 'email')
+        user_recipients = get_user_model().objects.filter(
+            receive_email_notifications=True,
+            is_active=True
+        ).values('email')
 
-        for recipient in recipients:
-            context["subject"] = notification.subject
-            context["username"] = recipient['username']
+        subscription_recipients = Subscription.objects.filter(
+            email__isnull=False, is_active=True
+        ).values('email')
+
+        email_addresses = list(
+            {recipient['email'] for recipient in user_recipients}.union(
+                {recipient['email'] for recipient in subscription_recipients}
+            )
+        )
+
+        if email_addresses:  
             email_content = render_to_string('email_templates/other_notify.html', context)
-            send_email_via_smtp2go([recipient['email']], notification.subject, email_content)
 
-            time.sleep(1)
+            send_email_via_smtp2go(email_addresses, notification.subject, email_content)
+
+            notification.is_active = False
+            notification.save()
 
         notification.is_active = False
-        notification.save()      
+        notification.save()
+    
             
 
 

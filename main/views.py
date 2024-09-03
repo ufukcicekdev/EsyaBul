@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from main.models import SocialMedia, HomeMainBanner, HomeSubBanner, TeamMembers, HomePageBannerItem,ContactUs
+from main.models import SocialMedia, HomeMainBanner, HomeSubBanner, TeamMembers, HomePageBannerItem,ContactUs, Subscription
 from django.http import JsonResponse
 from products.models import Category,Product, ProductReview,Cart,CartItem,ProductImage
 from customerauth.models import wishlist_model,UserProductView
@@ -336,3 +336,18 @@ def get_main_category_products(request, mainContext, category_slug_list):
     }
     context.update(mainContext)
     return context
+
+
+
+
+def subscribe(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+        if email:
+            subscription, created = Subscription.objects.get_or_create(email=email)
+            if created:
+                messages.success(request, "Abonelik işlemi başarıyla tamamlandı.")
+            else:
+                messages.info(request, "Bu e-posta adresi zaten kayıtlı.")
+        return redirect('main:home') 
+    return render(request, 'coreBase/home.html')

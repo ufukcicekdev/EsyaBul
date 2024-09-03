@@ -219,6 +219,25 @@
           <div class="col-xs-12 col-md-3 text-right hidden-sm">
             <!-- F Widget Newsletter of the Page -->
             <div class="f-widget-newsletter">
+
+
+              <h3 class="f-widget-heading">Bülten</h3>
+              <div class="holder">
+                <form class="newsletter-form form2" method="POST" action="{% url 'main:subscribe' %}">
+                    {% csrf_token %}
+                    <fieldset>
+                        <input 
+                            type="email" 
+                            class="form-control" 
+                            name="email" 
+                            placeholder="E-posta Adresinizi Girin" 
+                            required 
+                        />
+                        <button type="submit">Abone Ol</button>
+                    </fieldset>
+                </form>
+            </div>
+            
          
               <h4 class="f-widget-heading follow">Bizi Takip Edin</h4>
               <!-- Social Network of the Page -->
