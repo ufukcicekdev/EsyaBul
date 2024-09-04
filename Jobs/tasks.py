@@ -5,14 +5,16 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 def start():
     scheduler = BackgroundScheduler()
+ 
     scheduler.add_job(
-        send_email_notifications, 
-        'interval', 
-        minutes=5, 
-        id='send_email_notifications', 
-        replace_existing=True, 
-        max_instances=1
-    )
+    send_email_notifications, 
+    'cron', 
+    hour=9, 
+    minute=0, 
+    id='send_email_notifications', 
+    replace_existing=True, 
+    max_instances=1
+    )   
     scheduler.add_job(check_wishlist, 'cron', day_of_week='mon', hour=9)
     scheduler.add_job(notify_users_about_expiring_orders, 'interval', days=2, hours=9)
 
