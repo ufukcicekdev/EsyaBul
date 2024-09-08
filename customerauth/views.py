@@ -138,7 +138,7 @@ def login_view(request):
             
             context1 = {
                 'success_messages': f"Tekrar hoşgeldiniz, {user_name}!",
-                'target_url': "main:home",
+                'target_url': "main:my_style_start",
                 "homesubbanners": homesubbanners
             }
             context1.update(mainContext)
@@ -392,18 +392,18 @@ def room_type_selected(request):
                 mystyles.room_type_id = selected_room_type_id
                 mystyles.save()
                 update_user_my_style_status(request.user)
-                messages.success(request, 'Room type successfully updated.')
-                return JsonResponse({'status': 'success', 'message': 'Room type successfully updated.'})
+                messages.success(request, 'Başarıyla Güncellendi!')
+                return JsonResponse({'status': 'success', 'message': 'Başarıyla Güncellendi!'})
             else:
-                messages.error(request, 'Invalid room type selected.')
+                messages.error(request, 'Geçersiz Bir Model Seçildi!')
         except MyStyles.DoesNotExist:
             if selected_room_type_id is not None:
                 MyStyles.objects.create(user=user, room_type_id=selected_room_type_id)
                 update_user_my_style_status(request.user)
                 messages.success(request, 'Room type successfully added.')
-                return JsonResponse({'status': 'success', 'message': 'Room type successfully added.'})
+                return JsonResponse({'status': 'success', 'message': 'Başarıyla Eklendi!'})
             else:
-                messages.error(request, 'Invalid room type selected.')
+                messages.error(request, 'Geçersiz Bir Model Seçildi!')
 
     context = {
         'room_types': active_room_types, 
@@ -426,18 +426,18 @@ def home_type_selected(request):
                 mystyles.home_type_id = selected_home_type_id
                 mystyles.save()
                 update_user_my_style_status(request.user)
-                messages.success(request, 'Home type successfully updated.')
-                return JsonResponse({'status': 'success', 'message': 'Room type successfully updated.'})
+                messages.success(request, 'Başarıyla Güncellendi!')
+                return JsonResponse({'status': 'success', 'message': 'Başarıyla Güncellendi!'})
             else:
-                messages.error(request, 'Invalid room type selected.')
+                messages.error(request, 'Geçersiz Bir Model Seçildi!')
         except MyStyles.DoesNotExist:
             if selected_home_type_id is not None:
                 MyStyles.objects.create(user=user, home_type_id=selected_home_type_id)
                 update_user_my_style_status(request.user)
-                messages.success(request, 'Home type successfully added.')
-                return JsonResponse({'status': 'success', 'message': 'Room type successfully added.'})
+                messages.success(request, 'Başarıyla Eklendi!')
+                return JsonResponse({'status': 'success', 'message': 'Başarıyla Eklendi!'})
             else:
-                messages.error(request, 'Invalid room type selected.')
+                messages.error(request, 'Geçersiz Bir Model Seçildi!')
 
     context = {
         'home_types': active_home_types, 
@@ -460,18 +460,18 @@ def home_model_selected(request):
                 mystyles.home_model_id = selected_home_model_id
                 mystyles.save()
                 update_user_my_style_status(request.user)
-                messages.success(request, 'Home type successfully updated.')
-                return JsonResponse({'status': 'success', 'message': 'Home model successfully updated.'})
+                messages.success(request, 'Başarıyla Güncellendi!')
+                return JsonResponse({'status': 'success', 'message': 'Başarıyla Güncellendi!'})
             else:
-                messages.error(request, 'Invalid home model selected.')
+                messages.error(request, 'Geçersiz Bir Model Seçildi!')
         except MyStyles.DoesNotExist:
             if selected_home_model_id is not None:
                 MyStyles.objects.create(user=user, home_model_id=selected_home_model_id)
                 update_user_my_style_status(request.user)
-                messages.success(request, 'Home type successfully added.')
-                return JsonResponse({'status': 'success', 'message': 'Home model successfully added.'})
+                messages.success(request, 'Başarıyla Eklendi!')
+                return JsonResponse({'status': 'success', 'message': 'Başarıyla Eklendi!'})
             else:
-                messages.error(request, 'Invalid room type selected.')
+                messages.error(request, 'Geçersiz Bir Model Seçildi!')
     
     context = {
         'home_models': active_space_definations,
@@ -494,18 +494,18 @@ def space_definations_selected(request):
                 mystyles.space_definition_id = selected_space_def_id
                 mystyles.save()
                 update_user_my_style_status(request.user)
-                messages.success(request, 'Home type successfully updated.')
-                return JsonResponse({'status': 'success', 'message': 'Home model successfully updated.'})
+                messages.success(request, 'Başarıyla Güncellendi!')
+                return JsonResponse({'status': 'success', 'message': 'Başarıyla Güncellendi!'})
             else:
-                messages.error(request, 'Invalid home model selected.')
+                messages.error(request, 'Geçersiz Bir Model Seçildi!')
         except MyStyles.DoesNotExist:
             if selected_space_def_id is not None:
                 MyStyles.objects.create(user=user, space_definition_id=selected_space_def_id)
                 update_user_my_style_status(request.user)
-                messages.success(request, 'Home type successfully added.')
-                return JsonResponse({'status': 'success', 'message': 'Home model successfully added.'})
+                messages.success(request, 'Başarıyla Eklendi!')
+                return JsonResponse({'status': 'success', 'message': 'Başarıyla Eklendi!'})
             else:
-                messages.error(request, 'Invalid room type selected.')
+                messages.error(request, 'Geçersiz Bir Model Seçildi!')
     
     context ={
         'space_defs': active_space_def, 
@@ -528,18 +528,18 @@ def time_range_selected(request):
                 mystyles.time_range_id = selected_time_range_id
                 mystyles.save()
                 update_user_my_style_status(request.user)
-                messages.success(request, 'Time Range successfully updated.')
-                return JsonResponse({'status': 'success', 'message': 'Time Range successfully updated.'})
+                messages.success(request, 'Başarıyla Güncellendi!')
+                return JsonResponse({'status': 'success', 'message': 'Başarıyla Güncellendi!'})
             else:
-                messages.error(request, 'Invalid home model selected.')
+                messages.error(request, 'Geçersiz Bir Model Seçildi!')
         except MyStyles.DoesNotExist:
             if selected_time_range_id is not None:
                 MyStyles.objects.create(user=user, time_range_id=selected_time_range_id)
                 update_user_my_style_status(request.user)
-                messages.success(request, 'Home type successfully added.')
-                return JsonResponse({'status': 'success', 'message': 'Time Range successfully added.'})
+                messages.success(request, 'Başarıyla Eklendi!')
+                return JsonResponse({'status': 'success', 'message': 'Başarıyla Eklendi!'})
             else:
-                messages.error(request, 'Invalid room type selected.')
+                messages.error(request, 'Geçersiz Bir Model Seçildi!')
     context={
         'time_ranges': active_time_range
     }
