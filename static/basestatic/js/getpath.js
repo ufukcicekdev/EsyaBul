@@ -23,6 +23,12 @@ function getProfile() {
   window.location.href = previousPageUrl;
 }
 
+function getEmailChange() {
+  const previousPageUrl ="/dashboard/change-email/";
+
+  window.location.href = previousPageUrl;
+}
+
 
 function logOut() {
   const previousPageUrl ="/sign-out/";

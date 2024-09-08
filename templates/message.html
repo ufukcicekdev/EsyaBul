@@ -1,76 +1,101 @@
 {% load static %}
 <div class="popup-message">
     {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">
-            <div class="popup-content">
-                <div class="popup-image">
-                    {% if message.tags == 'success' %}
-                        <img src="https://filestorages.fra1.digitaloceanspaces.com/message/check.png" alt="Success">
-                    {% elif message.tags == 'warning' %}
-                        <img src="https://filestorages.fra1.digitaloceanspaces.com/message/cross.png" alt="Warning">
-                    {% elif message.tags == 'error' %}
-                        <img src="https://filestorages.fra1.digitaloceanspaces.com/message/cross.png" alt="Error">
-                    {% endif %}
+        <div class="alert-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <div class="popup-content">
+                        <div class="popup-image">
+                            {% if message.tags == 'success' %}
+                            <img src="https://filestorages.fra1.digitaloceanspaces.com/message/check.png" alt="Success">
+                            {% elif message.tags == 'warning' %}
+                            <img src="https://filestorages.fra1.digitaloceanspaces.com/message/cross.png" alt="Warning">
+                            {% elif message.tags == 'error' %}
+                            <img src="https://filestorages.fra1.digitaloceanspaces.com/message/cross.png" alt="Error">
+                            {% endif %}
+                        </div>
+                        <div class="popup-text">
+                            <p>{{ message.message }}</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="popup-text">
-                    <p>{{ message.message }}</p>
-                </div>
-            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     {% endif %}
 </div>
 
 
 
-
 <style>
     .popup-message {
-        display: block;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 1000;
-        background-color: #fff; /* Popup arka plan rengi */
-        border-radius: 8px; /* Köşe yuvarlaklığı */
-    }
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: #fff; /* Popup arka plan rengi */
+    border-radius: 8px; /* Köşe yuvarlaklığı */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Hafif gölge efekti */
+    padding: 10px;
+    max-width: 90%; /* Maksimum genişlik */
+    width: 300px; /* Sabit genişlik */
+}
 
-    .popup-content {
-        display: flex;
-        align-items: center;
-    }
+.alert-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Mesajlar arasındaki boşluk */
+}
 
-    .popup-image {
-        flex: 1;
-    }
+.alert {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f8f9fa; /* Genel arka plan rengi */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 
-    .popup-image img {
-        max-width: 80%;
-        height: auto;
-        display: block;
-    }
+.alert.success {
+    border-left: 5px solid #28a745; /* Başarı mesajı için yeşil kenar */
+}
 
-    .popup-text {
-        flex: 2;
-        padding: 20px;
-    }
+.alert.warning {
+    border-left: 5px solid #ffc107; /* Uyarı mesajı için sarı kenar */
+}
 
-    .popup-text p {
-        margin: 0;
-        font-size: 16px;
-        color: #333;
-    }
+.alert.error {
+    border-left: 5px solid #dc3545; /* Hata mesajı için kırmızı kenar */
+}
+
+.popup-image {
+    margin-right: 10px; /* Resim ile metin arasındaki boşluk */
+}
+
+.popup-image img {
+    width: 24px; /* Görüntü genişliği */
+    height: 24px; /* Görüntü yüksekliği */
+}
+
+.popup-text {
+    flex: 1;
+}
+
+.popup-text p {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
 </style>
 
 
-
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function() {
     const popupMessage = document.querySelector('.popup-message');
     
-    // Eğer mesajlar varsa, popup mesajı göster
+    // Eğer mesajlar varsa, popup mesajını göster
     if (popupMessage && popupMessage.innerHTML.trim() !== '') {
         popupMessage.style.display = 'block';
         
@@ -82,6 +107,5 @@ document.addEventListener("DOMContentLoaded", function() {
         popupMessage.style.display = 'none';
     }
 });
-
 
 </script>

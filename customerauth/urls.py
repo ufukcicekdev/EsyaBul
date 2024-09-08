@@ -6,7 +6,7 @@ app_name = "customerauth"
 
 urlpatterns = [
     ## customer page ##
-    path("sign-up/", views.register_view, name="sign-up"),
+    #path("sign-up/", views.register_view, name="sign-up"),
     path("sign-in/", views.login_view, name="sign-in"),
     path("sign-out/", views.logout_view, name="sign-out"),
     path("dashboard/", views.customer_dashboard, name="dashboard"),
@@ -20,6 +20,7 @@ urlpatterns = [
     path('dashboard/password/', views.password_change, name='password-process'),
     path('dashboard/notifications/', views.notifications, name='notifications'),
     path('dashboard/profile/', views.profile_update, name='profile'),
+    path('dashboard/change-email/', views.change_email_view, name='change_email'),
     path('thank-you/', views.thank_you_view, name='thank_you'),
     ##MY STYLE##
     path('room-type/', views.room_type_selected, name='room-type'),
@@ -43,4 +44,8 @@ urlpatterns = [
     path('dashboard/orders-detail/<str:order_number>/', views.orders_detail, name='orders-detail'),
 
     path('', include('main.urls')),
+
+
+    path('signup/', views.register_view, name='sign-up'),
+    path('accounts/confirm-email/<str:uidb64>/<str:token>/', views.confirm_email, name='account_confirm_email'),
 ]

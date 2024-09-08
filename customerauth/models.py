@@ -12,9 +12,10 @@ class User(AbstractUser):
     my_style = models.BooleanField(default=False)
     phone = models.CharField(max_length=15, null=True, blank=True)
     verified = models.BooleanField(default=False)
+    email_verified= models.BooleanField(default=False)
     receive_email_notifications = models.BooleanField(default=True)
     receive_sms_notifications = models.BooleanField(default=True)
-    tckn = models.CharField(max_length=11, null=True, blank=True)  # TC Kimlik Numarası alanı
+    tckn = models.CharField(max_length=11, null=True, blank=True, unique=True)  # TC Kimlik Numarası alanı
     birth_date = models.DateField(null=True, blank=True)
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ['username']
@@ -34,20 +35,6 @@ class User(AbstractUser):
     )
     def __str__(self):
         return self.username
-
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="image")
-    full_name = models.CharField(max_length=200, null=True, blank=True)
-    phone = models.CharField(max_length=255)
-    verified = models.BooleanField(default=False)
-    receive_email_notifications = models.BooleanField(default=True)
-    receive_sms_notifications = models.BooleanField(default=True)
-    
-    def __str__(self):
-        return f"{self.user.username} - {self.full_name}"
 
 
 class ContactUs(models.Model):
@@ -101,18 +88,6 @@ class Address(models.Model):
 
     def __str__(self):
         return f"{self.username} - {self.address_line1}, {self.city}"
-
-    
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
-
- 
-post_save.connect(create_user_profile, sender=User)
-post_save.connect(save_user_profile, sender=User)    
 
 
 class MyStyles(models.Model):

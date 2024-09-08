@@ -237,7 +237,6 @@ def payment_order(request):
         sozlukToken.append(json_content["token"])
         return HttpResponse(json_content["checkoutFormContent"])
     except Exception as e:
-        print(e)
         messages.error(request, "Ödeme başlatılırken bir hata oluştu: {}".format(e))
         return redirect('products:order_checkout')
 

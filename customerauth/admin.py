@@ -79,9 +79,7 @@ class OrderAdmin(admin.ModelAdmin):
         return obj.get_total_order_price()
     def order_pdf_document_url(self, obj):
         if obj.order_pdf_document:
-            print("obj.order_pdf_document.url",obj.order_pdf_document.url)
             url = obj.order_pdf_document.url
-            print("url",url)
             return format_html('<a href="{}" target="_blank">{}</a>', url, obj.order_pdf_document.name)
         else:
             return "-"
@@ -90,7 +88,6 @@ class OrderAdmin(admin.ModelAdmin):
     def billing_document_url(self, obj):
         if obj.billing_document:
             url = obj.billing_document.url
-            print("url",url)
             return format_html('<a href="{}" target="_blank">{}</a>', url, obj.billing_document.name)
         else:
             return "-"
