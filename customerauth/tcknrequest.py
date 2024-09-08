@@ -29,20 +29,20 @@ class TCKimlikNoSorgula:
 
         return response
 
-# Kullanım örneği
-if __name__ == "__main__":
-    tc_kimlik_no = '19451167026'
-    ad = 'Ufukd'
-    soyad = 'Çiçek'
-    dogum_yili = 1995
+# # Kullanım örneği
+# if __name__ == "__main__":
+#     tc_kimlik_no = '19451167026'
+#     ad = 'Ufukd'
+#     soyad = 'Çiçek'
+#     dogum_yili = 1995
 
-    sorgu = TCKimlikNoSorgula(tc_kimlik_no, ad, soyad, dogum_yili)
-    sonuc = sorgu.sorgula()
+#     sorgu = TCKimlikNoSorgula(tc_kimlik_no, ad, soyad, dogum_yili)
+#     sonuc = sorgu.sorgula()
 
-    if sonuc:
-        print("T.C. Kimlik numarası doğrulandı.")
-    else:
-        print("T.C. Kimlik numarası doğrulanmadı.")
+#     if sonuc:
+#         print("T.C. Kimlik numarası doğrulandı.")
+#     else:
+#         print("T.C. Kimlik numarası doğrulanmadı.")
 
 
 

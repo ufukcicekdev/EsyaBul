@@ -56,10 +56,13 @@
                                             Bilgilerim</button></li>
                                             <li class="sc-gdyeKB xqfpj"><button onclick="getProfile()" class="sc-kzqdkY edqiAa title-bold-16-19">Kişisel
                                                 Bilgiler</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getEmailChange()" class="sc-kzqdkY edqiAa title-bold-16-19">Email Bilgilerim</button></li>
                                     <li class="sc-gdyeKB xqfpj"><button onclick="getNotify()" class="sc-kzqdkY edqiAa title-bold-16-19">Bildirim
                                             Ayarları</button></li>
+                                            {% if not user.social_auth.exists %}
                                     <li class="sc-gdyeKB xqfpj"><button onclick="getPasswordProcess()" class="sc-kzqdkY edqiAa title-bold-16-19">Şifre
                                             İşlemleri</button></li>
+                                            {% endif %}
                                     <li class="sc-gdyeKB xqfpj"><button onclick="logOut()"  class="sc-kzqdkY edqiAa title-bold-16-19">Çıkış
                                             Yap</button></li>
                                 </ul>

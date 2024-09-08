@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from customerauth.forms import UserRegisterForm, ProfileForm, AddressForm,CustomPasswordChangeForm, NotificationSettingsForm,CancelOrderForm
-from django.contrib.auth import login, authenticate, logout
+from customerauth.forms import UserRegisterForm, ProfileForm, AddressForm,CustomPasswordChangeForm, NotificationSettingsForm,CancelOrderForm,EmailChangeForm
+from django.contrib.auth import login, authenticate, logout, get_backends
 from django.contrib import messages
 from django.conf import settings
 from customerauth.models import User, Address, MyStyles, wishlist_model,Order,OrderItem
@@ -23,43 +23,75 @@ from payment.views import refund_payment_cancel_order
 from main.mainContent import mainContent
 from main.decorators import log_request
 
+from django.urls import reverse
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.template.loader import render_to_string
+from django.conf import settings
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_str
+from customerauth.send_confirmation import send_confirmation_email, send_email_change_notification
+
+
+def confirm_email(request, uidb64, token):
+    context = {}
+    mainContext = mainContent(request)
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+        
+        if default_token_generator.check_token(user, token):
+            user.email_verified = True
+            user.save()
+
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+
+            context['message'] = "E-posta adresiniz başarıyla doğrulandı ve otomatik olarak giriş yaptınız!"
+            context.update(mainContext)
+        else:
+            context['message'] = "E-posta doğrulama bağlantısı geçersiz."
+            context.update(mainContext)
+    except User.DoesNotExist:
+        context['message'] = "Kullanıcı bulunamadı."
+        context.update(mainContext)
+
+    return render(request, 'customerauth/confirmation_result.html', context)
+
+
+
 
 def register_view(request):
+    
     homesubbanners = HomeSubBanner.objects.filter(is_active=True)
     mainContext = mainContent(request)
+    
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             new_user = form.save()
-            username = form.cleaned_data.get("username")            
-            user = authenticate(request, username=form.cleaned_data['email'], password=form.cleaned_data['password1'])
-            if user is not None:
-                login(request, user)
-                user_name = request.user.username 
-                context1 = {
-                    'success_messages': f"Tanıştığımıza memnun oldum, {user_name}!",
-                    'target_url':"main:home",
-                    "homesubbanners":homesubbanners
-                }
-                context1.update(mainContext)
-                action.send(request.user , verb='register')
-                return render(request, "customerauth/thank-you.html", context1)
-            else:
-                for field, errors in form.errors.items():
-                    for error in errors:
-                        messages.error(request, f"{field}: {error}")
-                return redirect("customerauth:sign-in")  
+            
+            send_confirmation_email(new_user, request)
+            
+            messages.success(request, "Kaydınız başarılı! E-posta adresinizi doğrulamak için lütfen e-postanızı kontrol edin.")
+            return redirect("customerauth:sign-in")
         else:
+            # Hataları döngüyle işle ve uygun mesajı göster
             for field, errors in form.errors.items():
                 for error in errors:
-                    messages.warning(request, f"{field}: {error}")
-            
+                    field_name = {
+                        'password2': 'Şifre Tekrar',
+                        'password1': 'Şifre',
+                        'username': 'Kullanıcı Adı',
+                        'email': 'Email'
+                    }.get(field, field.capitalize())
+                    messages.warning(request, f"{field_name}: {error}")
+            return redirect("customerauth:sign-up")
     else:
         form = UserRegisterForm()
 
     context = {
         'form': form,
-        "homesubbanners":homesubbanners
+        "homesubbanners": homesubbanners
     }
     context.update(mainContext)
     
@@ -69,19 +101,21 @@ def register_view(request):
 def login_view(request):
     homesubbanners = HomeSubBanner.objects.filter(is_active=True)
     mainContext = mainContent(request)
+    
     if request.user.is_authenticated:
-        action.send(request.user , verb='login')
+        action.send(request.user, verb='login')
         user_name = request.user.username 
         context1 = {
             'success_messages': f"Tekrar hoşgeldiniz, {user_name}!",
-            'target_url':"main:home",
+            'target_url': "main:home",
         }
         context1.update(mainContext)
         return render(request, "customerauth/thank-you.html", context1)
     
     if request.method == "POST":
-        email_or_username = request.POST.get("email_or_username") 
-        password = request.POST.get("password") 
+        email_or_username = request.POST.get("email_or_username")
+        password = request.POST.get("password")
+        
         try:
             user = User.objects.get(email=email_or_username)
         except User.DoesNotExist:
@@ -89,30 +123,35 @@ def login_view(request):
                 user = User.objects.get(username=email_or_username)
             except User.DoesNotExist:
                 messages.warning(request, "Hatalı şifre veya kullanıcı adı girdiniz.")
-                return render(request, "customerauth/sign-in.html")
-        user = authenticate(request, email=user.email, password=password)
+                return render(request, "customerauth/sign-in.html", {"homesubbanners": homesubbanners, **mainContext})
 
+        if not user.email_verified:
+            
+            send_confirmation_email(user, request)
+            messages.warning(request, "E-posta adresiniz doğrulanmamış. Yeni bir doğrulama e-postası gönderildi. Lütfen e-postanızı kontrol edin.")
+            return render(request, "customerauth/sign-in.html", {"homesubbanners": homesubbanners, **mainContext})
+
+        user = authenticate(request, email=user.email, password=password)
         if user is not None:
             login(request, user)
             user_name = request.user.username 
             
             context1 = {
                 'success_messages': f"Tekrar hoşgeldiniz, {user_name}!",
-                'target_url':"main:home",
-                "homesubbanners":homesubbanners
+                'target_url': "main:home",
+                "homesubbanners": homesubbanners
             }
             context1.update(mainContext)
-            action.send(request.user , verb='login')
+            action.send(request.user, verb='login')
             return render(request, "customerauth/thank-you.html", context1)
         else:
             messages.warning(request, "Hatalı şifre veya kullanıcı adı girdiniz.")
 
-
-    context= {
-        "homesubbanners":homesubbanners
+    context = {
+        "homesubbanners": homesubbanners
     }
     context.update(mainContext)
-    return render(request, "customerauth/sign-in.html",context)
+    return render(request, "customerauth/sign-in.html", context)
         
 
 def logout_view(request):
@@ -550,7 +589,10 @@ import random
 def reset_password(request):
     username = request.GET.get("username")
     try:
-        user = get_object_or_404(User, username=username)
+        try: 
+            user = get_object_or_404(User,username=username)  # Kullanıcıyı User modelinden bul
+        except User.DoesNotExist:
+            return JsonResponse({"status": "failed", "message":"Kullanıc Bulunamadı!"})  # Kullanıcı bulunamazsa hata döner
         otp = random.randint(100000, 999999)
         context = {
             'username': user.username,
@@ -697,3 +739,47 @@ def orders_detail(request, order_number):
     context.update(mainContext)
     return render(request, 'customerauth/order-detail.html', context)
 
+
+
+@login_required(login_url='customerauth:sign-in')
+def change_email_view(request):
+    title = "Email Bilgilerim"
+    mainContext = mainContent(request)
+    
+    if request.method == 'POST':
+        form = EmailChangeForm(request.user, request.POST)
+        if form.is_valid():
+            new_email = form.cleaned_data['new_email']
+            old_email = form.cleaned_data['old_email']
+
+            # E-posta adresini güncelle
+            request.user.email = new_email
+            request.user.email_verified = True  # E-posta doğrulama yapılmadı
+            request.user.save()
+
+            # Doğrulama e-postasını gönder
+            #send_confirmation_email(request.user, request)
+
+            # Eski e-posta adresine bilgilendirme gönder
+            send_email_change_notification(new_email, request.user, old_email)
+
+            messages.success(request, 'E-posta adresiniz başarıyla güncellendi.')
+            return redirect('customerauth:change_email')
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    field_name = {
+                        'password': 'Şifre',
+                        'new_email': 'Email'
+                    }.get(field, field.capitalize())
+                    messages.warning(request, f"{field_name}: {error}")
+    else:
+        form = EmailChangeForm(request.user)
+
+    context = {
+        'form': form,
+        'title': title,
+    }
+    context.update(mainContext)
+
+    return render(request, 'customerauth/change_email.html', context)

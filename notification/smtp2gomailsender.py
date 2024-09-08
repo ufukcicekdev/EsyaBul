@@ -20,10 +20,7 @@ def send_email_via_smtp2go(to_list, subjects, body):
         "html_body": body  
     }
     
-    response = requests.post(url, headers=headers, data=json.dumps(payload))
-    
-    print(f"Status Code: {response.status_code}")
-    print(f"Response: {response.json()}")
-    print("tolistt", to_list)
+    requests.post(url, headers=headers, data=json.dumps(payload))
+
 
 

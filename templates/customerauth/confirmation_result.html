@@ -1,0 +1,117 @@
+{% extends 'partialsBase/base.html' %}
+{% load static %}
+{% block title %} Esyala {% endblock title %}
+{% block content %}
+
+<style>
+    body {
+        background-color: #FFFFFF;
+    }
+
+    .vertical-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+
+    .image-container {
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .option-image {
+        display: inline-block;
+        margin: 0 10px;
+        cursor: pointer;
+    }
+
+    .option-image img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .confirmation-message {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        max-width: 400px;
+        text-align: center;
+        margin: auto;
+    }
+
+    .confirmation-image {
+        margin-bottom: 20px;
+    }
+
+    .confirmation-image img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .confirmation-text {
+        font-size: 18px;
+        color: #333;
+        margin: 0;
+    }
+
+    .back-to-home {
+        margin-top: 20px;
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+    }
+
+    .back-to-home:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div id="wrapper">
+    <!-- Page Loader -->
+    <div id="pre-loader" class="loader-container">
+        <div class="loader">
+            <img src="{% static 'images/svg/rings.svg' %}" alt="loader">
+        </div>
+    </div> 
+    <div class="w1">
+        {% include 'coreBase/header.html' %}
+
+        <main id="mt-main">
+            <div class="vertical-center">
+                <div class="text-center">
+                    <!-- Başarılı giriş mesajı -->
+                    {% if success_messages %}
+                    <div class="mb-5">
+                        <h1>{{ success_messages }}</h1>
+                    </div>
+                    {% endif %}
+
+                    <!-- E-posta doğrulama sonucu mesajı -->
+                    <div class="confirmation-message">
+                        <div class="confirmation-image">
+                            {% if "başarıyla doğrulandı" in message %}
+                                <img src="https://filestorages.fra1.digitaloceanspaces.com/message/check.png" alt="Başarılı">
+                            {% else %}
+                                <img src="https://filestorages.fra1.digitaloceanspaces.com/message/cross.png" alt="Hata">
+                            {% endif %}
+                        </div>
+                        <div class="confirmation-text">
+                            <p>{{ message }}</p>
+                        </div>
+                        <a href="{% url 'main:home' %}" class="back-to-home">Ana Sayfaya Dön</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        {% include 'coreBase/footer.html' %}
+    </div>
+    <span id="back-top" class="fa fa-arrow-up"></span>
+</div>
+
+{% endblock content %}

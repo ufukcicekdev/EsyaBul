@@ -1,0 +1,131 @@
+{% extends 'partialsBase/base.html' %}
+{% block title %} {{title}} - Eşyala {% endblock %}
+{% load static %}
+{% block content %}
+
+
+<style>
+    form {
+    width: 100%;
+    max-width: 400px; 
+}
+</style>
+
+
+<div id="wrapper">
+    <!-- Page Loader -->
+    <div id="pre-loader" class="loader-container">
+        <div class="loader">
+            <img src="{% static 'images/svg/rings.svg' %}" alt="loader">
+        </div>
+    </div> 
+    <!-- W1 start here -->
+    <div class="w1">
+        <!-- mt header style4 start here -->
+        {% include 'coreBase/header.html' %}
+        <main id="mt-main">  
+            <section class="mt-contact-banner mt-banner-22" style="background-image: url({% static 'images/img-76.jpg' %}); background-size: cover; background-position: center;">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <h1 class="text-center">Hesabım</h1>
+                      <!-- Breadcrumbs of the Page -->
+                      <nav class="breadcrumbs">
+                        <ul class="list-unstyled">
+                          <li><a href="{% url 'main:home' %}">Anasayfa <i class="fa fa-angle-right"></i></a></li>
+                          <li><a href="{% url 'customerauth:dashboard' %}">Hesabım <i class="fa fa-angle-right"></i></a></li>
+                          <li>Email Bilgilerim</li>
+                        </ul>
+                      </nav>
+                      <!-- Breadcrumbs of the Page end -->
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+        </main>
+        
+        <main class="site-main">
+            <div class="site-main__container">
+                <div class="container">
+                    <h1 class="pageTitle headline-bold-24-29">Email Bilgilerim</h1>
+                    <div class="profileLayout">
+                        <div class="left">
+                            <div class="accountList">
+                                <ul class="sc-ecPEgm dCbnuA">
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getOrders()" class="sc-kzqdkY edqiAa title-bold-16-19">Siparişlerim</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getAddress()" class="sc-kzqdkY edqiAa title-bold-16-19">Adres
+                                            Bilgilerim</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getProfile()" class="sc-kzqdkY edqiAa title-bold-16-19">Kişisel
+                                            Bilgiler</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getEmailChange()" class="sc-kzqdkY hIpJTj title-bold-16-19">Email Bilgilerim</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getNotify()" class="sc-kzqdkY edqiAa title-bold-16-19">Bildirim
+                                            Ayarları</button></li>
+                                            {% if not user.social_auth.exists %}
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getPasswordProcess()" class="sc-kzqdkY edqiAa title-bold-16-19">Şifre
+                                            İşlemleri</button></li>
+                                            {% endif %}
+                                    <li class="sc-gdyeKB xqfpj"><button  onclick="logOut()" class="sc-kzqdkY edqiAa title-bold-16-19">Çıkış
+                                            Yap</button></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="right">
+                            <div id="profileInfo" class="sc-bVHCgj bvQtLI">
+                                <div class="contentTitle"><strong class="d-block headline-bold-20-24">Email Bilgilerim</strong></div>
+                                <div id="identity">
+                                    <form id="EmailChangeForm" class="customForm" method="POST">
+                                        {% csrf_token %}
+                                        
+                                        <div class="input-container">
+                                            <div class="sc-koXPp hcabXJ">
+                                                <div class="top caption-bold-12-15">
+                                                    <p>Yeni E-posta Adresi</p>
+                                                </div>
+                                                {{ form.new_email }}
+                                            </div>
+                                        </div>
+                                
+                                        <div class="input-container">
+                                            <div class="sc-koXPp hcabXJ">
+                                                <div class="top caption-bold-12-15">
+                                                    <p>Mevcut Şifre</p>
+                                                </div>
+                                                {{ form.password }}
+                                            </div>
+                                        </div>
+                                
+                                        {{ form.old_email }}
+                                
+                                        <div class="buttonContainer">
+                                            <button type="submit" class="btn-type3">
+                                                <div class="children">E-posta Değişikliğini Kaydet</div>
+                                            </button>
+                                        </div>
+                                    </form>
+                                    
+                                    
+                                </div>
+                        </div>
+                        </div>
+                  
+                    </div>
+                </div>
+                <div class="shoppingCartBackdrop hidden"></div>
+            </div>
+        </main>
+        {% include 'coreBase/footer.html' %}
+        <!-- footer of the Page end -->
+    </div><!-- W1 end here -->
+    <span id="back-top" class="fa fa-arrow-up"></span>
+</div>
+
+
+
+{% endblock %}
+
+
+
+
+

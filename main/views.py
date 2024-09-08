@@ -233,7 +233,6 @@ def dynamic_category_product_list_view(request, category_slugs):
     Prefetch('wishes', queryset=wishlist_model.objects.all())
     ).annotate(average_rating=Avg('reviews__rating')).order_by('id')
     
-    print("products********",products)
 
     for subcategory in subcategories:
         subcategory.product_count = Product.objects.filter(category=subcategory).count()
