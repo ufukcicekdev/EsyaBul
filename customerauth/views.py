@@ -400,7 +400,7 @@ def room_type_selected(request):
             if selected_room_type_id is not None:
                 MyStyles.objects.create(user=user, room_type_id=selected_room_type_id)
                 update_user_my_style_status(request.user)
-                messages.success(request, 'Room type successfully added.')
+                messages.success(request, 'Başarıyla Eklendi!')
                 return JsonResponse({'status': 'success', 'message': 'Başarıyla Eklendi!'})
             else:
                 messages.error(request, 'Geçersiz Bir Model Seçildi!')
