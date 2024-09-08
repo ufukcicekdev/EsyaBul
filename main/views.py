@@ -117,7 +117,7 @@ def my_style_start(request):
         'user_name': user_name,  
     }
     context.update(mainContext)
-    return render(request, 'my_style/my_style_start.html', )
+    return render(request, 'my_style/my_style_start.html', context)
 
 
 ################### Errors Open ################

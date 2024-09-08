@@ -3,7 +3,6 @@
 {% block title %} Ev Modeliniz - Eşyala {% endblock title %}
 {% block content %}
 
-
 <!-- main container of all the page elements -->
 <div id="wrapper">
     <!-- Page Loader -->
@@ -12,6 +11,7 @@
             <img src="{% static 'images/svg/rings.svg' %}" alt="loader">
         </div>
     </div> 
+
     <!-- W1 start here -->
     <div class="w1">
         <!-- mt header style4 start here -->
@@ -25,10 +25,13 @@
                         <p class="mb-30">Stil sonuçlarını görmek için Tarzımı Gör diyerek devam edebilirsiniz!</p>
                     </div>
                 </div>
+
                 <div class="split right-side">
                     <div class="centered">
-                        <h1 class="mb-5">Hazır mısın {{ user_name }}</h1>
-                        <button type="submit" class="btn btn-heading custom-btn" onclick="redirectToPage()" name="login">Tarzımı Gör</button>
+                        <h1 class="mb-5">Hazır mısın {{ user_name }}?</h1>
+                        <button type="submit" class="btn btn-heading custom-btn" onclick="redirectToPage()" name="login">
+                            Tarzımı Gör
+                        </button>
                     </div>
                 </div>
             </div>
@@ -40,11 +43,56 @@
     <span id="back-top" class="fa fa-arrow-up"></span>
 </div>
 
-
 <script>
     function redirectToPage() {
         window.location.href = "{% url 'customerauth:room-type' %}";
     }
 </script>
 
-{%  endblock %}
+<style>
+    /* Split container styling */
+    .split-container {
+        display: flex;
+        height: 100vh;
+    }
+
+    .split {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .left-side {
+        background-color: #f7f7f7;
+    }
+
+    .right-side {
+        background-color: #ffffff;
+    }
+
+    .centered {
+        max-width: 400px;
+        width: 100%;
+    }
+
+    .custom-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 18px;
+        background-color: #d38d0e;
+        color: #000000;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .custom-btn:hover {
+        background-color: #ffa601;
+    }
+</style>
+
+{% endblock %}

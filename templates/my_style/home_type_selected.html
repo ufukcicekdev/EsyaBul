@@ -3,8 +3,6 @@
 {% block title %} Ev Tipiniz - Eşyala {% endblock title %}
 {% block content %}
 
-
-
 <!-- main container of all the page elements -->
 <div id="wrapper">
     <!-- Page Loader -->
@@ -13,6 +11,7 @@
             <img src="{% static 'images/svg/rings.svg' %}" alt="loader">
         </div>
     </div> 
+
     <!-- W1 start here -->
     <div class="w1">
         <!-- mt header style4 start here -->
@@ -30,12 +29,12 @@
                     <div class="centered">
                         <div class="image-container">
                             {% for home_type in home_types %}
-                            <div class="option-image text-center" onclick="selectImage(this)" data-home-type-id="{{ home_type.id }}">
-                                <img src="{{ home_type.image.url }}" alt="{{ home_type.img_alt }}" title="{{ home_type.img_title }}" />
-                                <i class="fas fa-check checkmark"></i>
-                                <span>{{ home_type.name }}</span>
-                            </div>
-                        {% endfor %}
+                                <div class="option-image text-center" onclick="selectImage(this)" data-home-type-id="{{ home_type.id }}">
+                                    <img src="{{ home_type.image.url }}" alt="{{ home_type.img_alt }}" title="{{ home_type.img_title }}" />
+                                    <i class="fa fa-check checkmark"></i>
+                                    <span>{{ home_type.name }}</span>
+                                </div>
+                            {% endfor %}
                         </div>
                         <div class="button-container">
                             <button type="submit" class="btn btn-heading custom-btn" onclick="goToPreviousPage()" name="prev">Önceki Adım</button>
@@ -57,79 +56,208 @@
     <span id="back-top" class="fa fa-arrow-up"></span>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-        <script>
-            
+<script>
+    function selectImage(element) {
+        document.querySelectorAll('.option-image').forEach(img => img.classList.remove('selected'));
+        element.classList.add('selected');
+        document.getElementById('selectedHomeTypeId').value = element.getAttribute('data-home-type-id');
+    }
+
+    function save_type() {
+        document.getElementById('roomTypeForm').submit();
+    }
+
+    function goToPreviousPage() {
+        window.history.back();
+    }
+</script>
+
+<style>
+    .split-container {
+        display: flex;
+        flex-wrap: wrap;
+        max-height: 90vh; /* Sayfa yüksekliğini sınırladık */
+        overflow: hidden; /* Taşmaları engelledik */
+    }
+
+    .split {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        text-align: center;
+        max-height: 80vh; /* Bölümlerin yüksekliklerini daha da sınırladık */
+    }
+
+    .left-side {
+        background-color: #f7f7f7;
+    }
+
+    .right-side {
+        background-color: #ffffff;
+        position: relative;
+    }
+
+    .centered {
+        max-width: 100%;
+        width: 100%;
+        padding: 20px;
+    }
+
+    .image-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .option-image {
+        position: relative;
+        border: 2px solid transparent;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 8px;
+        transition: border-color 0.3s ease;
+    }
+
+    .option-image.selected {
+        border-color: #007bff;
+    }
+
+    .option-image img {
+        max-width: 150px;
+        height: auto;
+        border-radius: 8px;
+        display: block;
+        margin: 0 auto 10px;
+    }
+
+    .option-image .checkmark {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 20px;
+        color: #007bff;
+        display: none;
+    }
+
+    .option-image.selected .checkmark {
+        display: block;
+    }
+
+    .button-container {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .custom-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #d38d0e;
+        color: #000000;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .custom-btn:hover {
+        background-color: #ffa601;
+    }
+
+    @media (max-width: 768px) {
+        .split-container {
+            flex-direction: column;
+        }
+
+        .button-container {
+            position: static;
+            margin-top: 20px;
+            text-align: center;
+        }
+    }
+</style>
+
+
+
+
+<script>
+
+
+let selectedImage = null;
+
+function selectImage(divElement) {
+    const imagePath = $(divElement).find("img").attr("src");
+    const checkmark = $(divElement).find(".checkmark");
+
+    if (selectedImage === imagePath) {
+        selectedImage = null;
+        $(divElement).removeClass("selected-image");
+        $(divElement).css("background-color", "#f0f0f0");
+        checkmark.hide();
+        return;
+    }
+
+    if (selectedImage) {
+        const messageContainer = document.querySelector('.popup-message');
+        messageContainer.innerHTML = '<div class="alert alert-danger">Sadece bir seçim yapabilirsiniz!</div>';
+        messageContainer.style.display = 'block';
+
+        setTimeout(function () {
+            messageContainer.style.display = 'none';
+        }, 5000); // 5 saniye
+        return;
+    }
+
+    selectedImage = imagePath;
+
+    $(divElement).addClass("selected-image");
+    $(divElement).css("background-color", "orange");
+    checkmark.show();
+}
+
+function save_type() {
+    if (selectedImage) {
+        const selectedHomeTypeId = $(".selected-image").attr("data-home-type-id");
+        $("#selectedHomeTypeId").val(selectedHomeTypeId);
+
+        console.log(selectedHomeTypeId);
         
-            let selectedImage = null;
-        
-            function selectImage(divElement) {
-                const imagePath = $(divElement).find("img").attr("src");
-                const checkmark = $(divElement).find(".checkmark");
-        
-                if (selectedImage === imagePath) {
-                    selectedImage = null;
-                    $(divElement).removeClass("selected-image");
-                    $(divElement).css("background-color", "#f0f0f0");
-                    checkmark.hide();
-                    return;
-                }
-        
-                if (selectedImage) {
-                    const messageContainer = document.querySelector('.popup-message');
-                    messageContainer.innerHTML = '<div class="alert alert-danger">Sadece bir seçim yapabilirsiniz!</div>';
-                    messageContainer.style.display = 'block';
-        
-                    setTimeout(function () {
-                        messageContainer.style.display = 'none';
-                    }, 5000); // 5 saniye
-                    return;
-                }
-        
-                selectedImage = imagePath;
-        
-                $(divElement).addClass("selected-image");
-                $(divElement).css("background-color", "orange");
-                checkmark.show();
+        $.ajax({
+            url: "{% url 'customerauth:home-type' %}",
+            type: "POST",
+            data: $("#roomTypeForm").serialize(),
+            success: function (response) {
+                window.location.href = "{% url 'customerauth:home-model' %}";
+            },
+            error: function (error) {
+                //console.error(selectedHomeTypeId);
             }
-        
-            function save_type() {
-                if (selectedImage) {
-                    const selectedHomeTypeId = $(".selected-image").attr("data-home-type-id");
-                    $("#selectedHomeTypeId").val(selectedHomeTypeId);
-        
-                    console.log(selectedHomeTypeId);
-                    
-                    $.ajax({
-                        url: "{% url 'customerauth:home-type' %}",
-                        type: "POST",
-                        data: $("#roomTypeForm").serialize(),
-                        success: function (response) {
-                            window.location.href = "{% url 'customerauth:home-model' %}";
-                        },
-                        error: function (error) {
-                            //console.error(selectedHomeTypeId);
-                        }
-                    });
-                } else {
-                    const messageContainer = document.querySelector('.popup-message');
-                    messageContainer.innerHTML = '<div class="alert alert-danger">Lütfen bir ev modeli seçin!</div>';
-                    messageContainer.style.display = 'block';
-        
-                    setTimeout(function () {
-                        messageContainer.style.display = 'none';
-                    }, 5000); // 5 saniye
-                }
-            }
-        
-            function goToPreviousPage() {
-                // Önceki sayfanın URL'ini al
-                const previousPageUrl = "{% url 'customerauth:room-type' %}";
-                
-                // Yeni sayfaya yönlendir
-                window.location.href = previousPageUrl;
-            }
-        </script>
+        });
+    } else {
+        const messageContainer = document.querySelector('.popup-message');
+        messageContainer.innerHTML = '<div class="alert alert-danger">Lütfen bir ev modeli seçin!</div>';
+        messageContainer.style.display = 'block';
+
+        setTimeout(function () {
+            messageContainer.style.display = 'none';
+        }, 5000); // 5 saniye
+    }
+}
+
+function goToPreviousPage() {
+    // Önceki sayfanın URL'ini al
+    const previousPageUrl = "{% url 'customerauth:room-type' %}";
+    
+    // Yeni sayfaya yönlendir
+    window.location.href = previousPageUrl;
+}
+</script>
 
 
 {%  endblock %}

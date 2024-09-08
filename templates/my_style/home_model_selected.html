@@ -3,8 +3,6 @@
 {% block title %} Ev Modeliniz - Eşyala {% endblock title %}
 {% block content %}
 
-
-
 <!-- main container of all the page elements -->
 <div id="wrapper">
     <!-- Page Loader -->
@@ -13,6 +11,7 @@
             <img src="{% static 'images/svg/rings.svg' %}" alt="loader">
         </div>
     </div> 
+
     <!-- W1 start here -->
     <div class="w1">
         <!-- mt header style4 start here -->
@@ -31,7 +30,7 @@
                             {% for home_model in home_models %}
                                 <div class="option-image text-center" onclick="selectImage(this)" data-home-model-id="{{ home_model.id }}">
                                     <img src="{{ home_model.image.url }}" alt="{{ home_model.img_alt }}" title="{{ home_model.img_title }}" />
-                                    <i class="fa-solid fa-check checkmark"></i>
+                                    <i class="fa fa-check checkmark"></i>
                                     <span>{{ home_model.name }}</span>
                                 </div>
                             {% endfor %}
@@ -56,8 +55,136 @@
     <span id="back-top" class="fa fa-arrow-up"></span>
 </div>
 
+<script>
+    function selectImage(element) {
+        document.querySelectorAll('.option-image').forEach(img => img.classList.remove('selected'));
+        element.classList.add('selected');
+        document.getElementById('selectedHomeModelId').value = element.getAttribute('data-home-model-id');
+    }
 
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    function save_type() {
+        document.getElementById('roomTypeForm').submit();
+    }
+
+    function goToPreviousPage() {
+        window.history.back();
+    }
+</script>
+
+<style>
+    .split-container {
+        display: flex;
+        flex-wrap: wrap;
+        max-height: 90vh; /* Sayfa yüksekliğini sınırladık */
+        overflow: hidden; /* Taşmaları engelledik */
+    }
+
+    .split {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        text-align: center;
+        max-height: 80vh; /* Bölümlerin yüksekliklerini sınırladık */
+    }
+
+    .left-side {
+        background-color: #f7f7f7;
+    }
+
+    .right-side {
+        background-color: #ffffff;
+        position: relative;
+    }
+
+    .centered {
+        max-width: 100%;
+        width: 100%;
+        padding: 20px;
+    }
+
+    .image-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .option-image {
+        position: relative;
+        border: 2px solid transparent;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 8px;
+        transition: border-color 0.3s ease;
+    }
+
+    .option-image.selected {
+        border-color: #007bff;
+    }
+
+    .option-image img {
+        max-width: 150px;
+        height: auto;
+        border-radius: 8px;
+        display: block;
+        margin: 0 auto 10px;
+    }
+
+    .option-image .checkmark {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 20px;
+        color: #007bff;
+        display: none;
+    }
+
+    .option-image.selected .checkmark {
+        display: block;
+    }
+
+    .button-container {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .custom-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #d38d0e;
+        color: #000000;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .custom-btn:hover {
+        background-color: #ffa601;
+    }
+
+    @media (max-width: 768px) {
+        .split-container {
+            flex-direction: column;
+        }
+
+        .button-container {
+            position: static;
+            margin-top: 20px;
+            text-align: center;
+        }
+    }
+</style>
+
+
+
+
 <script>
     let selectedImage = null;
     function selectImage(divElement) {
