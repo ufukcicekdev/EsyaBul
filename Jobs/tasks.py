@@ -22,6 +22,6 @@ def start():
 
     #scheduler.add_job(check_wishlist, 'interval', minutes=1)
 
-    scheduler.add_job(web_notify_service, 'cron', min='30')
+    scheduler.add_job(web_notify_service, 'cron', minute='30')
 
     scheduler.start()
