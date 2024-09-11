@@ -21,10 +21,6 @@ from django.core.cache import cache
 
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 32bf4ed8193b5c927a21ed64eff691e774831cfc
 def get_home_main_banners():
     key = 'home_main_banners'
     banners = cache.get(key)
@@ -102,10 +98,6 @@ def home(request):
         context.update({'user_product_view': user_product_view})
 
     context.update(mainContext)
-<<<<<<< HEAD
-=======
-
->>>>>>> 32bf4ed8193b5c927a21ed64eff691e774831cfc
     
     return render(request, 'coreBase/home.html', context)
 
@@ -355,14 +347,4 @@ def subscribe(request):
             else:
                 messages.info(request, "Bu e-posta adresi zaten kayıtlı.")
         return redirect('main:home') 
-<<<<<<< HEAD
     return render(request, 'coreBase/home.html')
-
-
-
-
-
-
-=======
-    return render(request, 'coreBase/home.html')
->>>>>>> 32bf4ed8193b5c927a21ed64eff691e774831cfc

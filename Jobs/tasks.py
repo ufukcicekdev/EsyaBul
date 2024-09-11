@@ -1,9 +1,5 @@
 # notification/tasks.py
-<<<<<<< HEAD
-from .utils import send_email_notifications, check_wishlist, notify_users_about_expiring_orders, delete_cards_not_users, web_notify_service
-=======
-from .utils import send_email_notifications, check_wishlist, notify_users_about_expiring_orders, delete_cards_not_users
->>>>>>> 32bf4ed8193b5c927a21ed64eff691e774831cfc
+from .utils import send_email_notifications, check_wishlist, notify_users_about_expiring_orders, delete_cards_not_users,web_notify_service
 from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 
