@@ -144,7 +144,7 @@ def web_notify_service():
         devices = Device.objects.all()
         
         for device in devices:
-            send_notification(device.token, notification.title, notification.message)
+            send_notification(device.token, notification.title, notification.message, notification.link)
         
         notification.is_sent = True
         notification.save()

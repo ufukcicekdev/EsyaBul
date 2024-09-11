@@ -40,7 +40,7 @@ def showFirebaseJS(request):
 
 
 
-def send_notification(token, message_title, message_desc):
+def send_notification(token, message_title, message_desc, click_action_url):
     url = "https://fcm.googleapis.com/v1/projects/esyala-a8bae/messages:send"
     
     fcm_api = firebase_service_account()
@@ -55,6 +55,11 @@ def send_notification(token, message_title, message_desc):
             "notification": {
                 "title": message_title,
                 "body": message_desc
+            },
+            "webpush": {
+                "notification": {
+                    "click_action": click_action_url
+                }
             }
         }
     }
