@@ -6,7 +6,8 @@ app_name = "notification"
 
 
 urlpatterns = [
-   
+    path('firebase-messaging-sw.js',showFirebaseJS,name="show_firebase_js"),
+    path('save-token/', save_token, name='save_token'),
 ]
 
 

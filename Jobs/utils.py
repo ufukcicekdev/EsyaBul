@@ -15,7 +15,8 @@ from products.models import Cart
 from django.db.models import Q
 import time
 from notification.smtp2gomailsender import send_email_via_smtp2go
-
+from notification.models import Notification, Device
+from notification.views import send_notification
 load_dotenv()
 
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
@@ -134,3 +135,21 @@ def delete_cards_not_users():
     empty_user_session_cards = Cart.objects.filter(Q(user_id=None) & Q(session_key=None))
 
     empty_user_session_cards.delete()
+
+
+
+def web_notify_service():
+    notifications = Notification.objects.filter(is_sent=False)
+    print("web_notify_service")
+    
+    for notification in notifications:
+        devices = Device.objects.all()
+        
+        tokens = [device.token for device in devices]
+
+        if tokens:
+            send_notification(tokens, notification.title, notification.message)
+        
+        notification.is_sent = True
+        notification.save()
+        

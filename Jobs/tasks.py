@@ -1,5 +1,5 @@
 # notification/tasks.py
-from .utils import send_email_notifications, check_wishlist, notify_users_about_expiring_orders, delete_cards_not_users
+from .utils import send_email_notifications, check_wishlist, notify_users_about_expiring_orders, delete_cards_not_users, web_notify_service
 from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -21,5 +21,7 @@ def start():
     scheduler.add_job(delete_cards_not_users, 'cron', day_of_week='*', hour=0)
 
     #scheduler.add_job(check_wishlist, 'interval', minutes=1)
+
+    scheduler.add_job(web_notify_service, 'interval', minutes=1)
 
     scheduler.start()
