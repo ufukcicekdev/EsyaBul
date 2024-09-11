@@ -40,7 +40,7 @@ def showFirebaseJS(request):
 
 
 
-def send_notification(registration_ids, message_title, message_desc):
+def send_notification(token, message_title, message_desc):
     url = "https://fcm.googleapis.com/v1/projects/esyala-a8bae/messages:send"
     
     fcm_api = firebase_service_account()
@@ -51,19 +51,18 @@ def send_notification(registration_ids, message_title, message_desc):
 
     payload = {
         "message": {
-            "registration_ids": registration_ids, 
-            "notification" : {
-                "body" : message_desc,
-                "title" : message_title,                
+            "token": token,
+            "notification": {
+                "title": message_title,
+                "body": message_desc
             }
         }
     }
 
-
-    result = requests.post(url, data=json.dumps(payload), headers=headers)
+    response = requests.post(url, data=json.dumps(payload), headers=headers)
     
-    print(result.json())
-
+    print(f"Status Code: {response.status_code}")
+    print(f"Response Text: {response.text}")
 
 
 
