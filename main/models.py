@@ -304,7 +304,11 @@ class Subscription(models.Model):
 
     class Meta:
         verbose_name = "Abonelik"
+<<<<<<< HEAD
         verbose_name_plural = "Abonelikler"
 
 
 
+=======
+        verbose_name_plural = "Abonelikler"
+>>>>>>> 32bf4ed8193b5c927a21ed64eff691e774831cfc

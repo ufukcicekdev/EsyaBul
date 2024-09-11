@@ -129,4 +129,8 @@ wrapt==1.16.0
 xhtml2pdf==0.2.15
 yarl==1.9.4
 zeep==4.2.1
+<<<<<<< HEAD
 zopfli==0.2.3
+=======
+zopfli==0.2.3
+>>>>>>> 32bf4ed8193b5c927a21ed64eff691e774831cfc

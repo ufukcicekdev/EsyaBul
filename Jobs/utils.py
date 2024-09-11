@@ -15,8 +15,12 @@ from products.models import Cart
 from django.db.models import Q
 import time
 from notification.smtp2gomailsender import send_email_via_smtp2go
+<<<<<<< HEAD
 from notification.models import Notification, Device
 from notification.views import send_notification
+=======
+
+>>>>>>> 32bf4ed8193b5c927a21ed64eff691e774831cfc
 load_dotenv()
 
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
@@ -134,6 +138,7 @@ def notify_users_about_expiring_orders():
 def delete_cards_not_users():
     empty_user_session_cards = Cart.objects.filter(Q(user_id=None) & Q(session_key=None))
 
+<<<<<<< HEAD
     empty_user_session_cards.delete()
 
 
@@ -153,3 +158,6 @@ def web_notify_service():
         notification.is_sent = True
         notification.save()
         
+=======
+    empty_user_session_cards.delete()
+>>>>>>> 32bf4ed8193b5c927a21ed64eff691e774831cfc
