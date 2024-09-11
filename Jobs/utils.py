@@ -139,10 +139,9 @@ def delete_cards_not_users():
 
 
 def web_notify_service():
-    notifications = Notification.objects.filter(is_sent=False)
+    notifications = Notification.objects.filter(is_active=True)
     for notification in notifications:
         devices = Device.objects.all()
-        
         for device in devices:
             send_notification(device.token, notification.title, notification.message, notification.link)
         
