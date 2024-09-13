@@ -48,6 +48,14 @@ def confirm_email(request, uidb64, token):
 
             context['message'] = "E-posta adresiniz başarıyla doğrulandı ve otomatik olarak giriş yaptınız!"
             context.update(mainContext)
+            context1 = {
+                'success_messages': f"Tekrar hoşgeldiniz, {user.username}!",
+                'target_url': "main:my_style_start",
+            }
+            context1.update(mainContext)
+            action.send(request.user, verb='login')
+            return render(request, "customerauth/thank-you.html", context1)
+
         else:
             context['message'] = "E-posta doğrulama bağlantısı geçersiz."
             context.update(mainContext)
@@ -107,7 +115,7 @@ def login_view(request):
         user_name = request.user.username 
         context1 = {
             'success_messages': f"Tekrar hoşgeldiniz, {user_name}!",
-            'target_url': "main:home",
+            'target_url': "main:my_style_start",
         }
         context1.update(mainContext)
         return render(request, "customerauth/thank-you.html", context1)
@@ -573,11 +581,15 @@ def forgot_password(request):
         user.set_password(pwd)
         user.save()
 
+
+        user_name = request.user.username 
+            
+       
         login(request,user, backend='django.contrib.auth.backends.ModelBackend')
         user_name = request.user.username 
         context1 = {
             'success_messages': f"Şifren başarıyla değiştirildi. Tekrar hoşgeldin, {user_name}!",
-            'target_url':"main:home",
+            'target_url':"main:my_style_start",
         }
         context1.update(mainContext)
         return render(request, "customerauth/thank-you.html", context1)
