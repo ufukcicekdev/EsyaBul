@@ -573,7 +573,7 @@ def forgot_password(request):
         user.set_password(pwd)
         user.save()
 
-        login(request,user)
+        login(request,user, backend='django.contrib.auth.backends.ModelBackend')
         user_name = request.user.username 
         context1 = {
             'success_messages': f"Şifren başarıyla değiştirildi. Tekrar hoşgeldin, {user_name}!",
