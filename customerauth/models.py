@@ -203,3 +203,15 @@ class UserProductView(models.Model):
 
     def __str__(self):
         return f'{self.user.username} - {self.product.name}'
+    
+
+
+
+class PasswordReset(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    otp = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_valid(self):
+        # OTP'nin 15 dakika içinde geçerli olduğunu kontrol eder
+        return self.created_at >= timezone.now() - timezone.timedelta(minutes=15)

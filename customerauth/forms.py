@@ -250,3 +250,27 @@ class EmailChangeForm(forms.Form):
             self.add_error('new_email', 'Yeni e-posta adresi eski e-posta adresinizle aynı olamaz.')
 
         return cleaned_data
+
+
+
+
+
+
+class PasswordResetRequestForm(forms.Form):
+    email = forms.EmailField(label='E-posta Adresiniz', widget=forms.EmailInput(attrs={'placeholder': 'E-posta adresinizi girin...'}))
+
+class SetNewPasswordForm(forms.Form):
+    otp = forms.CharField(
+        label='Doğrulama Kodu',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Doğrulama kodunu girin...',
+            'autocomplete': 'off'  
+        })
+    )
+    new_password = forms.CharField(
+        label='Yeni Şifreniz',
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Yeni şifrenizi girin...',
+            'autocomplete': 'new-password' 
+        })
+    )

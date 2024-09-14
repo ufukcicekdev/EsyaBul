@@ -30,8 +30,8 @@ urlpatterns = [
     path('time-range/', views.time_range_selected, name='time-range'),
 
     ##FORGET PASSWORD##
-    path("forgot-password/",views.forgot_password, name="forgot_password"),
-    path("reset-password/",views.reset_password,name="reset_password"),
+    path('password-reset/', views.password_reset_request, name='password_reset_request'),
+    path('set-new-password/', views.set_new_password, name='set_new_password'),
     
     ## wishlist page ##
     path("wishlist/", views.wishlist_view, name="wishlist"),

@@ -21,6 +21,3 @@ def send_email_via_smtp2go(to_list, subjects, body):
     }
     
     requests.post(url, headers=headers, data=json.dumps(payload))
-
-
-

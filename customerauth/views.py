@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from customerauth.forms import UserRegisterForm, ProfileForm, AddressForm,CustomPasswordChangeForm, NotificationSettingsForm,CancelOrderForm,EmailChangeForm
+from .forms import PasswordResetRequestForm, SetNewPasswordForm
 from django.contrib.auth import login, authenticate, logout, get_backends
 from django.contrib import messages
 from django.conf import settings
@@ -31,6 +32,9 @@ from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_str
 from customerauth.send_confirmation import send_confirmation_email, send_email_change_notification
+from .models import PasswordReset
+from django.views.decorators.http import require_POST
+
 
 
 def confirm_email(request, uidb64, token):
@@ -568,63 +572,6 @@ def update_user_my_style_status(user):
 
 
 
-################### Forgot Passwords Open ################
-
-
-def forgot_password(request):
-    mainContext = mainContent(request)
-    if request.method=="POST":
-        un = request.POST["username"]
-        pwd = request.POST["npass"]
-
-        user = get_object_or_404(User,username=un)
-        user.set_password(pwd)
-        user.save()
-
-
-        user_name = request.user.username 
-            
-       
-        login(request,user, backend='django.contrib.auth.backends.ModelBackend')
-        user_name = request.user.username 
-        context1 = {
-            'success_messages': f"Şifren başarıyla değiştirildi. Tekrar hoşgeldin, {user_name}!",
-            'target_url':"main:my_style_start",
-        }
-        context1.update(mainContext)
-        return render(request, "customerauth/thank-you.html", context1)
-    return render(request,"customerauth/forgot_password.html",mainContext)
-
-
-import random
-
-def reset_password(request):
-    username = request.GET.get("username")
-    try:
-        try: 
-            user = get_object_or_404(User,username=username)  # Kullanıcıyı User modelinden bul
-        except User.DoesNotExist:
-            return JsonResponse({"status": "failed", "message":"Kullanıc Bulunamadı!"})  # Kullanıcı bulunamazsa hata döner
-        otp = random.randint(100000, 999999)
-        context = {
-            'username': user.username,
-            'otp': otp,
-        }
-        email_content = render_to_string('email_templates/reset_password_email.html', context)
-        try:
-            
-            send_email_via_smtp2go([user.email], "Hesap Doğrulama", email_content)
-
-            return JsonResponse({"status": "sent", "email": user.email, "rotp": otp})
-        except:
-            return JsonResponse({"status": "error", "email": user.email})
-    except Exception as e:
-        return JsonResponse({"status": "failed"})
-    
-################### Forgot Passwords Close ################
-
-
-
 ################### Wishlist Open ################
     
 @login_required(login_url='customerauth:sign-in')
@@ -795,3 +742,71 @@ def change_email_view(request):
     context.update(mainContext)
 
     return render(request, 'customerauth/change_email.html', context)
+
+
+
+
+
+
+################### Forgot Passwords Open ################
+
+import random
+
+def generate_otp():
+    return ''.join(random.choices('0123456789', k=6))
+
+def password_reset_request(request):
+    if request.method == 'POST':
+        form = PasswordResetRequestForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            try:
+                user = User.objects.get(email=email)
+                otp = generate_otp()
+                PasswordReset.objects.create(user=user, otp=otp)
+                
+                context = {
+                    'username': user.username,
+                    'otp': otp,
+                }
+
+                email_content = render_to_string('email_templates/reset_password_email.html', context)
+                send_email_via_smtp2go([user.email], "Hesap Doğrulama", email_content)
+                messages.success(request, 'Doğrulama kodunuz e-posta adresinize gönderildi.')
+                return redirect('customerauth:set_new_password')
+            except User.DoesNotExist:
+                messages.error(request, 'Bu e-posta adresi ile kayıtlı kullanıcı bulunamadı.')
+    else:
+        form = PasswordResetRequestForm()
+
+    context = mainContent(request)
+    context['reset_form'] = form
+
+    return render(request, 'customerauth/password_reset_request.html', context)
+
+def set_new_password(request):
+    if request.method == 'POST':
+        form = SetNewPasswordForm(request.POST)
+        if form.is_valid():
+            otp = form.cleaned_data['otp']
+            new_password = form.cleaned_data['new_password']
+            try:
+                password_reset = PasswordReset.objects.get(otp=otp)
+                if password_reset.is_valid():
+                    user = password_reset.user
+                    user.set_password(new_password)
+                    user.save()
+                    password_reset.delete()  
+                    messages.success(request, 'Şifreniz başarıyla güncellendi.')
+                    return redirect('customerauth:sign-in')
+                else:
+                    messages.error(request, 'Doğrulama Kodu süresi dolmuş.')
+            except PasswordReset.DoesNotExist:
+                messages.error(request, 'Geçersiz Doğrulama Kodu kodu.')
+    else:
+        form = SetNewPasswordForm()
+
+    context = mainContent(request)
+    context['set_password_form'] = form
+
+    return render(request, 'customerauth/set_new_password.html', context)
