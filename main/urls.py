@@ -23,7 +23,6 @@ urlpatterns = [
     path('about/', about, name='about'),
     path('faqs/', faqs, name='faqs'),
     path('how-does-it-work/', does_it_work, name='itwork'),
-    path("contact-form/", ajax_contact_form, name="ajax-contact-form"),
     path("category/<path:category_slugs>/", dynamic_category_product_list_view, name="dynamic-category-product-list"),
     path('search/', search_view, name='search_results'),
     path('sitemap.xml/', sitemap, {'sitemaps': sitemaps, "template_name": "custom_sitemap.html"}, name='django.contrib.sitemaps.views.sitemap'),

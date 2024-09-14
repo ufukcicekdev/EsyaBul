@@ -11,7 +11,7 @@ from django.db.models import Q,Avg,Prefetch
 from products.forms import AddToCartForm
 import random
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .forms import ProductSearchForm
+from .forms import ProductSearchForm,ContactForm
 from .mainContent import mainContent
 from django.template.loader import render_to_string
 from django.views.decorators.cache import cache_page
@@ -140,7 +140,22 @@ def contact(request):
     mainContext = mainContent(request)
     description = "Eşyala.com ile iletişime geçin! Sorularınız, geri bildirimleriniz veya destek talepleriniz için bize ulaşın. Müşteri memnuniyeti ve çözüm odaklı hizmet anlayışımızla, sizlere en iyi deneyimi sunmak için buradayız."
     mainContext["description"] = description
+
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save() 
+            messages.success(request, 'Mesajınız başarıyla gönderildi!')
+            return redirect('main:contact')  
+        else:
+            messages.error(request, 'Lütfen formu doğru şekilde doldurduğunuzdan emin olun.')
+            mainContext['form'] = form
+    else:
+        mainContext['form'] = ContactForm()
+
     return render(request, "mainBase/contact.html", mainContext)
+
+
 @cache_page(60 * 60 * 6)  # 6 saatlik cache
 @vary_on_cookie
 def about(request):
@@ -171,35 +186,7 @@ def does_it_work(request):
 
 
 
-def ajax_contact_form(request):
-    full_name = request.GET['full_name']
-    email = request.GET['email']
-    phone = request.GET['phone']
-    subject = request.GET['subject']
-    message = request.GET['message']
 
-    contact = ContactUs.objects.create(
-        full_name=full_name,
-        email=email,
-        phone=phone,
-        subject=subject,
-        message=message,
-    )
-
-    messages_List = []
-    message = 'Başarılı bir şekilde gönderildi!'
-    tags = "success"
-    messages_List.append({'message': message, 'tags': tags})
-    message_html = render_to_string('message.html', {'messages': messages_List})
-
-    context = {
-        "status": True,
-        "messages": messages_List,
-        "message_html": message_html,
-    }
-
-
-    return JsonResponse(context)
 
 
 

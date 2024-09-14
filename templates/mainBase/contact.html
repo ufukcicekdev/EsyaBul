@@ -6,7 +6,6 @@
 {% block description %} {{ description }} {% endblock description %}
 
 {% block content %}
-
 <!-- main container of all the page elements -->
 <div id="wrapper">
     <!-- Page Loader -->
@@ -38,6 +37,7 @@
             </div>
           </section>
           <!-- Mt Map Descrp of the Page end -->
+          
           <!-- Mt Contact Detail of the Page -->
           <div class="mt-contact-detail wow fadeInUp" data-wow-delay="0.4s">
             <div class="container">
@@ -61,38 +61,35 @@
             </div>
           </div>
           <!-- Mt Contact Detail of the Page end -->
+          
           <!-- Mt Form Section of the Page -->
           <section class="mt-form-sec wow fadeInUp" data-wow-delay="0.4s">
             <div class="container">
               <div class="row">
                 <header class="col-xs-12 text-center header">
                   <h2>Sorunuz mu var?</h2>
-                  <p> Aşağıdaki formu dolduraraki bizimle iletişime geçebilirsiniz.</p>
+                  <p>Aşağıdaki formu doldurarak bizimle iletişime geçebilirsiniz.</p>
                 </header>
               </div>
               <div class="row">
                 <div class="col-xs-12">
                   <!-- Contact Form of the Page -->
-                  <form class="contact-form" id="contact-form-ajax" method="POST">
-                       {% csrf_token %}
+                  <form class="contact-form" method="POST" action="{% url 'main:contact' %}">
+                    {% csrf_token %}
                     <fieldset>
-                      <input type="text" class="form-control" name="full_name" id="full_name" placeholder="Adını ve soyadını gir"  required>
-                      <input type="email" class="form-control" name="email" id="email" placeholder="isim@örnek.com"  required >
-                      <input type="tel" class="form-control"class="form-control" id="phone" name="telphone" placeholder="888 888 8888"  maxlength="12"  title="Ten digits code" required/> 
-                      <input type="text" class="form-control" name="subject" id="subject" placeholder="Konu"  required>
-                      <textarea class="form-control" name="message" id="message" placeholder="Mesajını detaylı olarak yazabilirsin" required></textarea>
-                      <button class="btn-type3" id="contact-form-ajax" type="submit">Gönder</button>
+                        <input type="text" class="form-control" name="full_name" id="full_name" placeholder="Adınızı ve soyadınızı girin" required>
+                        <input type="email" class="form-control" name="email" id="email" placeholder="isim@örnek.com" required>
+                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="(500) 123 1234" maxlength="14" title="Telefon numaranızı girin" oninput="formatPhoneNumber(this)" required>
+                        <input type="text" class="form-control" name="subject" id="subject" placeholder="Konu" required>
+                        <textarea class="form-control" name="message" id="message" placeholder="Mesajınızı detaylı olarak yazabilirsiniz" required></textarea>
+                        <button class="btn-type3" type="submit">Gönder</button>
                     </fieldset>
-                  </form>
-                  <!-- Contact Form of the Page end -->
+                </form>
                 </div>
               </div>
             </div>
           </section>
-          <!-- Mt Form Section of the Page -->
         </main>
-      
-
 
         {% include 'coreBase/footer.html' %}
         <!-- footer of the Page end -->
@@ -100,5 +97,24 @@
     <span id="back-top" class="fa fa-arrow-up"></span>
 </div>
 
+<script>
+  function formatPhoneNumber(input) {
+      let value = input.value.replace(/\D/g, ''); // Sadece rakamları al
+      if (value.length > 10) {
+          value = value.substring(0, 10); // 10 rakamdan fazlasını al
+      }
+      let formattedValue = '';
+      if (value.length > 0) {
+          formattedValue += '(' + value.substring(0, 3); // İlk 3 rakamı parantez içine al
+      }
+      if (value.length > 3) {
+          formattedValue += ') ' + value.substring(3, 6); // Sonraki 3 rakamı ekle
+      }
+      if (value.length > 6) {
+          formattedValue += ' ' + value.substring(6, 10); // Son 4 rakamı ekle
+      }
+      input.value = formattedValue;
+  }
+</script>
 
-{%  endblock %}
+{% endblock %}
