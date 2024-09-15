@@ -339,6 +339,26 @@ header .close:hover{
         padding: 15px;
     }
 
+    .txt-wrap {
+    margin-top: 10px;
+}
+
+.delivery-time {
+    font-size: 16px;
+    color: #333; /* Varsayılan metin rengi */
+    padding: 8px;
+    background-color: #f0f0f0; /* Arka plan rengi */
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* Tahmini teslimat süresi yoksa farklı bir stil uygula */
+.no-delivery-time {
+    color: #ff4d4f; /* Kırmızı renkte hata mesajı */
+    background-color: #ffe6e6; /* Kırmızımsı bir arka plan */
+}
+
+
     </style>
 
 <div id="wrapper">
@@ -488,6 +508,13 @@ header .close:hover{
                                         </ul>
                                     {% endif %}
                                     <p>{{ product.description|safe }}</p>
+                                </div>
+                                <div class="txt-wrap">
+                                    {% if product.estimated_delivery_time %}
+                                        <p class="delivery-time">Teslimat Süresi: {{ product.estimated_delivery_time }}</p>
+                                    {% else %}
+                                        <p class="delivery-time no-delivery-time">Tahmini teslimat süresi belirtilmemiş.</p>
+                                    {% endif %}
                                 </div>
                                 <div class="price-options">
                                     <table class="table">

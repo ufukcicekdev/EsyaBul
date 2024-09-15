@@ -167,6 +167,14 @@ class Supplier(models.Model):
 
 
 class Product(models.Model):
+
+    DELIVERY_TIME_CHOICES = [
+        ('1-2 iş günü', '1-2 iş günü'),
+        ('3-5 iş günü', '3-5 iş günü'),
+        ('5-7 iş günü', '5-7 iş günü'),
+        ('7-10 iş günü', '7-10 iş günü'),
+    ]
+
     name = models.CharField(max_length=1000, verbose_name="Ad")
     slug = AutoSlugField(populate_from='name', unique=True, verbose_name="Slug")
     description = CKEditor5Field(config_name='extends', null=True, blank=True,verbose_name="Açıklama")
@@ -198,6 +206,14 @@ class Product(models.Model):
     view_count = models.PositiveIntegerField(default=0, verbose_name="Görüntülenme Sayısı")
 
     related = models.ManyToManyField('self', blank=True, related_name='related_product_set', symmetrical=False)
+
+    desi = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="Desi", null=True, blank=True)
+    estimated_delivery_time = models.CharField(
+        max_length=20,
+        choices=DELIVERY_TIME_CHOICES,
+        default='3-5 iş günü',
+        verbose_name="Tahmini Teslimat Süresi", null=True, blank=True
+    )
     
     class Meta:
         verbose_name = "Ürün"
