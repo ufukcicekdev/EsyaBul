@@ -133,6 +133,30 @@
   
   </style>
 
+<style>
+    .shop {
+        background-image: url('/path/to/shopping-cart-icon.png');
+        background-size: 24px 24px;
+        background-repeat: no-repeat;
+        background-position: left center;
+        padding-left: 40px; /* İkon ile metin arasında boşluk bırak */
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        background-color: rgba(255, 255, 255, 0.7);
+        border-radius: 5px;
+    }
+
+    .shop:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+</style>
+
+
+
+
+
+
 <!-- main container of all the page elements -->
 <div id="wrapper">
     <!-- Page Loader -->
@@ -162,7 +186,9 @@
                                         <div class="txt">
                                             <p style="color: {{ banner.text_color }};"  >{{ banner.description }}</p>
                                         </div>
-                                        <a href="{{ banner.link }}" title="Alışverişe Başla" class="shop">Alışverişe Başla</a>
+                                        <a href="{{ banner.link }}" title="Alışverişe Başla" class="shop">
+                                            <span>Alışverişe Başla</span>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
