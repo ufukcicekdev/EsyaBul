@@ -18,6 +18,7 @@ from django.views.decorators.cache import cache_page
 import random
 from django.views.decorators.vary import vary_on_cookie
 from django.core.cache import cache
+from slack_send_messages.send_messages import send_contact_message
 
 
 
@@ -144,7 +145,18 @@ def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            form.save() 
+            contact_instance = form.save()  # Formu kaydediyoruz
+
+            # Slack'e mesaj gönder
+            contact_data = {
+                'full_name': contact_instance.full_name,
+                'email': contact_instance.email,
+                'phone': contact_instance.phone,
+                'subject': contact_instance.subject,
+                'message': contact_instance.message,
+            }
+            send_contact_message(contact_data)  # Slack fonksiyonunu burada çağırıyoruz
+
             messages.success(request, 'Mesajınız başarıyla gönderildi!')
             return redirect('main:contact')  
         else:

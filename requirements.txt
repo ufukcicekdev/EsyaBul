@@ -108,6 +108,7 @@ requests-toolbelt==1.0.0
 rsa==4.9
 s3transfer==0.6.2
 six==1.16.0
+slack_sdk==3.32.0
 social-auth-app-django==5.4.0
 social-auth-core==4.5.1
 soupsieve==2.5
