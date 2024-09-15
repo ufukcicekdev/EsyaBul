@@ -79,8 +79,8 @@ def home(request):
     brand_data = get_homepage_brand()
 
     description = "Esyala.com, mobilya, ev dekorasyonu, elektronik ve daha fazlasını kapsayan geniş ürün yelpazesiyle online alışveriş platformudur. Kiralama ve satın alma seçenekleriyle evinizi yenilemek artık çok daha kolay!"
-    banners = HomePageBannerItem.objects.filter(position__in=['left', 'right']).order_by('order')
-    sliders = HomePageBannerItem.objects.filter(position='slider').order_by('order')
+    banners = HomePageBannerItem.objects.filter(position__in=['left', 'right']).order_by('id')
+    sliders = HomePageBannerItem.objects.filter(position='slider').order_by('id')
 
     context = {
         "homemainbanners": homemainbanners,
