@@ -164,13 +164,13 @@
                           </div>
                           <div class="col-xs-12 col-sm-2">
                             <form method="post" action="{% url 'products:update_cart_item_quantity' cart_item.id %}" class="quantity-form">
-                                {% csrf_token %}
-                                <div class="quantity-controls">
-                                    <button type="button" class="btn-decrease" data-cart-item-id="{{ cart_item.id }}">-</button>
-                                    <input type="number" name="quantity" value="{{ cart_item.quantity }}" min="1" class="form-control quantity-input" readonly data-cart-item-id="{{ cart_item.id }}">
-                                    <button type="button" class="btn-increase" data-cart-item-id="{{ cart_item.id }}">+</button>
-                                </div>
-                            </form>
+                              {% csrf_token %}
+                              <div class="quantity-controls">
+                                  <button type="button" class="btn-decrease" data-cart-item-id="{{ cart_item.id }}">-</button>
+                                  <input type="number" name="quantity" value="{{ cart_item.quantity }}" min="1" max="10" class="form-control quantity-input" readonly data-cart-item-id="{{ cart_item.id }}">
+                                  <button type="button" class="btn-increase" data-cart-item-id="{{ cart_item.id }}">+</button>
+                              </div>
+                          </form>
                         </div>
                         
                         
