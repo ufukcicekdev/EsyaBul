@@ -6,6 +6,57 @@
 {% block content %}
 
 
+<style>
+.quantity-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 60px 0;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-controls button {
+    width: 20px;
+    height: 20px;
+    font-size: 14px; 
+    margin: 0 2px; 
+    background-color: #ddd;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.quantity-controls button:hover {
+    background-color: #bbb;
+}
+
+.quantity-input {
+    width: 25px; 
+    height: 25px; 
+    text-align: center; 
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0;
+    margin: 0 2px; 
+    font-size: 12px; 
+    background-color: #fff;
+    box-sizing: border-box; 
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+}
+
+.quantity-form input:focus {
+    outline: none;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+}
+
+
+</style>
 
 <div id="wrapper">
     <!-- Page Loader -->
@@ -112,8 +163,17 @@
                               {% endif %}
                           </div>
                           <div class="col-xs-12 col-sm-2">
-                              <strong class="product-name">{{ cart_item.quantity }}</strong>
-                          </div>
+                            <form method="post" action="{% url 'products:update_cart_item_quantity' cart_item.id %}" class="quantity-form">
+                                {% csrf_token %}
+                                <div class="quantity-controls">
+                                    <button type="button" class="btn-decrease" data-cart-item-id="{{ cart_item.id }}">-</button>
+                                    <input type="number" name="quantity" value="{{ cart_item.quantity }}" min="1" class="form-control quantity-input" readonly data-cart-item-id="{{ cart_item.id }}">
+                                    <button type="button" class="btn-increase" data-cart-item-id="{{ cart_item.id }}">+</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        
                           <div class="col-xs-12 col-sm-2">
                               <strong class="price"><i class="fa fa-try"></i> {{ cart_item.subtotal }}</strong>
                               <a href="{% url 'products:remove_from_cart' cart_item_id=cart_item.id %}"><i class="fa fa-close"></i></a>
@@ -192,12 +252,35 @@
 
 <script>
 
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.btn-increase').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const input = this.parentElement.querySelector('.quantity-input');
+            input.value = parseInt(input.value) + 1;
+            input.form.submit(); 
+        });
+    });
+
+    document.querySelectorAll('.btn-decrease').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const input = this.parentElement.querySelector('.quantity-input');
+            if (parseInt(input.value) > 1) { 
+                input.value = parseInt(input.value) - 1;
+                input.form.submit(); 
+            }
+        });
+    });
+});
+
+
+
   function handleArrowClick() {
       var redirectURL = "{% url 'main:home' %}";
       window.location.href = redirectURL;
   }
 </script>
 
+  
 {% endblock %}
 
 

@@ -132,8 +132,7 @@ def notify_users_about_expiring_orders():
 
 
 def delete_cards_not_users():
-    empty_user_session_cards = Cart.objects.filter(Q(user_id=None) & Q(session_key=None))
-
+    empty_user_session_cards = Cart.objects.filter(Q(user_id=None))
     empty_user_session_cards.delete()
 
 

@@ -165,6 +165,15 @@ def order_shopping_card(request):
     return render(request, 'core/order-shopping-card.html', context)
 
 
+def update_cart_item_quantity(request, cart_item_id):
+    cart_item = get_object_or_404(CartItem, id=cart_item_id)
+    if request.method == "POST":
+        quantity = request.POST.get('quantity', 1)
+        cart_item.quantity = quantity
+        cart_item.save()
+    return redirect('products:order_shopping_card')
+
+
 @csrf_protect
 @login_required(login_url='customerauth:sign-in')
 def remove_from_cart(request, cart_item_id):
