@@ -87,7 +87,7 @@ def add_product_review(request, product_id):
         form = ProductReviewForm()
     return redirect('main:home')
 
-
+@login_required(login_url='customerauth:sign-in')
 def add_to_cart(request, product_id):
     if request.method == 'POST':
         add_to_cart_form = AddToCartForm(request.POST, product_id=product_id)
