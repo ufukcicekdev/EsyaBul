@@ -7,7 +7,7 @@ import json
 import iyzipay
 from ipware import get_client_ip
 from django.contrib import messages
-from cities_light.models import City, Country, SubRegion
+from cities_light.models import City, Country, SubRegion, Region
 from customerauth.models import Address, Order, OrderItem, Payment, User
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
@@ -26,6 +26,7 @@ from django.views.decorators.http import require_http_methods
 from main.decorators import log_request
 from main.models import Request_Log_Table
 from django.http import HttpResponseRedirect
+from slack_send_messages.send_messages import send_new_order_message
 from django.urls import reverse
 load_dotenv()
 
@@ -122,7 +123,7 @@ def payment_order(request):
     order_city_id = user_order_addresses.city_id
     order_region_id = user_order_addresses.region_id
     userInfo = get_object_or_404(User, id=request.user.id)
-    order_city = City.objects.get(pk=order_city_id)
+    order_city = Region.objects.get(pk=order_city_id)
     order_country = Country.objects.get(pk=order_city.country_id)
     order_subregion = SubRegion.objects.get(id=user_order_addresses.region_id)
 
@@ -341,6 +342,8 @@ def result(request):
             order.payment_id = sonuc['paymentId']
             order.payment_transaction_id = payment_transaction_id
             order.save()
+            #send_new_order_message(order, order_total)
+
             create_payment_object(user, sonuc)
             return HttpResponseRedirect(reverse('products:order_shopping_card'))
 
@@ -379,6 +382,7 @@ def create_payment_object(user, sonuc):
 
 
 def create_order_and_items(user, order_completed_order_address, order_completed_billing_address, basket_items, order_total, order_number, cart_items, card_id, payment_transaction_id):
+    
     order = Order.objects.create(
         user=user,
         order_adress=order_completed_order_address,
@@ -390,9 +394,10 @@ def create_order_and_items(user, order_completed_order_address, order_completed_
         shipping_status='Preparing',
         payment_transaction_id = payment_transaction_id
     )
-    order_create_mail(order_number)
+    
+    order_create_mail(order_number, user)
     cart_order_completed(card_id)
-    #order_user_mail(order_number, user, card_id)
+    order_user_mail(order_number, user, card_id)
     for cart_item in cart_items:
         OrderItem.objects.create(
             order=order,
@@ -420,12 +425,19 @@ def generate_and_upload_pdf(order_number):
 
 
 
-def order_create_mail(order_number):
+def order_create_mail(order_number, user):
     subject = "Yeni bir sipariş oluşturuldu"
-    body = f"{order_number} sipariş numaralı yeni bir sipariş oluşturuldu."
-    recipients = get_user_model().objects.filter(is_superuser=True).values_list('email', flat=True)
 
-    send_email_via_smtp2go(recipients, subject, body)
+    email_content = render_to_string('email_templates/order_create_mail.html', {
+        'subject':subject,
+        'username': user.username,
+        "order_number":order_number
+    })
+    
+    recipients_queryset = get_user_model().objects.filter(is_superuser=True).values_list('email', flat=True)
+    recipients = list(recipients_queryset)
+
+    send_email_via_smtp2go(recipients, subject, email_content)
 
 def cart_order_completed(card_id):
     cart = Cart.objects.get(order_completed=False, id=card_id)
@@ -455,13 +467,11 @@ def order_user_mail(order_number, user, card_id):
             else:
                 cart_total += cart_item.selling_price * cart_item.quantity
 
-    context = {
+
+    email_content = render_to_string('email_templates/order_checkout.html', {
         'subject':subject,
         'username': user.username,
         'cart_total': cart_total,  
         "order_number":order_number
-    }
-
-
-    email_content = render_to_string('email_templates/order_checkout.html', context)
+    })
     send_email_via_smtp2go([user.email], subject, email_content)

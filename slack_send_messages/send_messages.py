@@ -24,3 +24,48 @@ def send_contact_message(contact_data):
         print(f"Error sending message: {e}")
 
 
+
+
+def send_new_order_message(order, order_total):
+    client = WebClient(token=SLACK_CONTACT_US_TOKEN)
+    channel_id = SLACK_CONTACT_US_CHANNEL_ID
+    bot_name = "ContactBot"
+    
+    # Sipariş detaylarını alıyoruz
+    order_number = order.order_number
+    order_date = order.created_at.strftime("%d-%m-%Y %H:%M")
+    total_price = order_total
+    user_name = order.user.username if order.user else "Misafir Kullanıcı"
+    email = order.user.email if order.user else order.guest_email
+    phone = order.user.phone if order.user else order.guest_phone
+    
+    # Siparişin ürün detaylarını alıyoruz
+    order_items = order.order_items.all()
+    items_details = ""
+    for item in order_items:
+        items_details += f"- {item.product.name} (Adet: {item.quantity}, Fiyat: {item.price})\n"
+    
+    # Slack'e gönderilecek mesaj
+    message = f"""
+    Yeni bir sipariş oluşturuldu! :tada:\n
+    *Sipariş No:* {order_number}
+    *Sipariş Tarihi:* {order_date}
+    *Kullanıcı Adı:* {user_name}
+    *E-posta:* {email}
+    *Telefon:* {phone}
+    *Toplam Fiyat:* {total_price} TL
+    *Sipariş Edilen Ürünler:*\n{items_details}
+    """
+    
+    try:
+        client.chat_postMessage(
+            channel=channel_id,
+            text=message,
+            username=bot_name
+        )
+    except SlackApiError as e:
+        print(f"Error sending message: {e}")
+
+
+
+
