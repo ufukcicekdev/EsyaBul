@@ -7,6 +7,21 @@
 {% block description %} {{ description }} {% endblock description %}
 {% block content %}
 
+<style>
+   .img-holder a img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 233px; 
+      overflow: hidden; 
+      position: relative; 
+  }
+  a img {
+      max-width: 100%;
+      max-height: 100%;
+  }
+</style>
+
 <!-- main container of all the page elements -->
 <div id="wrapper">
     <!-- Page Loader -->
@@ -77,51 +92,41 @@
                 </div>
               </div>
             </section>
-            <!-- Mt About Section of the Page -->
-            <!-- Mt Team Section of the Page -->
             <section class="mt-team-sec">
               <div class="container">
-                
                 <div class="row">
                   <div class="col-xs-12">
                     <h3>Takımımız</h3>
+            
                     <div class="holder">
-                      {% for team_member in teamsMembers|dictsort:"level" %}
-                        <div class="col wow fadeInUp" data-wow-delay="0.8s">
-                          <div class="img-holder">
-                            <a href="javascript:void(0)">
-                              <img src="{{ team_member.image.url }}" alt="{{ team_member.full_name }}" style="width: 281px; height: 289px;">
-                              <ul class="list-unstyled social-icon">
-                                {% for platform, link in team_member.get_social_media_links.items %}
-                                <li data-link="{{ link }}"><i class="fa fa-{{ platform }}"></i></li>
-                                {% endfor %}
-                              </ul>
-                            </a>
-                          </div>
+                      <div class="row">
+                        {% for team_member in teamsMembers|dictsort:"level" %}
+                        <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-delay="0.8s">
+                            <div class="img-holder">
+                                <a href="javascript:void(0)">
+                                    <img src="{{ team_member.image.url }}" alt="{{ team_member.full_name }}">
+                                    <ul class="list-unstyled social-icon">
+                                        {% for platform, link in team_member.get_social_media_links.items %}
+                                            <li data-link="{{ link }}"><i class="fa fa-{{ platform }}"></i></li>
+                                        {% endfor %}
+                                    </ul>
+                                </a>
+                            </div>
                             <div class="mt-txt">
                                 <h4><a href="#">{{ team_member.full_name|title }}</a></h4>
                                 <span class="sub-title">{{ team_member.position|title }}</span>
                             </div>
                         </div>
-                        {% endfor %}
+                    {% endfor %}
 
-
-                        
-
-                      
-                  
-                     
-                 
+                      </div>
                     </div>
+                    
                   </div>
                 </div>
               </div>
             </section>
-            <!-- Mt About Section of the Page -->
-
           </main>
-      
-
 
         {% include 'coreBase/footer.html' %}
         <!-- footer of the Page end -->

@@ -172,9 +172,9 @@ def contact(request):
 @vary_on_cookie
 def about(request):
     mainContext = mainContent(request)
-    teamsMembers = TeamMembers.objects.filter(is_active=True).order_by("id")
+    teams_Members = TeamMembers.objects.filter(is_active=True).order_by("id")
     context = {
-        "teamsMembers":teamsMembers,
+        "teamsMembers":teams_Members,
     }
     context.update(mainContext)
     description = "Eşyala.com hakkında daha fazla bilgi edinin. Biz kimiz, ne yapıyoruz ve neden bu kadar tutkuluyuz? Eşyala.com, size kaliteli hizmet sunmak ve ihtiyaçlarınıza en iyi şekilde cevap vermek için burada. Misyonumuz, vizyonumuz ve değerlerimizle ilgili detaylar için sayfamızı ziyaret edin."
