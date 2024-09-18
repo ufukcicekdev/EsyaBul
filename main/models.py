@@ -65,7 +65,7 @@ class HomeMainBanner(models.Model):
     subtitle = models.CharField(max_length=1000, blank=True, null=True, verbose_name="Alt Başlık")
     image = models.ImageField(
         upload_to='banners/',
-        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])],
+        validators=[FileExtensionValidator(allowed_extensions=['webp','jpg', 'jpeg', 'png'])],
         help_text="Resim boyutları 1714x584 piksel olmalıdır."
     )
     
