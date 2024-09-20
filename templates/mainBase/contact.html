@@ -2,15 +2,27 @@
 
 {% load static %}
 
-{% block title %} İletişim | Eşyala {% endblock title %}
 
 {% block meta %}
-<meta name="description" content=" {{ description }}">
-<meta name="keywords" content="mobilya kiralama, kiralık mobilya, ev dekorasyonu kiralama, ofis mobilyası kiralama, online mobilya alışverişi, oturma odası mobilyası, yatak odası mobilyası, dekorasyon ürünleri kiralama, uygun fiyatlı mobilya kiralama, salon mobilyası kiralama">
-<meta property="og:title" content="İletişim | Eşyala"/>
-<meta property="og:url" content="https://esyala.com/contact/"/>
-<meta property="og:site_name" content="Eşyala"/>
-<meta property="og:description" content="{{ description }}"/>
+<!-- HTML Meta Tags -->
+<title>İletişim | Eşyala</title>
+<meta name="description" content="{{ description }}">
+
+<meta property="og:url" content="https://esyala.com/contact/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="İletişim | Eşyala">
+<meta property="og:description" content="{{ description }}">
+
+<meta property="og:image" content="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/Site-Images/quino-al-4SNUcHPiC8c-unsplash.jpg">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:domain" content="esyala.com">
+<meta property="twitter:url" content="https://esyala.com/contact/">
+<meta name="twitter:title" content="İletişim | Eşyala">
+<meta name="twitter:description" content="{{ description }}">
+
+<meta name="twitter:image" content="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/Site-Images/quino-al-4SNUcHPiC8c-unsplash.jpg">
+
 {% endblock %}
 
 {% block content %}

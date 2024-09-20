@@ -1,8 +1,65 @@
 {% extends 'partialsBase/base.html' %}
 {% load custom_filters %}
 {% load static %} 
-{% block title %} {{ product.name }} - Eşyala {% endblock title %}
-{% block description %} {{ product.description|truncatechars:100 }} {% endblock description %}
+
+
+
+{% block meta %}
+<title> {{ product.name }} - Eşyala </title>
+<meta name="description" content="{{ product.description|truncatechars:156 }}">
+
+<meta property="og:url" content="">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ product.name }} - Eşyala">
+<meta property="og:description" content="{{ product.description|truncatechars:156 }}">
+
+{% if product.related_products.count %}
+    {% with first_image=product.related_products.first %}
+
+        <meta property="og:image" content="{{ first_image.image.url }}">
+        <meta name="twitter:image" content="{{ first_image.image.url }}">
+    {% endwith %}
+{% endif %}
+
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:domain" content="esyala.com">
+<meta property="twitter:url" content="">
+<meta name="twitter:title" content="{{ product.name }} - Eşyala">
+<meta name="twitter:description" content="{{ product.description|truncatechars:156 }}">
+
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var currentUrl = window.location.href;
+
+    var ogUrlMetaTag = document.querySelector('meta[property="og:url"]');
+    if (!ogUrlMetaTag) {
+        ogUrlMetaTag = document.createElement('meta');
+        ogUrlMetaTag.setAttribute('property', 'og:url');
+        document.head.appendChild(ogUrlMetaTag);
+    }
+    ogUrlMetaTag.setAttribute('content', currentUrl);
+
+    var twitterUrlMetaTag = document.querySelector('meta[property="twitter:url"]');
+    if (!twitterUrlMetaTag) {
+        twitterUrlMetaTag = document.createElement('meta');
+        twitterUrlMetaTag.setAttribute('property', 'twitter:url');
+        document.head.appendChild(twitterUrlMetaTag);
+    }
+    twitterUrlMetaTag.setAttribute('content', currentUrl);
+
+  });
+</script>
+
+
+{% endblock %}
+
+
+
+
+
+
 {% load social_share %}
 
 {% block content %}

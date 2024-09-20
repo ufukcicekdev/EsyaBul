@@ -3,6 +3,55 @@
 {% load static %}
 {% block title %} Arama Sonuçları - Eşyala {% endblock title %}
 {% block description %} {{ description }} {% endblock description %}
+
+
+
+{% block meta %}
+<title> {{ category_name.name|default:"Eşyala" }} | Eşyala </title>
+<meta name="description" content="{{ description }}">
+
+<meta property="og:url" content="">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Arama Sonuçları - Eşyala">
+<meta property="og:description" content="{{ description }}">
+<meta property="og:image" content="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/Site-Images/rohit-choudhari-pE37k0imUDs-unsplash.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:domain" content="esyala.com">
+<meta property="twitter:url" content="">
+<meta name="twitter:title" content="Arama Sonuçları - Eşyala">
+<meta name="twitter:description" content="{{ description }}">
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var currentUrl = window.location.href;
+
+    var ogUrlMetaTag = document.querySelector('meta[property="og:url"]');
+    if (!ogUrlMetaTag) {
+        ogUrlMetaTag = document.createElement('meta');
+        ogUrlMetaTag.setAttribute('property', 'og:url');
+        document.head.appendChild(ogUrlMetaTag);
+    }
+    ogUrlMetaTag.setAttribute('content', currentUrl);
+
+    var twitterUrlMetaTag = document.querySelector('meta[property="twitter:url"]');
+    if (!twitterUrlMetaTag) {
+        twitterUrlMetaTag = document.createElement('meta');
+        twitterUrlMetaTag.setAttribute('property', 'twitter:url');
+        document.head.appendChild(twitterUrlMetaTag);
+    }
+    twitterUrlMetaTag.setAttribute('content', currentUrl);
+
+  });
+</script>
+
+<meta name="twitter:image" content="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/Site-Images/rohit-choudhari-pE37k0imUDs-unsplash.jpg">
+
+{% endblock %}
+
+
+
+
 {% load social_share %}
 {% block content %}
 

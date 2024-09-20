@@ -4,6 +4,60 @@
 {% block title %} {{ category_name.name }} - Eşyala {% endblock title %}
 {% block description %} {{ category_name.description }} {% endblock description %}
 
+
+
+
+
+
+
+{% block meta %}
+<title> {{ category_name.name|default:"Eşyala" }} | Eşyala </title>
+<meta name="description" content="{{ category_name.description|default:"Geniş ürün yelpazesiyle mobilya ve ev dekorasyonu alışveriş platformu." }}">
+
+<meta property="og:url" content="">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ category_name.name|default:"Eşyala" }}">
+<meta property="og:description" content="{{ category_name.description|default:"Geniş ürün yelpazesiyle mobilya ve ev dekorasyonu alışveriş platformu." }}">
+<meta property="og:image" content="{{ image }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:domain" content="esyala.com">
+<meta property="twitter:url" content="">
+<meta name="twitter:title" content="{{ category_name.name|default:"Eşyala" }} | Eşyala">
+<meta name="twitter:description" content="{{ category_name.description|default:"Geniş ürün yelpazesiyle mobilya ve ev dekorasyonu alışveriş platformu." }}">
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var currentUrl = window.location.href;
+
+    var ogUrlMetaTag = document.querySelector('meta[property="og:url"]');
+    if (!ogUrlMetaTag) {
+        ogUrlMetaTag = document.createElement('meta');
+        ogUrlMetaTag.setAttribute('property', 'og:url');
+        document.head.appendChild(ogUrlMetaTag);
+    }
+    ogUrlMetaTag.setAttribute('content', currentUrl);
+
+    var twitterUrlMetaTag = document.querySelector('meta[property="twitter:url"]');
+    if (!twitterUrlMetaTag) {
+        twitterUrlMetaTag = document.createElement('meta');
+        twitterUrlMetaTag.setAttribute('property', 'twitter:url');
+        document.head.appendChild(twitterUrlMetaTag);
+    }
+    twitterUrlMetaTag.setAttribute('content', currentUrl);
+
+  });
+</script>
+
+<meta name="twitter:image" content="{{ image }}">
+
+{% endblock %}
+
+
+
+
+
+
 {% load social_share %}
 {% block content %}
 
@@ -549,27 +603,6 @@ header .close:hover{
 
 <script>
 
-
-
-document.addEventListener("DOMContentLoaded", function() {
-    const listViewBtn = document.getElementById('list-view-btn');
-    const cardViewBtn = document.getElementById('card-view-btn');
-    const listView = document.getElementById('list-view');
-    const cardView = document.getElementById('card-view');
-
-    listViewBtn.addEventListener('click', function() {
-        listView.style.display = 'block';
-        cardView.style.display = 'none';
-    });
-
-    cardViewBtn.addEventListener('click', function() {
-        listView.style.display = 'none';
-        cardView.style.display = 'block';
-    });
-});
-
-
-// JavaScript ile alt kategorileri göstermek için bir fonksiyon
 function toggleSubcategories(element) {
     var subcategories = element.querySelector('.sub-subcategory-list');
     if (subcategories.style.display === 'block') {
@@ -579,7 +612,6 @@ function toggleSubcategories(element) {
     }
 }
 
-// Tıklama etkinliği eklemek için HTML'de onclick özniteliğini kullanabiliriz
 
 
 </script>

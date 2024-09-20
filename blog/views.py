@@ -14,9 +14,7 @@ def bloghome(request):
         mainContext = mainContent(request)
 
         description = (
-            "Esyala Blog: En son haberler, trendler ve rehber yazılar ile "
-            "dekorasyon, yaşam tarzı ve teknoloji konularında ilham alın. "
-            "Güncel içeriklerle evinizi yenileyin ve hayatınızı kolaylaştırın."
+            "Esyala Blog: Dekorasyon, yaşam tarzı ve teknoloji ile ilgili en son haberler ve rehber yazılarla ilham alın. Ev ve yaşamınızı yenileyin."
         )
         mainContext["description"] = description
         
@@ -26,17 +24,14 @@ def bloghome(request):
 
         categories = Category.objects.filter(is_active=True)
 
-        # Pagination
-        paginator = Paginator(blogs_list, 10)  # Sayfada 10 blog göster
+        paginator = Paginator(blogs_list, 10)  
         page = request.GET.get('page')
 
         try:
             blogs = paginator.page(page)
         except PageNotAnInteger:
-            # Sayfa numarası bir tam sayı değilse, ilk sayfayı göster
             blogs = paginator.page(1)
         except EmptyPage:
-            # Sayfa numarası sınırları aşıyorsa, son sayfayı göster
             blogs = paginator.page(paginator.num_pages)
 
     except Exception as e:

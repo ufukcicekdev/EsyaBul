@@ -2,8 +2,67 @@
 {% load custom_filters %}
 {% load static %}
 
-{% block title %} Blog - Eşyala {% endblock title %}
-{% block description %} {{ description }} {% endblock description %}
+
+
+
+{% block meta %}
+<title> {{ category.name }} - Blog - Eşyala </title>
+<meta name="description" content="{{ description|truncatechars:156 }}">
+
+<meta property="og:url" content="">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ category.name }} - Blog - Eşyala">
+<meta property="og:description" content="{{ description|truncatechars:156 }}">
+
+
+{% if category.image %}
+<meta property="og:image" content="{{ category.image.url }}">
+<meta name="twitter:image" content="{{ category.image.url }}">
+{% else %}
+<meta property="og:image" content="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/Site-Images/andrew-neel-cckf4TsHAuw-unsplash.jpg">
+<meta name="twitter:image" content="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/Site-Images/andrew-neel-cckf4TsHAuw-unsplash.jpg">
+{% endif %}
+
+
+
+<!-- Twitter Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:domain" content="esyala.com">
+<meta property="twitter:url" content="">
+<meta name="twitter:title" content="{{ category.name }} - Blog - Eşyala">
+<meta name="twitter:description" content="{{ description|truncatechars:156 }}">
+
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var currentUrl = window.location.href;
+
+    var ogUrlMetaTag = document.querySelector('meta[property="og:url"]');
+    if (!ogUrlMetaTag) {
+        ogUrlMetaTag = document.createElement('meta');
+        ogUrlMetaTag.setAttribute('property', 'og:url');
+        document.head.appendChild(ogUrlMetaTag);
+    }
+    ogUrlMetaTag.setAttribute('content', currentUrl);
+
+    var twitterUrlMetaTag = document.querySelector('meta[property="twitter:url"]');
+    if (!twitterUrlMetaTag) {
+        twitterUrlMetaTag = document.createElement('meta');
+        twitterUrlMetaTag.setAttribute('property', 'twitter:url');
+        document.head.appendChild(twitterUrlMetaTag);
+    }
+    twitterUrlMetaTag.setAttribute('content', currentUrl);
+
+  });
+</script>
+
+
+{% endblock %}
+
+
+
+
 {% block content %}
 <style>
     .address-list li {

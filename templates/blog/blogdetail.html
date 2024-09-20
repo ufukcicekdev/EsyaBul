@@ -2,8 +2,55 @@
 {% load custom_filters %}
 {% load static %}
 
-{% block title %} Blog - Eşyala {% endblock title %}
-{% block description %} {{ description }} {% endblock description %}
+
+{% block meta %}
+<title> {{ blog.title }} - Eşyala </title>
+<meta name="description" content="{{ description|truncatechars:156 }}">
+
+<meta property="og:url" content="">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ blog.title }} - Eşyala">
+<meta property="og:description" content="{{ description|truncatechars:156 }}">
+
+<meta property="og:image" content="{{ blog.banner.url }}">
+
+<!-- Twitter Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:domain" content="esyala.com">
+<meta property="twitter:url" content="">
+<meta name="twitter:title" content="{{ blog.title }} - Eşyala">
+<meta name="twitter:description" content="{{ description|truncatechars:156 }}">
+
+<meta name="twitter:image" content="{{ blog.banner.url }}">
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var currentUrl = window.location.href;
+
+    var ogUrlMetaTag = document.querySelector('meta[property="og:url"]');
+    if (!ogUrlMetaTag) {
+        ogUrlMetaTag = document.createElement('meta');
+        ogUrlMetaTag.setAttribute('property', 'og:url');
+        document.head.appendChild(ogUrlMetaTag);
+    }
+    ogUrlMetaTag.setAttribute('content', currentUrl);
+
+    var twitterUrlMetaTag = document.querySelector('meta[property="twitter:url"]');
+    if (!twitterUrlMetaTag) {
+        twitterUrlMetaTag = document.createElement('meta');
+        twitterUrlMetaTag.setAttribute('property', 'twitter:url');
+        document.head.appendChild(twitterUrlMetaTag);
+    }
+    twitterUrlMetaTag.setAttribute('content', currentUrl);
+
+  });
+</script>
+
+
+{% endblock %}
+
+
+
 {% block content %}
 <style>
     .address-list li {
@@ -376,7 +423,7 @@ header .close:hover{
                             <small>{{ blog.created_at|date:'F' }}</small> 
                         </time>
                         <div class="blog-txt">
-                          <h2><a >{{ blog.title }}</a></h2>
+                          <h1><a >{{ blog.title }}</a></h1>
                           <ul class="list-unstyled blog-nav">
                             <li> <a href="#"><i class="fa fa-clock-o"></i>{{ blog.created_at | date }}</a></li>
                             <li> <a href="{% url 'blog:category_detail_blog' blog.category.slug %}"><i class="fa fa-list"></i>{{ blog.category }}</a></li>
