@@ -78,7 +78,6 @@ def home(request):
     product_data = get_homepage_products()
     brand_data = get_homepage_brand()
 
-    description = "Esyala.com, mobilya, ev dekorasyonu, elektronik ve daha fazlasını kapsayan geniş ürün yelpazesiyle online alışveriş platformudur. Kiralama ve satın alma seçenekleriyle evinizi yenilemek artık çok daha kolay!"
     banners = HomePageBannerItem.objects.filter(position__in=['left', 'right']).order_by('id')
     sliders = HomePageBannerItem.objects.filter(position='slider').order_by('id')
 
@@ -90,8 +89,8 @@ def home(request):
         "latest_products": product_data['latest_products'],
         "banners": banners,
         "sliders": sliders,
-        "description":description,
-        "brand_data":brand_data
+        "brand_data":brand_data,
+        "description": "Esyala.com, mobilya, ev dekorasyonu ve elektronik ürünlerde geniş seçenekler sunan online alışveriş platformu. Evinizi kiralama veya satın alma ile kolayca yenileyin!"
     }
 
     if request.user.is_authenticated:
@@ -139,7 +138,7 @@ def custom_500_page(request):
 @vary_on_cookie
 def contact(request):
     mainContext = mainContent(request)
-    description = "Eşyala.com ile iletişime geçin! Sorularınız, geri bildirimleriniz veya destek talepleriniz için bize ulaşın. Müşteri memnuniyeti ve çözüm odaklı hizmet anlayışımızla, sizlere en iyi deneyimi sunmak için buradayız."
+    description = "Esyala.com ile iletişime geçin! Sorularınız, geri bildirimleriniz veya destek talepleriniz için bize ulaşın. Müşteri memnuniyeti ve çözüm odaklı hizmet anlayışımızla, sizlere en iyi deneyimi sunmak için buradayız."
     mainContext["description"] = description
 
     if request.method == 'POST':
@@ -177,21 +176,21 @@ def about(request):
         "teamsMembers":teams_Members,
     }
     context.update(mainContext)
-    description = "Eşyala.com hakkında daha fazla bilgi edinin. Biz kimiz, ne yapıyoruz ve neden bu kadar tutkuluyuz? Eşyala.com, size kaliteli hizmet sunmak ve ihtiyaçlarınıza en iyi şekilde cevap vermek için burada. Misyonumuz, vizyonumuz ve değerlerimizle ilgili detaylar için sayfamızı ziyaret edin."
+    description = "Esyala.com hakkında bilgi edinin. Kaliteli hizmet ve müşteri memnuniyeti için buradayız. Misyonumuz, vizyonumuz ve değerlerimiz hakkında daha fazla bilgi alın."
     context["description"] = description
     return render(request, "mainBase/about.html", context)
 @cache_page(60 * 60 * 6)  # 6 saatlik cache
 @vary_on_cookie
 def faqs(request):
     mainContext = mainContent(request)
-    description = "Eşyala.com Sık Sorulan Sorular (SSS) sayfası, kullanıcılarımızın en çok merak ettiği soruları yanıtlamaktadır. Hizmetlerimiz, kullanımı, hesap yönetimi ve diğer konularla ilgili kapsamlı cevaplar bulabilirsiniz. Sorularınıza hızlı ve etkili çözümler arıyorsanız, doğru yerdesiniz."
+    description = "Esyala.com Sık Sorulan Sorular (SSS) sayfası, hizmetlerimiz, hesap yönetimi ve diğer konular hakkında en çok merak edilen sorulara yanıt sunar. Hızlı çözümler için doğru yerdesiniz!"
     mainContext["description"] = description
     return render(request, "mainBase/faq.html", mainContext)
 @cache_page(60 * 60 * 6)  # 6 saatlik cache
 @vary_on_cookie
 def does_it_work(request):
     mainContext = mainContent(request)
-    description = "Eşyala.com'un nasıl çalıştığını öğrenin. Kullanıcı dostu ara yüzümüzle işlerinizi kolaylaştırın ve etkili sonuçlar elde edin."
+    description = "Esyala.com'un nasıl çalıştığını öğrenin. Kullanıcı dostu ara yüzümüzle işlerinizi kolaylaştırın ve etkili sonuçlar elde edin."
     mainContext["description"] = description
     return render(request, "mainBase/doesitwork.html", mainContext)
 

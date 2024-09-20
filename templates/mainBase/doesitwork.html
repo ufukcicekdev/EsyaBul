@@ -2,8 +2,19 @@
 
 {% load static %}
 
-{% block title %} Nasıl Çalışır - Eşyala {% endblock title %}
-{% block description %} {{ description }} {% endblock description %}
+{% block title %} Nasıl Çalışır | Eşyala {% endblock title %}
+
+{% block meta %}
+<meta name="description" content=" {{ description }}">
+<meta name="keywords" content="mobilya kiralama, kiralık mobilya, ev dekorasyonu kiralama, ofis mobilyası kiralama, online mobilya alışverişi, oturma odası mobilyası, yatak odası mobilyası, dekorasyon ürünleri kiralama, uygun fiyatlı mobilya kiralama, salon mobilyası kiralama">
+<meta property="og:title" content="Nasıl Çalışır | Eşyala"/>
+<meta property="og:url" content="https://esyala.com/how-does-it-work/"/>
+<meta property="og:site_name" content="Eşyala"/>
+<meta property="og:description" content="{{ description }}"/>
+{% endblock %}
+
+
+
 {% block content %}
 
 <style>

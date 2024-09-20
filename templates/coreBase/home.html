@@ -2,8 +2,32 @@
 {% load custom_filters %}
 {% load static %}
 
-{% block title %} Anasayfa - Eşyala {% endblock title %}
-{% block description %} {{ description }} {% endblock description %}
+{% block title %} Anasayfa | Eşyala {% endblock title %}
+
+{% block meta %}
+<!-- HTML Meta Tags -->
+<meta name="description" content="{{ description }}">
+
+<!-- Facebook Meta Tags -->
+<meta property="og:url" content="https://esyala.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content=" Anasayfa | Eşyala ">
+<meta property="og:description" content="{{ description }}">
+
+<meta property="og:image" content="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/banners/WhatsApp_Image_2024-05-04_at_15.webp">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:domain" content="esyala.com">
+<meta property="twitter:url" content="https://esyala.com/">
+<meta name="twitter:title" content=" Anasayfa - Eşyala ">
+<meta name="twitter:description" content="{{ description }}">
+
+<meta name="twitter:image" content="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/banners/WhatsApp_Image_2024-05-04_at_15.webp">
+
+<!-- Meta Tags Generated via https://www.opengraph.xyz -->
+{% endblock %}
+
+
 {% block content %}
 <style>
     .address-list li {

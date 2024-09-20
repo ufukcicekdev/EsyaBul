@@ -2,8 +2,16 @@
 
 {% load static %}
 
-{% block title %} İletişim - Eşyala {% endblock title %}
-{% block description %} {{ description }} {% endblock description %}
+{% block title %} İletişim | Eşyala {% endblock title %}
+
+{% block meta %}
+<meta name="description" content=" {{ description }}">
+<meta name="keywords" content="mobilya kiralama, kiralık mobilya, ev dekorasyonu kiralama, ofis mobilyası kiralama, online mobilya alışverişi, oturma odası mobilyası, yatak odası mobilyası, dekorasyon ürünleri kiralama, uygun fiyatlı mobilya kiralama, salon mobilyası kiralama">
+<meta property="og:title" content="İletişim | Eşyala"/>
+<meta property="og:url" content="https://esyala.com/contact/"/>
+<meta property="og:site_name" content="Eşyala"/>
+<meta property="og:description" content="{{ description }}"/>
+{% endblock %}
 
 {% block content %}
 <!-- main container of all the page elements -->
