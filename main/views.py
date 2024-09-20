@@ -90,7 +90,7 @@ def home(request):
         "banners": banners,
         "sliders": sliders,
         "brand_data":brand_data,
-        "description": "Esyala.com, mobilya, ev dekorasyonu ve elektronik ürünlerde geniş seçenekler sunan online alışveriş platformu. Evinizi kiralama veya satın alma ile kolayca yenileyin!"
+        "description": "Esyala.com, mobilya, ev dekorasyonu ve elektronik ürünler sunan online alışveriş platformudur. Evinizi kolayca yenileyin!"
     }
 
     if request.user.is_authenticated:
