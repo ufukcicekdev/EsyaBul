@@ -357,6 +357,7 @@
                                                 </div>
                                                 <div class="txt">
                                                     <strong class="title"><a href="{% url 'products:product-detail-view' featured_product.slug %}" title="{{ featured_product.name }}">{{ featured_product.name|truncatechars:20 }}</a></strong>
+                                                    <h4>{{ featured_product.category.name }}</h4>
                                                     <strong class="title">Satış Fiyatı</strong>
                                                     {% if featured_product.selling_old_price != 0 %}
                                                     <del class="off"><i class="fa fa-try"></i> <span>{{ featured_product.selling_old_price }}</span></del>
@@ -406,6 +407,7 @@
                                                 </div>
                                                 <div class="txt">
                                                     <strong class="title"><a href="{% url 'products:product-detail-view' latest_product.slug %}" title="{{ latest_product.name }}">{{ latest_product.name|truncatechars:20 }}</a></strong>
+                                                    <h4>{{ latest_product.category.name }}</h4>
                                                     <strong class="title">Satış Fiyatı</strong>
                                                     {% if latest_product.selling_old_price != 0 %}
                                                     <del class="off"><i class="fa fa-try"></i> <span>{{ latest_product.selling_old_price }}</span></del>
@@ -467,6 +469,7 @@
                                                         <strong class="title">
                                                             <a href="{% url 'products:product-detail-view' user_product.product.slug %}" title="{{ user_product.product.name }}">{{ user_product.product.name }}</a>
                                                         </strong>
+                                                        <h4>{{ user_product.product.category.name }}</h4>
                                                         {% if user_product.product.selling_old_price != 0 %}
                                                         <del class="off"><i class="fa fa-try"></i> <span>{{user_product.product.selling_old_price}}</span></del>
                                                         {% endif %}
@@ -538,6 +541,7 @@
                                                         <strong class="title">
                                                             <a href="{% url 'products:product-detail-view' best_seller_product.slug %}" title="{{ best_seller_product.name }}">{{ best_seller_product.name }}</a>
                                                         </strong>
+                                                        <h4>{{ best_seller_product.category.name }}</h4>
                                                         {% if best_seller_product.selling_old_price != 0 %}
                                                         <del class="off"><i class="fa fa-try"></i> <span>{{best_seller_product.selling_old_price}}</span></del>
                                                         {% endif %}

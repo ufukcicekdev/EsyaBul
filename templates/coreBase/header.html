@@ -35,16 +35,34 @@
     }
 }
 
+.logo-img {
+    width: 150px; /* Adjust logo width as needed */
+    height: 50px;
+  }
+
+  .slogan-container h1 {
+    font-size: 1.8rem; /* Adjust font size */
+    color: #000301; /* Change color */
+    font-weight: 600; /* Adjust weight */
+  }
+
+
 </style>
 
 <header id="mt-header" class="style4">
-    <!-- mt bottom bar start here -->
     <div class="mt-bottom-bar">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-xs-12">
-                    <!-- mt logo start here -->
-                    <div class="mt-logo"><a href="{% url 'main:home' %}" title="Eşyala"><img class="logo-img" style="height:50px;" src="{% static 'images/esyala_syh_noktalı.png' %}" alt="Esyala"></a></div>
+                <div class="col-xs-12 text-center"> <!-- Orta hizalamak için text-center ekledim -->
+                    <!-- Slogan ve Logo -->
+                    <div class="slogan-container" style="display: flex; align-items: center; justify-content: center;">
+                        <h1 style="margin-right: 10px;">keşfet. kullan.</h1>
+                        <div class="mt-logo">
+                          <a href="{% url 'main:home' %}" title="Eşyala">
+                            <img class="logo-img" src="{% static 'images/esyala_syh_noktalı.png' %}" alt="Esyala">
+                          </a>
+                        </div>
+                      </div>
                     <!-- mt icon list start here -->
                     <ul class="mt-icon-list">
                         <li class="hidden-lg hidden-md">
@@ -54,140 +72,98 @@
                                 <span class="bar"></span>
                             </a>
                         </li>
-                        <li><a  class="icon-magnifier"></a></li>
-                        <li class="">
+                        <li><a class="icon-magnifier"></a></li>
+                        <li>
                             {% if request.user.is_authenticated %}
-                            <a href="{% url 'customerauth:wishlist' %}" title="{{ wcount }}" class="icon-heart cart-opener"><span style="margin-bottom: -3px;" class="num wish-count">{{ wcount }}</span></a>
+                                <a href="{% url 'customerauth:wishlist' %}" title="{{ wcount }}" class="icon-heart cart-opener">
+                                    <span style="margin-bottom: -3px;" class="num wish-count">{{ wcount }}</span>
+                                </a>
                             {% else %}
-                            <a href="{% url 'customerauth:wishlist' %}" title="{{ wcount }}" class="icon-heart cart-opener"><span style="margin-bottom: -3px;" class="num wish-count">{{ wcount }}</span></a>
+                                <a href="{% url 'customerauth:wishlist' %}" title="{{ wcount }}" class="icon-heart cart-opener">
+                                    <span style="margin-bottom: -3px;" class="num wish-count">{{ wcount }}</span>
+                                </a>
                             {% endif %}
-                            
-                            <!-- mt drop start here -->
-                            <div class="mt-drop">
-                                <!-- mt drop sub start here -->
-                                <div class="mt-drop-sub">
-                                    <!-- mt side widget start here -->
-                                    <div class="mt-side-widget">
-                                    
-                                        
-                                        <div class="cart-row-total">
-                                            <a href="{% url 'customerauth:wishlist' %}" title="Beğendiklerim" class="btn-type2">Beğendiklerim</a>
-                                        </div>
-                                        <!-- cart row total end here -->
-                                    </div><!-- mt side widget end here -->
-                                </div>
-                                <!-- mt drop sub end here -->
-                            </div><!-- mt drop end here -->
-                            <span class="mt-mdropover"></span>
                         </li>
                         <li class="drop">
                             <a class="cart-opener1">
                                 <span class="icon-handbag"></span>
                                 <span class="num">{{ hcount }}</span>
                             </a>
-                            <!-- mt drop start here -->
                             <div class="mt-drop">
-                                <!-- mt drop sub start here -->
                                 <div class="mt-drop-sub">
-                                    <!-- mt side widget start here -->
                                     <div class="mt-side-widget">
                                         {% if cart_items.count > 0 %}
                                             {% for cart_item in cart_items %}
                                                 <div class="cart-row">
                                                     {% with first_image=cart_item.product.related_products.first %}
                                                     {% if first_image %}
-                                                    <a href="{% url 'products:product-detail-view' cart_item.product.slug %}" title="{{ first_image.img_title }}" class="img"><img class="img-responsive" src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}"></a>
+                                                    <a href="{% url 'products:product-detail-view' cart_item.product.slug %}" class="img">
+                                                        <img class="img-responsive" src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}">
+                                                    </a>
                                                     {% endif %}
                                                     {% endwith %}
                                                     <div class="mt-h">
-                                                        <span class="mt-h-title"><a >{{cart_item.product.name}}</a></span>
+                                                        <span class="mt-h-title"><a>{{cart_item.product.name}}</a></span>
                                                         {% if cart_item.is_rental %}
-                                                        <strong class="price"><i class="fa fa-try"></i> {{ cart_item.rental_price }}</strong>
+                                                            <strong class="price"><i class="fa fa-try"></i> {{ cart_item.rental_price }}</strong>
                                                         {% else %}
-                                                        <strong class="price"><i class="fa fa-try"></i> {{ cart_item.selling_price }}</strong>
+                                                            <strong class="price"><i class="fa fa-try"></i> {{ cart_item.selling_price }}</strong>
                                                         {% endif %}
                                                         <span class="mt-h-title">Adet: {{ cart_item.quantity }}</span>
                                                     </div>
-                                                    <a href="{% url 'products:remove_from_cart' cart_item_id=cart_item.id %}" title="" class="close fa fa-times"></a>
+                                                    <a href="{% url 'products:remove_from_cart' cart_item_id=cart_item.id %}" class="close fa fa-times"></a>
                                                 </div>
                                             {% endfor %}
-
-                                            
-                                            
                                             <div class="cart-row-total">
                                                 <span class="mt-total">Toplam Tutar</span>
-                                                <span class="mt-total-txt"><i class="fa fa-try" aria-hidden="true"></i>{{ cart_total }}</span>
+                                                <span class="mt-total-txt"><i class="fa fa-try"></i>{{ cart_total }}</span>
                                             </div>
-                                            <!-- cart row total end here -->
                                             <div class="cart-btn-row">
-                                                <a href="{% url 'products:order_shopping_card' %}" title="Sepetim" class="btn-type2">Sepetim</a>
+                                                <a href="{% url 'products:order_shopping_card' %}" class="btn-type2">Sepetim</a>
                                             </div>
                                         {% else %}
-                                        <div class="cart-row text-center">
-                                            <h4>Sepetinizde Ürün Bulunmamaktadır</h4>
-                                        </div>
+                                            <div class="cart-row text-center">
+                                                <h4>Sepetinizde Ürün Bulunmamaktadır</h4>
+                                            </div>
                                         {% endif %}
-
-                                    </div><!-- mt side widget end here -->
+                                    </div>
                                 </div>
-                                <!-- mt drop sub end here -->
-                            </div><!-- mt drop end here -->
-                            <span class="mt-mdropover"></span>
+                            </div>
                         </li>
                         <li id="user-icon">
                             {% if request.user.is_authenticated %}
                                 <a href="{% url 'customerauth:address-list' %}" title="{{ request.user.username }}">
-                                    <div class="user-icon" id="dropdownIcon">{{ request.user.username|first|upper }}</div>
+                                    <div class="user-icon">{{ request.user.username|first|upper }}</div>
                                 </a>
                             {% else %}
-                                <a href="{% url 'customerauth:sign-in' %}" title="">
-                                    <div class="icon-user" id="dropdownIcon"></div>
+                                <a href="{% url 'customerauth:sign-in' %}">
+                                    <div class="icon-user"></div>
                                 </a>
                             {% endif %}
                         </li>
-
-                        
-                    </ul><!-- mt icon list end here -->
-                    <!-- navigation start here -->
+                    </ul>
                     <nav id="nav">
                         <ul>
-                            <li>
-                                <a href="{% url 'main:home' %}" title="Anasayfa">Anasayfa</a>
-                                
-                            </li>
-                            <li><a href="{% url 'blog:blog_home' %}" title="Blog">Blog</a> </li>
-                            
-                            
-                            <!-- category_menu.html -->
+                            <li><a href="{% url 'main:home' %}" title="Anasayfa">Anasayfa</a></li>
+                            <li><a href="{% url 'blog:blog_home' %}" title="Blog">Blog</a></li>
                             <li class="drop">
-                                <a title="Kategoriler">Kategoriler <i class="fa fa-angle-down" aria-hidden="true"></i></a>
-                                <!-- mt dropmenu start here -->
+                                <a title="Kategoriler">Kategoriler <i class="fa fa-angle-down"></i></a>
                                 <div class="mt-dropmenu text-left">
-                                    <!-- mt frame start here -->
                                     <div class="mt-frame">
-                                        <!-- mt f box start here -->
                                         <div class="mt-f-box">
                                             {{ main_categories|safe }}
-
                                         </div>
-                                        <!-- mt f box end here -->
                                     </div>
-                                    <!-- mt frame end here -->
                                 </div>
-                                <!-- mt dropmenu end here -->
-                                <span class="mt-mdropover"></span>
                             </li>
                             <li><a href="{% url 'main:about' %}" title="Hakkımızda">Hakkımızda</a></li>
-                            <li><a href="{% url 'main:contact' %}" title="İletişim">İletişim</a> </li>
+                            <li><a href="{% url 'main:contact' %}" title="İletişim">İletişim</a></li>
                         </ul>
                     </nav>
-                    <!-- mt icon list end here -->
                 </div>
             </div>
         </div>
     </div>
-    <!-- mt bottom bar end here -->
-    <span class="mt-side-over"></span>
 </header>
 
 
