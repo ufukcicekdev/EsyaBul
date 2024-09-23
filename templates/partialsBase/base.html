@@ -63,47 +63,9 @@
 </head>
 
 <body>
-    <style>
-            img {
-    opacity: 0;
-    transition: opacity 0.3s;
-}
+   
 
-img[data-src] {
-    background-color: #f0f0f0; /* Placeholder */
-}
 
-img[src] {
-    opacity: 1;
-}
-    </style>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const lazyImages = document.querySelectorAll("img[data-src]");
-    
-        const lazyLoadImage = (entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.src = img.getAttribute("data-src");
-                    img.removeAttribute("data-src");
-                    observer.unobserve(img);
-                }
-            });
-        };
-    
-        const observer = new IntersectionObserver(lazyLoadImage, {
-            rootMargin: "0px 0px 200px 0px",
-            threshold: 0.1
-        });
-    
-        lazyImages.forEach(img => {
-            observer.observe(img);
-        });
-    });
-    
-    </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 

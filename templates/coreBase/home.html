@@ -196,7 +196,7 @@
     <!-- Page Loader -->
     <!-- <div id="pre-loader" class="loader-container">
         <div class="loader">
-            <img data-src="{% static 'images/svg/rings.svg' %}" alt="loader">
+            <img src="{% static 'images/svg/rings.svg' %}" alt="loader">
         </div>
     </div>   -->
     <!-- W1 start here -->
@@ -245,7 +245,7 @@
                                 {% if banner.position == 'left' %}
                                     <div class="banner-box third wow fadeInLeft" >
                                         <div class="banner-12 right white wow fadeInUp" >
-                                            <img data-src="{{ banner.image.url }}" alt="image description">
+                                            <img src="{{ banner.image.url }}" alt="image description">
                                             <div class="holder">
                                                 <h2>
                                                     {% if banner.subtitle %}
@@ -263,7 +263,7 @@
                                         </div>
                                         {% elif banner.position == 'right' %}
                                             <div class="banner-12 right wow fadeInDown" >
-                                                <img data-src="{{ banner.image.url }}" alt="image description">
+                                                <img src="{{ banner.image.url }}" alt="image description">
                                                 <div class="holder">
                                                     <h2><strong class="title">{{ banner.title }}</strong></h2>
                                                     {% if banner.subtitle %}
@@ -287,7 +287,7 @@
                                 <div class="slider banner-slider">
                                     {% for slider in sliders %}
                                         <div class="s-holder">
-                                            <img data-src="{{ slider.image.url }}" alt="image description">
+                                            <img src="{{ slider.image.url }}" alt="image description">
                                             <div class="s-box">
                                                 <h2><strong class="title">{{ slider.title }}</strong></h2>
                                                 {% if slider.subtitle %}
@@ -330,7 +330,7 @@
                                                             {% with first_image=featured_product.related_products.all.0 %}
                                                             {% if first_image %}
                                                             <a href="{% url 'products:product-detail-view' featured_product.slug %}" title="{{ first_image.img_title }}">
-                                                                <img data-src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}">
+                                                                <img src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}">
                                                             </a>
                                                             {% endif %}
                                                             {% endwith %}
@@ -381,7 +381,7 @@
                                                         <div class="b2">
                                                             {% with first_image=latest_product.related_products.all.0 %}
                                                             {% if first_image %}
-                                                            <a href="{% url 'products:product-detail-view' latest_product.slug %}" title="{{ first_image.img_title }}"><img data-src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}"></a>
+                                                            <a href="{% url 'products:product-detail-view' latest_product.slug %}" title="{{ first_image.img_title }}"><img src="{{ first_image.image.url }}" style="width: 216px; height: 265px;" alt="{{ first_image.img_title }}"></a>
                                                             {% endif %}
                                                             {% endwith %}
                                                             {% if latest_product.get_percentage %}
@@ -442,7 +442,7 @@
                                                         {% if user_product.product.related_products.count %}
                                                             {% with first_image=user_product.product.related_products.first %}
                                                                 <a href="{% url 'products:product-detail-view' user_product.product.slug %}" title="{{ first_image.img_title }}">
-                                                                    <img data-src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}">
+                                                                    <img src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}">
                                                                 </a>
                                                             {% endwith %}
                                                         {% endif %}
@@ -512,7 +512,7 @@
                                                         {% if best_seller_product.related_products.count %}
                                                             {% with first_image=best_seller_product.related_products.first %}
                                                                 <a href="{% url 'products:product-detail-view' best_seller_product.slug %}" title="{{ first_image.img_title }}">
-                                                                    <img data-src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}">
+                                                                    <img src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}">
                                                                 </a>
                                                             {% endwith %}
                                                         {% endif %}
@@ -573,7 +573,7 @@
                                 <div class="slide">
                                     {% if brand.image %}
                                     <div class="box1">
-                                        <div class="box2"><a><img data-src="{{ brand.image.url }}" title="{{ brand.img_title }}" alt="{{ brand.img_alt }}" style="width: 200px; height: 150px;"></a></div>
+                                        <div class="box2"><a><img src="{{ brand.image.url }}" title="{{ brand.img_title }}" alt="{{ brand.img_alt }}" style="width: 200px; height: 150px;"></a></div>
                                     </div>
                                     {% endif %}
                                 </div>
