@@ -184,9 +184,6 @@
     .shop:hover {
         background-color: rgba(0, 0, 0, 0.8);
     }
-
-
-
 </style>
 
 
@@ -219,22 +216,19 @@
                                 <div class="col-xs-12">
                                     <div class="text {{ banner.title_position }}">
                                         <strong style="color: {{ banner.text_color }};" class="title">{{ banner.title }}</strong>
-                                        <h1 style="color: {{ banner.text_color }};">{{ banner.subtitle }}</h1>
+                                        <h1 style="color: {{ banner.text_color }};" >{{ banner.subtitle }}</h1>
                                         <div class="txt">
-                                            <p style="color: {{ banner.text_color }};">{{ banner.description }}</p>
+                                            <p style="color: {{ banner.text_color }};"  >{{ banner.description }}</p>
                                         </div>
                                         <a href="{{ banner.link }}" title="Alışverişe Başla" class="shop">
                                             <span>Alışverişe Başla</span>
                                         </a>
                                     </div>
                                 </div>
-                                <!-- Lazy loaded image -->
-                                <img data-src="{{ banner.image.url }}" alt="{{ banner.title }}">
                             </div>
                         </div>
                     </div>
                 {% endfor %}
-
                 <!-- holder end here -->
 
             </div>
@@ -600,7 +594,6 @@
     </div><!-- W1 end here -->
     <span id="back-top" class="fa fa-arrow-up"></span>
 </div>
-
 
 
 {%  endblock %}
