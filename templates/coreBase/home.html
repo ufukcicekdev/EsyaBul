@@ -235,7 +235,7 @@
                
                 {% for banner in homemainbanners %}
                 <div class="holder">
-                        <img class="img" src="{{ banner.image.url }}" alt="{{ banner.title }}">
+                        <img class="img" src="{{ banner.image.url }}" alt="{{ banner.title }}" fetchpriority="high">
                     
                     <div class="txt-wrap {{ banner.title_position }}">
                         <a href="{{ banner.link }}" title="Alışverişe Başla"><strong style="color: {{ banner.text_color }};" class="title">{{ banner.title }}</strong></a>
