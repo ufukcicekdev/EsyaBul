@@ -165,26 +165,49 @@
   text-decoration: none;
 }
   
+
+.shop {
+  color: #3e3e4a;
+  padding: 0 10px;
+  margin: 26 0 20px;
+  font-weight: bold;
+  position: relative;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 16px;
+  line-height: 18px;
+  font-family: "Montserrat", sans-serif;
+  -moz-transition: all 0.4s linear;
+  -webkit-transition: all 0.4s linear;
+  -o-transition: all 0.4s linear;
+  transition: all 0.4s linear;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.banner-slider .img {
+    width: 100%; /* Resimlerin genişliğini kapsayıcıya göre ayarlar */
+    height: 600px; /* İstediğiniz yükseklik */
+    object-fit: cover; /* Resmin kapsayıcıya tam oturmasını sağlar */
+    display: block; /* Tarayıcıdan kaynaklı ara boşlukları kaldırır */
+}
+
+/* Mobil görünüm için ayarlar */
+@media (max-width: 768px) {
+    .banner-slider .img {
+        height: 200px; /* Mobilde daha küçük bir yükseklik ayarlayabilirsiniz */
+    }
+}
+
+/* Tablet ve küçük ekranlar için ayarlar */
+@media (max-width: 1024px) {
+    .banner-slider .img {
+        height: 250px; /* Tablet için yükseklik */
+    }
+}
+
   </style>
 
-<style>
-    .shop {
-        background-image: url('/path/to/shopping-cart-icon.png');
-        background-size: 24px 24px;
-        background-repeat: no-repeat;
-        background-position: left center;
-        padding-left: 40px; /* İkon ile metin arasında boşluk bırak */
-        display: inline-flex;
-        align-items: center;
-        text-decoration: none;
-        background-color: rgba(255, 255, 255, 0.7);
-        border-radius: 5px;
-    }
-
-    .shop:hover {
-        background-color: rgba(0, 0, 0, 0.8);
-    }
-</style>
 
 
 
@@ -204,37 +227,34 @@
         <!-- mt header style4 start here -->
         {% include 'coreBase/header.html' %}
 
-        <!-- mt main slider start here -->
-        <div class="mt-main-slider">
+   
+
+        <div class="mt-mainslider3">
             <!-- slider banner-slider start here -->
             <div class="slider banner-slider">
-                <!-- holder start here -->
+               
                 {% for banner in homemainbanners %}
-                    <div class="holder text-center" style="background-image: url({{ banner.image.url }});">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="text {{ banner.title_position }}">
-                                        <strong style="color: {{ banner.text_color }};" class="title">{{ banner.title }}</strong>
-                                        <h1 style="color: {{ banner.text_color }};" >{{ banner.subtitle }}</h1>
-                                        <div class="txt">
-                                            <p style="color: {{ banner.text_color }};"  >{{ banner.description }}</p>
-                                        </div>
-                                        <a href="{{ banner.link }}" title="Alışverişe Başla" class="shop">
-                                            <span>Alışverişe Başla</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-                <!-- holder end here -->
+                <div class="holder">
+                        <img class="img" src="{{ banner.image.url }}" alt="{{ banner.title }}" loading="lazy">
+                    
+                    <div class="txt-wrap {{ banner.title_position }}">
+                        <a href="{{ banner.link }}" title="Alışverişe Başla"><strong style="color: {{ banner.text_color }};" class="title">{{ banner.title }}</strong></a>
+                        
+                        <a href="{{ banner.link }}" title="Alışverişe Başla"><h1 style="color: {{ banner.text_color }};">{{ banner.subtitle }}</h1></a>
 
-            </div>
-            <!-- slider regular end here -->
-        </div><!-- mt main slider end here -->
-        <!-- mt main start here -->
+                        <div class="txt">
+                            <p style="color: {{ banner.text_color }};">{{ banner.description }}</p>
+                        </div>
+                    
+                    </div>
+                </div>
+            {% endfor %}
+            
+            </div><!-- slider banner-slider start here -->
+        </div>
+
+
+
         <main id="mt-main">
             <div class="container">
                 <div class="row">
