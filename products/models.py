@@ -142,6 +142,18 @@ class Brand(models.Model):
             self.img_alt = self.name
         if not self.img_title:
             self.img_title = self.name
+        
+        image = Image.open(self.image)
+        output = io.BytesIO()
+        image.save(output, format='WEBP')
+        output.seek(0)
+
+        # Yeni içerik nesnesi oluştur
+        webp_image = InMemoryUploadedFile(output, 'ImageField', f"{self.image.name.split('.')[0]}.webp", 'image/webp', output.tell(), None)
+
+        # Yeni resim dosyasını ayarla
+        self.image = webp_image
+
         super().save(*args, **kwargs)
     
 class Supplier(models.Model):
