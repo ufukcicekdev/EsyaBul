@@ -121,7 +121,7 @@
                                 <span class="bar"></span>
                             </a>
                         </li>
-                        <li><a class="icon-magnifier"></a></li>
+                        <li><a href="#" class="icon-magnifier"></a></li>
                         <li>
                             <a href="{% url 'customerauth:wishlist' %}" title="{{ wcount }}" class="icon-heart cart-opener">
                                 <span style="margin-bottom: -3px;" class="num wish-count">{{ wcount }}</span>
@@ -230,5 +230,7 @@
         </div>
     </div><!-- mt nav holder end here -->
 </header>
+
+{% include 'coreBase/searchbar.html' %}
 
 {% endblock %}
