@@ -21,13 +21,25 @@
     {% block meta %}
     {% endblock %}
 
-	<link rel="stylesheet" type="text/css" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/main.css">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/animate.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/icon-fonts.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/responsive.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/custom.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/bcf16bd37f5afe2e.css' %}">
+    
+
+
+
+
+	<!-- <link rel="stylesheet" type="text/css" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/main.css">
     <link rel="stylesheet" type="text/css" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/bootstrap2.css">
     <link rel="stylesheet" type="text/css" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/animate2.css">
     <link rel="stylesheet" type="text/css" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/icon-fonts2.css">
     <link rel="stylesheet" type="text/css" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/responsive.css">
     <link rel="stylesheet" type="text/css" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/custom2.css">
-    <link rel="stylesheet" type="text/css" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/bcf16bd37f5afe2e2.css" />
+    <link rel="stylesheet" type="text/css" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/bcf16bd37f5afe2e2.css" /> -->
 
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script>
@@ -60,12 +72,7 @@
 </head>
 
 <body>
-   
-
-
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-
-
 
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MV485Q4F"
@@ -76,12 +83,19 @@
     {% block content %}
     {% endblock content %}
 
-    <script type="text/javascript" src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/jquery.main.js" ></script> 
+    <script type="text/javascript" src="{% static '/js/jquery.main.js' %}" ></script> 
+    <script type="text/javascript" src="{% static '/js/jquery.js' %}" ></script> 
+    <script type="text/javascript" src="{% static '/js/function.js' %}" ></script> 
+    <script type="text/javascript" src="{% static '/js/plugins.js' %}" ></script> 
+    <script type="text/javascript" src="{% static '/js/getpath.js' %}" ></script> 
+    <script type="text/javascript" src="{% static '/js/main.js' %}" ></script> 
+
+    <!-- <script type="text/javascript" src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/jquery.main.js" ></script> 
     <script type="text/javascript" src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/jquery.js" ></script>
     <script type="text/javascript" src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/function.js" ></script>
     <script type="text/javascript" src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/plugins2.js" ></script>
     <script type="text/javascript" src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/getpath.js" ></script>
-    <script type="text/javascript" src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/main2.js" ></script>
+    <script type="text/javascript" src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/main2.js" ></script> -->
 
 </body>
 
