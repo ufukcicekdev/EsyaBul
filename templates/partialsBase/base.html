@@ -9,8 +9,8 @@
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
         })(window,document,'script','dataLayer','GTM-MV485Q4F');</script>
     <!-- End Google Tag Manager -->
-    
-	<meta charset="utf-8">
+
+    <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
@@ -18,36 +18,39 @@
     <meta name="author" content="esyala.com">
     <meta name="robots" content="index,follow">
     <meta name="publisher" content="Esyala.com">
-    {% block meta %}
-    {% endblock %}
+    {% block meta %}{% endblock %}
 
-    <!-- <link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static '/css/bootstrap.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static '/css/animate.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static '/css/icon-fonts.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static '/css/responsive.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static '/css/custom.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static '/css/bcf16bd37f5afe2e.css' %}"> -->
-    
+    <!-- Ana stil dosyası için preload -->
+    <link rel="preload" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/main.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/main.css"></noscript>
 
+    <!-- Diğer stil dosyaları -->
+    <link rel="preload" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/bootstrap2.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/bootstrap2.css"></noscript>
 
+    <link rel="preload" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/animate2.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/animate2.css"></noscript>
 
+    <link rel="preload" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/icon-fonts2.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/icon-fonts2.css"></noscript>
 
-	<link rel="stylesheet" type="text/css" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/main.css">
-    <link rel="stylesheet" type="text/css" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/bootstrap2.css">
-    <link rel="stylesheet" type="text/css" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/animate2.css">
-    <link rel="stylesheet" type="text/css" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/icon-fonts2.css">
-    <link rel="stylesheet" type="text/css" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/responsive.css">
-    <link rel="stylesheet" type="text/css" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/custom2.css">
-    <link rel="stylesheet" type="text/css" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/bcf16bd37f5afe2e2.css" />
+    <link rel="preload" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/responsive.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/responsive.css"></noscript>
 
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="preload" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/custom2.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/custom2.css"></noscript>
+
+    <link rel="preload" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/bcf16bd37f5afe2e2.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/css/bcf16bd37f5afe2e2.css"></noscript>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var canonicalLink = document.createElement('link');
             canonicalLink.rel = 'canonical';
             canonicalLink.href = window.location.href;
-
             document.head.appendChild(canonicalLink);
         });
     </script>
@@ -68,7 +71,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-messaging.js" ></script>
 
     <script src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/firebase-messaging.js" ></script>
-
 </head>
 
 <body>
@@ -80,23 +82,23 @@
     <!-- End Google Tag Manager (noscript) -->
 
     {% include 'message.html' %}
-    {% block content %}
-    {% endblock content %}
+    {% block content %}{% endblock content %}
 
-    <!-- <script type="text/javascript" src="{% static '/js/jquery.main.js' %}" ></script> 
-    <script type="text/javascript" src="{% static '/js/jquery.js' %}" ></script> 
-    <script type="text/javascript" src="{% static '/js/function.js' %}" ></script> 
-    <script type="text/javascript" src="{% static '/js/plugins.js' %}" ></script> 
-    <script type="text/javascript" src="{% static '/js/getpath.js' %}" ></script> 
-    <script type="text/javascript" src="{% static '/js/main.js' %}" ></script>  -->
+    <!-- JavaScript dosyaları -->
+    <link rel="preload" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/jquery.main.js" as="script">
+    <script type="text/javascript" src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/jquery.main.js" defer></script>
 
-    <script type="text/javascript" src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/jquery.main.js" ></script> 
-    <script type="text/javascript" src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/jquery.js" ></script>
-    <script type="text/javascript" src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/function.js" ></script>
-    <script type="text/javascript" src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/plugins2.js" ></script>
-    <script type="text/javascript" src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/getpath.js" ></script>
-    <script type="text/javascript" src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/main2.js" ></script>
+    <link rel="preload" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/jquery.js" as="script">
+    <script type="text/javascript" src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/jquery.js" defer></script>
+
+    <link rel="preload" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/function.js" as="script">
+    <script type="text/javascript" src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/function.js" defer></script>
+
+    <link rel="preload" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/plugins.js" as="script">
+    <script type="text/javascript" src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/plugins.js" defer></script>
+
+    <link rel="preload" href="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/custom2.js" as="script">
+    <script type="text/javascript" src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/js/custom2.js" defer></script>
 
 </body>
-
 </html>
