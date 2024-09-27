@@ -94,8 +94,10 @@ def my_view(request):
 
 
 def generate_order_number():
-    # 10 karakterlik bir rastgele sipariş numarası oluşturuyoruz
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+    while True:
+        order_number = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+        if not Order.objects.filter(order_number=order_number).exists():
+            return order_number 
 
 order_number = generate_order_number()
 
