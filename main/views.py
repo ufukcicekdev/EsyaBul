@@ -219,14 +219,14 @@ def dynamic_category_product_list_view(request, category_slugs):
         category_query = Q(category=target_category)
 
     # Ürünleri ve ilişkili verileri daha verimli getirin
-    products = Product.objects.filter(category_query).select_related('category').prefetch_related(
+    products = Product.objects.filter(category_query, is_active=True).select_related('category').prefetch_related(
         Prefetch('related_products', queryset=ProductImage.objects.all()),
         Prefetch('reviews', queryset=ProductReview.objects.all()),
         Prefetch('wishes', queryset=wishlist_model.objects.all())
     ).annotate(average_rating=Avg('reviews__rating')).order_by('id')
 
     for subcategory in subcategories:
-        subcategory.product_count = Product.objects.filter(category=subcategory).count()
+        subcategory.product_count = Product.objects.filter(category=subcategory, is_active=True).count()
 
     paginator = Paginator(products, 12)
     page_number = request.GET.get('page')
@@ -279,7 +279,7 @@ def search_view(request):
         query = request.session.get('search_query', '')  # Oturumdan sorguyu alın
 
     if query:
-        products = Product.objects.filter(
+        products = Product.objects.filter(Q(is_active=True) &
             Q(name__icontains=query) | 
             Q(description__icontains=query) | 
             Q(information__icontains=query)
@@ -311,7 +311,7 @@ def search_view(request):
 def get_main_category_products(request, mainContext, category_slug_list):
     main_category = get_object_or_404(Category, slug=category_slug_list[0])
     main_slug=main_category
-    products = Product.objects.all().order_by("id")
+    products = Product.objects.filter(is_active=True).order_by("id")
     paginator = Paginator(products, 12)  
     page_number = request.GET.get('page')
     try:

@@ -143,10 +143,7 @@ button{
   padding-bottom: 15px;
   border-bottom: 1px solid #ebedf9;
 }
-header span{
-  font-size: 21px;
-  font-weight: 600;
-}
+
 header .close, .icons a{
   display: flex;
   align-items: center;
@@ -283,16 +280,6 @@ header .close:hover{
 }
 
 
-
-
-
-
-
-
-</style>
-
-<style>
-
     .product-3 {
         display: flex;
         flex-direction: column;
@@ -414,7 +401,31 @@ header .close:hover{
     color: #ff4d4f; /* Kırmızı renkte hata mesajı */
     background-color: #ffe6e6; /* Kırmızımsı bir arka plan */
 }
-
+.caption.top-right {
+      top: 10px; /* Üstten mesafe */
+      right: 10px; /* Sağdan mesafe */
+  }
+  
+  .related_product {
+      font-size: 17px;
+        color: #fff;
+        display: inline-block;
+        padding: 3px 8px;
+        margin-bottom: 5px;
+        background-color: #fed062;
+        font-weight: 700;
+        font-family: "Montserrat", sans-serif;
+        line-height: 1.2;
+        border-radius: 3px;
+  }
+  .product-3 .img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 233px;
+      overflow: hidden;
+      position: relative;
+  }
 
     </style>
 
@@ -447,6 +458,7 @@ header .close:hover{
                                     <li><a href="#" class="share-modal"><i class="fa fa-share-alt"></i> Paylaş</a></li>
 
                                 </ul>
+                                
                                
                                 <div class="popupSocial">
                                     <header>
@@ -478,6 +490,7 @@ header .close:hover{
                                         {% for image in related_product_data.images %}
                                             <div class="slide">
                                                 <img src="{{ image.image.url }}" alt="{{ image.img_alt }}" title="{{ image.img_title }}">
+                                               
                                             </div>
                                         {% endfor %}
                                     {% endfor %}
@@ -534,6 +547,9 @@ header .close:hover{
                                 
                                 
                                 <!-- Breadcrumbs of the Page end -->
+                                <span class="caption top-right">
+                                    <span class="related_product">{{ product.get_purchase_rental_options }}</span>
+                                </span>
                                 <h4>{{ product.name }}</h4>
                                 <!-- Rank Rating of the Page -->
                                 <div class="rank-rating">
@@ -573,6 +589,7 @@ header .close:hover{
                                         <p class="delivery-time no-delivery-time">Tahmini teslimat süresi belirtilmemiş.</p>
                                     {% endif %}
                                 </div>
+                                
                                 <div class="price-options">
                                     <table class="table">
                                         <thead>
@@ -747,6 +764,9 @@ header .close:hover{
                                                 <span class="best-price">En İyi Fiyat</span>
                                             </span>
                                             {% endif %}
+                                            <span class="caption top-right">
+                                                <span class="related_product">{{ best_seller_product.get_purchase_rental_options }}</span>
+                                            </span>
                                         </div>
                             
                                         <!-- stars start here -->

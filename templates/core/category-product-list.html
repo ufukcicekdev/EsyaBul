@@ -300,12 +300,6 @@ header .close:hover{
 }
 
 
-
-
-
-</style>
-
-<style>
   #card-view {
     display: inline-table;
     flex-wrap: wrap;
@@ -313,63 +307,63 @@ header .close:hover{
 }
 
 .product-3 {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #ddd;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    height: 500px; /* Sabit yükseklik */
-    overflow: hidden; /* İçeriğin dışarı taşmasını önler */
-    position: relative;
-    text-align: center;
-    background-color: #fff; /* Arka plan rengi */
-}
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      height: 500px; /* Sabit yükseklik */
+      overflow: hidden; /* İçeriğin dışarı taşmasını önler */
+      position: relative;
+      text-align: center;
+      background-color: #fff; /* Arka plan rengi */
+  }
 
-.img a img {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 300px; /* Sabit yükseklik */
-    overflow: hidden; /* Taşmaları önler */
-    position: relative; /* Caption ve yıldızlar için gerekli */
-}
-
-.img img {
-    max-width: 100%;
-    max-height: 100%;
-}
+  .img a img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 233px; 
+      overflow: hidden; 
+      position: relative; 
+  }
+  
+  .img img {
+      max-width: 100%;
+      max-height: 100%;
+  }
 
 .caption {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    color: #fff;
-    padding: 5px;
-}
-
-.caption .off {
-    font-size: 17px;
-    color: #fff;
-    display: inline-block;
-    padding: 3px 8px;
-    margin-bottom: 5px;
-    background-color: #b2cc29;
-    font-weight: 700;
-    font-family: "Montserrat", sans-serif;
-    line-height: 1.2;
-    border-radius: 3px;
-}
-
-.caption .best-price {
-    font-size: 17px;
-    color: #fff;
-    padding: 5px 10px;
-    background-color: #fed062;
-    font-weight: 700;
-    font-family: "Montserrat", sans-serif;
-    line-height: 1.2;
-    border-radius: 3px;
-    display: inline-block;
-}
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      color: #fff;
+      padding: 5px;
+  }
+  
+  .caption .off {
+      font-size: 17px;
+      color: #fff;
+      display: inline-block;
+      padding: 3px 8px;
+      margin-bottom: 5px;
+      background-color: #b2cc29;
+      font-weight: 700;
+      font-family: "Montserrat", sans-serif;
+      line-height: 1.2;
+      border-radius: 3px;
+  }
+  
+  .caption .best-price {
+      font-size: 17px;
+      color: #fff;
+      padding: 5px 10px;
+      background-color: #fed062;
+      font-weight: 700;
+      font-family: "Montserrat", sans-serif;
+      line-height: 1.2;
+      border-radius: 3px;
+      display: inline-block;
+  }
 
 .mt-stars-container {
     margin-top: 10px;
@@ -410,6 +404,31 @@ header .close:hover{
 
 .links li {
     margin: 0 5px;
+}
+.caption.top-right {
+    top: 10px; /* Üstten mesafe */
+    right: 10px; /* Sağdan mesafe */
+}
+
+.related_product {
+    font-size: 17px;
+      color: #fff;
+      display: inline-block;
+      padding: 3px 8px;
+      margin-bottom: 5px;
+      background-color: #fed062;
+      font-weight: 700;
+      font-family: "Montserrat", sans-serif;
+      line-height: 1.2;
+      border-radius: 3px;
+}
+.product-3 .img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 233px;
+    overflow: hidden;
+    position: relative;
 }
 
 
@@ -517,6 +536,11 @@ header .close:hover{
                                           <span class="best-price">En İyi Fiyat</span>
                                       </span>
                                       {% endif %}
+
+                                      <span class="caption top-right">
+                                        <span class="related_product">{{ product.get_purchase_rental_options }}</span>
+                                    </span>
+                                      
                                   </div>
                       
                                   <!-- stars start here -->

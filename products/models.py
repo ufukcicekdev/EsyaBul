@@ -278,6 +278,15 @@ class Product(models.Model):
                 star_list[full_stars] = False  # Yarım yıldız ekleyin
             return star_list
         return [False] * 5
+    
+
+    def get_purchase_rental_options(self):
+        has_rental_price = ProductRentalPrice.objects.filter(product=self).exists()
+
+        if has_rental_price:
+            return "Kirala / Satın Al"
+        else:
+            return "Satın Al"
 
 class ProductReview(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)

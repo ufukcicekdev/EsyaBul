@@ -25,7 +25,7 @@ csrf_protect = decorator_from_middleware(CsrfViewMiddleware)
 
 def product_detail_view(request, product_slug):
     product = get_object_or_404(Product, slug=product_slug, is_active=True)
-    related_products = Product.objects.filter(category_id=product.category_id).exclude(id=product.id).order_by('?')[:10]
+    related_products = Product.objects.filter(is_active=True, category_id=product.category_id).exclude(id=product.id).order_by('?')[:10]
     add_to_cart_form = AddToCartForm(request.POST, product_id=product.id)
     reviews = ProductReview.objects.filter(product=product)
     wishCount = wishlist_model.objects.filter(product=product)

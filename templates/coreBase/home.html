@@ -40,9 +40,7 @@
     margin-right: 0px; /* İkon ile metin arasındaki sağ boşluğu ayarlayın */
 }
 
-</style>
 
-<style>
 
   .product-3 {
       display: flex;
@@ -206,6 +204,25 @@
     }
 }
 
+
+.caption.top-right {
+    top: 10px; /* Üstten mesafe */
+    right: 10px; /* Sağdan mesafe */
+}
+
+.related_product {
+    font-size: 17px;
+      color: #fff;
+      display: inline-block;
+      padding: 3px 8px;
+      margin-bottom: 5px;
+      background-color: #fed062;
+      font-weight: 700;
+      font-family: "Montserrat", sans-serif;
+      line-height: 1.2;
+      border-radius: 3px;
+}
+
   </style>
 
 
@@ -360,6 +377,11 @@
                                                                     <span class="best-price">En İyi Fiyat</span>
                                                                 </span>
                                                             {% endif %}
+                                                            <span class="caption top-right">
+                                                                <span class="related_product">{{ featured_product.get_purchase_rental_options }}</span>
+                                                            </span>
+                                                            
+
                                                             <ul class="mt-stars">
                                                                 {% if featured_product.average_rating %}
                                                                 {% for star in featured_product.average_rating|make_star_list %}
@@ -410,6 +432,9 @@
                                                                     <span class="best-price">En İyi Fiyat</span>
                                                                 </span>
                                                             {% endif %}
+                                                            <span class="caption top-right">
+                                                                <span class="related_product">{{ latest_product.get_purchase_rental_options }}</span>
+                                                            </span>
                                                             <ul class="mt-stars">
                                                                 {% if latest_product.average_rating %}
                                                                 {% for star in latest_product.average_rating|make_star_list %}
@@ -473,6 +498,9 @@
                                                             <span class="best-price">En İyi Fiyat</span>
                                                         </span>
                                                         {% endif %}
+                                                        <span class="caption top-right"></span>
+                                                            <span class="related_product">{{ user_product.product.get_purchase_rental_options }}</span>
+                                                        </span>
                                                     </div>
 
                                                     {% if user_product.product.get_star_list %}
@@ -543,6 +571,10 @@
                                                             <span class="best-price">En İyi Fiyat</span>
                                                         </span>
                                                         {% endif %}
+                                                        
+                                                        <span class="caption top-right">
+                                                            <span class="related_product">{{ best_seller_product.get_purchase_rental_options }}</span>
+                                                        </span>
                                                     </div>
                                         
                                                     <!-- stars start here -->
