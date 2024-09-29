@@ -76,6 +76,96 @@
     .mt-icon-list {
         justify-content: flex-end; /* İkon listesi sağa yaslı */
     }
+
+    /* Alt menü için stil */
+.mobile-bottom-nav {
+    display: none; /* Desktop görünümünde gizlenir */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff; /* Menü arka planı */
+    box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.1); /* Hafif gölge efekti */
+    z-index: 1000; /* Üstte görünmesi için */
+    border-top: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.mobile-bottom-nav ul {
+    display: flex;
+    justify-content: space-around; /* İkonları eşit aralıklı yerleştirir */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.mobile-bottom-nav ul li {
+    flex: 1; /* İkonlar eşit genişlikte */
+    text-align: center;
+}
+
+.mobile-bottom-nav ul li a {
+    color: #000;
+    font-size: 16px; /* İkon boyutu */
+    text-decoration: none;
+}
+
+.mobile-bottom-nav ul li a .icon {
+    font-size: 24px; /* İkon büyüklüğü */
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Mobilde görünür yapmak için */
+@media (max-width: 767px) {
+    .mobile-bottom-nav {
+        display: block;
+    }
+    #user-icon{
+        display: none;
+    }
+    .icon-magnifier{
+        display: none;
+    }
+}
+
+@media (max-width: 991px) {
+    .mobile-bottom-nav {
+        display: block;
+    }
+    #user-icon{
+        display: none;
+    }
+    .icon-magnifier{
+        display: none;
+    }
+    }
+
+.user-icon1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 22px; /* Simgenin genişliği */
+    height: 22px; /* Simgenin yüksekliği */
+    background-color: #ccc; /* Arkaplan rengi */
+    color: white; /* Harf rengi */
+    border-radius: 50%; /* Yuvarlak simge */
+    font-size: 18px; /* Harf boyutu */
+    font-weight: bold; /* Harfi vurgulamak için */
+    margin: 0 auto 5px; /* Ortalamak ve altına boşluk bırakmak için */
+}
+
+
+
+li a span {
+    display: block;
+    text-align: center;
+}
+
+#back-top.active{
+    margin-bottom: 70px; 
+}
+    
 </style>
 
 <header id="mt-header" class="style19">
@@ -96,7 +186,6 @@
     </div><!-- mt top bar end here -->
 
     <div class="container">
-        <!-- mt bottom bar start here -->
         <div class="mt-bottom-bar">
             <div class="row">
                 <div class="col-xs-12">
@@ -199,7 +288,7 @@
                     </div>
                 </div>
             </div>
-        </div><!-- mt bottom bar start here -->
+        </div>
     </div>
     <!-- mt nav holder start here -->
     <div class="mt-nav-holder">
@@ -209,7 +298,7 @@
                     <!-- navigation start here -->
                     <nav id="nav">
                         <ul>
-                            <li><a href="{% url 'main:home' %}" title="Anasayfa">Anasayfa</a></li>
+                            <li><a href="{% url 'main:home' %}"  title="Anasayfa">Anasayfa</a></li>
                             <li><a href="{% url 'blog:blog_home' %}" title="Blog">Blog</a></li>
                             <li class="drop">
                                 <a title="Kategoriler">Kategoriler <i class="fa fa-angle-down" aria-hidden="true"></i></a>
@@ -221,14 +310,52 @@
                                     </div>
                                 </div>
                             </li>
-                            <li><a href="{% url 'main:about' %}" title="Hakkında">Hakkımızda</a></li>
-                            <li><a href="{% url 'main:contact' %}" title="İletişim">İletişim</a></li>
+                            <li><a href="{% url 'main:about' %}"  title="Hakkımızda">Hakkımızda</a></li>
+                            <li><a href="{% url 'main:contact' %}"  title="İletişim">İletişim</a></li>
                         </ul>
                     </nav><!-- navigation end here -->
                 </div>
             </div>
         </div>
     </div><!-- mt nav holder end here -->
+
+<!-- Diğer içerikler -->
+
+<div class="mobile-bottom-nav">
+    <ul>
+        <li>
+            <a href="{% url 'main:home' %}">
+                <span class="icon fa fa-home"></span>
+                <span>Anasayfa</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="icon-magnifier2">
+                <span class="icon fa fa-search"></span>
+                <span>Arama</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'customerauth:dashboard' %}">
+                {% if request.user.is_authenticated %}
+                    <span class="user-icon1">{{ request.user.username|first|upper }}</span>
+                {% else %}
+                    <span class="icon fa fa-user"></span>
+                {% endif %}
+                <span>Profil</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'main:contact' %}">
+                <span class="icon fa fa-phone"></span>
+                <span>İletişim</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+
 </header>
 
 {% include 'coreBase/searchbar.html' %}
