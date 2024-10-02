@@ -19,6 +19,7 @@ import random
 from django.views.decorators.vary import vary_on_cookie
 from django.core.cache import cache
 from slack_send_messages.send_messages import send_contact_message
+from collections import defaultdict
 
 
 
@@ -172,13 +173,26 @@ def contact(request):
 def about(request):
     mainContext = mainContent(request)
     teams_Members = TeamMembers.objects.filter(is_active=True).order_by("id")
+
+    sorted_members = {}
+    for member in teams_Members:
+        level = member.level  
+        if level not in sorted_members:
+            sorted_members[level] = []
+        sorted_members[level].append(member)
+
+
     context = {
-        "teamsMembers":teams_Members,
+        "teamsMembers": teams_Members,
+        "sorted_members": sorted_members,  
     }
     context.update(mainContext)
     description = "Esyala.com hakkında bilgi edinin. Kaliteli hizmet ve müşteri memnuniyeti için buradayız. Misyonumuz, vizyonumuz ve değerlerimiz hakkında daha fazla bilgi alın."
     context["description"] = description
     return render(request, "mainBase/about.html", context)
+
+
+
 @cache_page(60 * 60 * 6)  # 6 saatlik cache
 @vary_on_cookie
 def faqs(request):
