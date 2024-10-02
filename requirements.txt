@@ -36,6 +36,7 @@ django-jazzmin==2.6.0
 django-phone-verify==3.0.0
 django-phonenumber-field==7.3.0
 django-phonenumbers==1.0.1
+django-prometheus==2.3.1
 django-push-notifications==3.0.2
 django-social-share==2.3.0
 django-storages==1.13.2
@@ -75,6 +76,7 @@ phonenumbers==8.13.27
 pillow==10.2.0
 platformdirs==4.2.0
 progressbar2==4.3.2
+prometheus_client==0.21.0
 proto-plus==1.23.0
 protobuf==4.25.2
 psycopg2==2.9.9
