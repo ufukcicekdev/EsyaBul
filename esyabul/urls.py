@@ -17,7 +17,6 @@ urlpatterns = [
     path('', include('blog.urls')),
     path("social-auth/", include('social_django.urls', namespace='social')),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
-    path('custom-metrics/', include('django_prometheus.urls')),
 ]
 
 

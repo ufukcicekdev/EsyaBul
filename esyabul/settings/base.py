@@ -49,11 +49,9 @@ INSTALLED_APPS = [
     "django_social_share",
     "ipware",  
     "blog",
-    'django_prometheus',
     ]
 
 MIDDLEWARE = [
-    "django_prometheus.middleware.PrometheusBeforeMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.middleware.gzip.GZipMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -66,7 +64,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "social_django.middleware.SocialAuthExceptionMiddleware",
     "products.middleware.MergeCartMiddleware",
-    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 
