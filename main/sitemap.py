@@ -42,7 +42,7 @@ class ProductLinkSiteMap(Sitemap):
         return Product.objects.filter(is_active=True)
 
     def location(self,obj):
-        return f"/product/{obj.slug}"
+        return f"/product/{obj.slug}/"
     
 
 
@@ -55,7 +55,7 @@ class CategoryLinkSiteMap(Sitemap):
         return Category.objects.filter(is_active=True)
 
     def location(self,obj):
-        return f"/category/{obj.get_full_path_slug()}"
+        return f"/category/{obj.get_full_path_slug()}/"
     
 
 
@@ -68,4 +68,4 @@ class BlogLinkSiteMap(Sitemap):
         return Blog.objects.filter(is_active=True)
 
     def location(self, obj):
-        return f"/blog/{obj.slug}"
+        return f"/blog/{obj.slug}/"
