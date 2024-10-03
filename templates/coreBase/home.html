@@ -481,6 +481,7 @@
                                     <div class="col-xs-12">
                                         <div class="bestseller-slider">
                                             {% for user_product in user_product_view %}
+                                            {% if user_product.product.is_active == True %}
                                             <div class="slide">
                                                 <div class="product-3 marginzero">
                                                     <div class="img">
@@ -533,6 +534,7 @@
                                                     </ul>
                                                 </div>
                                             </div>
+                                            {% endif %}
                                             {% endfor %}
 
                                         </div>
