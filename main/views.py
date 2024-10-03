@@ -95,7 +95,7 @@ def home(request):
     }
 
     if request.user.is_authenticated:
-        user_product_view = UserProductView.objects.filter(user=request.user, is_active=True).order_by('-created_at')[:10]
+        user_product_view = UserProductView.objects.filter(user=request.user).order_by('-created_at')[:10]
         context.update({'user_product_view': user_product_view})
 
     context.update(mainContext)
