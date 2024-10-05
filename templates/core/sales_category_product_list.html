@@ -1,7 +1,7 @@
 {% extends 'partialsBase/base.html' %}
 {% load custom_filters %}
 {% load static %}
-{% block title %} {{ category_name.name }} | Eşyala {% endblock title %}
+{% block title %} Tüm Ürünler | Eşyala {% endblock title %}
 {% block description %} {{ category_name.description }} {% endblock description %}
 
 
@@ -11,7 +11,7 @@
 
 
 {% block meta %}
-<title> {{ category_name.name|default:"Eşyala" }} | Eşyala </title>
+<title> Tüm Ürünler | Eşyala </title>
 <meta name="description" content="{{ category_name.description|default:"Geniş ürün yelpazesiyle mobilya ve ev dekorasyonu alışveriş platformu." }}">
 
 <meta property="og:url" content="">
