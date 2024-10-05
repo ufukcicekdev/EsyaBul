@@ -244,8 +244,8 @@
                 <div class="row">
                     <div class="col-xs-12">
 
-                        {% if retails_products|length > 0 %}
-                        {% include 'coreBase/retail.html' %}
+                        {% if retails_products.best_seller_products|length > 0 or retails_products.featured_products|length > 0 or retails_products.latest_products|length > 0 %}
+                            {% include 'coreBase/retail.html' %}
                         {% endif %}
 
                         {% include 'coreBase/sales.html' %}

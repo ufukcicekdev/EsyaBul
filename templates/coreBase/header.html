@@ -307,6 +307,17 @@ li a span {
                                 <div class="mt-dropmenu text-left">
                                     <div class="mt-frame">
                                         <div class="mt-f-box">
+                                            <div class="mt-col-3">
+                                                <div class="sub-dropcont">
+                                                    <strong class="title">
+                                                        <a href="{% url 'main:rental_product_list_view' %}" title="Çalışma Odası" class="mt-subopener">Kiralık Ürünler</a>
+                                                    </strong>
+                                                    
+                                                    <a href="{% url 'main:rental_product_list_view' %}" title="Tümünü Gör" class="">
+                                                        <i class="fa fa-angle-right" aria-hidden="true">Tümünü Gör</i>
+                                                    </a>
+                                                </div>
+                                            </div>
                                             {{ main_categories|safe }}
                                         </div>
                                     </div>
