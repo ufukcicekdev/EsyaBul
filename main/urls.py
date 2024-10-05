@@ -30,6 +30,11 @@ urlpatterns = [
     path('subscribe/', subscribe, name='subscribe'),
     
 
+    path("category/rental", rental_product_list_view, name="rental_product_list_view"),
+    path("category/sales", sales_product_list_view, name="sales_product_list_view"),
+
+
+
 ]
 
 

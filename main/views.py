@@ -5,7 +5,7 @@ from main.models import SocialMedia, HomeMainBanner, HomeSubBanner, TeamMembers,
 from django.http import JsonResponse
 from products.models import Category,Product, ProductReview,Cart,CartItem,ProductImage
 from customerauth.models import wishlist_model,UserProductView
-from products.models import Brand
+from products.models import Brand,ProductRentalPrice
 from django.http import Http404
 from django.db.models import Q,Avg,Prefetch
 from products.forms import AddToCartForm
@@ -20,6 +20,7 @@ from django.views.decorators.vary import vary_on_cookie
 from django.core.cache import cache
 from slack_send_messages.send_messages import send_contact_message
 from collections import defaultdict
+from django.db.models import Exists, OuterRef
 
 
 
@@ -61,6 +62,28 @@ def get_homepage_products():
     
     return products
 
+def get_home_retail_products():
+    key = 'get_home_retail_products'
+    products = cache.get(key)
+    if not products:
+        best_seller_products = Product.objects.filter(is_active=True,best_seller=True).annotate(has_rental_price=Exists(ProductRentalPrice.objects.filter(product=OuterRef('pk')))).filter(has_rental_price=True).prefetch_related('related_products', 'related_products_price')[:4]
+        featured_products = Product.objects.filter(is_active=True,is_featured=True).annotate(has_rental_price=Exists(ProductRentalPrice.objects.filter(product=OuterRef('pk')))).filter(has_rental_price=True).prefetch_related('related_products', 'related_products_price')[:4]
+        latest_products = Product.objects.filter(is_active=True).annotate(has_rental_price=Exists(ProductRentalPrice.objects.filter(product=OuterRef('pk')))).filter(has_rental_price=True).order_by('-created_at').prefetch_related('related_products', 'related_products_price')[:4]
+    
+        products = {
+            'best_seller_products': list(best_seller_products),
+            'featured_products': list(featured_products),
+            'latest_products': list(latest_products),
+        }
+
+        cache.set(key, products, 60 * 60 * 6)  # 6 saat cache süresi
+    
+    return products
+
+
+
+
+
 
 def get_homepage_brand():
     key = 'homepage_brand'
@@ -78,6 +101,8 @@ def home(request):
     homesubbanners = get_home_sub_banners()
     product_data = get_homepage_products()
     brand_data = get_homepage_brand()
+    retails_products = get_home_retail_products()
+    #sales_products = get_home_sales_products()
 
     banners = HomePageBannerItem.objects.filter(position__in=['left', 'right']).order_by('id')
     sliders = HomePageBannerItem.objects.filter(position='slider').order_by('id')
@@ -91,6 +116,7 @@ def home(request):
         "banners": banners,
         "sliders": sliders,
         "brand_data":brand_data,
+        "retails_products":retails_products,
         "description": "Esyala.com, mobilya, ev dekorasyonu ve elektronik ürünler sunan online alışveriş platformudur. Evinizi kolayca yenileyin!"
     }
 
@@ -359,3 +385,104 @@ def subscribe(request):
                 messages.info(request, "Bu e-posta adresi zaten kayıtlı.")
         return redirect('main:home') 
     return render(request, 'coreBase/home.html')
+
+
+
+@cache_page(60 * 60 * 6)  # 6 saatlik cache
+@vary_on_cookie
+def rental_product_list_view(request):
+    mainContext = mainContent(request)
+
+    # Kiralama fiyatı olan ürünleri al
+    products = Product.objects.filter(
+        is_active=True
+    ).annotate(
+        has_rental_price=Exists(ProductRentalPrice.objects.filter(product=OuterRef('pk')))
+    ).filter(
+        has_rental_price=True  # Sadece kiralama fiyatı olan ürünleri seçiyoruz
+    ).select_related('category').prefetch_related(
+        Prefetch('related_products', queryset=ProductImage.objects.all()),
+        Prefetch('reviews', queryset=ProductReview.objects.all()),
+        Prefetch('wishes', queryset=wishlist_model.objects.all())
+    ).annotate(average_rating=Avg('reviews__rating')).order_by('id')
+
+    # Kiralama fiyatı olan ürünlerin kategorilerini ve alt kategorilerini al
+    categories = set(product.category for product in products)
+    subcategories = {category: category.children.all() for category in categories}
+
+    paginator = Paginator(products, 12)
+    page_number = request.GET.get('page')
+
+    try:
+        page_products = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_products = paginator.page(1)
+    except EmptyPage:
+        page_products = paginator.page(paginator.num_pages)
+
+    # Kategoriler için resim veya varsayılan bir resim al
+    category_images = {
+        category.id: category.image.url if category.image else 'https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/Site-Images/naomi-hebert-2dcYhvbHV-M-unsplash.jpg'
+        for category in categories
+    }
+
+    context = {
+        "tumrunler": False,
+        "products": page_products,
+        "product_count": products.count(),
+        "categories": categories,  # Kiralama fiyatı olan ürünlerin kategorileri
+        "subcategories": subcategories,  # Kiralama fiyatı olan ürünlerin alt kategorileri
+        "category_images": category_images,  # Kategorilerin resimleri
+    }
+    context.update(mainContext)
+
+    return render(request, "core/retail_category_product_list.html", context)
+
+
+
+
+@cache_page(60 * 60 * 6)  # 6 saatlik cache
+@vary_on_cookie
+def sales_product_list_view(request):
+    mainContext = mainContent(request)
+
+    # Kiralama fiyatı olan ürünleri al
+    products = Product.objects.filter(
+        is_active=True
+    ).select_related('category').prefetch_related(
+        Prefetch('related_products', queryset=ProductImage.objects.all()),
+        Prefetch('reviews', queryset=ProductReview.objects.all()),
+        Prefetch('wishes', queryset=wishlist_model.objects.all())
+    ).annotate(average_rating=Avg('reviews__rating')).order_by('id')
+
+    # Kiralama fiyatı olan ürünlerin kategorilerini ve alt kategorilerini al
+    categories = set(product.category for product in products)
+    subcategories = {category: category.children.all() for category in categories}
+
+    paginator = Paginator(products, 12)
+    page_number = request.GET.get('page')
+
+    try:
+        page_products = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_products = paginator.page(1)
+    except EmptyPage:
+        page_products = paginator.page(paginator.num_pages)
+
+    # Kategoriler için resim veya varsayılan bir resim al
+    category_images = {
+        category.id: category.image.url if category.image else 'https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/Site-Images/naomi-hebert-2dcYhvbHV-M-unsplash.jpg'
+        for category in categories
+    }
+
+    context = {
+        "tumrunler": False,
+        "products": page_products,
+        "product_count": products.count(),
+        "categories": categories,  # Kiralama fiyatı olan ürünlerin kategorileri
+        "subcategories": subcategories,  # Kiralama fiyatı olan ürünlerin alt kategorileri
+        "category_images": category_images,  # Kategorilerin resimleri
+    }
+    context.update(mainContext)
+
+    return render(request, "core/sales_category_product_list.html", context)

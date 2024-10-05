@@ -369,9 +369,9 @@ class ProductRentalPrice(models.Model):
         verbose_name = "Ürün Kiralama Fiyatı"
         verbose_name_plural = "Ürün Kiralama Fiyatı"
 
-    def clean(self):
-        if self.rental_price < self.rental_old_price:
-            raise ValidationError("Eski kiralama fiyatı yeni fiyattan küçük olamaz.")
+    # def clean(self):
+    #     if self.rental_price > self.rental_old_price:
+    #         raise ValidationError("Eski kiralama fiyatı yeni fiyattan küçük olamaz.")
     def __str__(self):
         return self.get_name_display()
     

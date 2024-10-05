@@ -223,11 +223,7 @@
       border-radius: 3px;
 }
 
-  </style>
-
-
-
-
+</style>
 
 
 
@@ -243,39 +239,40 @@
     <div class="w1">
         <!-- mt header style4 start here -->
         {% include 'coreBase/header.html' %}
-
-   
-
-        <div class="mt-mainslider3">
-            <!-- slider banner-slider start here -->
-            <div class="slider banner-slider">
-               
-                {% for banner in homemainbanners %}
-                <div class="holder">
-                        <img class="img" src="{{ banner.image.url }}" alt="{{ banner.title }}">
-                    
-                    <div class="txt-wrap {{ banner.title_position }}">
-                        <a href="{{ banner.link }}" title="Alışverişe Başla"><strong style="color: {{ banner.text_color }};" class="title">{{ banner.title }}</strong></a>
-                        
-                        <a href="{{ banner.link }}" title="Alışverişe Başla"><h1 style="color: {{ banner.text_color }};">{{ banner.subtitle }}</h1></a>
-
-                        <div class="txt">
-                            <p style="color: {{ banner.text_color }};">{{ banner.description }}</p>
-                        </div>
-                    
-                    </div>
-                </div>
-            {% endfor %}
-            
-            </div><!-- slider banner-slider start here -->
-        </div>
-
-
-
         <main id="mt-main">
             <div class="container">
                 <div class="row">
                     <div class="col-xs-12">
+
+                        {% if retails_products|length > 0 %}
+                        {% include 'coreBase/retail.html' %}
+                        {% endif %}
+
+                        {% include 'coreBase/sales.html' %}
+                        
+                        
+
+                        <div class="mt-mainslider3">
+                            <div class="slider banner-slider">
+                               
+                                {% for banner in homemainbanners %}
+                                <div class="holder">
+                                        <img class="img" src="{{ banner.image.url }}" alt="{{ banner.title }}">
+                                    
+                                    <div class="txt-wrap {{ banner.title_position }}">
+                                        <a href="{{ banner.link }}" title="Alışverişe Başla"><strong style="color: {{ banner.text_color }};" class="title">{{ banner.title }}</strong></a>
+                                        
+                                        <a href="{{ banner.link }}" title="Alışverişe Başla"><h1 style="color: {{ banner.text_color }};">{{ banner.subtitle }}</h1></a>
+                
+                                        <div class="txt">
+                                            <p style="color: {{ banner.text_color }};">{{ banner.description }}</p>
+                                        </div>
+                                    
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
                         
                         <div class="banner-frame mt-paddingsmzero">
                             {% for banner in banners %}

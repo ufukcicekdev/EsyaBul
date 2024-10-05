@@ -1,0 +1,311 @@
+{% load static %}
+{% block content %}
+<style>
+    .banner-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        padding: 20px;
+        background-color: #f9f9f9;
+        flex-wrap: wrap;
+    }
+
+    /* Sol taraftaki büyük resim ve metin */
+    .banner-left {
+        flex: 1;
+        position: relative;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* İçeriği yatayda ortala */
+        justify-content: center; /* İçeriği dikeyde ortala */
+    }
+
+    .banner-left img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .banner-left h1 {
+        position: absolute;
+        top: 20px;
+        left: 50%; /* Sol kenarı ortala */
+        transform: translateX(-50%); /* Yazıyı tam ortalamak için */
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 48px;
+        font-weight: bold;
+    }
+
+    /* Sağ: Tab stilini oluşturuyoruz */
+    .banner-right {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: stretch;
+    }
+
+    .tabRetail {
+        overflow: hidden;
+        background-color: #fff;
+        border-bottom: 1px solid #ccc;
+        display: flex;
+        justify-content: center; /* Tabları ortalar */
+        margin-bottom: 10px; /* Ürünlerden önce biraz boşluk bırak */
+    }
+
+    .tabRetail button {
+        background-color: inherit;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+        font-size: 16px;
+    }
+
+    .tabRetail button:hover {
+        background-color: #ddd;
+    }
+
+    .tabRetail button.active {
+        background-color: #f1f1f1;
+        border-bottom: 2px solid orange;
+    }
+
+    .tabcontentSales {
+        display: none;
+        grid-template-columns: repeat(2, 1fr); /* İki sütun */
+        gap: 15px;
+        padding: 10px;
+    }
+
+    .tabcontentSales.active {
+        display: grid;
+    }
+
+    /* Ürün listesi ve ürün stilini oluşturuyoruz */
+    .product-item {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        background-color: white;
+        border: 1px solid #eee;
+        border-radius: 5px;
+        overflow: hidden;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+    }
+
+    .product-item:hover {
+        transform: scale(1.02);
+    }
+
+    .product-item img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        margin-right: 10px;
+    }
+
+    .product-info {
+        padding: 10px;
+        flex-grow: 1;
+    }
+
+    .product-info h3 {
+        font-size: 16px;
+        margin: 0;
+    }
+
+    .product-price {
+        color: #ff4500;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .banner-heading {
+        width: 100%;
+        text-align: center;
+        font-size: 48px;
+        font-weight: bold;
+        color: rgb(255, 255, 255);
+        margin-bottom: 20px;
+    }
+
+    .product-description {
+        font-size: 14px;
+        color: #666; /* Açıklama metni rengi */
+        margin: 5px 0; /* Üst ve alt boşluk */
+    }
+
+    .product-price-wrapper {
+        display: flex;
+        justify-content: flex-start;
+        align-items: baseline;
+    }
+
+    .product-old-price {
+        text-decoration: line-through;
+        color: #777;
+        margin-right: 6px; /* Eski fiyatla indirimli fiyat arasında boşluk */
+    }
+
+    .product-discount-price, .product-final-price {
+        color: #ff4500;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    /* Mobil cihazlar için medya sorgusu */
+    @media (max-width: 768px) {
+        .banner-container {
+            flex-direction: column; /* Dikey düzende göster */
+        }
+
+        .banner-left h1 {
+            font-size: 36px;
+            left: 50%; /* Sol kenarı ortala */
+            transform: translateX(-50%); /* Yazıyı tam ortalamak için */
+            top: 40px; /* Yukarıdan biraz daha fazla boşluk bırak */
+        }
+
+        .tabRetail {
+            margin-bottom: 10px; /* Ürünlerden önce biraz boşluk bırak */
+        }
+
+        .tabcontentSales {
+            grid-template-columns: 1fr; /* Mobilde tek sütun */
+        }
+
+        .product-item img {
+            width: 60px;
+            height: 60px;
+        }
+
+        .product-info h3 {
+            font-size: 14px;
+        }
+
+        .product-price {
+            font-size: 14px;
+        }
+    }
+
+    .banner-heading {
+        width: 100%;
+        text-align: center;
+        font-size: 48px;
+        font-weight: bold;
+        color: black;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="banner-container" style="margin-top: 50px;">
+    <!-- Sağ: Tab Menü ve Ürün Listesi -->
+    <div class="banner-right">
+        <div class="tabRetail">
+            <button class="tablinksales active" onclick="openTabSales(event, 'trendsales')" id="defaultOpenretail">Trend Ürünler</button>
+            <button class="tablinksales" onclick="openTabSales(event, 'encokSales')">Çok Satanlar</button>
+        </div>
+    
+        <!-- Trend Ürünler Tabı -->
+        <div id="trendsales" class="tabcontentSales active">
+            {% for product in featured_products|slice:"4" %}
+            <div class="product-item">
+                <div class="product-image">
+                    {% with first_image=product.related_products.first %}
+                        {% if first_image %}
+                        <a href="{% url 'products:product-detail-view' product.slug %}" title="{{ first_image.img_title }}">
+                            <img src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}" loading="lazy">
+                        </a>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+           
+                <div class="product-info">
+                    <a href="{% url 'products:product-detail-view' product.slug %}" title="{{ first_image.img_title }}">
+                        <h3>{{ product.name }}</h3>
+                    </a>
+                    
+                    <p class="product-description">{{ product.description|truncatewords:15|safe }}</p> 
+                    <div class="product-price-wrapper">
+                        {% if product.selling_old_price %}
+                            <span class="product-old-price">{{ product.selling_old_price }} ₺</span>
+                            <span class="product-discount-price">{{ product.selling_price }} ₺</span>
+                        {% else %}
+                            <span class="product-final-price">{{ product.selling_price}} ₺</span>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+
+    
+        <!-- En Çok Satanlar Tabı -->
+        <div id="encokSales" class="tabcontentSales">
+            {% for product in best_seller_products|slice:"4" %}
+            <div class="product-item">
+                <div class="product-image">
+                    {% with first_image=product.related_products.first %}
+                        {% if first_image %}
+                        <a href="{% url 'products:product-detail-view' product.slug %}" title="{{ first_image.img_title }}">
+                            <img src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}" loading="lazy">
+                        </a>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+                <div class="product-info">
+                    <a href="{% url 'products:product-detail-view' product.slug %}" title="{{ first_image.img_title }}">
+                        <h3>{{ product.name }}</h3>
+                    </a>
+                    
+                    <p class="product-description">{{ product.description|truncatewords:15|safe }}</p> 
+                    <div class="product-price-wrapper">
+                        {% if product.selling_old_price %}
+                            <span class="product-old-price">{{ product.selling_old_price }} ₺</span>
+                            <span class="product-discount-price">{{ product.selling_price }} ₺</span>
+                        {% else %}
+                            <span class="product-final-price">{{ product.selling_price}} ₺</span>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Sol: Banner Resmi -->
+    <div class="banner-left">
+        <img src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/Site-Images/black-friday-elements-assortment.jpg" alt="Banner Resmi" loading="lazy">
+        <a href="{% url 'main:sales_product_list_view' %}"><h1 class="banner-heading">Satın Al</h1></a>
+
+    </div>
+</div>
+
+
+<script>
+    function openTabSales(evt, tabName) {
+        var i, tabcontentSales, tablinksales;
+        tabcontentSales = document.getElementsByClassName("tabcontentSales");
+        for (i = 0; i < tabcontentSales.length; i++) {
+            tabcontentSales[i].classList.remove("active");
+        }
+        tablinksales = document.getElementsByClassName("tablinksales");
+        for (i = 0; i < tablinksales.length; i++) {
+            tablinksales[i].classList.remove("active");
+        }
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.classList.add("active");
+    }
+
+    // Varsayılan olarak açılacak sekme
+    document.getElementById("defaultOpenretail").click();
+</script>
+{% endblock %}
