@@ -244,7 +244,15 @@
                 <div class="row">
                     <div class="col-xs-12">
 
-                        <div class="mt-mainslider3"></div>
+                        {% if retails_products.best_seller_products|length > 0 or retails_products.featured_products|length > 0 or retails_products.latest_products|length > 0 %}
+                            {% include 'coreBase/retail.html' %}
+                        {% endif %}
+
+                        {% include 'coreBase/sales.html' %}
+                        
+                        
+
+                        <div class="mt-mainslider3">
                             <div class="slider banner-slider">
                                
                                 {% for banner in homemainbanners %}
@@ -265,16 +273,6 @@
                                 {% endfor %}
                             </div>
                         </div>
-
-                        {% if retails_products.best_seller_products|length > 0 or retails_products.featured_products|length > 0 or retails_products.latest_products|length > 0 %}
-                            {% include 'coreBase/retail.html' %}
-                        {% endif %}
-
-                        {% include 'coreBase/sales.html' %}
-                        
-                        
-
-                        
                         
                         <div class="banner-frame mt-paddingsmzero">
                             {% for banner in banners %}
