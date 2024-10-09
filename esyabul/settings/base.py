@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "ipware",  
     "blog",
     'django_prometheus',
+    'shipping'
     ]
 
 MIDDLEWARE = [
