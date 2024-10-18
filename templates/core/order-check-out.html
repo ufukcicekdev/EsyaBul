@@ -44,6 +44,66 @@
   cursor: pointer;
 }
 
+
+.card {
+    background-color: #ffffff; /* Kart arka plan rengi */
+    border: 1px solid #ddd; /* Kart kenar rengi */
+    border-radius: 8px; /* Köşe yuvarlama */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Gölgelendirme */
+    margin: 20px; /* Kartlar arası boşluk */
+    padding: 20px; /* İç boşluk */
+    transition: box-shadow 0.3s; /* Geçiş animasyonu */
+}
+
+.card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Hover efektinde gölge artışı */
+}
+
+.card-header {
+    background-color: #f5f5f5; /* Başlık arka plan rengi */
+    font-size: 1.25rem; /* Başlık font boyutu */
+    font-weight: bold; /* Kalın yazı */
+    padding: 10px; /* Başlık iç boşluğu */
+    border-bottom: 1px solid #ddd; /* Başlık ve içerik arasındaki sınır */
+    border-top-left-radius: 8px; /* Sol üst köşe yuvarlama */
+    border-top-right-radius: 8px; /* Sağ üst köşe yuvarlama */
+}
+
+.card-body {
+    padding: 15px; /* İçerik alanı iç boşluğu */
+}
+
+.card-body p {
+    margin: 10px 0; /* Paragraf arası boşluk */
+    font-size: 1rem; /* Paragraf font boyutu */
+    line-height: 1.5; /* Satır yüksekliği */
+    color: #333; /* Yazı rengi */
+}
+
+strong {
+    color: #000; /* Kalın yazı rengi */
+}
+
+.title_header {
+    font-size: 2.5rem; /* Başlık boyutu */
+    font-weight: bold; /* Kalın yazı */
+    color: #333; /* Yazı rengi */
+    text-align: center; /* Ortalanmış yazı */
+    margin-bottom: 20px; /* Alt boşluk */
+    text-transform: uppercase; /* Büyük harfle yazma */
+    letter-spacing: 1px; /* Harfler arası boşluk */
+    font-family: 'Arial', sans-serif; /* Yazı tipi */
+}
+.title_header::after {
+    content: ""; /* İçerik eklemek için boş bir element */
+    display: block; /* Blok düzende göster */
+    width: 50%; /* Genişlik */
+    height: 4px; /* Yükseklik */
+    background-color: #007bff; /* Alt çizgi rengi */
+    margin: 10px auto; /* Ortalamak için margin */
+}
+
+
 </style>
 
 <div id="wrapper">
@@ -107,129 +167,89 @@
                 <div class="container">
                     
                     <div class="row">
-                        {% if user_addresses.count > 0 %}
                         <div class="col-xs-12 col-sm-6">
-                            <ul class="nav nav-tabs" id="myTabs" role="tablist">
-                                <li class="nav-item order-tab">
-                                    <a class="nav-link active" id="order-address-tab" data-toggle="tab" href="#order-address" role="tab" aria-controls="order-address" aria-selected="true">Sipariş Adresi</a>
-                                </li>
-                                <li class="nav-item billing-tab">
-                                    <a class="nav-link" id="billing-address-tab" data-toggle="tab" href="#billing-address" role="tab" aria-controls="billing-address" aria-selected="false">Fatura Adresi</a>
-                                </li>
-                            </ul>
+                            
+                            
                             <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="order-address" role="tabpanel" aria-labelledby="order-address-tab">
-                                    <!-- Sipariş Adresi Formu -->
-                                    <form action="#" class="bill-detail">
-                                        <fieldset>
-                                            <div class="form-group">
-                                                <select class="form-control" id="order-address-select" onchange="fillOrderAddressDetails()">
-                                                    <option value="">Adres Seçiniz</option>
-                                                    {% for address in user_addresses %}
-                                                    <option value="{{ address.id }}">{{ address.address_name }}</option>
-                                                    {% endfor %}
-                                                </select>
+                                <div class="tab-panel delivery" id="order-address" role="tabpanel" aria-labelledby="order-address-tab">
+                                    {% if delivery_addresses.count > 0 %}
+
+                                        <h1 class="title_header">Teslimat Adresim</h1>
+                                        <form action="#" class="bill-detail">
+                                            <fieldset>
+                                                <div class="form-group">
+                                                    <select class="form-control" id="order-address-select" onchange="fillOrderAddressDetails()">
+                                                        <option value="">Adres Seçiniz</option>
+                                                        {% for address in delivery_addresses %}
+                                                        <option value="{{ address.id }}" {% if default_delivery_address and address.id == default_delivery_address.id %}selected{% endif %}>
+                                                            {{ address.address_name }}
+                                                        </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <p><strong>Alıcı Adı:</strong> <span id="name"></span></p>
+                                                        <p><strong>Adress Adı:</strong> <span id="addresses_name"></span></p>
+                                                        <p><strong>Adres:</strong> <span id="city_region_negn"></span></p>
+                                                        <p><strong>Açık Adres:</strong> <span id="address_line1"></span></p>
+                                                        <p><strong>Telefon:</strong> <span id="phone"></span></p>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </form>
+                                    {% else %}
+                                    <div class="container text-center">
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-12">
+                                            <h3 class="title">Teslimat Adresi Ekleyin</h3>
+                                            <button class="btn-type3" onclick="handleDeliveryAddressAddedClick()" type="submit">Adres Ekle</button> 
                                             </div>
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" placeholder="Ad" id="name" readonly>
-                                                <input type="text" class="form-control" placeholder="Soyad" id="last_name" readonly>
-                                            </div>
-                                    
-                                            <div class="form-group" id="company_name_field" style="display: none;">
-                                                <input type="text" class="form-control" placeholder="Şirket Adı" id="company_name" readonly>
-                                            </div>
-                                    
-                                            <div class="form-group" id="company_taxcode" style="display: none;">
-                                                <input type="text" class="form-control" placeholder="Vergi Numarası" id="firm_taxcode" readonly>
-                                            </div>
-                                    
-                                            <div class="form-group" id="company_tax_home" style="display: none;">
-                                                <input type="text" class="form-control" placeholder="Vergi Dairesi" id="firm_taxhome" readonly>
-                                            </div>
-                                    
-                                            <div class="form-group">
-                                                <textarea class="form-control" placeholder="Adres" id="address_line1" readonly></textarea>
-                                            </div>
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" placeholder="Şehir" id="town_city" readonly>
-                                            </div>
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" placeholder="İl / Ülke" id="state_country" readonly>
-                                            </div>
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" placeholder="Posta Kodu / Zip" id="postcode_zip" readonly>
-                                            </div>
-                                            <div class="form-group">
-                                                <input type="email" class="form-control" placeholder="E-posta Adresi" id="email" readonly>
-                                                <input type="tel" class="form-control" placeholder="Telefon Numarası" id="phone" readonly>
-                                            </div>
-                                    
-                                            <div class="form-group">
-                                                <textarea class="form-control" placeholder="Sipariş Notları" id="order_notes"></textarea>
-                                            </div>
-                                        </fieldset>
-                                    </form>
+                                        </div>
+                                    </div>
+                                    {% endif %}
                                 </div>
-                                <div class="tab-pane fade show" id="billing-address" role="tabpanel" aria-labelledby="billing-address-tab">
-                                    <!-- Fatura Adresi Formu -->
+                                <div class="tab-panel billing" id="billing-address" role="tabpanel" aria-labelledby="billing-address-tab">
+                                    {% if billing_addresses.count > 0 %}
+                                    <h1 class="title_header">Fatura Adresim</h1>
                                     <form action="#" class="bill-detail" id="billing-form">
                                         <fieldset>
                                             <div class="form-group">
                                                 <select class="form-control" id="billing-address-select" onchange="fillBillingAddressDetails()">
                                                     <option value="">Adres Seçiniz</option>
-                                                    {% for address in user_addresses %}
-                                                    <option value="{{ address.id }}">{{ address.address_name }}</option>
+                                                    {% for address in billing_addresses %}
+                                                    <option value="{{ address.id }}" {% if default_billing_address and address.id == default_billing_address.id %}selected{% endif %}>
+                                                        {{ address.address_name }}
+                                                    </option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" placeholder="Ad" id="name1" readonly>
-                                                <input type="text" class="form-control" placeholder="Soyad" id="last_name1" readonly>
-                                            </div>
-                                    
-                                            <div class="form-group" id="company_name_field" style="display: none;">
-                                                <input type="text" class="form-control" placeholder="Şirket Adı" id="company_name1" readonly>
-                                            </div>
-                                    
-                                            <div class="form-group" id="company_taxcode" style="display: none;">
-                                                <input type="text" class="form-control" placeholder="Vergi Numarası" id="firm_taxcode1" readonly>
-                                            </div>
-                                    
-                                            <div class="form-group" id="company_tax_home" style="display: none;">
-                                                <input type="text" class="form-control" placeholder="Vergi Dairesi" id="firm_taxhome1" readonly>
-                                            </div>
-                                    
-                                            <div class="form-group">
-                                                <textarea class="form-control" placeholder="Adres" id="address_line11" readonly></textarea>
-                                            </div>
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" placeholder="Şehir" id="town_city1" readonly>
-                                            </div>
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" placeholder="İl / Ülke" id="state_country1" readonly>
-                                            </div>
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" placeholder="Posta Kodu / Zip" id="postcode_zip1" readonly>
-                                            </div>
-                                            <div class="form-group">
-                                                <input type="email" class="form-control" placeholder="E-posta Adresi" id="email1" readonly>
-                                                <input type="tel" class="form-control" placeholder="Telefon Numarası" id="phone1" readonly>
-                                            </div>
-
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <p><strong>Alıcı Adı:</strong> <span id="name1"></span></p>
+                                                    <p><strong>Adress Adı:</strong> <span id="addresses_name1"></span></p>
+                                                    <p><strong>Adres:</strong> <span id="city_region_negn1"></span></p>
+                                                    <p><strong>Açık Adres:</strong> <span id="address_line2"></span></p>
+                                                    <p><strong>Telefon:</strong> <span id="phone1"></span></p>
+                                                </div>
+                                            </div>                                            
                                         </fieldset>
                                     </form>
+                                    {% else %}
+                                    <div class="container text-center">
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-12">
+                                            <h3 class="title">Fatura Adresi Ekleyin</h3>
+                                            <button class="btn-type3" onclick="handleBillingAddressAddedClick()" type="submit">Adres Ekle</button> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
-                     
-                        {% else %}
-                        <div class="col-xs-12 col-sm-6">
-                            <div class="block-holder">
-                                <p>Siparişe devam edebilmek için adres eklemeniz gerekmektedir</p>
-                                <a href="{% url 'customerauth:address-list' %}" class="process-btn">Adress Ekle <i class="fa fa-check"></i></a>
-                            </div>
-                        </div>
-                        {% endif %}
+                    
 
                         <div class="col-xs-12 col-sm-6">
                             <div class="holder">
@@ -322,7 +342,7 @@
                     <button class="btn-type3" onclick="handleArrowClick()" type="submit">Anasayfa</button> 
                     </div>
                 </div>
-                </div>
+            </div>
             {% endif %}
             <!-- Mt Detail Section of the Page end -->
           </main>
@@ -334,177 +354,137 @@
 </div>
 
 
+
 <script>
-    var addresses = [
-        {% for address in user_addresses %}
+    var delivery_addresses = [
+        {% for delivery in delivery_addresses %}
             {
-                id: "{{ address.id }}",
-                username: "{{ address.username }}",
-                usersurname: "{{ address.usersurname }}",
-                firm_name: "{{ address.firm_name }}",
-                address_line1: "{{ address.address_line1 }}",
-                city: "{{ address.city }}",
-                region: "{{ address.region }}",
-                postal_code: "{{ address.postal_code }}",
-                email: "{{ address.user.email }}",
-                phone: "{{ address.phone }}"
+                id: "{{ delivery.id }}",
+                username: "{{ delivery.username }}",
+                usersurname: "{{ delivery.usersurname }}",
+                address_name: "{{ delivery.address_name }}",
+                address_line1: "{{ delivery.address_line1 }}",
+                city: "{{ delivery.city }}",
+                region: "{{ delivery.region }}",
+                neighborhood: "{{ delivery.neighborhood }}",
+                phone: "{{ delivery.phone }}",
             },
         {% endfor %}
     ];
     
     function fillOrderAddressDetails() {
-    var selectedOrderId = document.getElementById('order-address-select').value;
-    var selectedAddress = addresses.find(address => address.id == selectedOrderId);
+        var orderAddressSelect = document.getElementById('order-address-select');
+        if (orderAddressSelect) {
+            var selectedOrderId = orderAddressSelect.value;
+            var selectedAddress = delivery_addresses.find(delivery => delivery.id == selectedOrderId);
+            console.log("selectedAddress", selectedAddress);
 
-    if (selectedAddress) {
-        document.getElementById('name').value = selectedAddress.username;
-        document.getElementById('last_name').value = selectedAddress.usersurname;
-        document.getElementById('address_line1').value = selectedAddress.address_line1;
-        document.getElementById('town_city').value = selectedAddress.city;
-        document.getElementById('state_country').value = selectedAddress.region;
-        document.getElementById('postcode_zip').value = selectedAddress.postal_code;
-        document.getElementById('email').value = selectedAddress.email;
-        document.getElementById('phone').value = selectedAddress.phone;
-        document.getElementById('company_name').value = selectedAddress.firm_name;
-        document.getElementById('firm_taxcode').value = selectedAddress.firm_taxcode;
-        document.getElementById('firm_taxhome').value = selectedAddress.firm_tax_home;
+            if (selectedAddress) {
+                document.getElementById('name').innerText = selectedAddress.username + " " + selectedAddress.usersurname;
+                document.getElementById('addresses_name').innerText = selectedAddress.address_name;
+                document.getElementById('city_region_negn').innerText = selectedAddress.city + "/" + selectedAddress.region + "/" + selectedAddress.neighborhood;
+                document.getElementById('address_line1').innerText = selectedAddress.address_line1;
+                document.getElementById('phone').innerText = selectedAddress.phone;
+            } else {
+                document.getElementById('name').innerText = '';
+                document.getElementById('addresses_name').innerText = '';
+                document.getElementById('city_region_negn').innerText = '';
+                document.getElementById('address_line1').innerText = '';
+                document.getElementById('phone').innerText = '';
+            }
+        }
+    }
 
-        var addressType = selectedAddress.address_type;
-        if (addressType === '2') {
-            document.getElementById('company_name').style.display = 'block';
-            document.getElementById('firm_taxcode').style.display = 'block';
-            document.getElementById('firm_taxhome').style.display = 'block';
+    var billing_addresses = [
+        {% for billing in billing_addresses %}
+            {
+                id: "{{ billing.id }}",
+                username1: "{{ billing.username }}",
+                usersurname1: "{{ billing.usersurname }}",
+                address_name1: "{{ billing.address_name }}",
+                address_line2: "{{ billing.address_line1 }}",
+                city1: "{{ billing.city }}",
+                region1: "{{ billing.region }}",
+                neighborhood1: "{{ billing.neighborhood }}",
+                phone1: "{{ billing.phone }}",
+            },
+        {% endfor %}
+    ];
 
+    function fillBillingAddressDetails() {
+        var billingAddressSelect = document.getElementById('billing-address-select');
+        if (billingAddressSelect) {
+            var selectedBillingId = billingAddressSelect.value;
+            var selectedAddress = billing_addresses.find(billing => billing.id == selectedBillingId);
+
+            if (selectedAddress) {
+                document.getElementById('name1').innerText = selectedAddress.username1 + " " + selectedAddress.usersurname1;
+                document.getElementById('addresses_name1').innerText = selectedAddress.address_name1;
+                document.getElementById('city_region_negn1').innerText = selectedAddress.city1 + "/" + selectedAddress.region1 + "/" + selectedAddress.neighborhood1;
+                document.getElementById('address_line2').innerText = selectedAddress.address_line2;
+                document.getElementById('phone1').innerText = selectedAddress.phone1;
+            } else {
+                document.getElementById('name1').innerText = '';
+                document.getElementById('addresses_name1').innerText = '';
+                document.getElementById('city_region_negn1').innerText = '';
+                document.getElementById('address_line2').innerText = '';
+                document.getElementById('phone1').innerText = '';
+            }
+        }
+    }
+
+    document.getElementById("submit-order-btn")?.addEventListener("click", function(event) {
+        var selectedAddressId = document.getElementById("order-address-select")?.value;
+        var selectedBillingAddressId = document.getElementById("billing-address-select")?.value;
+        var useOrderAddressCheckbox = document.getElementById('use-order-address').checked;
+        var cardId = "{{ cart_id }}";  
+
+        if (selectedAddressId && (selectedBillingAddressId || useOrderAddressCheckbox)) {
+            document.getElementById("selected-address-id").value = selectedAddressId; 
+            document.getElementById("selected-billing-address-id").value = useOrderAddressCheckbox ? selectedAddressId : selectedBillingAddressId; 
+            document.getElementById("card-id").value = cardId; 
+            document.getElementById("order-total").value = "{{ cart_total }}"; 
+            document.getElementById("created-date").value = currentDate(); 
+            document.getElementById("order-status").value = "Processing"; 
+            document.getElementById("order-form").submit();
         } else {
-            document.getElementById('company_name').style.display = 'none';
-            document.getElementById('firm_taxcode').style.display = 'none';
-            document.getElementById('firm_taxhome').style.display = 'none';
+            console.error("Addresses are not selected!");
+        }
 
-        }  
+        event.preventDefault();
+    });
+
+    function currentDate() {
+        var now = new Date();
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+        var year = now.getFullYear();
+        return year + "-" + month + "-" + day;
     }
-}
 
-function fillBillingAddressDetails() {
-    var selectedBillingId = document.getElementById('billing-address-select').value;
-    var selectedAddress = addresses.find(address => address.id == selectedBillingId);
-
-    if (selectedAddress) {
-        document.getElementById('name1').value = selectedAddress.username;
-        document.getElementById('last_name1').value = selectedAddress.usersurname;
-        document.getElementById('address_line11').value = selectedAddress.address_line1;
-        document.getElementById('town_city1').value = selectedAddress.city;
-        document.getElementById('state_country1').value = selectedAddress.region;
-        document.getElementById('postcode_zip1').value = selectedAddress.postal_code;
-        document.getElementById('email1').value = selectedAddress.email;
-        document.getElementById('phone1').value = selectedAddress.phone;
-        document.getElementById('company_name1').value = selectedAddress.firm_name;
-        document.getElementById('firm_taxcode1').value = selectedAddress.firm_taxcode;
-        document.getElementById('firm_taxhome1').value = selectedAddress.firm_tax_home;
-
-        var addressType = selectedAddress.address_type;
-        if (addressType === '2') {
-            document.getElementById('company_name1').style.display = 'block';
-            document.getElementById('firm_taxcode1').style.display = 'block';
-            document.getElementById('firm_taxhome1').style.display = 'block';
-
-        } else {
-            document.getElementById('company_name1').style.display = 'none';
-            document.getElementById('firm_taxcode1').style.display = 'none';
-            document.getElementById('firm_taxhome1').style.display = 'none';
-
-        }  
+    function openTermsPopup() {
+        var termsPopup = document.getElementById("termsPopup");
+        if (termsPopup) {
+            termsPopup.style.display = "block";
+        }
     }
-}
 
-function toggleCompanyFields() {
-    var addressType = document.getElementById('address_type').value;
-    var firmNameInput = document.getElementById('company_name');
-    var firmTaxcodeInput = document.getElementById('firm_taxcode');
-    var firmTaxHomeInput = document.getElementById('firm_tax_home');
-
-    if (addressType == 2) {
-        // Adres tipi 2 ise alanları etkinleştir
-        firmNameInput.disabled = false;
-        firmTaxcodeInput.disabled = false;
-        firmTaxHomeInput.disabled = false;
-    } else {
-        // Diğer durumlarda alanları devre dışı bırak
-        firmNameInput.disabled = true;
-        firmTaxcodeInput.disabled = true;
-        firmTaxHomeInput.disabled = true;
+    function closeTermsPopup() {
+        var termsPopup = document.getElementById("termsPopup");
+        if (termsPopup) {
+            termsPopup.style.display = "none";
+        }
     }
-}
 
-
-document.getElementById("use-order-address").addEventListener("change", function() {
-    var billingForm = document.getElementById("billing-form");
-    var billingTab = document.getElementById("billing-address-tab");
-    if (this.checked) {
-        // Checkbox işaretli ise, Fatura Adresi sekmesini gizle
-        billingForm.style.display = "none";
-        billingTab.style.display = "none";
-    } else {
-        // Checkbox işaretli değilse, Fatura Adresi sekmesini göster
-        billingForm.style.display = "block";
-        billingTab.style.display = "block";
+    window.onclick = function(event) {
+        var termsPopup = document.getElementById("termsPopup");
+        if (event.target == termsPopup) {
+            termsPopup.style.display = "none";
+        }
     }
-});
 
-
-// Sipariş tamamla butonuna tıklanınca
-document.getElementById("submit-order-btn").addEventListener("click", function(event) {
-    // Form elemanlarının değerlerini al
-    var selectedAddressId = document.getElementById("order-address-select").value; // Sipariş adresinin ID'sini alır
-    var selectedBillingAddressId = document.getElementById("billing-address-select").value; // Fatura adresinin ID'sini alır
-    var cardId = "{{ cart_id }}";  // Kullanılan kartın ID'sini alır
-
-    // Diğer gerekli verileri de alabilirsiniz
-
-    // Formu sunucuya göndermek için önce gerekli alanları doldur
-    document.getElementById("selected-address-id").value = selectedAddressId; 
-    document.getElementById("selected-billing-address-id").value = selectedBillingAddressId; 
-    document.getElementById("card-id").value = cardId; 
-    document.getElementById("order-total").value = "{{ cart_total }}"; 
-    document.getElementById("created-date").value = currentDate(); 
-    document.getElementById("order-status").value = "Processing"; 
-
-    // Gizli formu sunucuya gönder
-    document.getElementById("order-form").submit();
-
-    // Sayfanın yeniden yüklenmesini engelle
-    event.preventDefault();
-});
-
-function currentDate() {
-    var now = new Date();
-    var day = ("0" + now.getDate()).slice(-2);
-    var month = ("0" + (now.getMonth() + 1)).slice(-2);
-    var year = now.getFullYear();
-    return year + "-" + month + "-" + day;
-}
-
-
-// Popup'ı aç
-function openTermsPopup() {
-  var termsPopup = document.getElementById("termsPopup");
-  termsPopup.style.display = "block";
-}
-
-// Popup'ı kapat
-function closeTermsPopup() {
-  var termsPopup = document.getElementById("termsPopup");
-  termsPopup.style.display = "none";
-}
-
-window.onclick = function(event) {
-  var termsPopup = document.getElementById("termsPopup");
-  if (event.target == termsPopup) {
-    termsPopup.style.display = "none";
-  }
-}
-
-
-function toggleSubmitButton() {
+   
+    function toggleSubmitButton() {
     var checkbox = document.querySelector('#termsCheckbox');
     var submitButtons = document.querySelectorAll('.btn-type3.process-btn');
     var termsMessage = document.getElementById('termsMessage');
@@ -512,48 +492,101 @@ function toggleSubmitButton() {
     var billingAddress = document.getElementById('billing-address-select');
     var useOrderAddressCheckbox = document.getElementById('use-order-address');
 
-    if (useOrderAddressCheckbox.checked && orderAddress.value && checkbox.checked) {
-        submitButtons.forEach(function(button) {
-            button.disabled = false; 
-        });
-        termsMessage.style.display = 'none'; 
+    var billing_addresses_tab = document.getElementById('billing-address');
+
+    // Eğer "Teslimat adresini fatura adresi olarak kullan" seçildiyse fatura adresini gizle
+    if (useOrderAddressCheckbox.checked) {
+        if (billingAddress && billingAddress.parentElement) {
+            billing_addresses_tab.style.display = 'none';
+        }
+    } else {
+        if (billingAddress && billingAddress.parentElement) {
+            billing_addresses_tab.style.display = 'block';
+        }
+    }
+
+    // Uyarı mesajlarını ve buton durumunu kontrol et
+    if (checkbox.checked) {
+        if (useOrderAddressCheckbox.checked) {
+            // Eğer "Fatura adresini kullan" işaretliyse sadece sipariş adresine bak
+            if (orderAddress && orderAddress.value) {
+                submitButtons.forEach(function(button) {
+                    button.disabled = false;
+                });
+                termsMessage.style.display = 'none';
+            } else {
+                submitButtons.forEach(function(button) {
+                    button.disabled = true;
+                });
+                termsMessage.textContent = 'Lütfen sipariş adresini seçiniz.';
+                termsMessage.style.display = 'block';
+            }
+        } else {
+            // Fatura adresi kullanılıyorsa her iki adresin de seçildiğinden emin ol
+            if (orderAddress && orderAddress.value && billingAddress && billingAddress.value) {
+                submitButtons.forEach(function(button) {
+                    button.disabled = false;
+                });
+                termsMessage.style.display = 'none';
+            } else {
+                submitButtons.forEach(function(button) {
+                    button.disabled = true;
+                });
+
+                if (!orderAddress || !orderAddress.value) {
+                    termsMessage.textContent = 'Lütfen sipariş adresini seçiniz.';
+                } else if (!billingAddress || !billingAddress.value) {
+                    termsMessage.textContent = 'Lütfen fatura adresini seçiniz.';
+                }
+                termsMessage.style.display = 'block';
+            }
+        }
     } else {
         submitButtons.forEach(function(button) {
-            button.disabled = true; 
+            button.disabled = true;
         });
-
-        // Tüm koşullar sağlanmadığında mesajı ayarla
-        if (!checkbox.checked) {
-            termsMessage.textContent = 'Şartları kabul etmelisiniz.'; // Şartlar kabul edilmediyse mesajı ayarla
-        } else if (!orderAddress.value || !billingAddress.value) {
-            termsMessage.textContent = 'Lütfen sipariş ve fatura adreslerini seçiniz.'; // Adresler seçilmediyse mesajı ayarla
-        } else {
-            termsMessage.style.display = 'block'; // Adres seçimi yapılmışsa termsMessage alanını göster
-        }
+        termsMessage.textContent = 'Şartları kabul etmelisiniz.';
+        termsMessage.style.display = 'block';
     }
 }
 
+    window.onload = function() {
+        toggleSubmitButton();
+        fillOrderAddressDetails(); 
+        fillBillingAddressDetails();
+        var checkbox = document.querySelector('#termsCheckbox');
+        checkbox?.addEventListener('change', toggleSubmitButton);
+        var orderAddress = document.getElementById('order-address-select');
+        orderAddress?.addEventListener('change', function() {
+            fillOrderAddressDetails();
+            toggleSubmitButton();
+        });
+        var billingAddress = document.getElementById('billing-address-select');
+        billingAddress?.addEventListener('change', function() {
+            fillBillingAddressDetails();
+            toggleSubmitButton();
+        });
+        var useOrderAddressCheckbox = document.getElementById('use-order-address');
+        useOrderAddressCheckbox?.addEventListener('change', toggleSubmitButton);
+    };
 
-window.onload = function() {
-    toggleSubmitButton(); // Sayfa yüklendiğinde buton durumunu ayarla
-    var checkbox = document.querySelector('#termsCheckbox');
-    checkbox.addEventListener('change', toggleSubmitButton); // Checkbox durumu değiştiğinde buton durumunu güncelle
-    var orderAddress = document.getElementById('order-address-select');
-    orderAddress.addEventListener('change', toggleSubmitButton); // Sipariş adresi seçimi değiştiğinde buton durumunu güncelle
-    var billingAddress = document.getElementById('billing-address-select');
-    billingAddress.addEventListener('change', toggleSubmitButton); // Fatura adresi seçimi değiştiğinde buton durumunu güncelle
-    var useOrderAddressCheckbox = document.getElementById('use-order-address');
-    useOrderAddressCheckbox.addEventListener('change', toggleSubmitButton); // Kullan sipariş adresini seçimi değiştiğinde buton durumunu güncelle
-};
+    function handleArrowClick() {
+        var redirectURL = "{% url 'main:home' %}";
+        window.location.href = redirectURL;
+    }
+
+    function handleDeliveryAddressAddedClick() {
+        var redirectURL = "{% url 'customerauth:create-address' %}?address_type=delivery";
+        window.location.href = redirectURL;
+    }
+
+    function handleBillingAddressAddedClick() {
+        var redirectURL = "{% url 'customerauth:create-address' %}?address_type=billing";
+        window.location.href = redirectURL;
+    }
+</script>
 
 
-function handleArrowClick() {
-    var redirectURL = "{% url 'main:home' %}";
-    window.location.href = redirectURL;
-}
-
-    </script>
-    
 {% endblock %}
 
 

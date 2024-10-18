@@ -13,28 +13,22 @@
     </div> 
     <!-- W1 start here -->
     <div class="w1">
-        <!-- mt header style4 start here -->
         {% include 'coreBase/header.html' %}
         <main id="mt-main">  
-            <section class="mt-contact-banner mt-banner-22" style="background-image: url({% static 'images/img-76.jpg' %}); background-size: cover; background-position: center;">
+            <section class="mt-contact-banner mt-banner-22" style="background-image: url({% static 'images/img-76.jpg' %});">
                 <div class="container">
-                  <div class="row">
-                    <div class="col-xs-12">
-                      <h1 class="text-center">Hesabım</h1>
-                      <!-- Breadcrumbs of the Page -->
-                      <nav class="breadcrumbs">
+                    <h1 class="text-center">Hesabım</h1>
+                    <!-- Breadcrumbs of the Page -->
+                    <nav class="breadcrumbs">
                         <ul class="list-unstyled">
-                          <li><a href="{% url 'main:home' %}">Anasayfa <i class="fa fa-angle-right"></i></a></li>
-                          <li><a href="{% url 'customerauth:dashboard' %}">Hesabım <i class="fa fa-angle-right"></i></a></li>
-                          <li>Adreslerim</li>
+                            <li><a href="{% url 'main:home' %}">Anasayfa <i class="fa fa-angle-right"></i></a></li>
+                            <li><a href="{% url 'customerauth:dashboard' %}">Hesabım <i class="fa fa-angle-right"></i></a></li>
+                            <li>Adreslerim</li>
                         </ul>
-                      </nav>
-                      <!-- Breadcrumbs of the Page end -->
-                    </div>
-                  </div>
+                    </nav>
+                    <!-- Breadcrumbs of the Page end -->
                 </div>
-              </section>
-
+            </section>
         </main>
         
         <main class="site-main">
@@ -46,42 +40,36 @@
                             <div class="accountList">
                                 <ul class="sc-ecPEgm dCbnuA">
                                     <li class="sc-gdyeKB xqfpj"><button onclick="getOrders()" class="sc-kzqdkY edqiAa title-bold-16-19">Siparişlerim</button></li>
-                                    <li class="sc-gdyeKB xqfpj"><button onclick="getAddress()" class="sc-kzqdkY hIpJTj title-bold-16-19">Adres
-                                            Bilgilerim</button></li>
-                                            <li class="sc-gdyeKB xqfpj"><button onclick="getProfile()" class="sc-kzqdkY edqiAa title-bold-16-19">Kişisel
-                                                Bilgiler</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getAddress()" class="sc-kzqdkY hIpJTj title-bold-16-19">Adres Bilgilerim</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getProfile()" class="sc-kzqdkY edqiAa title-bold-16-19">Kişisel Bilgiler</button></li>
                                     <li class="sc-gdyeKB xqfpj"><button onclick="getEmailChange()" class="sc-kzqdkY edqiAa title-bold-16-19">Email Bilgilerim</button></li>
-                                    <li class="sc-gdyeKB xqfpj"><button onclick="getNotify()" class="sc-kzqdkY edqiAa title-bold-16-19">Bildirim
-                                            Ayarları</button></li>
-                                            {% if not user.social_auth.exists %}
-                                    <li class="sc-gdyeKB xqfpj"><button onclick="getPasswordProcess()" class="sc-kzqdkY edqiAa title-bold-16-19">Şifre
-                                            İşlemleri</button></li>
-                                            {% endif %}
-                                    <li class="sc-gdyeKB xqfpj"><button onclick="logOut()" class="sc-kzqdkY edqiAa title-bold-16-19">Çıkış
-                                            Yap</button></li>
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getNotify()" class="sc-kzqdkY edqiAa title-bold-16-19">Bildirim Ayarları</button></li>
+                                    {% if not user.social_auth.exists %}
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="getPasswordProcess()" class="sc-kzqdkY edqiAa title-bold-16-19">Şifre İşlemleri</button></li>
+                                    {% endif %}
+                                    <li class="sc-gdyeKB xqfpj"><button onclick="logOut()" class="sc-kzqdkY edqiAa title-bold-16-19">Çıkış Yap</button></li>
                                 </ul>
                             </div>
                         </div>
 
                         <div class="right">
-                            
-                            <div id="addressPage" class="sc-bVHCgj bvQtLI">
+                            <ul class="tabs">
+                                <li class="tab-link current" data-tab="delivery-address">Teslimat Adresleri</li>
+                                <li class="tab-link" data-tab="billing-address">Fatura Adresleri</li>
+                            </ul>
+
+                            <div id="addressPage-delivery-address" class="sc-bVHCgj bvQtLI tab-content current">
                                 <div class="contentTitle heading">
-                                    <strong class="d-block headline-bold-20-24">Adres bilgilerim</strong>
+                                    <strong class="d-block headline-bold-20-24">Teslimat Adreslerim</strong>
                                     <div class="insertAddress body-bold-14-17">
-                                        <a class="sc-iHGNWf bhQoUp d-block" href="{% url 'customerauth:create-address' %}">
+                                        <a class="sc-iHGNWf bhQoUp d-block" href="{% url 'customerauth:create-address' %}?address_type=delivery">
                                             <div class="sc-kOHTFB kABxmt">
                                                 <div class="sc-dtBdUo eeQyqX">
-                                                    <svg width="24px" height="24px" viewBox="0 0 16 16" fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg" name="PlusSmall">
+                                                    <svg width="24px" height="24px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <g id="arrow/+">
                                                             <g id="i-add">
-                                                                <path id="Path" d="M10.666 8.00104L5.33268 8.00104"
-                                                                    stroke="#0A103D" stroke-width="2" stroke-linecap="round"
-                                                                    stroke-linejoin="round"></path>
-                                                                <path id="Path_2" d="M7.99896 10.6673L7.99896 5.33398"
-                                                                    stroke="#0A103D" stroke-width="2" stroke-linecap="round"
-                                                                    stroke-linejoin="round"></path>
+                                                                <path d="M10.666 8.00104L5.33268 8.00104" stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                                <path d="M7.99896 10.6673L7.99896 5.33398" stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                                             </g>
                                                         </g>
                                                     </svg>
@@ -93,48 +81,130 @@
                                 </div>
         
                                 <div class="addressList">
-                                    {% for address in addresses %}
-                                        <div class="addressBox">
+                                    {% for address in delivery_addresses %}
+                                        <div class="addressBox {% if address.is_default %}default-address{% endif %}">
                                             <div class="header">
-                                                <strong class="title body-semi-bold-14-17">{{ address.address_name }}</strong>
+                                                <strong class="title body-semi-bold-14-17">{{ address.address_name }} {% if address.is_default %}(Varsayılan){% endif %}</strong>
                                                 <div class="body-bold-14-17">
-                                                    <a href="{% url 'customerauth:delete-address' address.id %}"
-                                                        class="sc-iHGNWf bhQoUp d-block edit-address">
-                                                        <div class="sc-kOHTFB kABxmt">Sil</div>
-                                                    </a>
-                                                    
+                                                    <a href="{% url 'customerauth:delete-address' address.id %}" class="sc-iHGNWf bhQoUp d-block edit-address">Sil</a>
+                                                    <a href="{% url 'customerauth:edit-address' address.id %}?address_type=delivery" class="sc-iHGNWf bhQoUp d-block edit-address">Düzenle</a>
                                                 </div>
-                                                <div class="body-bold-14-17">
-                                                    <a href="{% url 'customerauth:edit-address' address.id %}"
-                                                        class="sc-iHGNWf bhQoUp d-block edit-address">
-                                                        <div class="sc-kOHTFB kABxmt">Düzenle</div>
-                                                    </a>
-                                                    
-                                                </div>
-                                                
                                             </div>
                                             <div class="body">
                                                 <p class="description body-regular-14-17">{{ address.address_line1 }}</p>
-                                                <p class="description body-regular-14-17">{{ address.city.name }} /
-                                                    {{ address.region.name }} / {{ address.country.name }}</p>
+                                                <p class="description body-regular-14-17">{{ address.city.name }} / {{ address.region.name }} / {{ address.neighborhood.name }}</p>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div id="addressPage-billing-address" class="sc-bVHCgj bvQtLI tab-content">
+                                <div class="contentTitle heading">
+                                    <strong class="d-block headline-bold-20-24">Fatura Adreslerim</strong>
+                                    <div class="insertAddress body-bold-14-17">
+                                        <a class="sc-iHGNWf bhQoUp d-block" href="{% url 'customerauth:create-address' %}?address_type=billing">
+                                            <div class="sc-kOHTFB kABxmt">
+                                                <div class="sc-dtBdUo eeQyqX">
+                                                    <svg width="24px" height="24px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <g id="arrow/+">
+                                                            <g id="i-add">
+                                                                <path d="M10.666 8.00104L5.33268 8.00104" stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                                <path d="M7.99896 10.6673L7.99896 5.33398" stroke="#0A103D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                            </g>
+                                                        </g>
+                                                    </svg>
+                                                </div>
+                                                Yeni adres ekle
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+        
+                                <div class="addressList">
+                                    {% for address in billing_addresses %}
+                                        <div class="addressBox {% if address.is_default %}default-address{% endif %}">
+                                            <div class="header">
+                                                <strong class="title body-semi-bold-14-17">{{ address.address_name }} {% if address.is_default %}(Varsayılan){% endif %}</strong>
+                                                <div class="body-bold-14-17">
+                                                    <a href="{% url 'customerauth:delete-address' address.id %}" class="sc-iHGNWf bhQoUp d-block edit-address">Sil</a>
+                                                    <a href="{% url 'customerauth:edit-address' address.id %}?address_type=billing" class="sc-iHGNWf bhQoUp d-block edit-address">Düzenle</a>
+                                                </div>
+                                            </div>
+                                            <div class="body">
+                                                <p class="description body-regular-14-17">{{ address.address_line1 }}</p>
+                                                <p class="description body-regular-14-17">{{ address.city.name }} / {{ address.region.name }} / {{ address.neighborhood.name }}</p>
                                             </div>
                                         </div>
                                     {% endfor %}
                                 </div>
                             </div>
                         </div>
-                  
                     </div>
                 </div>
-                <div class="shoppingCartBackdrop hidden"></div>
             </div>
         </main>
         {% include 'coreBase/footer.html' %}
-        <!-- footer of the Page end -->
-    </div><!-- W1 end here -->
-    <span id="back-top" class="fa fa-arrow-up"></span>
+    </div>
 </div>
 
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.tab-link');
+    const contents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Remove 'current' class from all tabs and content sections
+            tabs.forEach(tab => tab.classList.remove('current'));
+            contents.forEach(content => content.classList.remove('current'));
+
+            // Add 'current' class to the clicked tab and corresponding content
+            this.classList.add('current');
+            const targetContent = document.querySelector(`#addressPage-${this.dataset.tab}`);
+            if (targetContent) {
+                targetContent.classList.add('current');
+            }
+        });
+    });
+});
+</script>
+
+<style>
+    /* Tab CSS */
+    .tabs {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        justify-content: normal;
+        margin-bottom: 20px;
+    }
+
+    .tabs li {
+        padding: 10px 20px;
+        cursor: pointer;
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+    }
+
+    .tabs li.current {
+        background-color: #ddd;
+        font-weight: bold;
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.current {
+        display: block;
+    }
+    .default-address {
+    border: 2px solid #0A103D;  /* Varsayılan adresi belirgin hale getirmek için kenarlık */
+    background-color: #f9f9f9;  /* Arka plan rengini değiştirme */
+}
+</style>
 
 
 {% endblock %}

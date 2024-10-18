@@ -266,6 +266,8 @@
                             </div>
                         </div>
 
+                        {% include 'coreBase/my_style_banner.html' %}
+
                         {% if retails_products.best_seller_products|length > 0 or retails_products.featured_products|length > 0 or retails_products.latest_products|length > 0 %}
                             {% include 'coreBase/retail.html' %}
                         {% endif %}

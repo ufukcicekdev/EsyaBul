@@ -36,7 +36,6 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     "django_ckeditor_5",
     "phonenumber_field",
-    "cities_light",
     "actstream",
     "customerauth",
     "social_django",
@@ -160,7 +159,7 @@ JAZZMIN_SETTINGS = {
     'site_header': "",
     'site_brand': "",
     'copyright': "esyala.com",
-    "hide_apps": ['cities_light','background_task','social_django'],
+    "hide_apps": ['background_task','social_django'],
   
 
     "show_sidebar": True,
@@ -220,13 +219,6 @@ AUTHENTICATION_BACKENDS = (
 )
 
 
-
-
-
-#cities
-
-CITIES_LIGHT_TRANSLATION_LANGUAGES = ['tr', 'en']
-CITIES_LIGHT_INCLUDE_COUNTRIES = ['TR']
 
 
 LOGIN_REDIRECT_URL="main:home"

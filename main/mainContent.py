@@ -54,8 +54,9 @@ def mainContent(request):
     cart_total = 0 
 
     session_key = request.session.session_key
-
+    my_style = False
     if request.user.is_authenticated:
+        my_style = request.user.my_style
         wcount = wishlist_model.objects.filter(user=request.user).count()
         try:
             handbag = Cart.objects.get(user=request.user, order_completed=False)
@@ -99,6 +100,7 @@ def mainContent(request):
         "hcount": hcount,
         'cart_items': cart_items,
         'cart_total': cart_total, 
+        'my_style':my_style,
     }
         
     return context

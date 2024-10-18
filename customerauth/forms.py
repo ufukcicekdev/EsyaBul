@@ -1,8 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from customerauth.models import User, Address
+from customerauth.models import *
 from phonenumber_field.formfields import PhoneNumberField
-from cities_light.models import Country, City, Region, SubRegion
 from products.models import RoomType, HomeType
 from django.contrib.auth.password_validation import CommonPasswordValidator, MinimumLengthValidator, NumericPasswordValidator
 from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm
@@ -140,33 +139,58 @@ class CustomPasswordChangeForm(PasswordChangeForm):
 
 
 class AddressForm(forms.ModelForm):
-
+    
     def __init__(self, *args, **kwargs):
-        # first call parent's constructor
+        district_id = kwargs.pop('district_id', None)  # Bölge ID'sini al
+        neighborhood_id = kwargs.pop('neighborhood_id', None)
         super(AddressForm, self).__init__(*args, **kwargs)
-        # there's a `fields` property now
+
+        # Diğer alanların gerekliliklerini ayarlama
         self.fields['firm_name'].required = False
         self.fields['firm_taxcode'].required = False
         self.fields['firm_tax_home'].required = False
 
+        # Eğer bir district_id varsa, mahalle queryset'ini güncelle
+        if district_id:
+            self.fields['neighborhood'].queryset = Neighborhood.objects.filter(district_id=district_id)
+            
+        if neighborhood_id:
+            self.fields['neighborhood'].queryset = Neighborhood.objects.filter(neighborhood_id=neighborhood_id)
+
+
 
     city = forms.ModelChoiceField(
-        queryset=Region.objects.filter(name='Istanbul').order_by('name'),
-        widget=forms.Select(attrs={'class': 'form-control'}),
+        queryset=City.objects.all().order_by('name'),
+        widget=forms.Select(attrs={'class': 'form-control'}),to_field_name='city_id',
         label='İl', required=True
     )
 
+    region = forms.ModelChoiceField(
+        queryset=District.objects.all().order_by('name'),
+        widget=forms.Select(attrs={'class': 'form-control'}),to_field_name='district_id',
+        label='İlçe', required=True
+    )
+    
+
+    neighborhood = forms.ModelChoiceField(
+        queryset=Neighborhood.objects.none(), 
+        widget=forms.Select(attrs={'class': 'form-control'}),to_field_name='neighborhood_id',
+        label='Mahalle', required=True
+    )
+    
+
     class Meta:
         model = Address
-        fields = ['address_type', 'username', 'usersurname', 'phone', 'city', 'region',
-                  'address_name', 'address_line1', 'postal_code', 'firm_name','firm_taxcode','firm_tax_home']
+        fields = ['address_type', 'username', 'usersurname', 'phone', 'city', 'region', 'neighborhood',
+                  'address_name', 'address_line1', 'postal_code', 'firm_name', 'firm_taxcode', 'firm_tax_home']
         widgets = {
             'address_type': forms.RadioSelect(attrs={'class': 'radioButtons'}),
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'usersurname': forms.TextInput(attrs={'class': 'form-control'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control', 'type':"number"}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'type': "number"}),
             'city': forms.Select(attrs={'class': 'form-control'}),
             'region': forms.Select(attrs={'class': 'form-control'}),
+            'neighborhood' :forms.Select(attrs={'class': 'form-control'}),
             'address_name': forms.TextInput(attrs={'class': 'form-control'}),
             'address_line1': forms.TextInput(attrs={'class': 'form-control'}),
             'postal_code': forms.TextInput(attrs={'class': 'form-control'}),
@@ -182,16 +206,19 @@ class AddressForm(forms.ModelForm):
             'phone': 'Telefon Numarası',
             'city': 'İl',
             'region': 'İlçe',
+            'neighborhood': 'Mahalle',
             'address_name': 'Adres Başlığı',
             'address_line1': 'Adres',
             'postal_code': 'Posta Kodu',
-            'firm_name':'Firma Adı',
-            'firm_taxcode':'Vergi Kodu',
-            'firm_tax_home':'Vergi Dairesi'
+            'firm_name': 'Firma Adı',
+            'firm_taxcode': 'Vergi Kodu',
+            'firm_tax_home': 'Vergi Dairesi'
         }
 
     def clean(self):
+        
         cleaned_data = super().clean()
+       
         address_type = cleaned_data.get('address_type')
 
         if address_type == 2:

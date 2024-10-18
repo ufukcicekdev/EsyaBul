@@ -1,0 +1,88 @@
+{% load static %}
+{% block content %}
+
+<style>
+    .my-style-banner-container {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+        background-image: url("{% static 'images/boliviainteligente-Q1b5nTLlZZA-unsplash.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        flex-direction: column;
+        color: white;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .banner-text {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .banner-buttons-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px; /* Butonlar arası boşluk */
+        flex-wrap: wrap; /* Küçük ekranlar için butonların alt alta geçmesi */
+    }
+
+    .banner-button {
+        padding: 10px 25px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        text-transform: uppercase;
+        text-decoration: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease;
+    }
+
+    .banner-button:hover {
+        background-color: #ffffff;
+        color: #007bff;
+    }
+
+    /* Mobil cihazlar için medya sorgusu */
+    @media (max-width: 768px) {
+        .banner-text {
+            font-size: 18px;
+        }
+
+        .banner-button {
+            padding: 8px 20px;
+            font-size: 12px;
+        }
+
+        .banner-buttons-container {
+            flex-direction: column; /* Küçük ekranlarda butonlar alt alta gelsin */
+        }
+    }
+</style>
+
+<div class="my-style-banner-container" style="margin-top: 50px;">
+    <div class="banner-text">
+        Tarzını Keşfet ve Sana Uygun Ürünleri Bul!
+    </div>
+    <div class="banner-buttons-container">
+        <a href="{% url 'main:my_style_start' %}?my_style_type=new" class="banner-button">
+            Tarzımı Keşfet!
+        </a>
+        {% if my_style %}
+        <a href="{% url 'customerauth:my_style_listview' %}?my_style_type=new" class="banner-button">
+            Ürünleri İncele!
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

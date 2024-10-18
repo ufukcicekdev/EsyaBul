@@ -52,6 +52,60 @@ class ContactUs(models.Model):
         return self.full_name
 
 
+
+class Country(models.Model):
+    name = models.CharField(max_length=255, verbose_name="Ülke Adı")
+    code = models.CharField(max_length=3, verbose_name="Ülke Kodu") 
+
+    class Meta:
+        verbose_name = "Ülke"
+        verbose_name_plural = "Ülkeler"
+
+    def __str__(self):
+        return self.name
+    
+
+class City(models.Model):
+    city_id = models.CharField(max_length=10, verbose_name="Şehir ID", null=True, blank=True, unique=True)
+    name = models.CharField(max_length=255, verbose_name="Şehir Adı")
+    country = models.ForeignKey(Country, related_name='cities', on_delete=models.CASCADE, verbose_name="Ülke")
+
+    class Meta:
+        verbose_name = "Şehir"
+        verbose_name_plural = "Şehirler"
+
+    def __str__(self):
+        return f"{self.name} ({self.city_id})"
+    
+
+class District(models.Model):
+    district_id = models.CharField(max_length=10, verbose_name="İlçe ID",null=True, blank=True, unique=True)
+    name = models.CharField(max_length=255, verbose_name="İlçe Adı")
+    city = models.ForeignKey(City, to_field='city_id', related_name='districts', on_delete=models.CASCADE, verbose_name="Şehir")
+    postal_code = models.CharField(max_length=10, verbose_name="Posta Kodu", null=True, blank=True)
+
+    class Meta:
+        verbose_name = "İlçe"
+        verbose_name_plural = "İlçeler"
+
+    def __str__(self):
+        return f"{self.name} ({self.district_id})"
+    
+class Neighborhood(models.Model):
+    neighborhood_id =models.CharField(max_length=10, verbose_name="İlçe ID",null=True, blank=True, unique=True)
+    name = models.CharField(max_length=255, verbose_name="Mahalle Adı")
+    district = models.ForeignKey(District, to_field='district_id', related_name='neighborhood', on_delete=models.CASCADE, verbose_name="İlçe")
+    postal_code = models.CharField(max_length=10, verbose_name="Posta Kodu") 
+
+    class Meta:
+        verbose_name = "Mahalle"
+        verbose_name_plural = "Mahalleler"
+
+    def __str__(self):
+        return f"{self.name} - {self.district.name} - {self.postal_code}"
+
+
+
 class AddressType(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
@@ -71,15 +125,15 @@ class Address(models.Model):
     is_default = models.BooleanField(default=False)  # varsayılan adres mi?
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
     firm_name = models.CharField(max_length=255)
     firm_taxcode = models.CharField(max_length=255)
     firm_tax_home = models.CharField(max_length=255)
+    city = models.ForeignKey(City, to_field='city_id', on_delete=models.SET_NULL, null=True, blank=True)  # Şehir
+    region = models.ForeignKey(District, to_field='district_id', on_delete=models.SET_NULL, null=True, blank=True)  # İlçe
+    neighborhood = models.ForeignKey(Neighborhood,to_field='neighborhood_id', on_delete=models.SET_NULL, null=True, blank=True)  # Mahalle
 
-    #country = models.ForeignKey('cities_light.Country', on_delete=models.SET_NULL, null=True, blank=True) 
-    #city = models.ForeignKey('cities_light.City', on_delete=models.SET_NULL, null=True, blank=True)
-    city = models.ForeignKey('cities_light.Region', on_delete=models.SET_NULL, null=True, blank=True)
-    region = models.ForeignKey('cities_light.SubRegion', on_delete=models.SET_NULL, null=True, blank=True)
+    delivery_addresses = models.BooleanField(default=False) 
+    billing_addresses = models.BooleanField(default=False) 
 
     
     class Meta:
@@ -145,6 +199,11 @@ class Order(models.Model):
     order_pdf_document = models.FileField(upload_to='order_pdf_documents/', blank=True, null=True, verbose_name="Sipariş PDF Belgesi") 
     payment_id = models.CharField(max_length=20, blank=True, null=True, verbose_name="Ödeme ID")
     payment_transaction_id = models.CharField(max_length=50, blank=True, null=True, verbose_name="Ödeme İşlem ID")
+
+    order_city = models.ForeignKey(City, to_field='city_id', on_delete=models.SET_NULL, null=True, blank=True, related_name='order_city_orders')  # Şehir
+    order_region = models.ForeignKey(District, to_field='district_id', on_delete=models.SET_NULL, null=True, blank=True, related_name='order_region_orders')  # İlçe
+    order_neighborhood = models.ForeignKey(Neighborhood,to_field='neighborhood_id', on_delete=models.SET_NULL, null=True, blank=True, related_name='order_neighborhood_orders')  # Mahalle
+
 
     class Meta:
         verbose_name ="Siparişler"
@@ -215,3 +274,13 @@ class PasswordReset(models.Model):
     def is_valid(self):
         # OTP'nin 15 dakika içinde geçerli olduğunu kontrol eder
         return self.created_at >= timezone.now() - timezone.timedelta(minutes=15)
+    
+
+
+
+class TempOrderCityData(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Kullanıcı")
+    order_number = models.CharField(max_length=20, unique=True, verbose_name="Sipariş Numarası")
+    order_city = models.ForeignKey(City, to_field='city_id', on_delete=models.SET_NULL, null=True, blank=True, related_name='temp_order_city_orders')  # Şehir
+    order_region = models.ForeignKey(District, to_field='district_id', on_delete=models.SET_NULL, null=True, blank=True, related_name='temp_order_region_orders')  # İlçe
+    order_neighborhood = models.ForeignKey(Neighborhood,to_field='neighborhood_id', on_delete=models.SET_NULL, null=True, blank=True, related_name='temp_order_neighborhood_orders')  # Mahalle

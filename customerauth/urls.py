@@ -16,6 +16,8 @@ urlpatterns = [
     path('dashboard/edit_address/<int:address_id>/', views.edit_address, name='edit-address'),
     path('dashboard/create_address/', views.create_address, name='create-address'),
     path('get-subregions/', views.get_subregions, name='get_subregions'),
+    path('get-neighborhood/', views.get_neighborhood, name='get_neighborhood'),
+
 
     path('dashboard/password/', views.password_change, name='password-process'),
     path('dashboard/notifications/', views.notifications, name='notifications'),
@@ -23,6 +25,9 @@ urlpatterns = [
     path('dashboard/change-email/', views.change_email_view, name='change_email'),
     path('thank-you/', views.thank_you_view, name='thank_you'),
     ##MY STYLE##
+    path('my-style-list/', views.my_style_list, name='my_style_listview'),
+    path('my-style-list/category/<slug:slug>/', views.my_style_list_category, name='my_style_list_category'),
+
     path('room-type/', views.room_type_selected, name='room-type'),
     path('home-type/', views.home_type_selected, name='home-type'),
     path('home-model/', views.home_model_selected, name='home-model'),

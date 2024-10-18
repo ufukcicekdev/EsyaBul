@@ -153,21 +153,48 @@
     }
 });
 
-function setDefaultSelectedValue() {
-    var selectedValue = $("#id_region").val();
-    $("#id_region option[value='" + selectedValue + "']").prop('selected', true);
+
+function setDefaultSelectedValue(selector, value) {
+    $(selector + " option[value='" + value + "']").prop('selected', true);
 }
 
 $(document).ready(function () {
+    // İlçe ve mahalle alanlarını başta disable yapıyoruz.
     $("#id_region").prop('disabled', true);
+    $("#id_neighborhood").prop('disabled', true);
 
+    // Sayfa yüklendiğinde var olan seçili değerleri korumak için
+    var initialCity = "{{ address.city.city_id }}";  // Şehir ID'si
+    var initialRegion = "{{ address.region.region_id }}";  // İlçe ID'si
+    var initialNeighborhood = "{{ address.neighborhood.neighborhood_id }}";  // Mahalle ID'si
+
+    // Şehir seçimini tetikleyerek ilçeleri getir
+    if (initialCity) {
+        $("#id_city").val(initialCity).trigger('change');  // Şehir seçimini tetikleyerek ilçeleri getir
+    }
+
+    // İlçe seçimini tetikleyerek mahalleleri getir
+    if (initialRegion) {
+        $("#id_region").val(initialRegion).trigger('change');  // İlçe seçimini tetikleyerek mahalleleri getir
+    }
+
+    // Mahalleyi seçili yap
+    if (initialNeighborhood) {
+        setDefaultSelectedValue("#id_neighborhood", initialNeighborhood);
+        $("#id_neighborhood").prop('disabled', false);  // Mahalle alanını aktif hale getir
+    }
+
+    // Şehir seçildiğinde
     $("#id_city").change(function () {
         var selectedCity = $(this).val();
 
+        // İlçe ve mahalle alanlarını temizleyip disable yapıyoruz.
         $("#id_region").empty().prop('disabled', true);
+        $("#id_neighborhood").empty().prop('disabled', true);
 
+        // İlçe verilerini AJAX ile çekiyoruz.
         $.ajax({
-            url: "{% url 'customerauth:get_subregions' %}", 
+            url: "{% url 'customerauth:get_subregions' %}",
             data: { 'city_id': selectedCity },
             dataType: 'json',
             success: function (data) {
@@ -175,16 +202,48 @@ $(document).ready(function () {
                     $("#id_region").append('<option value="' + key + '">' + value + '</option>');
                 });
 
-                setDefaultSelectedValue();
+                // Başlangıçta seçili olan ilçeyi ayarla
+                if (initialRegion) {
+                    setDefaultSelectedValue("#id_region", initialRegion);
+                }
+                
                 $("#id_region").prop('disabled', false);
             }
         });
     });
-});
 
-$("#id_region").change(function () {
-        setDefaultSelectedValue();
+    // İlçe seçildiğinde mahalleleri getiriyoruz.
+    $("#id_region").change(function () {
+        var selectedDistrict = $(this).val();
+
+        $("#id_neighborhood").empty().prop('disabled', true);
+
+        // Mahalle verilerini AJAX ile çekiyoruz.
+        $.ajax({
+            url: "{% url 'customerauth:get_neighborhood' %}",
+            data: { 'district_id': selectedDistrict },
+            dataType: 'json',
+            success: function (data) {
+                $.each(data, function (key, value) {
+                    $("#id_neighborhood").append('<option value="' + key + '">' + value + '</option>');
+                });
+
+                // Başlangıçta seçili olan mahalleyi ayarla
+                if (initialNeighborhood) {
+                    setDefaultSelectedValue("#id_neighborhood", initialNeighborhood);
+                }
+
+                $("#id_neighborhood").prop('disabled', false);
+            }
+        });
     });
+
+    // Seçilen değerleri korumak için
+    $("#id_region, #id_neighborhood").change(function () {
+        setDefaultSelectedValue("#id_region", $("#id_region").val());
+        setDefaultSelectedValue("#id_neighborhood", $("#id_neighborhood").val());
+    });
+});
 
 </script>
 

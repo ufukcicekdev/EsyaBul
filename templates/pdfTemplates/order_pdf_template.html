@@ -6,15 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sipariş PDF</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            font-size: 14px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
-    <img src="https://filestorages.fra1.digitaloceanspaces.com/EmailFolder/esyalacom.png" alt="Your Logo">
+    <img src="https://filestorages.fra1.digitaloceanspaces.com/EmailFolder/esyalacom.png" alt="Your Logo" style="max-width: 100%; height: auto;">
     <h1>{{ order.order_number }} Sipariş Detayları</h1>
     <p><strong>Sipariş Tarihi:</strong> {{ order.created_at }}</p>
     <p><strong>Adres:</strong> {{ order.order_adress }}</p>
     <p><strong>Fatura Adresi:</strong> {{ order.billing_adress }}</p>
-    <p><strong>Toplam Tutar:</strong> {{ order.total_amount }}</p>
+    <p><strong>Toplam Tutar:</strong> {{ order.total_amount }} TL</p>
     <h2>Ürünler</h2>
     <ul>
         {% for order_item in order.order_items.all %}

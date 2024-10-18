@@ -1,27 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from main.models import SocialMedia, HomeMainBanner, HomeSubBanner, TeamMembers, HomePageBannerItem,ContactUs, Subscription
-from django.http import JsonResponse
-from products.models import Category,Product, ProductReview,Cart,CartItem,ProductImage
+from main.models import HomeMainBanner, HomeSubBanner, TeamMembers, HomePageBannerItem, Subscription
+from products.models import Category,Product, ProductReview,ProductImage
 from customerauth.models import wishlist_model,UserProductView
 from products.models import Brand,ProductRentalPrice
-from django.http import Http404
 from django.db.models import Q,Avg,Prefetch
-from products.forms import AddToCartForm
-import random
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import ProductSearchForm,ContactForm
 from .mainContent import mainContent
-from django.template.loader import render_to_string
 from django.views.decorators.cache import cache_page
-import random
 from django.views.decorators.vary import vary_on_cookie
 from django.core.cache import cache
 from slack_send_messages.send_messages import send_contact_message
-from collections import defaultdict
 from django.db.models import Exists, OuterRef
-
 
 
 def get_home_main_banners():
@@ -132,10 +124,11 @@ def home(request):
 
 @login_required(login_url='customerauth:sign-in')
 def my_style_start(request):
+    address_type = request.GET.get('my_style_type')
     user = request.user
     user_name = user.username
     mainContext = mainContent(request)
-    if user.my_style:
+    if user.my_style and address_type!='new':
         return redirect('main:home')
     
     context ={

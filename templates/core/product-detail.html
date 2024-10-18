@@ -426,7 +426,13 @@ header .close:hover{
       overflow: hidden;
       position: relative;
   }
+  .slide img {
+    transition: transform 0.3s ease;
+}
 
+.slide img:hover {
+    transform: scale(1.05); /* Resim hafif büyüsün */
+}
     </style>
 
 <div id="wrapper">
@@ -484,46 +490,56 @@ header .close:hover{
                                 </div>
                             
                                 {% if related_products_with_images %}
-                                
                                 <div class="product-slider">
                                     {% for related_product_data in related_products_with_images %}
                                         {% for image in related_product_data.images %}
                                             <div class="slide">
-                                                <img src="{{ image.image.url }}" alt="{{ image.img_alt }}" title="{{ image.img_title }}">
-                                               
+                                                <!-- FancyBox için gerekli attributeleri ekledik -->
+                                                <a href="{{ image.image.url }}" data-fancybox="gallery" data-caption="{{ image.img_alt }}">
+                                                    <img src="{{ image.image.url }}" alt="{{ image.img_alt }}" title="{{ image.img_title }}">
+                                                </a>
                                             </div>
                                         {% endfor %}
                                     {% endfor %}
                                 </div>
-                                
+
                                 <div class="list-unstyled slick-slider pagg-slider">
                                     {% for related_product_data in related_products_with_images %}
                                         {% for image in related_product_data.images %}
                                             <li>
                                                 <div class="img">
+                                                    <!-- Sadece img etiketi, FancyBox yok -->
                                                     <img src="{{ image.image.url }}" alt="{{ image.img_alt }}" title="{{ image.img_title }}">
                                                 </div>
                                             </li>
                                         {% endfor %}
                                     {% endfor %}
-                                 </div>
-                                
-                                 {% else %}
-                                 <div class="product-slider">
+                                </div>
+
+                            {% else %}
+                                <div class="product-slider">
                                     {% for image in product.related_products.all %}
                                         <div class="slide">
-                                            <img src="{{ image.image.url }}" alt="{{ image.img_alt }}" title="{{ image.title }}">
+                                            <!-- FancyBox ekliyoruz -->
+                                            <a href="{{ image.image.url }}" data-fancybox="gallery" data-caption="{{ image.img_alt }}">
+                                                <img src="{{ image.image.url }}" alt="{{ image.img_alt }}" title="{{ image.title }}">
+                                            </a>
                                         </div>
                                     {% endfor %}
                                 </div>
 
                                 <div class="list-unstyled slick-slider pagg-slider">
-                                    {% for image in product.related_products.all  %}
-                                    <li><div class="img"><img src="{{ image.image.url }}" alt="{{ image.alt }}" title="{{ image.title }}"></div></li>
+                                    {% for image in product.related_products.all %}
+                                        <li>
+                                            <div class="img">
+                                                <!-- Normal img etiketi -->
+                                                <img src="{{ image.image.url }}" alt="{{ image.alt }}" title="{{ image.title }}">
+                                            </div>
+                                        </li>
                                     {% endfor %}
                                 </div>
-                                    
-                                {% endif %}
+                            {% endif %}
+
 
                                 
 
@@ -668,6 +684,7 @@ header .close:hover{
                     </div>
                 </div>
             </section><!-- Mt Product Detial of the Page end -->
+
             <div class="product-detail-tab wow fadeInUp" data-wow-delay="0.4s">
                 <div class="container">
                     <div class="row">
@@ -733,6 +750,7 @@ header .close:hover{
                 </div>
             </div>
 
+            {% include 'coreBase/my_style_banner.html' %}
 
             <div class="mt-bestseller bg-grey text-center wow fadeInUp" data-wow-delay="0.4s">
                 <div class="container">
@@ -887,14 +905,16 @@ document.getElementById("whatsappShareBtn").addEventListener("click", function()
     window.open(url, "_blank", "width=600,height=400");
 });
 
-document.getElementById("telegramShareBtn").addEventListener("click", function() {
-    var url = "https://t.me/share/url?url=" + encodeURIComponent(window.location.href);
-    window.open(url, "_blank", "width=600,height=400");
-});
 
 
-
-
+    document.addEventListener("DOMContentLoaded", function() {
+        // FancyBox başlatma işlemi
+        Fancybox.bind("[data-fancybox='gallery']", {
+            infinite: true, // Resimler arasında döngü
+            toolbar: "auto",
+            idleTime: false
+        });
+    });
 
 
 

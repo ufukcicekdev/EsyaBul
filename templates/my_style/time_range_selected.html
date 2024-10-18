@@ -230,7 +230,7 @@
                 type: "POST",
                 data: $("#roomTypeForm").serialize(),
                 success: function (response) {
-                    window.location.href = "{% url 'main:home' %}";
+                    window.location.href = "{% url 'customerauth:my_style_listview' %}?my_style_type=new";
                 },
                 error: function (error) {
                     //console.error(selectedTimeRangeId);

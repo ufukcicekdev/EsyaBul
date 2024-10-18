@@ -150,21 +150,27 @@
     }
 });
 
-function setDefaultSelectedValue() {
-    var selectedValue = $("#id_region").val();
-    $("#id_region option[value='" + selectedValue + "']").prop('selected', true);
+function setDefaultSelectedValue(selector) {
+    var selectedValue = $(selector).val();
+    $(selector + " option[value='" + selectedValue + "']").prop('selected', true);
 }
 
 $(document).ready(function () {
+    // İlçe alanını başta disable yapıyoruz.
     $("#id_region").prop('disabled', true);
+    $("#id_neighborhood").prop('disabled', true);
 
+    // İl seçildiğinde
     $("#id_city").change(function () {
         var selectedCity = $(this).val();
 
+        // İlçe ve mahalle alanlarını temizleyip disable yapıyoruz.
         $("#id_region").empty().prop('disabled', true);
+        $("#id_neighborhood").empty().prop('disabled', true);
 
+        // İlçe verilerini AJAX ile çekiyoruz.
         $.ajax({
-            url: "{% url 'customerauth:get_subregions' %}", 
+            url: "{% url 'customerauth:get_subregions' %}",
             data: { 'city_id': selectedCity },
             dataType: 'json',
             success: function (data) {
@@ -172,16 +178,40 @@ $(document).ready(function () {
                     $("#id_region").append('<option value="' + key + '">' + value + '</option>');
                 });
 
-                setDefaultSelectedValue();
+                setDefaultSelectedValue("#id_region");
                 $("#id_region").prop('disabled', false);
             }
         });
     });
+
+    // İlçe seçildiğinde mahalleleri getiriyoruz.
+    $("#id_region").change(function () {
+        var selectedDistrict = $(this).val();
+
+        $("#id_neighborhood").empty().prop('disabled', true);
+
+        $.ajax({
+            url: "{% url 'customerauth:get_neighborhood' %}",
+            data: { 'district_id': selectedDistrict },
+            dataType: 'json',
+            success: function (data) {
+                $.each(data, function (key, value) {
+                    $("#id_neighborhood").append('<option value="' + key + '">' + value + '</option>');
+                });
+
+                setDefaultSelectedValue("#id_neighborhood");
+                $("#id_neighborhood").prop('disabled', false);
+            }
+        });
+    });
+
+    // Seçilen değeri korumak için
+    $("#id_region, #id_neighborhood").change(function () {
+        setDefaultSelectedValue("#id_region");
+        setDefaultSelectedValue("#id_neighborhood");
+    });
 });
 
-$("#id_region").change(function () {
-        setDefaultSelectedValue();
-    });
 
 </script>
 

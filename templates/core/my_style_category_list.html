@@ -1,0 +1,667 @@
+{% extends 'partialsBase/base.html' %}
+{% load custom_filters %}
+{% load static %}
+{% block title %} {{ category_name.name }} | Eşyala {% endblock title %}
+{% block description %} {{ category_name.description }} {% endblock description %}
+
+
+
+
+
+
+
+{% block meta %}
+<title> {{ category_name.name|default:"Eşyala" }} | Eşyala </title>
+<meta name="description" content="{{ category_name.description|default:"Geniş ürün yelpazesiyle mobilya ve ev dekorasyonu alışveriş platformu." }}">
+
+<meta property="og:url" content="">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ category_name.name|default:"Eşyala" }}">
+<meta property="og:description" content="{{ category_name.description|default:"Geniş ürün yelpazesiyle mobilya ve ev dekorasyonu alışveriş platformu." }}">
+<meta property="og:image" content="{{ image }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:domain" content="esyala.com">
+<meta property="twitter:url" content="">
+<meta name="twitter:title" content="{{ category_name.name|default:"Eşyala" }} | Eşyala">
+<meta name="twitter:description" content="{{ category_name.description|default:"Geniş ürün yelpazesiyle mobilya ve ev dekorasyonu alışveriş platformu." }}">
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var currentUrl = window.location.href;
+
+    var ogUrlMetaTag = document.querySelector('meta[property="og:url"]');
+    if (!ogUrlMetaTag) {
+        ogUrlMetaTag = document.createElement('meta');
+        ogUrlMetaTag.setAttribute('property', 'og:url');
+        document.head.appendChild(ogUrlMetaTag);
+    }
+    ogUrlMetaTag.setAttribute('content', currentUrl);
+
+    var twitterUrlMetaTag = document.querySelector('meta[property="twitter:url"]');
+    if (!twitterUrlMetaTag) {
+        twitterUrlMetaTag = document.createElement('meta');
+        twitterUrlMetaTag.setAttribute('property', 'twitter:url');
+        document.head.appendChild(twitterUrlMetaTag);
+    }
+    twitterUrlMetaTag.setAttribute('content', currentUrl);
+
+  });
+</script>
+
+<meta name="twitter:image" content="{{ image }}">
+
+{% endblock %}
+
+{% load social_share %}
+{% block content %}
+
+
+<style>
+
+/* Kategori resimleri için stiller */
+.category-images {
+    display: flex; /* Yatay hizalama */
+    flex-wrap: wrap; /* Taşma olduğunda bir alt satıra geçme */
+}
+
+.category-item {
+    margin: 10px; /* Her kategori arasında boşluk */
+    text-align: center; /* İsimleri ortala */
+}
+
+.category-img {
+    width: 80px; /* Resim genişliği */
+    height: auto; /* Orantılı yükseklik */
+}
+
+.category-name {
+    display: block; /* İsimleri yeni satıra al */
+    margin-top: 5px; /* Üstten boşluk */
+    font-size: 12px; /* İsim yazı boyutu */
+}
+
+</style>
+
+<style>
+
+
+
+    .star {
+        cursor: pointer;
+        font-size: 25px;
+        color: rgb(168, 168, 168);
+    }
+    
+    .selected {
+        color: gold;
+    }
+    
+    
+    button{
+      outline: none;
+      cursor: pointer;
+      font-weight: 500;
+      border-radius: 4px;
+      border: 2px solid transparent;
+      transition: background 0.1s linear, border-color 0.1s linear, color 0.1s linear;
+    }
+    
+    
+    ::selection{
+      color: #fff;
+      background: #7d2ae8;
+    }
+    .view-modal, .popupSocial{
+      position: absolute;
+      left: 50%;
+      z-index: 5;
+    }
+    
+    .view-modal{
+      top: 10%;
+      left: 90%;
+      color: #e8e4ee;
+      font-weight: bold;
+      font-size: 18px;
+      padding: 10px 25px;
+      background: rgb(113, 5, 156);
+      transform: translate(-50%, -50%);
+    }
+    .popupSocial{
+      background: rgb(255, 254, 254);
+      padding: 25px;
+      border-radius: 15px;
+      top: 10%;
+      max-width: 380px;
+      width: 100%;
+      opacity: 0;
+      pointer-events: none;
+      box-shadow: 0px 10px 15px rgba(0,0,0,0.1);
+      transform: translate(-50%, -50%) scale(1.2);
+      transition: top 0s 0.2s ease-in-out,
+                  opacity 0.2s 0s ease-in-out,
+                  transform 0.2s 0s ease-in-out;
+    }
+    .popupSocial.show{
+      top: 300%;
+      left: 100%;
+      opacity: 1;
+      pointer-events: auto;
+      transform:translate(-50%, -50%) scale(1);
+      transition: top 0s 0s ease-in-out,
+                  opacity 0.2s 0s ease-in-out,
+                  transform 0.2s 0s ease-in-out;
+    
+    }
+    .popupSocial :is(header, .icons, .field){
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .popupSocial header{
+      padding-bottom: 15px;
+      border-bottom: 1px solid #ebedf9;
+    }
+    
+    header .close, .icons a{
+      display: flex;
+      align-items: center;
+      border-radius: 50%;
+      justify-content: center;
+      transition: all 0.3s ease-in-out;
+    } 
+    header .close{
+      color: #878787;
+      font-size: 17px;
+      background: #f3f3f3;
+      height: 33px;
+      width: 33px;
+      cursor: pointer;
+    }
+    header .close:hover{
+      background: #ebedf9;
+    }
+    .popup .sociaContent{
+      margin: 20px 0;
+    }
+    .popup .icons{
+      margin: 15px 0 20px 0;
+    }
+    .sociaContent p{
+      font-size: 16px;
+    }
+    .sociaContent .icons a{
+      height: 50px;
+      width: 50px;
+      font-size: 20px;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+    .icons a i{
+      transition: transform 0.3s ease-in-out;
+    }
+    .icons a:nth-child(1){
+      color: #1877F2;
+      border-color: #b7d4fb;
+    }
+    .icons a:nth-child(1):hover{
+      background: #1877F2;
+    }
+    .icons a:nth-child(2){
+      color: #46C1F6;
+      border-color: #b6e7fc;
+    }
+    .icons a:nth-child(2):hover{
+      background: #46C1F6;
+    }
+    .icons a:nth-child(3){
+      color: #e1306c;
+      border-color: #f5bccf;
+    }
+    .icons a:nth-child(3):hover{
+      background: #e1306c;
+    }
+    .icons a:nth-child(4){
+      color: #25D366;
+      border-color: #bef4d2;
+    }
+    .icons a:nth-child(4):hover{
+      background: #25D366;
+    }
+    .icons a:nth-child(5){
+      color: #0088cc;
+      border-color: #b3e6ff;
+    }
+    .icons a:nth-child(5):hover{
+      background: #0088cc;
+    }
+    .icons a:hover{
+      color: #fff;
+      border-color: transparent;
+    }
+    .icons a:hover i{
+      transform: scale(1.2);
+    }
+    .sociaContent .field{
+      margin: 12px 0 -5px 0;
+      height: 45px;
+      border-radius: 4px;
+      padding: 0 5px;
+      border: 1px solid #757171;
+    }
+    .field.active{
+      border-color: #7d2ae8;
+    }
+    .field i{
+      width: 50px;
+      font-size: 18px;
+      text-align: center;
+    }
+    .field.active i{
+      color: #7d2ae8;
+    }
+    
+    
+    .field input{
+      width: 100%;
+      height: 100%;
+      border: none;
+      outline: none;
+      font-size: 15px;
+    }
+    .field button{
+      color: #fff;
+      padding: 5px 18px;
+      background: #7d2ae8;
+    }
+    .field button:hover{
+      background: #8d39fa;
+    }
+    
+    
+    @media only screen and (max-width: 798px) {
+        .popupSocial.show {
+        top: 300%;
+        left: 100%;
+        opacity: 1;
+        pointer-events: auto;
+        transform: translate(-93%, -50%) scale(0.80);
+        transition: top 0s 0s ease-in-out, opacity 0.2s 0s ease-in-out, transform 0.2s 0s ease-in-out;
+    }
+    
+    
+    }
+    
+    
+    .subcategory-list .name {
+      font-size: 16px;
+      line-height: 18px;
+      font-weight: 700;
+    }
+    
+    .subcategory-list .num {
+      float: right;
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 15px;
+      margin: 2px 0 0;
+    }
+    
+    .sub-subcategory-list {
+        display: none; /* Alt kategorileri varsayılan olarak gizle */
+    }
+    
+    .subcategory-list li {
+        list-style: none; /* Madde işaretlerini kaldır */
+        margin: 10px 0; /* Liste öğeleri arasındaki boşluğu ayarla */
+    }
+    
+    .subcategory-list li:hover .sub-subcategory-list {
+        display: block; /* Üzerine gelindiğinde alt kategorileri göster */
+    }
+    
+    
+      #card-view {
+        display: inline-table;
+        flex-wrap: wrap;
+        gap: 10px; /* Kartlar arasındaki boşluk */
+    }
+    
+    .product-3 {
+          display: flex;
+          flex-direction: column;
+          border: 1px solid #ddd;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+          height: 500px; /* Sabit yükseklik */
+          overflow: hidden; /* İçeriğin dışarı taşmasını önler */
+          position: relative;
+          text-align: center;
+          background-color: #fff; /* Arka plan rengi */
+      }
+    
+      .img a img {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 233px; 
+          overflow: hidden; 
+          position: relative; 
+      }
+      
+      .img img {
+          max-width: 100%;
+          max-height: 100%;
+      }
+    
+    .caption {
+          position: absolute;
+          bottom: 10px;
+          left: 10px;
+          color: #fff;
+          padding: 5px;
+      }
+      
+      .caption .off {
+          font-size: 17px;
+          color: #fff;
+          display: inline-block;
+          padding: 3px 8px;
+          margin-bottom: 5px;
+          background-color: #b2cc29;
+          font-weight: 700;
+          font-family: "Montserrat", sans-serif;
+          line-height: 1.2;
+          border-radius: 3px;
+      }
+      
+      .caption .best-price {
+          font-size: 17px;
+          color: #fff;
+          padding: 5px 10px;
+          background-color: #fed062;
+          font-weight: 700;
+          font-family: "Montserrat", sans-serif;
+          line-height: 1.2;
+          border-radius: 3px;
+          display: inline-block;
+      }
+    
+    .mt-stars-container {
+        margin-top: 10px;
+    }
+    
+    .mt-stars {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .mt-stars li {
+        margin: 0 2px;
+    }
+    
+    .mt-stars i {
+        color: #FFD700;
+    }
+    
+    .title a {
+        color: #000;
+        text-decoration: none;
+    }
+    
+    .price, .off {
+        display: block;
+    }
+    
+    .links {
+        list-style: none;
+        padding: 0;
+        margin: 10px 0;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .links li {
+        margin: 0 5px;
+    }
+    .caption.top-right {
+        top: 10px; /* Üstten mesafe */
+        right: 10px; /* Sağdan mesafe */
+    }
+    
+    .related_product {
+        font-size: 17px;
+          color: #fff;
+          display: inline-block;
+          padding: 3px 8px;
+          margin-bottom: 5px;
+          background-color: #fed062;
+          font-weight: 700;
+          font-family: "Montserrat", sans-serif;
+          line-height: 1.2;
+          border-radius: 3px;
+    }
+    .product-3 .img {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 233px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    
+    </style>
+    
+
+<div id="wrapper">
+    <!-- Page Loader -->
+    <div id="pre-loader" class="loader-container">
+        <div class="loader">
+            <img src="{% static 'images/svg/rings.svg' %}" alt="loader">
+        </div>
+    </div>
+
+    <div class="w1">
+        {% include 'coreBase/header.html' %}
+
+        <main id="mt-main">
+            <section class="mt-contact-banner style4" style="background-image: url({% static 'images/img-76.jpg' %});">
+                <div class="container">
+                    <div class="row">
+                      <div class="col-xs-12 text-center">
+                        <h1 style="color: #fff;">{{ category_name }}</h1>
+                       
+                        <nav class="breadcrumbs">
+                            <ul class="list-unstyled">
+                                <li><a style="color: #fff;" href="{% url 'main:home' %}">Anasayfa <i class="fa fa-angle-right"></i></a></li>
+                                <li><a style="color: #fff;" href="{% url 'customerauth:my_style_listview' %}?my_style_type=new">Tüm Ürünler<i class="fa fa-angle-right"></i></a></li>
+                                {% if category_name %}
+                                    <li style="color: #fff;">{{ category_name }}</li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                    
+                    </div>
+                </div>
+            </section><!-- Mt Contact Banner of the Page end -->
+
+            <div class="container">
+                <div class="row">
+                    <aside id="sidebar" class="col-xs-12 col-sm-4 col-md-3 wow fadeInLeft" data-wow-delay="0.4s">
+                        <section class="shop-widget">
+                            <h2>Kategoriler</h2>
+                            <div class="category-images">
+                                {% if room_type %}
+                                    <div class="category-item">
+                                        <a href="{% url 'customerauth:my_style_list_category' room_type.slug %}">
+                                            <span class="category-name">Oda Tipi</span>
+                                            <img src="{{ room_type.image.url }}" alt="Room Type" class="category-img" />
+                                            <span class="category-name">{{ room_type.name }} - ({{ room_type_prouct_count }})</span>
+                                        </a>
+                                    </div>
+                                {% endif %}
+                                {% if home_type %}
+                                    <div class="category-item">
+                                        <a href="{% url 'customerauth:my_style_list_category' home_type.slug %}">
+                                            <span class="category-name">Ev Tipi</span>
+                                            <img src="{{ home_type.image.url }}" alt="Home Type" class="category-img" />
+                                            <span class="category-name">{{ home_type.name }} - ({{ home_type_prouct_count }})</span>
+                                        </a>
+                                    </div>
+                                {% endif %}
+                                {% if home_model %}
+                                    <div class="category-item">
+                                        <a href="{% url 'customerauth:my_style_list_category' home_model.slug %}">
+                                            <span class="category-name">Ev Modeli</span>
+                                            <img src="{{ home_model.image.url }}" alt="Home Model" class="category-img" />
+                                            <span class="category-name">{{ home_model.name }} - ({{ home_models_prouct_count }})</span>
+                                        </a>
+                                    </div>
+                                {% endif %}
+                                {% if space_definition %}
+                                    <div class="category-item">
+                                        <a href="{% url 'customerauth:my_style_list_category' space_definition.slug %}">
+                                            <span class="category-name">Boşluğunuz</span>
+                                            <img src="{{ space_definition.image.url }}" alt="Space Definition" class="category-img" />
+                                            <span class="category-name">{{ space_definition.name }} - ({{ space_definitions_prouct_count }})</span>
+                                        </a>
+                                    </div>
+                                {% endif %}
+                                {% if time_range %}
+                                    <div class="category-item">
+                                        <a href="{% url 'customerauth:my_style_list_category' time_range.slug %}">
+                                            <span class="category-name">Teslimat Zamanı</span>
+                                            <img src="{{ time_range.image.url }}" alt="Time Range" class="category-img" />
+                                            <span class="category-name">{{ time_range.name }} - ({{ time_ranges_prouct_count }})</span>
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </section>
+                        
+                    </aside>
+
+                    <div class="col-xs-12 col-sm-8 col-md-9 wow fadeInRight" data-wow-delay="0.4s">
+                        <header class="mt-shoplist-header">
+                            <div class="mt-textbox">
+                                <p><strong>{{ product_count }}</strong> sonuç</p>
+                            </div>
+                        </header>
+
+                        <ul class="mt-productlisthold list-inline" id="card-view">
+                            {% for product in products %}
+                            <li>
+                                <div class="product-3 marginzero">
+                                    <div class="img">
+                                        {% if product.related_products.count %}
+                                            {% with first_image=product.related_products.first %}
+                                                <a href="{% url 'products:product-detail-view' product.slug %}">
+                                                    <img src="{{ first_image.image.url }}" alt="{{ first_image.img_title }}">
+                                                </a>
+                                            {% endwith %}
+                                        {% endif %}
+                                        {% if product.get_percentage %}
+                                            <span class="caption">
+                                                <span class="off">{{ product.get_percentage|floatformat:0 }}%</span>
+                                                <span class="best-price">En İyi Fiyat</span>
+                                            </span>
+                                        {% endif %}
+                                        <span class="caption top-right">
+                                            <span class="related_product">{{ product.get_purchase_rental_options }}</span>
+                                        </span>
+                                    </div>
+
+                                    {% if product.get_star_list %}
+                                    <div class="mt-stars-container">
+                                        <ul class="mt-stars">
+                                            {% for star in product.get_star_list %}
+                                            <li><i class="fa fa-star{% if not star %}-o{% endif %}"></i></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+
+                                    <div class="txt">
+                                        <strong class="title">
+                                            <a href="{% url 'products:product-detail-view' product.slug %}">{{ product.name }}</a>
+                                        </strong>
+                                        <h4>{{ product.category.name }}</h4>
+                                        {% if product.selling_old_price != 0 %}
+                                            <del class="off"><i class="fa fa-try"></i> <span>{{ product.selling_old_price }}</span></del>
+                                        {% endif %}
+                                        <span class="price"><i class="fa fa-try"></i> <span>{{ product.selling_price }}</span></span>
+                                        <p>{{ product.truncated_description }}</p>
+                                    </div>
+
+                                    <ul class="links">
+                                        {% if request.user.is_authenticated %}
+                                        <li><a aria-label="Beğendiklerim" class="action-btn add-to-wishlist" data-product-item="{{ product.id }}"><i class="icon-heart"></i></a></li>
+                                        {% endif %}
+                                        <li><a href="{% url 'products:product-detail-view' product.slug %}" class="lightbox"><i class="icon-eye"></i></a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                {% if products.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1">&laquo; İlk</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ products.previous_page_number }}">Önceki</a>
+                                    </li>
+                                {% endif %}
+                                <li class="page-item">
+                                    <span class="page-link">Sayfa {{ products.number }} / {{ products.paginator.num_pages }}</span>
+                                </li>
+                                {% if products.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ products.next_page_number }}">Sonraki</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ products.paginator.num_pages }}">Son &raquo;</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        {% include 'coreBase/footer.html' %}
+    </div>
+    <span id="back-top" class="fa fa-arrow-up"></span>
+</div>
+
+
+
+<script>
+
+function toggleSubcategories(element) {
+    var subcategories = element.querySelector('.sub-subcategory-list');
+    if (subcategories.style.display === 'block') {
+        subcategories.style.display = 'none';
+    } else {
+        subcategories.style.display = 'block';
+    }
+}
+
+
+
+</script>
+
+
+{% endblock %}
+
+
+
+

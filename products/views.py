@@ -2,7 +2,6 @@ from django.shortcuts import render,redirect,get_object_or_404
 from .models import Product, Category, ProductReview, Cart, CartItem, ProductRentalPrice
 from customerauth.models import wishlist_model, Address, User, UserProductView
 from products.forms import ProductReviewForm,AddToCartForm
-from django.urls import reverse
 from django.db.models import Avg
 from main.models import SocialMedia
 from django.middleware.csrf import CsrfViewMiddleware
@@ -10,10 +9,8 @@ from django.utils.decorators import decorator_from_middleware
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
-import os
 from dotenv import load_dotenv
 from main.mainContent import mainContent
-from esyabul.settings import base
 from django.views.decorators.cache import cache_page
 from django.utils import timezone
 
@@ -197,13 +194,14 @@ def order_checkout(request):
     hcount = 0
     cart_items = []
     cart_total = 0  # Sepetin toplam tutarı
-    user_addresses = Address.objects.filter(user=request.user)
-    cart_id = None  # Sepet ID'sini başlangıçta None olarak ayarlayın
+    delivery_addresses = Address.objects.filter(user=request.user, delivery_addresses=True)
+    billing_addresses = Address.objects.filter(user=request.user, billing_addresses=True)
+
+    cart_id = None  
 
     if request.user.is_authenticated:
         wcount = wishlist_model.objects.filter(user=request.user).count()
 
-        # Kullanıcının isteğe bağlı olarak tanımlanmış sepetini alın
         try:
             handbag = Cart.objects.get(user=request.user, order_completed=False)
             hcount = CartItem.objects.filter(cart=handbag).count()
@@ -211,7 +209,6 @@ def order_checkout(request):
         except Cart.DoesNotExist:
             pass
 
-        # Kullanıcının sepetindeki ürünleri alın
         cart = Cart.objects.filter(user=request.user, order_completed=False).first()
         if cart:
             cart_items = cart.cartitem_set.all()
@@ -223,17 +220,26 @@ def order_checkout(request):
                 else:
                     cart_total += cart_item.selling_price * cart_item.quantity
 
+    # Kullanıcının varsayılan adreslerini al
+    default_delivery_address = delivery_addresses.first() if delivery_addresses.exists() else None
+    default_billing_address = billing_addresses.first() if billing_addresses.exists() else None
+
     context = {
         'main_categories': main_categories,
         'wcount': wcount,
         'hcount': hcount,
         'cart_items': cart_items,
-        'cart_total': cart_total,  # Sepetin toplam tutarı
+        'cart_total': cart_total,
         "social_media_links": social_media_links,
-        "user_addresses": user_addresses,
+        "delivery_addresses": delivery_addresses,
+        "billing_addresses": billing_addresses,
         "cart_id": cart_id,
+        "default_delivery_address": default_delivery_address,
+        "default_billing_address": default_billing_address,
     }
 
+    mainContext = mainContent(request)
+
+    context.update(mainContext)
+
     return render(request, 'core/order-check-out.html', context)
-
-

@@ -3,37 +3,27 @@ from customerauth.forms import UserRegisterForm, ProfileForm, AddressForm,Custom
 from .forms import PasswordResetRequestForm, SetNewPasswordForm
 from django.contrib.auth import login, authenticate, logout, get_backends
 from django.contrib import messages
-from django.conf import settings
-from customerauth.models import User, Address, MyStyles, wishlist_model,Order,OrderItem
+from customerauth.models import *
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from products.models import RoomType, HomeType, HomeModel, SpaceDefinition, TimeRange, Product, Category,Cart,CartItem
 from actstream import action
 from notification.smtp2gomailsender import send_email_via_smtp2go
-import json
+from django.core.cache import cache
 from django.utils import timezone
 from django.contrib.auth import update_session_auth_hash
-from django.core import serializers
 from django.template.loader import render_to_string
-from cities_light.models import Country, City, Region, SubRegion
 from main.models import SocialMedia,HomeSubBanner
 from .tcknrequest import TCKimlikNoSorgula
-import iyzipay
-from ipware import get_client_ip
 from payment.views import refund_payment_cancel_order
 from main.mainContent import mainContent
-from main.decorators import log_request
-
-from django.urls import reverse
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes
 from django.template.loader import render_to_string
-from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_str
 from customerauth.send_confirmation import send_confirmation_email, send_email_change_notification
 from .models import PasswordReset
-from django.views.decorators.http import require_POST
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 
@@ -289,10 +279,10 @@ def notifications(request):
         form = NotificationSettingsForm(request.POST, instance=user_profile)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Notification settings updated successfully.')
+            messages.success(request, 'Bildirimler Güncellendi')
             return redirect("customerauth:notifications")
         else:
-            messages.error(request, 'Error updating notification settings. Please check the form.')
+            messages.error(request, 'Bildirimler güncellenirken bir sorun oluştu.')
     else:
         form = NotificationSettingsForm(instance=user_profile)
 
@@ -308,11 +298,14 @@ def notifications(request):
 @login_required(login_url='customerauth:sign-in')
 def address_list(request):
     title ="Adreslerim"
-    addresses = Address.objects.filter(user=request.user)
+    delivery_addresses = Address.objects.filter(user=request.user, delivery_addresses=True ).order_by("-created_at")
+    billing_addresses = Address.objects.filter(user=request.user, billing_addresses=True ).order_by("-created_at")
+
     form = AddressForm(request.POST or None) 
     mainContext = mainContent(request)
     context = {
-        'addresses': addresses, 
+        'delivery_addresses': delivery_addresses, 
+        'billing_addresses':billing_addresses,
         'form': form, 
         'title':title ,
     }
@@ -322,15 +315,33 @@ def address_list(request):
 
 @login_required(login_url='customerauth:sign-in')
 def create_address(request):
-    title ="Adreslerim"
+    address_type = request.GET.get('address_type') 
+    title = "Adreslerim"
     mainContext = mainContent(request)    
+    district_id = request.POST.get('region') if request.method == 'POST' else None
+
     if request.method == 'POST':
-        form = AddressForm(request.POST)
+        form = AddressForm(request.POST, district_id=district_id) 
         if form.is_valid():
+            # Aynı türdeki mevcut adreslerin varsayılanlığını kaldır
+            if address_type == 'delivery':
+                Address.objects.filter(user=request.user, delivery_addresses=True).update(is_default=False)
+            elif address_type == 'billing':
+                Address.objects.filter(user=request.user, billing_addresses=True).update(is_default=False)
+
             new_address = form.save(commit=False)
             new_address.user = request.user
+            if address_type == 'delivery':
+                new_address.delivery_addresses = True
+                new_address.billing_addresses = False
+                new_address.is_default = True
+            elif address_type == 'billing':
+                new_address.delivery_addresses = False
+                new_address.billing_addresses = True
+                new_address.is_default = True
+
             new_address.save()
-            messages.success(request,"Adresiniz Başarıyla Eklenmiştir.")
+            messages.success(request, "Adresiniz Başarıyla Eklenmiştir.")
             return redirect('customerauth:address-list')  
         else:
             print("form error: ", form.errors)
@@ -345,27 +356,51 @@ def create_address(request):
     return render(request, 'customerauth/add-new-address.html', context)
 
 
+
 @login_required(login_url='customerauth:sign-in')
 def edit_address(request, address_id):
-    title ="Adreslerim"
+    address_type = request.GET.get('address_type')
+    title = "Adreslerim"
     address = get_object_or_404(Address, id=address_id)
     mainContext = mainContent(request)  
+    district_id = address.region.district_id
+    neighborhood_id = address.neighborhood.neighborhood_id  
+
     if request.method == 'POST':
-        form = AddressForm(request.POST, instance=address)
+        neighborhood_id = request.POST.get('neighborhood') if request.method == 'POST' else None 
+        form = AddressForm(request.POST, instance=address, district_id=district_id, neighborhood_id=neighborhood_id)
         if form.is_valid():
-            form.save()
-            messages.success(request,"Adresiniz Başarıyla Güncellenmiştir.")
+            # Aynı türdeki mevcut adreslerin varsayılanlığını kaldır
+            if address_type == 'delivery':
+                Address.objects.filter(user=request.user, delivery_addresses=True).update(is_default=False)
+            elif address_type == 'billing':
+                Address.objects.filter(user=request.user, billing_addresses=True).update(is_default=False)
+
+            address = form.save(commit=False)
+            if address_type == 'delivery':
+                address.delivery_addresses = True
+                address.billing_addresses = False
+                address.is_default = True
+            elif address_type == 'billing':
+                address.delivery_addresses = False
+                address.billing_addresses = True
+                address.is_default = True
+            address.save()
+            messages.success(request, "Adresiniz Başarıyla Güncellenmiştir.")
             return redirect('customerauth:address-list')
     else:
-        form = AddressForm(instance=address)
+        form = AddressForm(instance=address, district_id=district_id, neighborhood_id=neighborhood_id)
 
     context = {
         'form': form, 
         'address': address, 
         'title': title,   
+        'district_id': district_id,
+        'neighborhood_id': neighborhood_id, 
     }
     context.update(mainContext)
     return render(request, 'customerauth/edit-address.html', context)
+
 
 
 @login_required(login_url='customerauth:sign-in')
@@ -382,8 +417,20 @@ def get_subregions(request):
     if request.method == 'GET':
         city_id = request.GET.get('city_id')
         if city_id:
-            subregions = SubRegion.objects.filter(region_id=city_id).values('id', 'name')
-            data = {str(subregion['id']): subregion['name'] for subregion in subregions}
+            subregions = District.objects.filter(city_id=city_id).values('district_id', 'name')
+            data = {str(subregion['district_id']): subregion['name'] for subregion in subregions}
+            return JsonResponse(data)
+
+    return JsonResponse({})
+
+
+@login_required(login_url='customerauth:sign-in')
+def get_neighborhood(request):
+    if request.method == 'GET':
+        district_id = request.GET.get('district_id')
+        if district_id:
+            subregions = Neighborhood.objects.filter(district_id=district_id).values('neighborhood_id', 'name')
+            data = {str(subregion['neighborhood_id']): subregion['name'] for subregion in subregions}
             return JsonResponse(data)
 
     return JsonResponse({})
@@ -567,6 +614,195 @@ def update_user_my_style_status(user):
         if mystyles.room_type and mystyles.home_type and mystyles.home_model and mystyles.space_definition and mystyles.time_range:
             # Eğer tüm alanlar dolu ise, User modelindeki my_style alanını True yap
             User.objects.filter(pk=user.pk).update(my_style=True)
+
+
+
+
+@login_required(login_url='customerauth:sign-in')
+def my_style_list(request):
+    mainContext = mainContent(request)
+    user = request.user  
+
+    # Kullanıcının stil kaydını kontrol et
+    if not hasattr(user, 'mystyles'):
+        return redirect("main:home")
+
+    try:
+        my_styles = MyStyles.objects.get(user=user)
+
+        filtered_products = set()
+
+        if my_styles.room_type:  
+            room_type_products = Product.objects.filter(room_types=my_styles.room_type, is_active=True)
+            filtered_products.update(room_type_products) 
+
+        if my_styles.home_type: 
+            home_type_products = Product.objects.filter(home_types=my_styles.home_type, is_active=True)
+            filtered_products.update(home_type_products)
+
+        if my_styles.home_model: 
+            home_model_products = Product.objects.filter(home_models=my_styles.home_model, is_active=True)
+            filtered_products.update(home_model_products)
+
+        if my_styles.space_definition:  
+            space_definition_products = Product.objects.filter(space_definitions=my_styles.space_definition, is_active=True)
+            filtered_products.update(space_definition_products)
+
+        if my_styles.time_range: 
+            time_range_products = Product.objects.filter(time_ranges=my_styles.time_range, is_active=True)
+            filtered_products.update(time_range_products)
+
+        products = list(filtered_products)
+
+        page = request.GET.get('page', 1)  
+        paginator = Paginator(products, 10)  
+
+        try:
+            paginated_products = paginator.page(page)
+        except PageNotAnInteger:
+            paginated_products = paginator.page(1)  
+        except EmptyPage:
+            paginated_products = paginator.page(paginator.num_pages)
+
+        room_type_prouct_count = Product.objects.filter(room_types=my_styles.room_type, is_active=True).count() if my_styles.room_type else 0
+        home_type_prouct_count = Product.objects.filter(home_types=my_styles.home_type, is_active=True).count() if my_styles.home_type else 0
+        home_models_prouct_count = Product.objects.filter(home_models=my_styles.home_model, is_active=True).count() if my_styles.home_model else 0
+        space_definitions_prouct_count = Product.objects.filter(space_definitions=my_styles.space_definition, is_active=True).count() if my_styles.space_definition else 0
+        time_ranges_prouct_count = Product.objects.filter(time_ranges=my_styles.time_range, is_active=True).count() if my_styles.time_range else 0
+
+        room_type = my_styles.room_type
+        home_type = my_styles.home_type
+        home_model = my_styles.home_model
+        space_definition = my_styles.space_definition
+        time_range = my_styles.time_range
+
+        context = {
+            "products": paginated_products,  
+            "room_type": room_type,
+            "home_type": home_type,
+            "home_model": home_model,
+            "space_definition": space_definition,
+            "time_range": time_range,
+            "room_type_prouct_count": room_type_prouct_count,
+            "home_type_prouct_count": home_type_prouct_count,
+            "home_models_prouct_count": home_models_prouct_count,
+            "space_definitions_prouct_count": space_definitions_prouct_count,
+            "time_ranges_prouct_count": time_ranges_prouct_count,
+            "product_count": paginator.count,  # Ürün sayısı
+            "paginator": paginator,  # Paginator nesnesi
+            "page": page,  # Şu anki sayfa numarası
+        }
+        
+        # Genel içerik ile context'i birleştir
+        context.update(mainContext)
+        return render(request, 'core/my_style_product_list.html', context)
+
+    except MyStyles.DoesNotExist:
+        # Stil bulunamadığında boş liste döndür
+        return render(request, 'core/my_style_product_list.html', {"products": [], "product_count": 0})
+
+
+
+
+
+@login_required(login_url='customerauth:sign-in')
+def my_style_list_category(request, slug):
+    mainContext = mainContent(request)
+    user = request.user  
+
+    if not hasattr(user, 'mystyles'):
+        return redirect("main:home")
+
+    try:
+        my_styles = MyStyles.objects.get(user=user)
+        filtered_products = set()
+        category_name = None 
+
+        room_type = RoomType.objects.filter(slug=slug).first()
+        home_type = HomeType.objects.filter(slug=slug).first()
+        home_model = HomeModel.objects.filter(slug=slug).first()
+        space_definition = SpaceDefinition.objects.filter(slug=slug).first()
+        time_range = TimeRange.objects.filter(slug=slug).first()
+
+        if room_type:
+            room_type_products = Product.objects.filter(room_types=room_type, is_active=True)
+            filtered_products.update(room_type_products) 
+            category_name = room_type.name 
+
+        if home_type:
+            home_type_products = Product.objects.filter(home_types=home_type, is_active=True)
+            filtered_products.update(home_type_products)
+            category_name = home_type.name  
+
+        if home_model:
+            home_model_products = Product.objects.filter(home_models=home_model, is_active=True)
+            filtered_products.update(home_model_products)
+            category_name = home_model.name
+
+        if space_definition:
+            space_definition_products = Product.objects.filter(space_definitions=space_definition, is_active=True)
+            filtered_products.update(space_definition_products)
+            category_name = space_definition.name 
+
+        if time_range:
+            time_range_products = Product.objects.filter(time_ranges=time_range, is_active=True)
+            filtered_products.update(time_range_products)
+            category_name = time_range.name  # TimeRange ismini al
+
+        # Sonuçları listele
+        products = list(filtered_products)
+
+        room_type_prouct_count = Product.objects.filter(room_types=my_styles.room_type, is_active=True).count() if my_styles.room_type else 0
+        home_type_prouct_count = Product.objects.filter(home_types=my_styles.home_type, is_active=True).count() if my_styles.home_type else 0
+        home_models_prouct_count = Product.objects.filter(home_models=my_styles.home_model, is_active=True).count() if my_styles.home_model else 0
+        space_definitions_prouct_count = Product.objects.filter(space_definitions=my_styles.space_definition, is_active=True).count() if my_styles.space_definition else 0
+        time_ranges_prouct_count = Product.objects.filter(time_ranges=my_styles.time_range, is_active=True).count() if my_styles.time_range else 0
+
+
+        room_type = my_styles.room_type
+        home_type = my_styles.home_type
+        home_model = my_styles.home_model
+        space_definition = my_styles.space_definition
+        time_range = my_styles.time_range
+
+
+        # Pagination işlemi
+        page = request.GET.get('page', 1)  
+        paginator = Paginator(products, 10)  
+
+        try:
+            paginated_products = paginator.page(page)
+        except PageNotAnInteger:
+            paginated_products = paginator.page(1)  
+        except EmptyPage:
+            paginated_products = paginator.page(paginator.num_pages)
+
+        context = {
+            "room_type": room_type,
+            "home_type": home_type,
+            "home_model": home_model,
+            "space_definition": space_definition,
+            "time_range": time_range,
+            "products": paginated_products,  
+            "category_name": category_name,  
+            "product_count": paginator.count,
+            "paginator": paginator,  
+            "page": page, 
+            "room_type_prouct_count": room_type_prouct_count,
+            "home_type_prouct_count": home_type_prouct_count,
+            "home_models_prouct_count": home_models_prouct_count,
+            "space_definitions_prouct_count": space_definitions_prouct_count,
+            "time_ranges_prouct_count": time_ranges_prouct_count,
+        }
+
+        # Genel içerik ile context'i birleştir
+        context.update(mainContext)
+        return render(request, 'core/my_style_category_list.html', context)
+
+    except MyStyles.DoesNotExist:
+        return render(request, 'core/my_style_category_list.html', {"products": [], "product_count": 0})
+
+
 
 ###################### My Style  Close #################
 

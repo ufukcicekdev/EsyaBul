@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("auth", "0012_alter_user_first_name_max_length"),
-        ("cities_light", "0011_alter_city_country_alter_city_region_and_more"),
+        #("cities_light", "0011_alter_city_country_alter_city_region_and_more"),
         ("products", "__first__"),
     ]
 
