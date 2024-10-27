@@ -348,10 +348,10 @@ def result(request):
 
     user = order_data.get('user')
     if user is None or not user.is_authenticated:
-        messages.error(request, "Kullanıcı oturumu açılmamış. Lütfen giriş yapın.")
-        return HttpResponseRedirect(reverse('customerauth:sign-in'))  
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
     else:
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+  
     
     order_completed_order_address = order_data.get('order_completed_order_address')
     order_completed_billing_address = order_data.get('order_completed_billing_address')
