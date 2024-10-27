@@ -393,7 +393,7 @@ def result(request):
             order.payment_transaction_id = payment_transaction_id
             order.save()
             create_payment_object(user, sonuc)
-            return HttpResponseRedirect(reverse('products:orders-list'))
+            return HttpResponseRedirect(reverse('customerauth:orders-list'))
 
         elif sonuc and sonuc['status'] == 'failure':
             messages.warning(request, sonuc['errorMessage'])
@@ -432,36 +432,39 @@ def create_payment_object(user, sonuc):
 
 def create_order_and_items(user, order_completed_order_address, order_completed_billing_address, basket_items, order_total, order_number, cart_items, card_id, payment_transaction_id):
     
-    get_tempOrder_result = TempOrderCityData.objects.get(order_number=order_number, user=user)
+    try:
 
-    order = Order.objects.create(
-        user=user,
-        order_adress=order_completed_order_address,
-        billing_adress=order_completed_billing_address,
-        order_details=json.dumps(basket_items),
-        total_amount=float(order_total.replace(',', '.')),
-        order_number=order_number,
-        status='Pending',
-        payment_transaction_id = payment_transaction_id,
-        order_city = get_tempOrder_result.order_city,
-        order_region = get_tempOrder_result.order_region,
-        order_neighborhood = get_tempOrder_result.order_neighborhood
-    )
-    
-    order_create_mail(order_number, user)
-    cart_order_completed(card_id)
-    order_user_mail(order_number, user, card_id)
-    for cart_item in cart_items:
-        OrderItem.objects.create(
-            order=order,
-            product=cart_item.product,
-            quantity=cart_item.quantity,
-            rental_price= cart_item.rental_price,
-            selling_price= cart_item.selling_price,
-            is_rental=cart_item.is_rental,
-            rental_period=cart_item.rental_period,
+        get_tempOrder_result = TempOrderCityData.objects.get(order_number=order_number, user=user)
+
+        order = Order.objects.create(
+            user=user,
+            order_adress=order_completed_order_address,
+            billing_adress=order_completed_billing_address,
+            order_details=json.dumps(basket_items),
+            total_amount=float(order_total.replace(',', '.')),
+            order_number=order_number,
+            status='Pending',
+            payment_transaction_id = payment_transaction_id,
+            order_city = get_tempOrder_result.order_city,
+            order_region = get_tempOrder_result.order_region,
+            order_neighborhood = get_tempOrder_result.order_neighborhood
         )
-
+        
+        order_create_mail(order_number, user)
+        cart_order_completed(card_id)
+        order_user_mail(order_number, user, card_id)
+        for cart_item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                product=cart_item.product,
+                quantity=cart_item.quantity,
+                rental_price= cart_item.rental_price,
+                selling_price= cart_item.selling_price,
+                is_rental=cart_item.is_rental,
+                rental_period=cart_item.rental_period,
+            )
+    except Exception as e:
+        print("Message: ",e.message)
 
 
 

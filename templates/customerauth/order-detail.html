@@ -199,6 +199,11 @@
                                             <th>Kargo Durumu</th>
                                             <td>
                                                 <span>{{ cargo_status.status_description }}</span>
+                                                {% if cargo_status.status_description %}
+                                                    <span>{{ cargo_status.status_description }}</span>
+                                                {% else %}
+                                                   <span>{{ cargo_status }}</span> 
+                                                {% endif %}
                                                 {% if shipping_details.shipping_url and orders_detail.status != 'Cancelled' and orders_detail.status != 'Completed' %}
                                                     <a href="{{ shipping_details.shipping_url }}" target="_blank" class="btn btn-danger btn-sm" style="display: inline-block; float: right; margin-left: 15px;">Kargo Takip</a>
                                                 {% else %}

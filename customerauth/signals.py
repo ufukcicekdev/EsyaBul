@@ -72,53 +72,59 @@ def create_shipping_order(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Order)
 def cancel_shipping_order(sender, instance, created, **kwargs):
-    if not created:
-        if instance.status == 'Cancelled':
-            receiver_email = instance.user.email
-            description ="Siparişiniz ürün tedariği sorunu yüzünden iptal edilmiştir. Ödemeniz kısa süre sonra tekrar hesabınıza yatacaktır."
-            orders_detail = get_object_or_404(Order, order_number=instance.order_number, user=instance.user.id) 
-            cancel_response = refund_payment_cancel_order2(description, instance.order_number, orders_detail)
-            if cancel_response:
-                subject = 'Sipariş Durumu Güncellendi'
-                context = {
-                    'subject': subject,
-                    'instance': instance,
-                    'status_translation': 'İptal Edildi',
-                    'order_number': instance.order_number,
-                    'username': instance.user.username,
-                    'shipping_status_translation':'',
-                    'description':description
-                }
-                html_content = render_to_string('email_templates/order_status_email.html', context)
-                
-                orders_detail.order_cancel_reason =description
-                orders_detail.order_cancel_date = timezone.now()
-                orders_detail.save()
+    try:
 
-                shipping_details = get_object_or_404(ShippingOrder, order=orders_detail.id, customer=orders_detail.user.id)
-                shipping_details.shipping_status_id = 15
-                shipping_details.save()
-                delete_consignment(shipping_details.barcode)
-                send_email_via_smtp2go([receiver_email], subject, html_content)
+        if not created:
+            if instance.status == 'Cancelled':
+                receiver_email = instance.user.email
+                description ="Siparişiniz ürün tedariği sorunu yüzünden iptal edilmiştir. Ödemeniz kısa süre sonra tekrar hesabınıza yatacaktır."
+                orders_detail = get_object_or_404(Order, order_number=instance.order_number, user=instance.user.id) 
+                cancel_response = refund_payment_cancel_order2(description, instance.order_number, orders_detail)
+                if cancel_response:
+                    subject = 'Sipariş Durumu Güncellendi'
+                    context = {
+                        'subject': subject,
+                        'instance': instance,
+                        'status_translation': 'İptal Edildi',
+                        'order_number': instance.order_number,
+                        'username': instance.user.username,
+                        'shipping_status_translation':'',
+                        'description':description
+                    }
+                    html_content = render_to_string('email_templates/order_status_email.html', context)
+                    
+                    orders_detail.order_cancel_reason =description
+                    orders_detail.order_cancel_date = timezone.now()
+                    orders_detail.save()
 
+                    shipping_details = get_object_or_404(ShippingOrder, order=orders_detail.id, customer=orders_detail.user.id)
+                    shipping_details.shipping_status_id = 15
+                    shipping_details.save()
+                    delete_consignment(shipping_details.barcode)
+                    send_email_via_smtp2go([receiver_email], subject, html_content)
+    except Exception as e:
+        print("Message: ",e)
            
             
 
 
 
-@receiver(post_save, sender=Order)
-def upload_billing_document(sender, instance, update_fields, **kwargs):
-    if 'billing_document' in update_fields:
-        subject = 'Siparişinizin Faturası Oluşturuldu'
-        receiver_email = instance.user.email  
-        context = {
-            'subject': subject,
-            'order_number':instance.order_number,
-            'username': instance.user.username,
-        }
-        html_content = render_to_string('email_templates/billing_notify.html', context)
-        send_email_via_smtp2go([receiver_email], subject, html_content)
 
+@receiver(post_save, sender=Order)
+def upload_billing_document(sender, instance, update_fields=None, **kwargs):
+    try:
+        if update_fields and 'billing_document' in update_fields:
+            subject = 'Siparişinizin Faturası Oluşturuldu'
+            receiver_email = instance.user.email  
+            context = {
+                'subject': subject,
+                'order_number': instance.order_number,
+                'username': instance.user.username,
+            }
+            html_content = render_to_string('email_templates/billing_notify.html', context)
+            send_email_via_smtp2go([receiver_email], subject, html_content)
+    except Exception as e:
+        print("Message:", e)
 
 
 

@@ -907,8 +907,14 @@ def orders_detail(request, order_number):
     mainContext = mainContent(request)
     form = CancelOrderForm()
     orders_detail = get_object_or_404(Order, order_number=order_number, user=request.user)
-    shipping_details = get_object_or_404(ShippingOrder, order=orders_detail.id, customer=request.user)
-    cargo_status = shipping_details.shipping_status if hasattr(shipping_details, 'shipping_status') else "Durum bilgisi mevcut değil"
+    shipping_details = ShippingOrder.objects.filter(order=orders_detail.id, customer=request.user).first()
+
+    cargo_status = "Kabul Bekliyor"
+
+    shipping_details = ShippingOrder.objects.filter(order=orders_detail.id, customer=request.user).first()
+
+    if shipping_details:
+        cargo_status = shipping_details.shipping_status.status_description if hasattr(shipping_details.shipping_status, 'status_description') else "Durum bilgisi mevcut değil"
 
     # if cargo_status.status_code in ["00"]:
     #     pass
