@@ -278,7 +278,7 @@ def start_scheduler():
             'func': shipping_status_services,
             'trigger': 'cron',
             'id': 'shipping_status_services',
-            'minute': '*',
+            'minute': '3',
             'replace_existing': True,
         },
     ]
