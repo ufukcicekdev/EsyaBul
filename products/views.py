@@ -102,27 +102,16 @@ def add_to_cart(request, product_id):
                 active_cart = Cart.objects.create(user=request.user, order_completed=False)
 
             
-            if price_type == 'rental':
-                existing_item = CartItem.objects.filter(
-                    cart=active_cart,
-                    product=product,
-                    is_rental=(price_type == 'rental'),
-                    order_completed=False
-                ).first()
-                print("existing_item",existing_item)
-                if existing_item:
-                    messages.warning(request, f"Bu ürün zaten sepette { 'kiralama' if price_type == 'rental' else 'satın alma' } olarak mevcut!")
-                    return redirect('products:product-detail-view', product_slug=product.slug)
+            existing_item = CartItem.objects.filter(
+                cart=active_cart,
+                product=product,
+                order_completed=False
+            ).first()
 
-            else:
-                existing_item = CartItem.objects.filter(
-                    cart=active_cart,
-                    product=product,
-                    order_completed=False
-                ).first()
-                if existing_item:
-                    messages.warning(request,f"Bu ürün zaten sepette { 'kiralama' if price_type == 'rental' else 'satın alma' } olarak mevcut!")
-                    return redirect('products:product-detail-view', product_slug=product.slug)
+              
+            if existing_item:
+                messages.warning(request, f"Bu ürün zaten sepette { 'kiralama' if price_type == 'rental' else 'satın alma' } olarak mevcut!")
+                return redirect('products:product-detail-view', product_slug=product.slug)
 
 
             # Yeni bir CartItem oluştur
