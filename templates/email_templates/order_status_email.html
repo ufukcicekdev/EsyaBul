@@ -268,8 +268,16 @@ table, td { color: #000000; } #u_body a { color: #161a39; text-decoration: under
             <p style="font-size: 14px; line-height: 140%;">&nbsp;</p>
             <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Sipariş numaranız: {{ order_number }}</span></p>
             <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Sipariş durumu: {{ status_translation }}</span></p>
+            {% if shipping_status_translation %}
             <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Kargo durumu: {{ shipping_status_translation }}</span></p>
+            {% endif %}
             <p style="font-size: 14px; line-height: 140%;">&nbsp;</p>
+
+            {% if description %}
+            <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Açıklama: {{ description }}</span></p>
+            {% endif %}
+            <p style="font-size: 14px; line-height: 140%;">&nbsp;</p>
+
             <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 18px; line-height: 25.2px; color: #666666;">Teşekkürler & Saygılar, Eşyala</span></p>
         </div>
         

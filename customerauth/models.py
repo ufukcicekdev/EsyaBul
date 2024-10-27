@@ -95,7 +95,7 @@ class Neighborhood(models.Model):
     neighborhood_id =models.CharField(max_length=10, verbose_name="İlçe ID",null=True, blank=True, unique=True)
     name = models.CharField(max_length=255, verbose_name="Mahalle Adı")
     district = models.ForeignKey(District, to_field='district_id', related_name='neighborhood', on_delete=models.CASCADE, verbose_name="İlçe")
-    postal_code = models.CharField(max_length=10, verbose_name="Posta Kodu") 
+    postal_code = models.CharField(max_length=10, verbose_name="Posta Kodu", null=True, blank=True) 
 
     class Meta:
         verbose_name = "Mahalle"
@@ -171,17 +171,11 @@ class wishlist_model(models.Model):
 class Order(models.Model):
     ORDER_STATUS_CHOICES = [
         ('Pending', 'Pending'),
+        ('Approved', 'Approved'),
         ('Completed', 'Completed'),
         ('Cancelled', 'Cancelled'),
     ]
 
-    SHIPPING_STATUS_CHOICES = [
-        ('Preparing', 'Preparing'),
-        ('Shipped', 'Shipped'),
-        ('Delivered', 'Delivered'),
-        ('Returned', 'Returned'),
-        ('Lost', 'Lost'),
-    ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Kullanıcı")
     order_adress = models.TextField(verbose_name="Sipariş Adresi")
@@ -190,7 +184,6 @@ class Order(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Toplam Miktar")
     order_number = models.CharField(max_length=20, unique=True, verbose_name="Sipariş Numarası")
     status = models.CharField(max_length=20, choices=ORDER_STATUS_CHOICES, default='Pending', verbose_name="Durum")
-    shipping_status = models.CharField(max_length=20, choices=SHIPPING_STATUS_CHOICES, default='Preparing', verbose_name="Nakliye Durumu")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Oluşturulma Tarihi")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Güncelleme Tarihi")
     billing_document = models.FileField(upload_to='billing_documents/', blank=True, null=True, verbose_name="Fatura Belgesi") 
@@ -199,7 +192,6 @@ class Order(models.Model):
     order_pdf_document = models.FileField(upload_to='order_pdf_documents/', blank=True, null=True, verbose_name="Sipariş PDF Belgesi") 
     payment_id = models.CharField(max_length=20, blank=True, null=True, verbose_name="Ödeme ID")
     payment_transaction_id = models.CharField(max_length=50, blank=True, null=True, verbose_name="Ödeme İşlem ID")
-
     order_city = models.ForeignKey(City, to_field='city_id', on_delete=models.SET_NULL, null=True, blank=True, related_name='order_city_orders')  # Şehir
     order_region = models.ForeignKey(District, to_field='district_id', on_delete=models.SET_NULL, null=True, blank=True, related_name='order_region_orders')  # İlçe
     order_neighborhood = models.ForeignKey(Neighborhood,to_field='neighborhood_id', on_delete=models.SET_NULL, null=True, blank=True, related_name='order_neighborhood_orders')  # Mahalle
@@ -208,6 +200,12 @@ class Order(models.Model):
     class Meta:
         verbose_name ="Siparişler"
         verbose_name_plural = "Siparişler"
+
+    def calculate_total_bulk(self):
+        total_bulk = 0
+        for item in self.order_items.all():
+            total_bulk += item.quantity * item.product.desi
+        return total_bulk
 
 
 

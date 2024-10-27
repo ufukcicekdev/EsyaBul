@@ -138,7 +138,7 @@
         <main class="site-main">
             <div class="site-main__container">
                 <div class="container">
-                    <h1 class="pageTitle headline-bold-24-29">Adreslerim</h1>
+                    <h1 class="pageTitle headline-bold-24-29">Siparişlerim</h1>
                     <div class="profileLayout">
                         <div class="left">
                             <div class="accountList">
@@ -165,7 +165,7 @@
                             <div id="addressPage" class="sc-bVHCgj bvQtLI">
                                 <div class="contentTitle heading">
                                     <strong class="d-block headline-bold-20-24">Siparişim: {{ orders_detail.order_number }}</strong>
-                                    {% if orders_detail.status != 'Cancelled' %}
+                                    {% if orders_detail.status != 'Cancelled' and orders_detail.status != 'Completed' %}
                                     <button class="btn-type3" id="cancelOrderButton">Siparişi İptal Et</button>  
                                     <div id="cancelModal" class="modal">
                                         <div class="modal-content">
@@ -196,12 +196,25 @@
                                             <td>{{ orders_detail.created_at }}</td>
                                         </tr>
                                         <tr>
+                                            <th>Kargo Durumu</th>
+                                            <td>
+                                                <span>{{ cargo_status.status_description }}</span>
+                                                {% if shipping_details.shipping_url and orders_detail.status != 'Cancelled' and orders_detail.status != 'Completed' %}
+                                                    <a href="{{ shipping_details.shipping_url }}" target="_blank" class="btn btn-danger btn-sm" style="display: inline-block; float: right; margin-left: 15px;">Kargo Takip</a>
+                                                {% else %}
+                                                    <span style="float: right; margin-left: 15px;">Kargo takip bilgisi yok</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        <tr>
                                             <th>Sipariş Durumu</th>
                                             <td>
                                                 {% if orders_detail.status == 'Pending' %}
                                                     Beklemede
                                                 {% elif orders_detail.status == 'Completed' %}
                                                     Tamamlandı
+                                                {% elif orders_detail.status == 'Approved' %}
+                                                    Onaylandı
                                                 {% elif orders_detail.status == 'Cancelled' %}
                                                     İptal Edildi
                                                 {% endif %}
@@ -217,9 +230,9 @@
                                         </tr>
                                         {% if orders_detail.billing_document %}
                                         <tr>
-                                            <th>Fatura Belgesi</th>
+                                            <th>Fatura</th>
                                             <td>
-                                                <a href="{{ orders_detail.billing_document.url }}" download> İndir </a>
+                                                <a target="_blank" href="{{ orders_detail.billing_document.url }}" download> İndir </a>
                                             </td>
                                         </tr>
                                         {% endif %}
@@ -237,7 +250,7 @@
                                     </table>
                                     
                                 </div>
-                                
+                            
                                 <div class="order-items">
                                     <h2>Sipariş Kalemleri</h2>
                                     <table class="order-items-table">

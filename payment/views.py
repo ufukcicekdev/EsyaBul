@@ -60,7 +60,7 @@ options = {
 sozlukToken = list()
 
 @login_required(login_url='customerauth:sign-in')
-def refund_payment_cancel_order(request, reason, order_number, id, orders_detail):
+def refund_payment_cancel_order(request, reason, order_number, orders_detail):
     client_ip = my_view(request) 
     request = {
         'locale': 'tr',
@@ -78,6 +78,27 @@ def refund_payment_cancel_order(request, reason, order_number, id, orders_detail
     sonuc = json.loads(result, object_pairs_hook=list)
     sonuc = dict(json.loads(result))
     return True if sonuc.get('status') == 'success' else False
+
+
+def refund_payment_cancel_order2(reason, order_number, orders_detail):
+    #client_ip = my_view(request) 
+    request = {
+        'locale': 'tr',
+        'conversationId': order_number,
+        'paymentId': orders_detail.payment_id,
+        'paymentTransactionId': orders_detail.payment_transaction_id,
+        #'ip': client_ip,
+        'currency':'TRY',
+        'price': str(orders_detail.total_amount),
+        'reason': 'other',
+        'description': reason
+    }
+    cancel = iyzipay.Refund().create(request, options)
+    result = cancel.read().decode('utf-8')
+    sonuc = json.loads(result, object_pairs_hook=list)
+    sonuc = dict(json.loads(result))
+    return True if sonuc.get('status') == 'success' else False
+    
 
 
 def my_view(request):
@@ -421,7 +442,6 @@ def create_order_and_items(user, order_completed_order_address, order_completed_
         total_amount=float(order_total.replace(',', '.')),
         order_number=order_number,
         status='Pending',
-        shipping_status='Preparing',
         payment_transaction_id = payment_transaction_id,
         order_city = get_tempOrder_result.order_city,
         order_region = get_tempOrder_result.order_region,

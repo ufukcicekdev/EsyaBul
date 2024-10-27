@@ -306,6 +306,13 @@ header .close:hover{
         max-height: 100%;
     }
     
+    .caption1 {
+        position: static;
+        bottom: 10px;
+        left: 10px;
+        color: #fff;
+        padding: 5px;
+    }
     .caption {
         position: absolute;
         bottom: 10px;
@@ -401,7 +408,11 @@ header .close:hover{
     color: #ff4d4f; /* Kırmızı renkte hata mesajı */
     background-color: #ffe6e6; /* Kırmızımsı bir arka plan */
 }
-.caption.top-right {
+.caption1.top-right {
+      top: 10px; /* Üstten mesafe */
+      right: 10px; /* Sağdan mesafe */
+  }
+  .caption.top-right {
       top: 10px; /* Üstten mesafe */
       right: 10px; /* Sağdan mesafe */
   }
@@ -563,7 +574,7 @@ header .close:hover{
                                 
                                 
                                 <!-- Breadcrumbs of the Page end -->
-                                <span class="caption top-right">
+                                <span class="caption1 top-right">
                                     <span class="related_product">{{ product.get_purchase_rental_options }}</span>
                                 </span>
                                 <h4>{{ product.name }}</h4>

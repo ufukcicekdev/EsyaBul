@@ -625,13 +625,15 @@
                             <h2 class="heading">Markalar</h2>
                             <div class="patner-slider">
                                 {% for brand in brand_data %}
-                                <div class="slide">
                                     {% if brand.image %}
-                                    <div class="box1">
-                                        <div class="box2"><a><img src="{{ brand.image.url }}" title="{{ brand.img_title }}" alt="{{ brand.img_alt }}" style="width: 200px; height: 150px;" loading="lazy"></a></div>
+                                    <div class="slide">
+                                        
+                                        <div class="box1">
+                                            <div class="box2"><a><img src="{{ brand.image.url }}" title="{{ brand.img_title }}" alt="{{ brand.img_alt }}" style="width: 200px; height: 150px;" loading="lazy"></a></div>
+                                        </div>
                                     </div>
                                     {% endif %}
-                                </div>
+
                                 {% endfor %}
 
                             </div>

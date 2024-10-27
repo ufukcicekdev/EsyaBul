@@ -45,12 +45,21 @@ class OrderItemInline(admin.TabularInline):
     model = OrderItem
     extra = 0
 
+from django.contrib import admin
+from django.utils.html import format_html
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'order_number', 'status', 'created_at','billing_document_url','order_pdf_document_url']
+    list_display = ['id', 'user', 'order_number', 'status', 'created_at', 'billing_document_url', 'order_pdf_document_url']
     list_filter = ['status', 'created_at', 'order_number']
     inlines = [OrderItemInline]
     list_per_page = 20
+
+    def get_fields(self, request, obj=None):
+        # Kullanıcı, siparişin detay sayfasında görmek istediğiniz alanları buraya ekleyebilirsiniz
+        if obj:  # Eğer obj mevcutsa (değiştiriliyorsa)
+            return ['user', 'order_number', 'status','billing_document','order_pdf_document']
+        return super().get_fields(request, obj)
 
     def save_model(self, request, obj, form, change):
         if change:
@@ -63,20 +72,12 @@ class OrderAdmin(admin.ModelAdmin):
                 obj.save(update_fields=update_fields)
             else:
                 obj.save()
-                
-            if obj.shipping_status == 'Delivered':
-                for order_item in obj.order_items.all():
-                    if order_item.is_rental:
-                        rental_period = order_item.rental_period
-                        expiration_days = int(rental_period) * 30  
-                        order_item.expired_date = obj.created_at + timedelta(days=expiration_days)
-                        order_item.save(update_fields=['expired_date'])
-
         else:
             obj.save()
-    
+
     def get_total_order_price(self, obj):
         return obj.get_total_order_price()
+
     def order_pdf_document_url(self, obj):
         if obj.order_pdf_document:
             url = obj.order_pdf_document.url
@@ -91,7 +92,7 @@ class OrderAdmin(admin.ModelAdmin):
             return format_html('<a href="{}" target="_blank">{}</a>', url, obj.billing_document.name)
         else:
             return "-"
-    billing_document_url.short_description = 'PDF Document URL'
+    billing_document_url.short_description = 'Billing Document URL'
     get_total_order_price.short_description = 'Total Price'
 
 @admin.register(OrderItem)

@@ -97,11 +97,11 @@
                   <form class="contact-form" method="POST" action="{% url 'main:contact' %}">
                     {% csrf_token %}
                     <fieldset>
-                        <input type="text" class="form-control" name="full_name" id="full_name" placeholder="Adınızı ve soyadınızı girin" required>
-                        <input type="email" class="form-control" name="email" id="email" placeholder="isim@örnek.com" required>
-                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="(500) 123 1234" maxlength="14" title="Telefon numaranızı girin" oninput="formatPhoneNumber(this)" required>
-                        <input type="text" class="form-control" name="subject" id="subject" placeholder="Konu" required>
-                        <textarea class="form-control" name="message" id="message" placeholder="Mesajınızı detaylı olarak yazabilirsiniz" required></textarea>
+                        <input type="text" class="form-control" name="full_name" id="full_name" placeholder="Adınızı ve soyadınızı girin" maxlength="100" required>
+                        <input type="email" class="form-control" name="email" id="email" placeholder="isim@örnek.com" maxlength="100" required>
+                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="(500) 123 1234" maxlength="17" title="Telefon numaranızı girin" oninput="formatPhoneNumber(this)" required>
+                        <input type="text" class="form-control" name="subject" id="subject" placeholder="Konu" maxlength="100" required>
+                        <textarea class="form-control" name="message" id="message" placeholder="Mesajınızı detaylı olarak yazabilirsiniz" maxlength="500" required></textarea>
                         <button class="btn-type3" type="submit">Gönder</button>
                     </fieldset>
                 </form>

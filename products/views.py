@@ -84,30 +84,47 @@ def add_product_review(request, product_id):
         form = ProductReviewForm()
     return redirect('main:home')
 
+
+
 @login_required(login_url='customerauth:sign-in')
 def add_to_cart(request, product_id):
     if request.method == 'POST':
         add_to_cart_form = AddToCartForm(request.POST, product_id=product_id)
         product = get_object_or_404(Product, pk=product_id)
+        
         if add_to_cart_form.is_valid():
             price_type = add_to_cart_form.cleaned_data['price_type']
             quantity = add_to_cart_form.cleaned_data['quantity']
             rental_period_id = add_to_cart_form.cleaned_data.get('rental_period')
 
+            active_cart = Cart.objects.filter(user=request.user, order_completed=False).first()
+            if not active_cart:
+                active_cart = Cart.objects.create(user=request.user, order_completed=False)
+
             
-            request.session['temporary_session_key'] = request.session.session_key
+            if price_type == 'rental':
+                existing_item = CartItem.objects.filter(
+                    cart=active_cart,
+                    product=product,
+                    is_rental=(price_type == 'rental')
+                ).first()
 
-            if request.user.is_authenticated:                
-                active_cart = Cart.objects.filter(user=request.user, order_completed=False).first()
-                if not active_cart:
-                    active_cart = Cart.objects.create(user=request.user, order_completed=False)
+                if existing_item:
+                    messages.warning(request, f"Bu ürün zaten sepette { 'kiralama' if price_type == 'rental' else 'satın alma' } olarak mevcut!")
+                    return redirect('products:product-detail-view', product_slug=product.slug)
+
             else:
-                session_key = request.session.session_key
-                active_cart = Cart.objects.filter(session_key=session_key, order_completed=False).first()
-                if not active_cart:
-                    active_cart = Cart.objects.create(session_key=session_key, order_completed=False)
+                existing_item = CartItem.objects.filter(
+                    cart=active_cart,
+                    product=product
+                ).first()
+                messages.warning(request,f"Bu ürün zaten sepette { 'kiralama' if price_type == 'rental' else 'satın alma' } olarak mevcut!")
+                return redirect('products:product-detail-view', product_slug=product.slug)
 
+
+            # Yeni bir CartItem oluştur
             cart_item = CartItem(cart=active_cart, product=product, quantity=quantity)
+            
             if price_type == 'rental':
                 rental_period = get_object_or_404(ProductRentalPrice, id=rental_period_id, product=product)
                 cart_item.rental_price = rental_period.rental_price
@@ -126,7 +143,6 @@ def add_to_cart(request, product_id):
     else:
         # Eğer istek POST metoduyla değilse, ana sayfaya yönlendir
         return redirect('main:home')
-
 
 
 

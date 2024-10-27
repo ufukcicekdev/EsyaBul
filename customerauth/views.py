@@ -24,8 +24,8 @@ from django.utils.encoding import force_str
 from customerauth.send_confirmation import send_confirmation_email, send_email_change_notification
 from .models import PasswordReset
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
-
+from shipping.models import ShippingOrder
+from shipping.views import *
 
 def confirm_email(request, uidb64, token):
     context = {}
@@ -907,6 +907,13 @@ def orders_detail(request, order_number):
     mainContext = mainContent(request)
     form = CancelOrderForm()
     orders_detail = get_object_or_404(Order, order_number=order_number, user=request.user)
+    shipping_details = get_object_or_404(ShippingOrder, order=orders_detail.id, customer=request.user)
+    cargo_status = shipping_details.shipping_status if hasattr(shipping_details, 'shipping_status') else "Durum bilgisi mevcut değil"
+
+    # if cargo_status.status_code in ["00"]:
+    #     pass
+
+
     order_items = orders_detail.order_items.all()
     if request.method == 'POST':
         form = CancelOrderForm(request.POST)
@@ -915,20 +922,24 @@ def orders_detail(request, order_number):
             orders_detail.status = 'Cancelled'
             orders_detail.order_cancel_reason = reason
             orders_detail.order_cancel_date = timezone.now()
-            cancel_response = refund_payment_cancel_order(request, reason, order_number, orders_detail.id, orders_detail)
+            shipping_details.shipping_status_id = 15   #kargo durumu iptal edidi
+            cancel_response = refund_payment_cancel_order(request, reason, order_number, orders_detail)
             if cancel_response:
                 messages.success(request, f"{order_number} nolu siparişiniz iptal edilmiştir.")
                 orders_detail.save()
+                shipping_details.save()
+                delete_consignment(shipping_details.barcode)
                 return redirect('customerauth:orders-detail', order_number=order_number)
             else:
                 messages.warning(request, f"{order_number} nolu siparişiniz iptal edilirken hata oluştu.")
                 return redirect('customerauth:orders-detail', order_number=order_number)
                 
-    
     context = {
         'orders_detail': orders_detail,
         'order_items': order_items,
         'title': title,
+        "shipping_details":shipping_details,
+        "cargo_status":cargo_status,
         "form": form
     }
     context.update(mainContext)
