@@ -909,7 +909,10 @@ def orders_detail(request, order_number):
     orders_detail = get_object_or_404(Order, order_number=order_number, user=request.user)
     shipping_details = ShippingOrder.objects.filter(order=orders_detail.id, customer=request.user).first()
 
-    cargo_status = "Kabul Bekliyor"
+    if  orders_detail.status == 'Cancelled':
+        cargo_status = "İptal Edildi"
+    else:
+        cargo_status = "Kabul Bekliyor"
 
     shipping_details = ShippingOrder.objects.filter(order=orders_detail.id, customer=request.user).first()
 
@@ -928,13 +931,15 @@ def orders_detail(request, order_number):
             orders_detail.status = 'Cancelled'
             orders_detail.order_cancel_reason = reason
             orders_detail.order_cancel_date = timezone.now()
-            shipping_details.shipping_status_id = 15   #kargo durumu iptal edidi
+            if shipping_details:
+                shipping_details.shipping_status_id = 15   #kargo durumu iptal edidi
             cancel_response = refund_payment_cancel_order(request, reason, order_number, orders_detail)
             if cancel_response:
                 messages.success(request, f"{order_number} nolu siparişiniz iptal edilmiştir.")
                 orders_detail.save()
-                shipping_details.save()
-                delete_consignment(shipping_details.barcode)
+                if shipping_details:
+                    shipping_details.save()
+                    delete_consignment(shipping_details.barcode)
                 return redirect('customerauth:orders-detail', order_number=order_number)
             else:
                 messages.warning(request, f"{order_number} nolu siparişiniz iptal edilirken hata oluştu.")
