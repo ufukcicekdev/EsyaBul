@@ -106,7 +106,8 @@ def add_to_cart(request, product_id):
                 existing_item = CartItem.objects.filter(
                     cart=active_cart,
                     product=product,
-                    is_rental=(price_type == 'rental')
+                    is_rental=(price_type == 'rental'),
+                    order_completed=False
                 ).first()
 
                 if existing_item:
@@ -116,7 +117,8 @@ def add_to_cart(request, product_id):
             else:
                 existing_item = CartItem.objects.filter(
                     cart=active_cart,
-                    product=product
+                    product=product,
+                    order_completed=False
                 ).first()
                 messages.warning(request,f"Bu ürün zaten sepette { 'kiralama' if price_type == 'rental' else 'satın alma' } olarak mevcut!")
                 return redirect('products:product-detail-view', product_slug=product.slug)
