@@ -444,6 +444,28 @@ header .close:hover{
 .slide img:hover {
     transform: scale(1.05); /* Resim hafif büyüsün */
 }
+
+.mt-tabs a {
+    text-decoration: none; /* Alt çizgiyi kaldır */
+    color: #333; /* Yazı rengi */
+    font-weight: bold; /* Daha belirgin bir görünüm */
+    padding: 10px 15px; /* Daha iyi bir tıklama alanı */
+    display: inline-block; /* Daha iyi hizalama için */
+    transition: color 0.3s ease, border-bottom 0.3s ease; /* Animasyon ekler */
+}
+
+.mt-tabs a:hover, 
+.mt-tabs a.active {
+    color: #ff5733; /* Hover ve aktif durumda renk değişimi */
+    border-bottom: 2px solid #ff5733; /* Hover ve aktif durumda alt çizgi */
+}
+
+.mt-tabs a:focus, 
+.mt-tabs a:active {
+    outline: none; /* Varsayılan odak çizgisini kaldır */
+    box-shadow: none; /* Ek görsel efektleri kaldır */
+}
+
     </style>
 
 <div id="wrapper">
@@ -607,7 +629,7 @@ header .close:hover{
                                             {% endfor %}
                                         </ul>
                                     {% endif %}
-                                    <p>{{ product.description|safe }}</p>
+                                    <p>{{ product.information|safe }}</p>
                                 </div>
                                 <div class="txt-wrap">
                                     {% if product.estimated_delivery_time %}

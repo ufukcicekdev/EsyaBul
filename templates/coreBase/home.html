@@ -130,10 +130,7 @@
       color: #FFD700;
   }
   
-  .title a {
-      color: #000;
-      text-decoration: none;
-  }
+
   
   .price, .off {
       display: block;
@@ -223,6 +220,34 @@
       border-radius: 3px;
 }
 
+
+
+.txt-wrap a {
+    outline: none;
+    box-shadow: none;
+    border: none;
+    text-decoration: none; /* Alt çizgiyi kaldır */
+    position: relative; /* Alt çizgi efekti için gerekli */
+    color: #535353; /* Yazı rengi */
+    font-weight: bold; /* Daha belirgin görünüm */
+    transition: color 0.3s ease, box-shadow 0.3s ease; /* Yumuşak geçiş */
+}
+
+.txt-wrap a:hover {
+    color: #ff5733; /* Hover sırasında renk değişimi */
+}
+
+.txt-wrap a::after {
+    content: ''; /* Görsel bir çizgi eklemek için */
+    position: absolute;
+    left: 0;
+    bottom: -2px; /* Yazının altına yerleştir */
+    width: 0;
+    height: 2px;
+    background-color: #ffffff; /* Çizgi rengi */
+    transition: width 0.3s ease; /* Yumuşak animasyon */
+}
+
 </style>
 
 
@@ -252,7 +277,8 @@
                                         <img class="img" src="{{ banner.image.url }}" alt="{{ banner.title }}">
                                     
                                     <div class="txt-wrap {{ banner.title_position }}">
-                                        <a href="{{ banner.link }}" title="Alışverişe Başla"><strong style="color: {{ banner.text_color }};" class="title">{{ banner.title }}</strong></a>
+                                        
+                                        <a href="{{ banner.link }}" title="Alışverişe Başla"><h6 style="color: {{ banner.text_color }};" class="title">{{ banner.title }}</h6></a>
                                         
                                         <a href="{{ banner.link }}" title="Alışverişe Başla"><h1 style="color: {{ banner.text_color }};">{{ banner.subtitle }}</h1></a>
                 

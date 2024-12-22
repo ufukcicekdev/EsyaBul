@@ -301,7 +301,7 @@ li a span {
                     <nav id="nav">
                         <ul>
                             <li><a href="{% url 'main:home' %}"  title="Anasayfa">Anasayfa</a></li>
-                            <li><a href="{% url 'blog:blog_home' %}" title="Blog">Blog</a></li>
+                            
                             <li class="drop">
                                 <a title="Kategoriler">Kategoriler <i class="fa fa-angle-down" aria-hidden="true"></i></a>
                                 <div class="mt-dropmenu text-left">
@@ -323,6 +323,7 @@ li a span {
                                     </div>
                                 </div>
                             </li>
+                            <li><a href="{% url 'blog:blog_home' %}" title="Blog">Blog</a></li>
                             <li><a href="{% url 'main:about' %}"  title="Hakkımızda">Hakkımızda</a></li>
                             <li><a href="{% url 'main:contact' %}"  title="İletişim">İletişim</a></li>
                         </ul>

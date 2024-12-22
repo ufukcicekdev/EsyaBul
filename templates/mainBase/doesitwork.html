@@ -27,149 +27,107 @@
 
 {% endblock %}
 
-
-
 {% block content %}
 
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+/>
 <style>
-  .container {
-  margin-bottom: 20px;
-}
+  .swiper {
+    width: 100%;
+    height: 100%; /* Yükseklik ayarı */
+    margin-bottom: 20px;
+  }
 
-.step {
-  border-radius: 5px;
-  overflow: hidden; 
-  background-color: #f9f9f9; /* Adım kutucuğunun arka plan rengi */
-}
+  .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f9f9f9;
+    border-radius: 5px;
+    overflow: hidden;
+  }
 
-.step-number {
-  display: block;
-  width: 30px;
-  height: 30px;
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  line-height: 30px;
-  font-weight: bold;
-  float: left; 
-}
+  .swiper-slide img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover; /* Görselleri orantılı şekilde gösterir */
+  }
 
-.step-content {
-  padding: 20px;
-  overflow: hidden; 
-}
+  .swiper-button-next, .swiper-button-prev {
+    color: #333; /* Düğmelerin rengi */
+  }
 
-.step h2 {
-  margin-top: 0; /* Başlığın üstündeki boşluğu kaldırır */
-}
-
-.step p {
-  margin-bottom: 10px; /* Paragraflar arasında boşluk bırakır */
-}
-
-.step ul, .step ol {
-  margin-top: 0; /* Listelerin üstündeki boşluğu kaldırır */
-  padding-left: 20px; /* Liste içeriklerini biraz sağa kaydırır */
-}
-
-.step li {
-  margin-bottom: 5px; /* Listenin elemanları arasında boşluk bırakır */
-}
-
-
+  .swiper-pagination-bullet {
+    background-color: #333; /* Sayfa göstergesinin rengi */
+  }
 </style>
-
 
 <!-- main container of all the page elements -->
 <div id="wrapper">
-    <!-- Page Loader -->
-    <div id="pre-loader" class="loader-container">
-        <div class="loader">
-            <img src="{% static 'images/svg/rings.svg' %}" alt="loader">
+  <div class="w1">
+    {% include 'coreBase/header.html' %}
+    <main id="mt-main">
+      <section class="mt-contact-banner" style="background-image: url({% static 'images/img43.jpg' %}); background-size: cover; background-position: center;">
+        <div class="container">
+          <div class="row">
+            <div class="col-xs-12 text-center">
+              <h1>Nasıl Çalışır</h1>
+              <nav class="breadcrumbs">
+                <ul class="list-unstyled">
+                  <li><a href="{% url 'main:home' %}">Ana Sayfa <i class="fa fa-angle-right"></i></a></li>
+                  <li>Nasıl Çalışır</li>
+                </ul>
+              </nav>
+            </div>
+          </div>
         </div>
-    </div> 
-    <!-- W1 start here -->
-    <div class="w1">
-        <!-- mt header style4 start here -->
-        {% include 'coreBase/header.html' %}
-        <main id="mt-main">
-  
-          <!-- Mt Map Descrp of the Page -->
-          <section class="mt-contact-banner wow fadeInUp" data-wow-delay="0.4s" style="background-image: url({% static 'images/img43.jpg' %}); background-size: cover; background-position: center;">
-            <div class="container">
-              <div class="row">
-                <div class="col-xs-12 text-center">
-                  <h1>Nasıl Çalışır</h1>
-                  <nav class="breadcrumbs">
-                    <ul class="list-unstyled">
-                      <li><a href="{% url 'main:home' %}">Ana Sayfa <i class="fa fa-angle-right"></i></a></li>
-                      <li>Nasıl Çalışır</li>
-                    </ul>
-                  </nav>
-                </div>
-              </div>
+      </section>
+
+      <!-- Swiper Slider -->
+      <div class="container">
+        <div class="swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <img src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/doesItWork/1.png" alt="Adım 1">
             </div>
-          </section>
-          
-          <div class="container">
-            <div class="step">
-              <span class="step-number">1</span>
-              <div class="step-content">
-                <h2>Nasıl Çalışır?</h2>
-                <p>Web sitemizdeki kiralama işlemi adımları:</p>
-                <ol>
-                  <li>Yüzlerce ürün arasından istediğin ürünü seç.</li>
-                  <li>Kiralamak istediğin süreyi belirle.</li>
-                  <li>Siparişini oluşturduğunda ilk ay kira ücreti alınır.</li>
-                  <li>Otomatik kimlik teyidi ve findeks raporu onayının ardından kiralama işlemi onaylanır ve ürünün ücretsiz kargo ile sana gönderilir.</li>
-                  <li>Kiralama talebi onaylanmazsa alınan ilk ay kira ücreti iade edilir.</li>
-                </ol>
-              </div>
+            <div class="swiper-slide">
+              <img src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/doesItWork/2.png" alt="Adım 2">
+            </div>
+            <div class="swiper-slide">
+              <img src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/doesItWork/3.png" alt="Adım 3">
+            </div>
+            <div class="swiper-slide">
+              <img src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/doesItWork/4.png" alt="Adım 4">
             </div>
           </div>
-          
-          <div class="container">
-            <div class="step">
-              <span class="step-number">2</span>
-              <div class="step-content">
-                <h2>Kullanım Detayları</h2>
-                <p>Kullanım detayları:</p>
-                <ul>
-                  <li>İlk ay kira ücreti kiralama yapıldığı gün alınır.</li>
-                  <li>Kira süresi ürünü teslim aldığın gün başlar. Sonraki ayların kira ücretleri de siparişini oluşturduğun günlerde kartından otomatik olarak alınır. Kargoda geçen süre kira süresine eklenir.</li>
-                  <li>Ürünü kullanırken hasar oluşursa, hasar onarım süreçlerini biz üstleniriz ve hasar onarım masraflarının %70’ini karşılarız.</li>
-                  <li>Kiraladığın ürünü daha uzun süre kullanmak istersen, istediğin zaman kira süresini uzatabilir ya da kiraladığın ürünü satın alabilirsin.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          
-          <div class="container">
-            <div class="step">
-              <span class="step-number">3</span>
-              <div class="step-content">
-                <h2>İade İşlemleri</h2>
-                <p>İade işlemi:</p>
-                <ul>
-                  <li>Kira süresi bittiğinde ürünü orijinal kutusu ve aksesuarlarıyla ücretsiz kargo ile geri gönder.</li>
-                  <li>Her iade edilen ürünün teknik kalite kontrol işlemleri yapılır.</li>
-                  <li>Kalite kontrol işlemleri onaylandığında kartından çekilen bir sonraki ayın kira ücreti iade edilir.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          
-          
-          
-        </main>
+        </div>
+      </div>
       
-
-
-        {% include 'coreBase/footer.html' %}
-        <!-- footer of the Page end -->
-    </div><!-- W1 end here -->
-    <span id="back-top" class="fa fa-arrow-up"></span>
+    </main>
+    {% include 'coreBase/footer.html' %}
+  </div>
 </div>
 
-
-{%  endblock %}
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+<script>
+  const swiper = new Swiper('.swiper', {
+    slidesPerView: 1,
+    spaceBetween: 20,
+    loop: true,
+    autoplay: {
+      delay: 3000,  // Slaytlar arasındaki bekleme süresi (ms)
+      disableOnInteraction: false,  // Kullanıcı etkileşimi sonrası durdurulmaz
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+  });
+</script>
+{% endblock %}
